@@ -22,6 +22,8 @@
 #include "placeholders.hpp"
 #include "let_expressions.hpp"
 
+#include "impl/demangle.hpp"
+
 #include <type_traits>
 #include <typeinfo>
 #include <iostream>
@@ -43,12 +45,12 @@ using first = tml::eval<f<_1,_2,_3,_4,_5> , bool,int,double,char,float>;
 //tml::let ussage example:
 struct X {}; //Variable
 
-using let = tml::let<X,int,f<X,X,X>>;
+using let = tml::let<X,int,f<X>>;
 
 using result = tml::eval<let>;
 
 int main()
 {
-    std::cout << typeid( let ).name();
+    std::cout << tml::impl::demangle( typeid( let ).name() ) << std::endl;
 }
 
