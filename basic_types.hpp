@@ -16,6 +16,8 @@
 
 #include "traits.hpp"
 
+//Question here: http://stackoverflow.com/questions/18619360/using-stdfunction-with-union-in-c11
+
 namespace implementation__demangling
 {
 #if defined( _MSC_VER )
