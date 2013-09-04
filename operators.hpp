@@ -26,32 +26,16 @@ namespace mpl
     template<typename OP>
     using logical_not = mpl::function<mpl::boolean<!OP::value>>;
 
-    template<typename... OPERANDS>
-    struct logical_or;
+    template<typename LHS , typename RHS>
+    struct logical_or  : public mpl::function<mpl::boolean<LHS::value || RHS::value>> {};
+    
+    template<typename LHS , typename RHS>
+    struct logical_and  : public mpl::function<mpl::boolean<LHS::value && RHS::value>> {};
 
     template<typename LHS , typename RHS>
-    struct logical_or<LHS,RHS>  : public mpl::function<mpl::boolean<LHS::value || RHS::value>> {};
-
-    template<typename FIRST , typename... REST>
-    struct logical_or<FIRST,REST...> : public logical_or<FIRST,logical_or<REST...>> {};
-
-    template<typename... OPERANDS>
-    struct logical_and;
-
-    template<typename LHS , typename RHS>
-    struct logical_and<LHS,RHS>  : public mpl::function<mpl::boolean<LHS::value && RHS::value>> {};
-
-    template<typename FIRST , typename... REST>
-    struct logical_and<FIRST,REST...> : public logical_and<FIRST,logical_and<REST...>> {};
-
-    template<typename... OPERANDS>
-    struct logical_xor;
-
-    template<typename LHS , typename RHS>
-    struct logical_xor<LHS,RHS>  : public mpl::function<mpl::boolean<LHS::value ^ RHS::value>> {};
-
-    template<typename FIRST , typename... REST>
-    struct logical_xor<FIRST,REST...> : public logical_xor<FIRST,logical_xor<REST...>> {};
+    struct logical_xor  : public mpl::function<mpl::boolean<LHS::value ^ RHS::value>> {};
+    
+    
 
 
     /* Bitwise functions */
@@ -78,22 +62,28 @@ namespace mpl
     /* Comparison functions */
 
     template<typename LHS , typename RHS>
-    struct equal : public mpl::function<std::is_same<LHS,RHS>> {}; //Default
+    struct equal_t : public mpl::function<std::is_same<LHS,RHS>> {}; //Default
 
     template<typename T , T a , typename U , U b>
-    struct equal<mpl::value_t<T,a>,mpl::value_t<U,b>> : public mpl::boolean<(a == b)> {};
+    struct equal_t<mpl::value_t<T,a>,mpl::value_t<U,b>> : public mpl::function<mpl::boolean<(a == b)>> {};
+    
+    template<typename LHS , typename RHS>
+    using equal = typename mpl::equal_t<LHS,RHS>::result;
 
     template<typename LHS , typename RHS>
-    using not_equal = logical_not<equal<LHS,RHS>>;
+    using not_equal = logical_not<mpl::equal<LHS,RHS>>;
 
     template<typename LHS , typename RHS>
-    struct less_than;
+    struct less_than_t;
 
     template<typename T , T a , typename U , U b>
-    struct less_than<mpl::value_t<T,a>,mpl::value_t<U,b>> : public mpl::boolean<(a < b)> {};
+    struct less_than_t<mpl::value_t<T,a>,mpl::value_t<U,b>> : public mpl::function<mpl::boolean<(a < b)>> {};
+    
+    template<typename LHS , typename RHS>
+    using less_than = typename mpl::less_than_t<LHS,RHS>::result;
 
     template<typename LHS , typename RHS>
-    using bigger_than = less_than<RHS,LHS>;
+    using bigger_than = mpl::less_than<RHS,LHS>;
 
     template<typename LHS , typename RHS>
     using less_or_equal = logical_not<bigger_than<LHS,RHS>>;
@@ -103,39 +93,48 @@ namespace mpl
 
 
     /* Arithmetic functions */
-
-    template<typename... OPERANDS>
-    struct add;
     
     template<typename LHS , typename RHS>
-    struct add<LHS,RHS> : public mpl::function<mpl::value_t<typename LHS::value_type , LHS::value + RHS::value>> {}; 
-
-    template<typename HEAD , typename... TAIL>
-    struct add<HEAD,TAIL...> : public mpl::add<HEAD,add<TAIL...>> {};
+    struct add_t: public mpl::function<mpl::value_t<typename LHS::value_type , LHS::value + RHS::value>> {}; 
 
     template<typename LHS , typename RHS>
-    struct sub : public mpl::function<mpl::value_t<typename LHS::value_type , LHS::value - RHS::value>> {}; 
+    struct sub_t : public mpl::function<mpl::value_t<typename LHS::value_type , LHS::value - RHS::value>> {}; 
 
     template<typename LHS , typename RHS>
-    struct mul : public mpl::function<mpl::value_t<typename LHS::value_type , LHS::value * RHS::value>> {}; 
+    struct mul_t : public mpl::function<mpl::value_t<typename LHS::value_type , LHS::value * RHS::value>> {}; 
 
     template<typename LHS , typename RHS>
-    struct div : public mpl::function<mpl::value_t<typename LHS::value_type , LHS::value / RHS::value>> {}; 
+    struct div_t : public mpl::function<mpl::value_t<typename LHS::value_type , LHS::value / RHS::value>> {}; 
+    
+    template<typename LHS , typename RHS>
+    using add = typename mpl::add_t<LHS,RHS>::result;
+    
+    template<typename LHS , typename RHS>
+    using sub = typename mpl::sub_t<LHS,RHS>::result;
+    
+    template<typename LHS , typename RHS>
+    using mul = typename mpl::mul_t<LHS,RHS>::result;
+    
+    template<typename LHS , typename RHS>
+    using div = typename mpl::div_t<LHS,RHS>::result;
+    
+    
+    
 
     template<typename VALUE>
-    struct increment : public add<VALUE,mpl::one<VALUE>> {};
+    using increment = mpl::add<VALUE,mpl::one<VALUE>>;
 
     template<typename VALUE>
-    struct decrement : public sub<VALUE,mpl::one<VALUE>> {};
+    using decrement = mpl::sub<VALUE,mpl::one<VALUE>>;
 
     template<typename BASE , typename EXPONENT>
-    struct pow : public mul<BASE , pow<BASE,decrement<EXPONENT>>> {};
+    struct pow : public mpl::mul<BASE , pow<BASE,mpl::decrement<EXPONENT>>> {};
 
     template<typename BASE>
     struct pow<BASE,zero<BASE>> : public mpl::one<BASE> {};
 
     template<typename BASE>
-    struct square : public mul<BASE,BASE> {};
+    using square = mpl::mul<BASE,BASE>;
 }
 #endif	/* OPERATORS_HPP */
 

@@ -60,6 +60,9 @@ namespace make_type_macro
 
 namespace mpl
 {
+    struct no_type{};
+    
+    
     template<typename T , T val>
     struct value_t
     {

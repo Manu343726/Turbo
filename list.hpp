@@ -195,29 +195,29 @@ namespace mpl
 
 
     template<typename HEAD , typename... TAIL>
-    struct begin<mpl::list<HEAD,TAIL...>> : public mpl::forward_iterator<HEAD,list<TAIL...>> {};
+    struct begin_t<mpl::list<HEAD,TAIL...>> : public mpl::make_forward_iterator<HEAD,list<TAIL...>> {};
 
     template<typename... Ts>
-    struct end<mpl::list<Ts...>> : public mpl::forward_iterator<mpl::invalid_list_item , mpl::invalid_list> {};
+    struct end_t<mpl::list<Ts...>> : public mpl::make_forward_iterator<mpl::invalid_list_item , mpl::invalid_list> {};
 
     template<typename... R_TAIL , typename R_HEAD>
-    struct rbegin<mpl::list<R_TAIL...,R_HEAD>> : public backward_iterator<list<R_TAIL...> , R_HEAD> {};
+    struct rbegin_t<mpl::list<R_TAIL...,R_HEAD>> : public mpl::make_backward_iterator<mpl::list<R_TAIL...> , R_HEAD> {};
 
     template<typename... Ts>
-    struct rend<mpl::list<Ts...>> : public mpl::backward_iterator<mpl::invalid_list , mpl::invalid_list_item> {};
+    struct rend_t<mpl::list<Ts...>> : public mpl::make_backward_iterator<mpl::invalid_list , mpl::invalid_list_item> {};
     
 
     template<typename ITEM , typename HEAD , typename... TAIL>
-    struct next<mpl::forward_iterator<ITEM,mpl::list<HEAD,TAIL...>>> : public mpl::forward_iterator<HEAD,mpl::list<TAIL...>> {};
+    struct next_t<mpl::forward_iterator<ITEM,mpl::list<HEAD,TAIL...>>> : public mpl::make_forward_iterator<HEAD,mpl::list<TAIL...>> {};
 
     template<typename ITEM>
-    struct next<mpl::forward_iterator<ITEM,mpl::empty_list>> : public mpl::forward_iterator<mpl::invalid_list_item , mpl::invalid_list> {};
+    struct next_t<mpl::forward_iterator<ITEM,mpl::empty_list>> : public mpl::make_forward_iterator<mpl::invalid_list_item , mpl::invalid_list> {};
 
     template<typename R_HEAD , typename... R_TAIL , typename ITEM>
-    struct previous<mpl::backward_iterator<mpl::list<R_TAIL...,R_HEAD>,ITEM>> : public mpl::backward_iterator<mpl::list<R_TAIL...>,R_HEAD> {};
+    struct previous_t<mpl::backward_iterator<mpl::list<R_TAIL...,R_HEAD>,ITEM>> : public mpl::make_backward_iterator<mpl::list<R_TAIL...>,R_HEAD> {};
 
     template<typename ITEM>
-    struct previous<mpl::backward_iterator<mpl::empty_list,ITEM>> : public mpl::backward_iterator<mpl::invalid_list , mpl::invalid_list_item> {};
+    struct previous_t<mpl::backward_iterator<mpl::empty_list,ITEM>> : public mpl::make_backward_iterator<mpl::invalid_list , mpl::invalid_list_item> {};
 }
 
 #endif	/* LIST_HPP */
