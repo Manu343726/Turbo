@@ -10,6 +10,7 @@
 #include "operators.hpp"
 #include "expressions.hpp"
 #include "list.hpp"
+#include "for.hpp"
 
 #include <iostream>
 
@@ -32,6 +33,18 @@ using f = decltype( mpl::false_type() && mpl::true_type() || !mpl::false_type() 
 using list1 = mpl::list<mpl::integer<0>,mpl::list<mpl::boolean<true>,mpl::character<'a'>>,mpl::empty_list,f,e,d>;
 using list2 = mpl::list<mpl::integer<0>,mpl::list<mpl::boolean<true>,mpl::character<'a'>>,mpl::empty_list,f,e,d>;
 using list3 = mpl::list<char,bool,int,long int,float>;
+
+
+using input = mpl::list<mpl::integer<0>,mpl::integer<1>,mpl::integer<2>,mpl::integer<3>>;
+
+
+template<typename CURRENT_VALUE , typename PREVIOUS_RESULT>
+struct add_kernel
+{
+    using result = mpl::add<CURRENT_VALUE,PREVIOUS_RESULT>;
+};
+
+using sumatorio = typename mpl::for_loop<mpl::begin<input> , mpl::end<input> , mpl::integer<0> , add_kernel>::result;
 
 int main()
 {
