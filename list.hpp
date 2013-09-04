@@ -12,6 +12,7 @@
 #undef min
 
 #include "basic_types.hpp"
+#include "iterator.hpp"
 
 #include <sstream>
 
@@ -153,6 +154,14 @@ namespace mpl
             using right = mpl::list<HEAD,TAIL...>;
             using left  = mpl::list<LEFT_TYPES...>;
         };
+        
+        /* mpl::concat */
+        
+        template<typename LIST1 , typename LIST2>
+        struct _concat;
+        
+        template<typename... Ts , typename... Us>
+        struct _concat<mpl::list<Ts...>,mpl::list<Us...>> : public mpl::type_t<mpl::list<Ts...,Us...>>{};
     }
     
     
@@ -173,6 +182,42 @@ namespace mpl
     
     template<typename LIST , typename INDEX>
     using split_right = typename _splitter<mpl::empty_list,LIST,INDEX::value>::right;
+    
+    template<typename LHS , typename RHS>
+    using concat = typename _concat<LHS,RHS>::type;
+    
+    
+    using empty_list = list<>;
+
+    struct invalid_list {};
+    struct invalid_list_item {};
+
+
+
+    template<typename HEAD , typename... TAIL>
+    struct begin<mpl::list<HEAD,TAIL...>> : public mpl::forward_iterator<HEAD,list<TAIL...>> {};
+
+    template<typename... Ts>
+    struct end<mpl::list<Ts...>> : public mpl::forward_iterator<mpl::invalid_list_item , mpl::invalid_list> {};
+
+    template<typename... R_TAIL , typename R_HEAD>
+    struct rbegin<mpl::list<R_TAIL...,R_HEAD>> : public backward_iterator<list<R_TAIL...> , R_HEAD> {};
+
+    template<typename... Ts>
+    struct rend<mpl::list<Ts...>> : public mpl::backward_iterator<mpl::invalid_list , mpl::invalid_list_item> {};
+    
+
+    template<typename ITEM , typename HEAD , typename... TAIL>
+    struct next<mpl::forward_iterator<ITEM,mpl::list<HEAD,TAIL...>>> : public mpl::forward_iterator<HEAD,mpl::list<TAIL...>> {};
+
+    template<typename ITEM>
+    struct next<mpl::forward_iterator<ITEM,mpl::empty_list>> : public mpl::forward_iterator<mpl::invalid_list_item , mpl::invalid_list> {};
+
+    template<typename R_HEAD , typename... R_TAIL , typename ITEM>
+    struct previous<mpl::backward_iterator<mpl::list<R_TAIL...,R_HEAD>,ITEM>> : public mpl::backward_iterator<mpl::list<R_TAIL...>,R_HEAD> {};
+
+    template<typename ITEM>
+    struct previous<mpl::backward_iterator<mpl::empty_list,ITEM>> : public mpl::backward_iterator<mpl::invalid_list , mpl::invalid_list_item> {};
 }
 
 #endif	/* LIST_HPP */
