@@ -6,14 +6,15 @@
                    projectFiles="true">
       <itemPath>basic_types.hpp</itemPath>
       <itemPath>common_functions.hpp</itemPath>
+      <itemPath>control_flow.hpp</itemPath>
       <itemPath>expressions.hpp</itemPath>
-      <itemPath>for.hpp</itemPath>
       <itemPath>iterator.hpp</itemPath>
       <itemPath>list.hpp</itemPath>
       <itemPath>metafunction_specialization.hpp</itemPath>
       <itemPath>newfile.hpp</itemPath>
       <itemPath>numeric_iterators.hpp</itemPath>
       <itemPath>operators.hpp</itemPath>
+      <itemPath>sort.hpp</itemPath>
       <itemPath>traits.hpp</itemPath>
       <itemPath>unordered_map.hpp</itemPath>
       <itemPath>utilities.hpp</itemPath>
@@ -57,9 +58,9 @@
       </item>
       <item path="common_functions.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="expressions.hpp" ex="false" tool="3" flavor2="0">
+      <item path="control_flow.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="for.hpp" ex="false" tool="3" flavor2="0">
+      <item path="expressions.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="iterator.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -74,6 +75,8 @@
       <item path="numeric_iterators.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="operators.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="sort.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="traits.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -107,9 +110,9 @@
       </item>
       <item path="common_functions.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="expressions.hpp" ex="false" tool="3" flavor2="0">
+      <item path="control_flow.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="for.hpp" ex="false" tool="3" flavor2="0">
+      <item path="expressions.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="iterator.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -124,6 +127,8 @@
       <item path="numeric_iterators.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="operators.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="sort.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="traits.hpp" ex="false" tool="3" flavor2="0">
       </item>
