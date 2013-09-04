@@ -153,16 +153,6 @@ namespace mpl
             using right = mpl::list<HEAD,TAIL...>;
             using left  = mpl::list<LEFT_TYPES...>;
         };
-        
-        //Base case:
-        template<typename... LEFT_TYPES , std::size_t INDEX>
-        struct _splitter<mpl::list<LEFT_TYPES...> , mpl::empty_list , INDEX>
-        {
-            static_assert( mpl::empty_list::lenght == 0 , "Index out of bounds" );
-        };
-        
-        template<typename LIST , typename INDEX>
-        struct _split : public _splitter<LIST,mpl::empty_list,INDEX::value> {};
     }
     
     
@@ -176,13 +166,13 @@ namespace mpl
     using type_at = typename _type_at<LIST,INDEX::value>::type;
     
     template<typename LIST , typename INDEX>
-    using split = _split<LIST,INDEX>;
+    using split = _splitter<LIST,mpl::empty_list,INDEX::value>;
     
     template<typename LIST , typename INDEX>
-    using split_left = typename _split<LIST,INDEX>::left;
+    using split_left = typename _splitter<mpl::empty_list,LIST,INDEX::value>::left;
     
     template<typename LIST , typename INDEX>
-    using split_right = typename _split<LIST,INDEX>::right;
+    using split_right = typename _splitter<mpl::empty_list,LIST,INDEX::value>::right;
 }
 
 #endif	/* LIST_HPP */

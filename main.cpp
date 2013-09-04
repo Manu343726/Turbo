@@ -31,6 +31,7 @@ using f = decltype( mpl::false_type() && mpl::true_type() || !mpl::false_type() 
 
 using list1 = mpl::list<mpl::integer<0>,mpl::list<mpl::boolean<true>,mpl::character<'a'>>,mpl::empty_list,f,e,d>;
 using list2 = mpl::list<mpl::integer<0>,mpl::list<mpl::boolean<true>,mpl::character<'a'>>,mpl::empty_list,f,e,d>;
+using list3 = mpl::list<char,bool,int,long int,float>;
 
 int main()
 {
@@ -49,8 +50,14 @@ int main()
     std::cout << "e: " << e::value << std::endl;
     std::cout << std::boolalpha << "f: " << f::value << std::endl;
     
-    std::cout << mpl::to_string<list1>() << std::endl;
-    std::cout << mpl::to_string<mpl::split<list1,mpl::size_t<4>>>() << std::endl;
+    std::cout << "legth: " << list1::lenght << " " << mpl::to_string<list1>() << std::endl;
+    
+    std::cout << "legth: " << list3::lenght << " " << mpl::to_string<list3>() << std::endl;
+    std::cout << mpl::to_string<mpl::split_left<list3,mpl::size_t<2>>>() << std::endl;
+    std::cout << mpl::to_string<mpl::split_right<list3,mpl::size_t<2>>>() << std::endl;
+    
     std::cout << mpl::to_string<f>() << std::endl;
+    
+    static_assert( mpl::is_value<mpl::integer<0>>::value , "");
 }
 

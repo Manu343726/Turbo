@@ -63,9 +63,13 @@ namespace mpl
     template<typename T , T val>
     struct value_t
     {
+    private:
+        struct _is_a_value {};
+    public:
         static const T value = val;
         using value_type = T;
-        typedef struct{} is_a_value; //Flag for return values of functions.
+        
+        using is_value_flag = _is_a_value;
         
         constexpr T operator()() { return val; }
     }; 
@@ -115,19 +119,17 @@ namespace mpl
     {
         template<typename T>
         struct _is_value
-        {
-            struct yes { char c[1]; };
-            struct no  { char c[2]; };
-            
-            static yes test(typename T::is_a_value*);
-            static no  test(...);
-            
-            static const bool result = sizeof( test(nullptr) ) == sizeof(yes);
+        {       
+        private:
+            template<typename C> static mpl::true_type  test(typename C::is_value_flag*);
+            template<typename C> static mpl::false_type test(...);
+        public:
+            static const bool value = decltype(test<T>(0))::value;
         };
     }
     
     template<typename T>
-    using is_value = mpl::boolean<implementation__is_value::_is_value<T>::result>;
+    using is_value = mpl::boolean<implementation__is_value::_is_value<T>::value>;
     
     
     namespace implementation__to_string
