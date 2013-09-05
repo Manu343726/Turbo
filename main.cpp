@@ -5,7 +5,6 @@
  * Created on 1 de septiembre de 2013, 13:16
  */
 
-#include "newfile.hpp"
 #include "basic_types.hpp"
 #include "operators.hpp"
 #include "expressions.hpp"
@@ -17,12 +16,12 @@
 #include <iostream>
 
 
-using input = mpl::list<char,int,float,bool>;
+using input = mpl::list<char,int,float,bool>; //The input is a list of basic types
 
 template<typename T , typename U>
-using comparer = mpl::boolean<(sizeof(T) > sizeof(U))>;
+using comparer = mpl::boolean<(sizeof(T) > sizeof(U))>; //In this example, we use the size of the type as ordering criteria (Decreasing order, biggest element to the left and lessr to the right )
 
-using output = mpl::sort<input,comparer>;
+using output = mpl::sort<input,comparer>; //Sorts the list using that comparer
 
 template<typename T>
 struct kernel
@@ -30,11 +29,15 @@ struct kernel
     using result = mpl::size_t<sizeof(T)>;
 };
 
-using sizes = mpl::for_each<mpl::add<mpl::begin<output>,mpl::size_t<2>>,mpl::end<output>,kernel>;
+/* 
+ * mpl::for_each returns a list wich contains the set of results of aplying an specified kernel to each element of a specified interval.
+ * In this case, retuns a list with the sizes of the types in the interval [begin + 2 , end)
+ */
+using sizes = mpl::for_each<decltype( mpl::begin<output>() + mpl::size_t<2>() ) , mpl::end<output>,kernel>;
 
 int main()
 {
-    std::cout << mpl::to_string<input>() << std::endl;
-    std::cout << mpl::to_string<output>() << std::endl;
-    std::cout << mpl::to_string<sizes>() << std::endl;
+    std::cout << mpl::to_string<input>() << std::endl;  //This prints [char,int,float,bool]
+    std::cout << mpl::to_string<output>() << std::endl; //This prints [float,int,char,bool]
+    std::cout << mpl::to_string<sizes>() << std::endl;  //This prints [1,1]
 }
