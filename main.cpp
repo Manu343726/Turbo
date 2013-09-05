@@ -16,13 +16,15 @@
 
 #include <iostream>
 
+struct foo { double a; double b; };
 
-using input = mpl::list<char,int,float,bool>; //The input is a list of basic types
+using input = mpl::for_each<mpl::make_integer_forward_iterator<0>, mpl::make_integer_forward_iterator<200> , mpl::function>;
 
 template<typename T , typename U>
-using comparer = mpl::boolean<(sizeof(T) > sizeof(U))>; //In this example, we use the size of the type as ordering criteria (Decreasing order, biggest element to the left and lessr to the right )
+using comparer = mpl::boolean<(sizeof(T) < sizeof(U))>; //In this example, we use the size of the type as ordering criteria (Decreasing order, biggest element to the left and lessr to the right )
 
-using output = mpl::sort<input,comparer>; //Sorts the list using that comparer
+using output = mpl::debug_sort<input,mpl::bigger_than>; //Sorts the list using that comparer
+//using output = mpl::sort<mpl::list<float,float,int,int>,comparer>; //Sorts the list using that comparer
 
 template<typename T>
 struct kernel
@@ -34,7 +36,7 @@ struct kernel
  * mpl::for_each returns a list wich contains the set of results of aplying an specified kernel to each element of a specified interval.
  * In this case, retuns a list with the sizes of the types in the interval [begin + 2 , end)
  */
-using sizes = mpl::for_each<decltype( mpl::begin<output>() + mpl::size_t<2>() ) , mpl::end<output> , kernel>;
+//using sizes = mpl::for_each<decltype( mpl::begin<output>() + mpl::size_t<0>() ) , mpl::end<output> , kernel>;
 
 
 using begin = mpl::make_uinteger_forward_iterator<0>;
@@ -50,13 +52,14 @@ struct fibonacci_kernel
 
 
 using pi = mpl::decimal<3141592,-6>;
-using pi_2 = decltype( pi() * mpl::integer<2>() );
+using pi_2 = decltype( pi() * mpl::integer<-2>() );
 
 int main()
 {
     std::cout << mpl::to_string<pi>() << std::endl;
     std::cout << mpl::to_string<pi_2>() << std::endl;
     std::cout << mpl::to_string<input>() << std::endl;  //This prints [char,int,float,bool]
-    std::cout << mpl::to_string<output>() << std::endl; //This prints [float,int,char,bool]
-    std::cout << mpl::to_string<sizes>() << std::endl;  //This prints [1,1]
+    std::cout << mpl::to_string<typename output::first>() << std::endl; //This prints [float,int,char,bool]
+    std::cout << mpl::to_string<typename output::second>() << std::endl; //This prints [float,int,char,bool]
+    //std::cout << mpl::to_string<sizes>() << std::endl;  //This prints [1,1]
 }

@@ -10,6 +10,7 @@
 
 #include "iterator.hpp"
 #include "basic_types.hpp"
+#include "fixed_point.hpp"
 #include "operators.hpp"
 #include "control_flow.hpp"
 
@@ -39,22 +40,22 @@ namespace mpl
     
     namespace
     {
-#define MAKE_NUMERIC_ITERATOR(type_name) template<mpl::type_name##_type VALUE> \
+#define MAKE_NUMERIC_INTEGRAL_ITERATOR(type_name) template<mpl::type_name##_type VALUE> \
                                          using make_##type_name##_forward_iterator = mpl::forward_iterator<mpl::type_name<VALUE>,mpl::no_type>; \
                                          template<mpl::type_name##_type VALUE> \
                                          using make_##type_name##_backward_iterator = mpl::backward_iterator<mpl::no_type,mpl::type_name<VALUE>>
     }
         
-    MAKE_NUMERIC_ITERATOR(ucharacter);
-    MAKE_NUMERIC_ITERATOR(character);
-    MAKE_NUMERIC_ITERATOR(uinteger);
-    MAKE_NUMERIC_ITERATOR(integer);
-    MAKE_NUMERIC_ITERATOR(ulong_integer);
-    MAKE_NUMERIC_ITERATOR(long_integer);
-    MAKE_NUMERIC_ITERATOR(ulong_long_integer);
-    MAKE_NUMERIC_ITERATOR(long_long_integer);
-    MAKE_NUMERIC_ITERATOR(boolean);
-    MAKE_NUMERIC_ITERATOR(size_t );
+    MAKE_NUMERIC_INTEGRAL_ITERATOR(ucharacter);
+    MAKE_NUMERIC_INTEGRAL_ITERATOR(character);
+    MAKE_NUMERIC_INTEGRAL_ITERATOR(uinteger);
+    MAKE_NUMERIC_INTEGRAL_ITERATOR(integer);
+    MAKE_NUMERIC_INTEGRAL_ITERATOR(ulong_integer);
+    MAKE_NUMERIC_INTEGRAL_ITERATOR(long_integer);
+    MAKE_NUMERIC_INTEGRAL_ITERATOR(ulong_long_integer);
+    MAKE_NUMERIC_INTEGRAL_ITERATOR(long_long_integer);
+    MAKE_NUMERIC_INTEGRAL_ITERATOR(boolean);
+    MAKE_NUMERIC_INTEGRAL_ITERATOR(size_t );
     
 }
 

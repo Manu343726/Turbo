@@ -16,6 +16,7 @@
       <itemPath>numeric_iterators.hpp</itemPath>
       <itemPath>operators.hpp</itemPath>
       <itemPath>sort.hpp</itemPath>
+      <itemPath>static_warning.hpp</itemPath>
       <itemPath>traits.hpp</itemPath>
       <itemPath>unordered_map.hpp</itemPath>
       <itemPath>utilities.hpp</itemPath>
@@ -81,6 +82,8 @@
       </item>
       <item path="sort.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="static_warning.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="traits.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="unordered_map.hpp" ex="false" tool="3" flavor2="0">
@@ -134,6 +137,8 @@
       <item path="operators.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="sort.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="static_warning.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="traits.hpp" ex="false" tool="3" flavor2="0">
       </item>
