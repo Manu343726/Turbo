@@ -20,6 +20,28 @@ namespace mpl
         using result = RESULT;
     };
     
+    
+    template<typename T>
+    struct zero_t : public mpl::function<mpl::no_type> {};
+    
+    template<typename T>
+    struct one_t : public mpl::function<T> {};
+    
+    template<typename T>
+    using zero = typename mpl::zero_t<T>::result;
+    
+    template<typename T>
+    using one = typename mpl::one_t<T>::result;
+    
+    
+    
+    template<typename T , T v>
+    struct zero_t<mpl::value_t<T,v>> : public mpl::function<mpl::value_t<T,0>> {};
+    
+    template<typename T , T v>
+    struct one_t<mpl::value_t<T,v>> : public mpl::function<mpl::value_t<T,1>> {};
+    
+    
 
     /* Logical functions */
 

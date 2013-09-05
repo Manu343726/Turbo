@@ -8,6 +8,7 @@
       <itemPath>common_functions.hpp</itemPath>
       <itemPath>control_flow.hpp</itemPath>
       <itemPath>expressions.hpp</itemPath>
+      <itemPath>fixed_point.hpp</itemPath>
       <itemPath>iterator.hpp</itemPath>
       <itemPath>list.hpp</itemPath>
       <itemPath>metafunction_specialization.hpp</itemPath>
@@ -62,6 +63,8 @@
       </item>
       <item path="expressions.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="fixed_point.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="iterator.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="list.hpp" ex="false" tool="3" flavor2="0">
@@ -113,6 +116,8 @@
       <item path="control_flow.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="expressions.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="fixed_point.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="iterator.hpp" ex="false" tool="3" flavor2="0">
       </item>

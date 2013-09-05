@@ -103,18 +103,7 @@ namespace mpl
     MAKE_TYPE(long_long_integer  , long long int);
     MAKE_TYPE(boolean            , bool);
     MAKE_TYPE(size_t             , std::size_t);
-    
-    template<typename T>
-    struct zero;
-    
-    template<typename T>
-    struct one;
-    
-    template<typename T , T v>
-    struct zero<mpl::value_t<T,v>> : public mpl::value_t<T,0> {};
-    
-    template<typename T , T v>
-    struct one<mpl::value_t<T,v>> : public mpl::value_t<T,1> {};
+  
     
     using false_type = mpl::boolean<false>;
     using true_type  = mpl::boolean<true>;
@@ -184,15 +173,6 @@ namespace mpl
     {
         return mpl::to_string_t<T>();
     }
-    
-    template<bool b>
-    struct to_string_t<mpl::boolean<b>>
-    {
-        constexpr operator std::string() const
-        {
-            return b ? "true" : "false";
-        }
-    };
 }
 
 #endif	/* BASIC_TRAITS_HPP */
