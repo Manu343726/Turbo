@@ -45,13 +45,13 @@ namespace mpl
     
     
     template<typename VALUE , typename RIGHT>
-    using make_forward_iterator = mpl::type_t<mpl::forward_iterator<VALUE,RIGHT>>;
+    using make_forward_iterator = mpl::function<mpl::forward_iterator<VALUE,RIGHT>>;
     
     template<typename LEFT , typename VALUE>
-    using make_backward_iterator = mpl::type_t<mpl::backward_iterator<LEFT,VALUE>>;
+    using make_backward_iterator = mpl::function<mpl::backward_iterator<LEFT,VALUE>>;
     
     template<typename LEFT , typename VALUE , typename RIGHT>
-    using make_bidirectional_iterator = mpl::type_t<mpl::bidirectional_iterator<LEFT,VALUE,RIGHT>>;
+    using make_bidirectional_iterator = mpl::function<mpl::bidirectional_iterator<LEFT,VALUE,RIGHT>>;
     
 
 
@@ -74,22 +74,22 @@ namespace mpl
     struct next_t;
     
     template<typename T>
-    using begin = typename mpl::begin_t<T>::type;
+    using begin = typename mpl::begin_t<T>::result;
     
     template<typename T>
-    using end = typename mpl::end_t<T>::type;
+    using end = typename mpl::end_t<T>::result;
     
     template<typename T>
-    using rbegin = typename mpl::rbegin_t<T>::type;
+    using rbegin = typename mpl::rbegin_t<T>::result;
     
     template<typename T>
-    using rend = typename mpl::rend_t<T>::type;
+    using rend = typename mpl::rend_t<T>::result;
     
     template<typename T>
-    using previous = typename mpl::previous_t<T>::type;
+    using previous = typename mpl::previous_t<T>::result;
     
     template<typename T>
-    using next = typename mpl::next_t<T>::type;
+    using next = typename mpl::next_t<T>::result;
 
     template<typename T>
     using first = typename mpl::begin<T>::value;
@@ -110,6 +110,49 @@ namespace mpl
 
     template<typename LEFT1 , typename VALUE1 , typename RIGHT1 , typename LEFT2 , typename VALUE2 , typename RIGHT2>
     struct equal_t<mpl::bidirectional_iterator<LEFT1,VALUE1,RIGHT1> , mpl::bidirectional_iterator<LEFT2,VALUE2,RIGHT2>> : public decltype( mpl::equal<LEFT1,LEFT2>() && mpl::equal<VALUE1,VALUE2>() && mpl::equal<RIGHT1,RIGHT2>()) {};
+
+
+    namespace
+    {   
+        template<typename ITERATOR , typename DISTANCE>
+        struct _add_t;
+        
+        template<typename ITERATOR , std::size_t DISTANCE>
+        struct _add_t<ITERATOR,mpl::size_t<DISTANCE>>
+        {
+            using result = typename _add_t<mpl::next<ITERATOR> , mpl::size_t<DISTANCE-1>>::result;
+        };
+        
+        template<typename ITERATOR>
+        struct _add_t<ITERATOR,mpl::size_t<0>>
+        {
+            using result = ITERATOR;
+        };
+        
+        
+        template<typename ITERATOR , typename DISTANCE>
+        struct _sub_t;
+        
+        template<typename ITERATOR , std::size_t DISTANCE>
+        struct _sub_t<ITERATOR,mpl::size_t<DISTANCE>>
+        {
+            using result = typename _sub_t<mpl::previous<ITERATOR> , mpl::size_t<DISTANCE-1>>::result;
+        };
+        
+        template<typename ITERATOR>
+        struct _sub_t<ITERATOR,mpl::size_t<0>>
+        {
+            using result = ITERATOR;
+        };
+    }
+    
+    template<typename VALUE , typename RIGHT , std::size_t DISTANCE>
+    struct add_t<mpl::forward_iterator<VALUE,RIGHT>,mpl::size_t<DISTANCE>> : public mpl::function<typename _add_t<mpl::forward_iterator<VALUE,RIGHT>,mpl::size_t<DISTANCE>>::result> {};
+    
+    template<typename LEFT , typename VALUE , std::size_t DISTANCE>
+    struct sub_t<mpl::backward_iterator<LEFT,VALUE>,mpl::size_t<DISTANCE>> : public mpl::function<typename _sub_t<mpl::backward_iterator<LEFT,VALUE>,mpl::size_t<DISTANCE>>::result> {};
+    
+    
 }
 
 #endif	/* ITERATOR_HPP */

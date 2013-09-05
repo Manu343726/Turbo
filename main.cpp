@@ -17,15 +17,24 @@
 #include <iostream>
 
 
-using input = mpl::list<char,int,float>;
+using input = mpl::list<char,int,float,bool>;
 
 template<typename T , typename U>
-using comparer = mpl::boolean<(sizeof(T) < sizeof(U))>;
+using comparer = mpl::boolean<(sizeof(T) > sizeof(U))>;
 
-using sorted = mpl::sort<input,comparer>;
+using output = mpl::sort<input,comparer>;
+
+template<typename T>
+struct kernel
+{
+    using result = mpl::size_t<sizeof(T)>;
+};
+
+using sizes = mpl::for_each<mpl::add<mpl::begin<output>,mpl::size_t<2>>,mpl::end<output>,kernel>;
 
 int main()
 {
     std::cout << mpl::to_string<input>() << std::endl;
-    std::cout << mpl::to_string<sorted>() << std::endl;
+    std::cout << mpl::to_string<output>() << std::endl;
+    std::cout << mpl::to_string<sizes>() << std::endl;
 }
