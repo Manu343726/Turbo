@@ -13,6 +13,7 @@
 
 #include "basic_types.hpp"
 #include "iterator.hpp"
+#include "to_string.hpp"
 
 #include <sstream>
 

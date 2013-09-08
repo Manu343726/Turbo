@@ -16,10 +16,12 @@
       <itemPath>numeric_iterators.hpp</itemPath>
       <itemPath>operators.hpp</itemPath>
       <itemPath>sort.hpp</itemPath>
-      <itemPath>static_warning.hpp</itemPath>
+      <itemPath>to_string.hpp</itemPath>
       <itemPath>traits.hpp</itemPath>
       <itemPath>unordered_map.hpp</itemPath>
       <itemPath>utilities.hpp</itemPath>
+      <itemPath>value_t.hpp</itemPath>
+      <itemPath>vector.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -82,13 +84,17 @@
       </item>
       <item path="sort.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="static_warning.hpp" ex="false" tool="3" flavor2="0">
+      <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="traits.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="unordered_map.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="utilities.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="value_t.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="vector.hpp" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -138,13 +144,17 @@
       </item>
       <item path="sort.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="static_warning.hpp" ex="false" tool="3" flavor2="0">
+      <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="traits.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="unordered_map.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="utilities.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="value_t.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="vector.hpp" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

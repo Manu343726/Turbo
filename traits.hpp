@@ -23,6 +23,19 @@ namespace
 
 namespace mpl
 {   
+    template<typename T>
+    struct is_value_t : public mpl::false_type {};
+    
+    template<typename T , T VALUE>
+    struct is_value_t<mpl::value_t<T,VALUE>> : public mpl::true_type {};
+    
+    
+    template<typename T>
+    struct is_type_t : public mpl::false_type {};
+    
+    template<typename T>
+    struct is_type_t<mpl::type_t<T>> : public mpl::true_type {};
+    
     /*
     MAKE_TRAIT( ubyte );
     MAKE_TRAIT( byte );

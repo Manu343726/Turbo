@@ -11,8 +11,6 @@
 #include "list.hpp"
 #include "control_flow.hpp"
 
-#include "static_warning.hpp"
-
 namespace mpl
 {   
     template<typename LIST , template<typename,typename> class COMPARER = mpl::bigger_than , typename DEBUG_TRACE = mpl::empty_list>

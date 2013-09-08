@@ -11,6 +11,7 @@
 #include "basic_types.hpp"
 #include "operators.hpp"
 #include "iterator.hpp"
+#include "to_string.hpp"
 
 #include <cmath> //std::pow())
 
@@ -65,7 +66,7 @@ namespace mpl
     };
 
     template<int mantissa , int exponent = 0 , fbcount PRECISSION = mpl::DEFAULT_FRACTIONAL_PRECISION> // MANTISSA x 10^EXPONENT
-    using decimal = mpl::fixed_point<decimal_shift<mantissa , PRECISSION + exponent>::value>; 
+    using decimal = mpl::fixed_point<decimal_shift<mantissa , PRECISSION + exponent>::value , PRECISSION>; 
 
 
     template<fpbits BITS , fbcount PRECISION>

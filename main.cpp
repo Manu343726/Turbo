@@ -13,12 +13,13 @@
 #include "numeric_iterators.hpp"
 #include "sort.hpp"
 #include "fixed_point.hpp"
+#include "vector.hpp"
 
 #include <iostream>
 
 struct foo { double a; double b; };
 
-using input = mpl::for_each<mpl::make_integer_forward_iterator<0>, mpl::make_integer_forward_iterator<200> , mpl::function>;
+using input = mpl::for_each<mpl::make_integer_forward_iterator<0>, mpl::make_integer_forward_iterator<2> , mpl::function>;
 
 template<typename T , typename U>
 using comparer = mpl::boolean<(sizeof(T) < sizeof(U))>; //In this example, we use the size of the type as ordering criteria (Decreasing order, biggest element to the left and lessr to the right )
@@ -54,11 +55,15 @@ struct fibonacci_kernel
 using pi = mpl::decimal<3141592,-6>;
 using pi_2 = decltype( pi() * mpl::integer<-2>() );
 
+using v1 = math::vec2<mpl::decimal<12,-1>,mpl::decimal<12,-1>>;
+
 int main()
 {
     std::cout << mpl::to_string<pi>() << std::endl;
     std::cout << mpl::to_string<pi_2>() << std::endl;
-    std::cout << mpl::to_string<input>() << std::endl;  //This prints [char,int,float,bool]
+    std::cout << mpl::to_string<input>() << std::endl;  
+    std::cout << mpl::to_string<v1>() << std::endl;
+    std::cout << mpl::to_string<decltype( v1() + v1() )>() << std::endl;
     std::cout << mpl::to_string<typename output::first>() << std::endl; //This prints [float,int,char,bool]
     std::cout << mpl::to_string<typename output::second>() << std::endl; //This prints [float,int,char,bool]
     //std::cout << mpl::to_string<sizes>() << std::endl;  //This prints [1,1]
