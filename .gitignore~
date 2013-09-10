@@ -13,5 +13,5 @@
 *.a
 
 # Netbeans GCC compilation folders
-debug/**/*
-dist/**/*
+debug/
+dist/

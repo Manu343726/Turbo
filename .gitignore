@@ -15,3 +15,5 @@
 # Netbeans GCC compilation folders
 debug/
 dist/
+build/
+
