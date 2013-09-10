@@ -78,7 +78,7 @@ namespace mpl
         {
             std::ostringstream os;
             os << "(" << mpl::to_string<X>() << "," << mpl::to_string<Y>() << ")";
-            return os.str();
+            return os.str() + "EXPRESSIONS CHECK WORKING!";
         }
     };
     

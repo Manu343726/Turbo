@@ -11,12 +11,21 @@
 #include "traits.hpp"
 #include "operators.hpp"
 
+#include <type_traits> //std::enable_if
+
 namespace mpl
 {
 #define expr_result decltype
     
     template<typename LHS , typename RHS>
-    mpl::add<LHS,RHS> operator+(const LHS& , const RHS&);
+    typename std::enable_if<
+   !std::is_same<
+       void,
+       typename mpl::add_t<LHS,RHS>::result
+    >::value,
+    mpl::add<LHS,RHS>
+>::type
+    operator+(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
     mpl::sub<LHS,RHS> operator-(const LHS& , const RHS&);
