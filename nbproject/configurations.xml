@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="89">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>basic_types.hpp</itemPath>
+      <itemPath>common_functions.hpp</itemPath>
+      <itemPath>control_flow.hpp</itemPath>
+      <itemPath>expressions.hpp</itemPath>
+      <itemPath>fixed_point.hpp</itemPath>
+      <itemPath>iterator.hpp</itemPath>
+      <itemPath>list.hpp</itemPath>
+      <itemPath>metafunction_specialization.hpp</itemPath>
+      <itemPath>newfile.hpp</itemPath>
+      <itemPath>numeric_iterators.hpp</itemPath>
+      <itemPath>operators.hpp</itemPath>
+      <itemPath>sort.hpp</itemPath>
+      <itemPath>to_string.hpp</itemPath>
+      <itemPath>traits.hpp</itemPath>
+      <itemPath>unordered_map.hpp</itemPath>
+      <itemPath>utilities.hpp</itemPath>
+      <itemPath>value_t.hpp</itemPath>
+      <itemPath>vector.hpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>main.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <standard>8</standard>
+        </ccTool>
+      </compileType>
+      <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="common_functions.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="control_flow.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="expressions.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="fixed_point.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="iterator.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="list.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="metafunction_specialization.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="newfile.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="numeric_iterators.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="operators.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="sort.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="traits.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="unordered_map.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="utilities.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="value_t.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="vector.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="common_functions.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="control_flow.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="expressions.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="fixed_point.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="iterator.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="list.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="metafunction_specialization.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="newfile.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="numeric_iterators.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="operators.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="sort.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="traits.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="unordered_map.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="utilities.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="value_t.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="vector.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
