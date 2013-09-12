@@ -8,12 +8,14 @@
 #ifndef OPERATORS_HPP
 #define	OPERATORS_HPP
 
-#include "basic_types.hpp"
-
 #include <type_traits>
 
 namespace mpl
 {
+    /* unmeaning sentinel type */
+    
+    struct no_type {};
+    
     /* Metafunction */
     
     template<typename RESULT>

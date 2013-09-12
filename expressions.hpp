@@ -13,64 +13,75 @@
 
 #include <type_traits> //std::enable_if
 
+namespace
+{
+#define ENABLE_ONLY_FOR_SPECIALIZED_BINARY(result_metafunction) typename std::enable_if<                                           \
+                                                                                        !std::is_same<                             \
+                                                                                                      void,                        \
+                                                                                                      result_metafunction<LHS,RHS> \
+                                                                                                     >::value,                     \
+                                                                                        result_metafunction<LHS,RHS>               \
+                                                                                       >::type         
+    
+#define ENABLE_ONLY_FOR_SPECIALIZED_UNARY(result_metafunction) typename std::enable_if<                                     \
+                                                                                       !std::is_same<                       \
+                                                                                                     void,                  \
+                                                                                                     result_metafunction<T> \
+                                                                                                    >::value,               \
+                                                                                       result_metafunction<T>               \
+                                                                                      >::type   
+}
+
 namespace mpl
 {
-#define expr_result decltype
     
     template<typename LHS , typename RHS>
-    typename std::enable_if<
-   !std::is_same<
-       void,
-       typename mpl::add_t<LHS,RHS>::result
-    >::value,
-    mpl::add<LHS,RHS>
->::type
-    operator+(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::add) operator+(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    mpl::sub<LHS,RHS> operator-(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::sub) operator-(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    mpl::mul<LHS,RHS> operator*(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::mul) operator*(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    mpl::div<LHS,RHS> operator/(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::div) operator/(const LHS& , const RHS&);
     
     
     
     
     template<typename LHS , typename RHS>
-    mpl::logical_and<LHS,RHS> operator&&(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::logical_and) operator&&(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    mpl::logical_or<LHS,RHS>  operator||(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::logical_or)  operator||(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    mpl::logical_xor<LHS,RHS> operator^(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::logical_xor) operator^(const LHS& , const RHS&);
     
     template<typename T>
-    mpl::logical_not<T>       operator!(const T&);
+    ENABLE_ONLY_FOR_SPECIALIZED_UNARY(mpl::logical_not)  operator!(const T&);
     
     
     
     
     template<typename LHS , typename RHS>
-    mpl::equal<LHS,RHS>           operator==(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::equal)           operator==(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    mpl::not_equal<LHS,RHS>       operator!=(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::not_equal)       operator!=(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    mpl::bigger_than<LHS,RHS>     operator>(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::bigger_than)     operator>(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    mpl::less_than<LHS,RHS>       operator<(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::less_than)       operator<(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    mpl::bigger_or_equal<LHS,RHS> operator>=(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::bigger_or_equal) operator>=(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    mpl::less_or_equal<LHS,RHS>   operator<=(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::less_or_equal)   operator<=(const LHS& , const RHS&);
     
     
 }

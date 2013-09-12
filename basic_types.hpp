@@ -25,7 +25,6 @@ namespace make_type_macro
 
 namespace mpl
 {
-    struct no_type{};
     
     template<typename T>
     struct type_t
@@ -55,6 +54,15 @@ namespace mpl
     
     using false_type = mpl::boolean<false>;
     using true_type  = mpl::boolean<true>;
+    
+    template<typename T>
+    struct equal_t<mpl::no_type,T> : public mpl::function<mpl::false_type> {};
+    
+    template<typename T>
+    struct equal_t<T,mpl::no_type> : public mpl::function<mpl::false_type> {};
+    
+    template<>
+    struct equal_t<mpl::no_type,mpl::no_type> : public mpl::function<mpl::true_type> {};
 }
 
 #endif	/* BASIC_TRAITS_HPP */

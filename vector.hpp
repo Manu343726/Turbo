@@ -78,7 +78,7 @@ namespace mpl
         {
             std::ostringstream os;
             os << "(" << mpl::to_string<X>() << "," << mpl::to_string<Y>() << ")";
-            return os.str() + "EXPRESSIONS CHECK WORKING!";
+            return os.str();
         }
     };
     
@@ -116,6 +116,28 @@ namespace mpl
     
     template<typename X1 , typename Y1 , typename Z1 , typename W1 , typename X2 , typename Y2 , typename Z2 , typename W2>
     struct add_t<math::vec4<X1,Y1,Z1,W1>,math::vec4<X2,Y2,Z2,W2>> : public mpl::function<math::vec4<mpl::add<X1,X2> , mpl::add<Y1,Y2> , mpl::add<Z1,Z2> , mpl::add<W1,W2>>> {};
+    
+    //Substraction:
+    
+    template<typename X1 , typename Y1 , typename X2 , typename Y2>
+    struct sub_t<math::vec2<X1,Y1>,math::vec2<X2,Y2>> : public mpl::function<math::vec2<mpl::sub<X1,X2> , mpl::sub<Y1,Y2>>> {};
+    
+    template<typename X1 , typename Y1 , typename Z1 , typename X2 , typename Y2 , typename Z2>
+    struct sub_t<math::vec3<X1,Y1,Z1>,math::vec3<X2,Y2,Z2>> : public mpl::function<math::vec3<mpl::sub<X1,X2> , mpl::sub<Y1,Y2> , mpl::sub<Z1,Z2>>> {};
+    
+    template<typename X1 , typename Y1 , typename Z1 , typename W1 , typename X2 , typename Y2 , typename Z2 , typename W2>
+    struct sub_t<math::vec4<X1,Y1,Z1,W1>,math::vec4<X2,Y2,Z2,W2>> : public mpl::function<math::vec4<mpl::sub<X1,X2> , mpl::sub<Y1,Y2> , mpl::sub<Z1,Z2> , mpl::sub<W1,W2>>> {};
+
+    //Scalar product:
+    
+    template<typename X1 , typename Y1 , typename X2 , typename Y2>
+    struct mul_t<math::vec2<X1,Y1>,math::vec2<X2,Y2>> : public mpl::function<decltype( X1() * X2() + Y1() * Y2())> {};
+    
+    template<typename X1 , typename Y1 , typename Z1 , typename X2 , typename Y2 , typename Z2>
+    struct mul_t<math::vec3<X1,Y1,Z1>,math::vec3<X2,Y2,Z2>> : public mpl::function<decltype( X1() * X2() + Y1() * Y2() + Z1() * Z2())> {};
+    
+    template<typename X1 , typename Y1 , typename Z1 , typename W1 , typename X2 , typename Y2 , typename Z2 , typename W2>
+    struct mul_t<math::vec4<X1,Y1,Z1,W1>,math::vec4<X2,Y2,Z2,W2>> : public mpl::function<decltype( X1() * X2() + Y1() * Y2() + Z1() * Z2() + W1() * W2())> {};
 }
 
 #endif	/* VECTOR_HPP */

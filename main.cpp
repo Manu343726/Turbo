@@ -63,7 +63,7 @@ int main()
     std::cout << mpl::to_string<pi_2>() << std::endl;
     std::cout << mpl::to_string<input>() << std::endl;  
     std::cout << mpl::to_string<v1>() << std::endl;
-    std::cout << mpl::to_string<decltype( v1() + v1() )>() << std::endl;
+    std::cout << mpl::to_string<decltype( v1() * v1() )>() << std::endl;
     std::cout << mpl::to_string<typename output::first>() << std::endl; //This prints [float,int,char,bool]
     std::cout << mpl::to_string<typename output::second>() << std::endl; //This prints [float,int,char,bool]
     //std::cout << mpl::to_string<sizes>() << std::endl;  //This prints [1,1]

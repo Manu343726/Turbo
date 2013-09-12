@@ -100,16 +100,16 @@ namespace mpl
     
 
     template<typename VALUE1 , typename VALUE2>
-    struct equal_t<mpl::iterator<VALUE1> , mpl::iterator<VALUE2>> : public mpl::equal<VALUE1 , VALUE2> {};
+    struct equal_t<mpl::iterator<VALUE1> , mpl::iterator<VALUE2>> : public mpl::function<mpl::equal<VALUE1 , VALUE2>> {};
 
     template<typename VALUE1 , typename RIGHT1 , typename VALUE2 , typename RIGHT2>
-    struct equal_t<mpl::forward_iterator<VALUE1,RIGHT1> , forward_iterator<VALUE2,RIGHT2>> : public mpl::logical_and<equal<VALUE1,VALUE2> , mpl::equal<RIGHT1,RIGHT2>> {};
+    struct equal_t<mpl::forward_iterator<VALUE1,RIGHT1> , forward_iterator<VALUE2,RIGHT2>> : public mpl::function<mpl::logical_and<equal<VALUE1,VALUE2> , mpl::equal<RIGHT1,RIGHT2>>> {};
 
     template<typename VALUE1 , typename LEFT1 , typename VALUE2 , typename LEFT2>
-    struct equal_t<mpl::backward_iterator<LEFT1 , VALUE1> , backward_iterator<LEFT2,VALUE2>> : public mpl::logical_and<equal<VALUE1,VALUE2> , mpl::equal<LEFT1,LEFT2>> {};
+    struct equal_t<mpl::backward_iterator<LEFT1 , VALUE1> , backward_iterator<LEFT2,VALUE2>> : public mpl::function<mpl::logical_and<equal<VALUE1,VALUE2> , mpl::equal<LEFT1,LEFT2>>> {};
 
     template<typename LEFT1 , typename VALUE1 , typename RIGHT1 , typename LEFT2 , typename VALUE2 , typename RIGHT2>
-    struct equal_t<mpl::bidirectional_iterator<LEFT1,VALUE1,RIGHT1> , mpl::bidirectional_iterator<LEFT2,VALUE2,RIGHT2>> : public decltype( mpl::equal<LEFT1,LEFT2>() && mpl::equal<VALUE1,VALUE2>() && mpl::equal<RIGHT1,RIGHT2>()) {};
+    struct equal_t<mpl::bidirectional_iterator<LEFT1,VALUE1,RIGHT1> , mpl::bidirectional_iterator<LEFT2,VALUE2,RIGHT2>> : public mpl::function<decltype( mpl::equal<LEFT1,LEFT2>() && mpl::equal<VALUE1,VALUE2>() && mpl::equal<RIGHT1,RIGHT2>())> {};
 
 
     namespace
