@@ -19,7 +19,7 @@
 
 struct foo { double a; double b; };
 
-using input = mpl::for_each<mpl::make_integer_forward_iterator<0>, mpl::make_integer_forward_iterator<2> , mpl::function>;
+using input = mpl::for_each<mpl::make_integer_forward_iterator<0>, mpl::make_integer_forward_iterator<20> , mpl::function>;
 
 template<typename T , typename U>
 using comparer = mpl::boolean<(sizeof(T) < sizeof(U))>; //In this example, we use the size of the type as ordering criteria (Decreasing order, biggest element to the left and lessr to the right )
@@ -48,7 +48,13 @@ struct fibonacci_kernel
 {
     using fib_n_1 = typename PREVIOUS_RESULT::first;
     using fib_n_2 = typename PREVIOUS_RESULT::second;
+    
+    using fib_n = decltype( fib_n_1() + fib_n_2() );
+    
+    using result = mpl::pair<fib_n,fib_n_1>;
 };
+
+using fibo = typename mpl::for_loop<mpl::make_integer_forward_iterator<2> , mpl::make_integer_forward_iterator<10> , mpl::pair<mpl::integer<1>,mpl::integer<0>> , fibonacci_kernel>::first;
 
 
 
@@ -63,8 +69,10 @@ int main()
     std::cout << mpl::to_string<pi_2>() << std::endl;
     std::cout << mpl::to_string<input>() << std::endl;  
     std::cout << mpl::to_string<v1>() << std::endl;
-    std::cout << mpl::to_string<decltype( v1() * v1() )>() << std::endl;
+    std::cout << mpl::to_string<decltype( v1() * mpl::integer<-2>() + v1() * mpl::decimal<5,-1>() )>() << std::endl;
     std::cout << mpl::to_string<typename output::first>() << std::endl; //This prints [float,int,char,bool]
     std::cout << mpl::to_string<typename output::second>() << std::endl; //This prints [float,int,char,bool]
+    std::cout << mpl::to_string<fibo>() << std::endl;
     //std::cout << mpl::to_string<sizes>() << std::endl;  //This prints [1,1]
 }
+

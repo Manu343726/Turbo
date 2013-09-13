@@ -138,6 +138,26 @@ namespace mpl
     
     template<typename X1 , typename Y1 , typename Z1 , typename W1 , typename X2 , typename Y2 , typename Z2 , typename W2>
     struct mul_t<math::vec4<X1,Y1,Z1,W1>,math::vec4<X2,Y2,Z2,W2>> : public mpl::function<decltype( X1() * X2() + Y1() * Y2() + Z1() * Z2() + W1() * W2())> {};
+
+    //Porduct:
+
+    template<typename X , typename Y , typename RHS>
+    struct mul_t<math::vec2<X,Y>,RHS> : public mpl::function<math::vec2<mpl::mul<X,RHS>,mpl::mul<Y,RHS>>> {};
+    
+    template<typename LHS , typename X , typename Y>
+    struct mul_t<LHS,math::vec2<X,Y>> : public mpl::function<math::vec2<mpl::mul<X,LHS>,mpl::mul<Y,LHS>>> {};
+    
+    template<typename X , typename Y , typename Z , typename RHS>
+    struct mul_t<math::vec3<X,Y,Z>,RHS> : public mpl::function<math::vec3<mpl::mul<X,RHS>,mpl::mul<Y,RHS>,mpl::mul<Z,RHS>>> {};
+    
+    template<typename LHS , typename X , typename Y , typename Z>
+    struct mul_t<LHS,math::vec3<X,Y,Z>> : public mpl::function<math::vec3<mpl::mul<X,LHS>,mpl::mul<Y,LHS>,mpl::mul<Z,LHS>>> {};
+    
+    template<typename X , typename Y , typename Z , typename W , typename RHS>
+    struct mul_t<math::vec4<X,Y,Z,W>,RHS> : public mpl::function<math::vec4<mpl::mul<X,RHS>,mpl::mul<Y,RHS>,mpl::mul<Z,RHS>,mpl::mul<W,RHS>>> {};
+    
+    template<typename LHS , typename X , typename Y , typename Z , typename W>
+    struct mul_t<LHS,math::vec4<X,Y,Z,W>> : public mpl::function<math::vec4<mpl::mul<X,LHS>,mpl::mul<Y,LHS>,mpl::mul<Z,LHS>,mpl::mul<W,LHS>>> {};
 }
 
 #endif	/* VECTOR_HPP */

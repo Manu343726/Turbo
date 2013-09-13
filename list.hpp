@@ -190,8 +190,8 @@ namespace mpl
     
     using empty_list = list<>;
 
-    struct invalid_list {};
-    struct invalid_list_item {};
+    using invalid_list = mpl::no_type;
+    using invalid_list_item = mpl::no_type;
 
 
 

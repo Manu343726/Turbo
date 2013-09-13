@@ -51,6 +51,24 @@ namespace mpl
     
     
     template<typename LHS , typename RHS>
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::bitwise_leftshift)  operator<<(const LHS& , const RHS&);
+    
+    template<typename LHS , typename RHS>
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::bitwise_rightshift) operator>>(const LHS& , const RHS&);
+    
+    template<typename LHS , typename RHS>
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::bitwise_and) operator&(const LHS& , const RHS&);
+    
+    template<typename LHS , typename RHS>
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::bitwise_or)  operator|(const LHS& , const RHS&);
+    
+    template<typename T>
+    ENABLE_ONLY_FOR_SPECIALIZED_UNARY(mpl::bitwise_not)  operator~(const T&);
+    
+    
+    
+    
+    template<typename LHS , typename RHS>
     ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::logical_and) operator&&(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
