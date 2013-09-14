@@ -14,65 +14,36 @@
 #include "sort.hpp"
 #include "fixed_point.hpp"
 #include "vector.hpp"
+#include "sin.hpp"
 
 #include <iostream>
 
-struct foo { double a; double b; };
-
-using input = mpl::for_each<mpl::make_integer_forward_iterator<0>, mpl::make_integer_forward_iterator<20> , mpl::function>;
+using list = mpl::list<char,int,double>;
 
 template<typename T , typename U>
-using comparer = mpl::boolean<(sizeof(T) < sizeof(U))>; //In this example, we use the size of the type as ordering criteria (Decreasing order, biggest element to the left and lessr to the right )
+struct comparer : public mpl::boolean<(sizeof(T) > sizeof(U))> {};
 
-using output = mpl::debug_sort<input,mpl::bigger_than>; //Sorts the list using that comparer
-//using output = mpl::sort<mpl::list<float,float,int,int>,comparer>; //Sorts the list using that comparer
-
-template<typename T>
-struct kernel
-{
-    using result = mpl::size_t<sizeof(T)>;
-};
-
-/* 
- * mpl::for_each returns a list wich contains the set of results of aplying an specified kernel to each element of a specified interval.
- * In this case, retuns a list with the sizes of the types in the interval [begin + 2 , end)
- */
-//using sizes = mpl::for_each<decltype( mpl::begin<output>() + mpl::size_t<0>() ) , mpl::end<output> , kernel>;
+using sorted_list = mpl::sort<list , comparer>;
 
 
-using begin = mpl::make_uinteger_forward_iterator<0>;
-using end   = mpl::make_uinteger_forward_iterator<10>;
+using zero = mpl::decimal<0>;
+using pi = mpl::decimal<3141592 , -6>;
+using pi_2 = mpl::div<pi,mpl::decimal<2>>;
+using pi_4 = mpl::div<pi,mpl::decimal<4>>;
 
-template<typename CURRENT , typename PREVIOUS_RESULT>
-struct fibonacci_kernel
-{
-    using fib_n_1 = typename PREVIOUS_RESULT::first;
-    using fib_n_2 = typename PREVIOUS_RESULT::second;
-    
-    using fib_n = decltype( fib_n_1() + fib_n_2() );
-    
-    using result = mpl::pair<fib_n,fib_n_1>;
-};
+using one = mpl::decimal<1>;
+using two = mpl::decimal<2>;
+using one_two = decltype( one() / two() );
 
-using fibo = typename mpl::for_loop<mpl::make_integer_forward_iterator<2> , mpl::make_integer_forward_iterator<10> , mpl::pair<mpl::integer<1>,mpl::integer<0>> , fibonacci_kernel>::first;
-
-
-
-using pi = mpl::decimal<3141592,-6>;
-using pi_2 = decltype( pi() * mpl::integer<-2>() );
-
-using v1 = math::vec2<mpl::decimal<12,-1>,mpl::decimal<12,-1>>;
+using iterations = mpl::uinteger<10>;
 
 int main()
 {
-    std::cout << mpl::to_string<pi>() << std::endl;
-    std::cout << mpl::to_string<pi_2>() << std::endl;
-    std::cout << mpl::to_string<input>() << std::endl;  
-    std::cout << mpl::to_string<v1>() << std::endl;
-    std::cout << mpl::to_string<decltype( v1() * mpl::integer<-2>() + v1() * mpl::decimal<5,-1>() )>() << std::endl;
-    std::cout << mpl::to_string<typename output::first>() << std::endl; //This prints [float,int,char,bool]
-    std::cout << mpl::to_string<typename output::second>() << std::endl; //This prints [float,int,char,bool]
-    std::cout << mpl::to_string<fibo>() << std::endl;
-    //std::cout << mpl::to_string<sizes>() << std::endl;  //This prints [1,1]
+    std::cout << mpl::to_string<list>() << std::endl;
+    std::cout << mpl::to_string<sorted_list>() << std::endl;
+    std::cout << mpl::to_string<one_two>() << std::endl;
+    std::cout << "sin(" << mpl::to_string<pi>() << ") = " << mpl::to_string<math::sin<pi,iterations>>() << std::endl;
+    std::cout << "sin(" << mpl::to_string<pi_2>() << ") = " << mpl::to_string<math::sin<pi_2,iterations>>() << std::endl;
+    std::cout << "sin(" << mpl::to_string<pi_4>() << ") = " << mpl::to_string<math::sin<pi_4,iterations>>() << std::endl;
 }
 

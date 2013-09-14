@@ -65,8 +65,8 @@ namespace mpl
         };
     };
 
-    template<int mantissa , int exponent = 0 , fbcount PRECISSION = mpl::DEFAULT_FRACTIONAL_PRECISION> // MANTISSA x 10^EXPONENT
-    using decimal = mpl::fixed_point<decimal_shift<mantissa , PRECISSION + exponent>::value , PRECISSION>; 
+    template<int mantissa , int exponent = 0 , fbcount PRECISION = mpl::DEFAULT_FRACTIONAL_PRECISION> // MANTISSA x 10^EXPONENT
+    using decimal = mpl::fixed_point<decimal_shift<mantissa , PRECISION + exponent>::value , PRECISION>; 
 
 
     template<fpbits BITS , fbcount PRECISION>
@@ -86,50 +86,50 @@ namespace mpl
     struct mul_t<mpl::fixed_point<BITS1,PRECISION> , mpl::fixed_point<BITS2,PRECISION>> : public mpl::function<fixed_point<decimal_rightshift<BITS1*BITS2,PRECISION>::value , PRECISION>> {};
 
     template<fpbits BITS1 , fpbits BITS2 , fbcount PRECISION>
-    struct div_t<mpl::fixed_point<BITS1,PRECISION> , mpl::fixed_point<BITS2,PRECISION>> : public mpl::function<fixed_point<decimal_leftshift<BITS1/BITS2,PRECISION>::value , PRECISION>> {};
+    struct div_t<mpl::fixed_point<BITS1,PRECISION> , mpl::fixed_point<BITS2,PRECISION>> : public mpl::function<fixed_point<decimal_leftshift<BITS1,PRECISION>::value/BITS2 , PRECISION>> {};
     
     
     /* Operations between integral and fixed-point values */
     
-    template<typename T , T v , fpbits BITS , fbcount PRECISSION>
-    struct add_t<mpl::value_t<T,v>,mpl::fixed_point<BITS,PRECISSION>> : public mpl::function<mpl::add<mpl::decimal<(fpbits)v,0,PRECISSION>,mpl::fixed_point<BITS,PRECISSION>>> {};
+    template<typename T , T v , fpbits BITS , fbcount PRECISION>
+    struct add_t<mpl::value_t<T,v>,mpl::fixed_point<BITS,PRECISION>> : public mpl::function<mpl::add<mpl::decimal<(fpbits)v,0,PRECISION>,mpl::fixed_point<BITS,PRECISION>>> {};
 
-    template<typename T , T v , fpbits BITS , fbcount PRECISSION>
-    struct add_t<mpl::fixed_point<BITS,PRECISSION>,mpl::value_t<T,v>> : public mpl::function<mpl::add<mpl::fixed_point<BITS,PRECISSION>,mpl::decimal<(fpbits)v,0,PRECISSION>>> {};
+    template<typename T , T v , fpbits BITS , fbcount PRECISION>
+    struct add_t<mpl::fixed_point<BITS,PRECISION>,mpl::value_t<T,v>> : public mpl::function<mpl::add<mpl::fixed_point<BITS,PRECISION>,mpl::decimal<(fpbits)v,0,PRECISION>>> {};
     
     
-    template<typename T , T v , fpbits BITS , fbcount PRECISSION>
-    struct sub_t<mpl::value_t<T,v>,mpl::fixed_point<BITS,PRECISSION>> : public mpl::function<mpl::sub<mpl::decimal<(fpbits)v,0,PRECISSION>,mpl::fixed_point<BITS,PRECISSION>>> {};
+    template<typename T , T v , fpbits BITS , fbcount PRECISION>
+    struct sub_t<mpl::value_t<T,v>,mpl::fixed_point<BITS,PRECISION>> : public mpl::function<mpl::sub<mpl::decimal<(fpbits)v,0,PRECISION>,mpl::fixed_point<BITS,PRECISION>>> {};
 
-    template<typename T , T v , fpbits BITS , fbcount PRECISSION>
-    struct sub_t<mpl::fixed_point<BITS,PRECISSION>,mpl::value_t<T,v>> : public mpl::function<mpl::sub<mpl::fixed_point<BITS,PRECISSION>,mpl::decimal<(fpbits)v,0,PRECISSION>>> {};
+    template<typename T , T v , fpbits BITS , fbcount PRECISION>
+    struct sub_t<mpl::fixed_point<BITS,PRECISION>,mpl::value_t<T,v>> : public mpl::function<mpl::sub<mpl::fixed_point<BITS,PRECISION>,mpl::decimal<(fpbits)v,0,PRECISION>>> {};
     
     
-    template<typename T , T v , fpbits BITS , fbcount PRECISSION>
-    struct mul_t<mpl::value_t<T,v>,mpl::fixed_point<BITS,PRECISSION>> : public mpl::function<mpl::mul<mpl::decimal<(fpbits)v,0,PRECISSION>,mpl::fixed_point<BITS,PRECISSION>>> {};
+    template<typename T , T v , fpbits BITS , fbcount PRECISION>
+    struct mul_t<mpl::value_t<T,v>,mpl::fixed_point<BITS,PRECISION>> : public mpl::function<mpl::mul<mpl::decimal<(fpbits)v,0,PRECISION>,mpl::fixed_point<BITS,PRECISION>>> {};
 
-    template<typename T , T v , fpbits BITS , fbcount PRECISSION>
-    struct mul_t<mpl::fixed_point<BITS,PRECISSION>,mpl::value_t<T,v>> : public mpl::function<mpl::mul<mpl::fixed_point<BITS,PRECISSION>,mpl::decimal<(fpbits)v,0,PRECISSION>>> {};
+    template<typename T , T v , fpbits BITS , fbcount PRECISION>
+    struct mul_t<mpl::fixed_point<BITS,PRECISION>,mpl::value_t<T,v>> : public mpl::function<mpl::mul<mpl::fixed_point<BITS,PRECISION>,mpl::decimal<(fpbits)v,0,PRECISION>>> {};
     
     
-    template<typename T , T v , fpbits BITS , fbcount PRECISSION>
-    struct div_t<mpl::value_t<T,v>,mpl::fixed_point<BITS,PRECISSION>> : public mpl::function<mpl::div<mpl::decimal<(fpbits)v,0,PRECISSION>,mpl::fixed_point<BITS,PRECISSION>>> {};
+    template<typename T , T v , fpbits BITS , fbcount PRECISION>
+    struct div_t<mpl::value_t<T,v>,mpl::fixed_point<BITS,PRECISION>> : public mpl::function<mpl::div<mpl::decimal<(fpbits)v,0,PRECISION>,mpl::fixed_point<BITS,PRECISION>>> {};
 
-    template<typename T , T v , fpbits BITS , fbcount PRECISSION>
-    struct div_t<mpl::fixed_point<BITS,PRECISSION>,mpl::value_t<T,v>> : public mpl::function<mpl::div<mpl::fixed_point<BITS,PRECISSION>,mpl::decimal<(fpbits)v,0,PRECISSION>>> {};
+    template<typename T , T v , fpbits BITS , fbcount PRECISION>
+    struct div_t<mpl::fixed_point<BITS,PRECISION>,mpl::value_t<T,v>> : public mpl::function<mpl::div<mpl::fixed_point<BITS,PRECISION>,mpl::decimal<(fpbits)v,0,PRECISION>>> {};
 
 
 
 
     /* mpl::to_string */
     
-    template<fpbits BITS , fbcount PRECISSION>
-    struct to_string_t<mpl::fixed_point<BITS,PRECISSION>>
+    template<fpbits BITS , fbcount PRECISION>
+    struct to_string_t<mpl::fixed_point<BITS,PRECISION>>
     {
         operator std::string() const
         {
             std::ostringstream os;
-            os << mpl::fixed_point<BITS,PRECISSION>();
+            os << mpl::fixed_point<BITS,PRECISION>();
             return os.str();
         }
     };

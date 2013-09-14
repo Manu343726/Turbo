@@ -72,6 +72,7 @@ namespace mpl
 
     template<typename T>
     struct next_t;
+   
     
     template<typename T>
     using begin = typename mpl::begin_t<T>::result;
@@ -97,6 +98,10 @@ namespace mpl
     template<typename T>
     using last = typename mpl::rbegin<T>::value;
     
+    
+    //Apaño:
+    template<typename LEFT , typename VALUE>
+    struct next_t<mpl::backward_iterator<LEFT,VALUE>> : public mpl::function<mpl::previous<mpl::backward_iterator<LEFT,VALUE>>> {};
     
 
     template<typename VALUE1 , typename VALUE2>

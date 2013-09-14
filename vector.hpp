@@ -158,6 +158,26 @@ namespace mpl
     
     template<typename LHS , typename X , typename Y , typename Z , typename W>
     struct mul_t<LHS,math::vec4<X,Y,Z,W>> : public mpl::function<math::vec4<mpl::mul<X,LHS>,mpl::mul<Y,LHS>,mpl::mul<Z,LHS>,mpl::mul<W,LHS>>> {};
+    
+    //Division:
+    
+    template<typename X , typename Y , typename RHS>
+    struct div_t<math::vec2<X,Y>,RHS> : public mpl::function<math::vec2<mpl::div<X,RHS>,mpl::div<Y,RHS>>> {};
+    
+    template<typename LHS , typename X , typename Y>
+    struct div_t<LHS,math::vec2<X,Y>> : public mpl::function<math::vec2<mpl::div<X,LHS>,mpl::div<Y,LHS>>> {};
+    
+    template<typename X , typename Y , typename Z , typename RHS>
+    struct div_t<math::vec3<X,Y,Z>,RHS> : public mpl::function<math::vec3<mpl::div<X,RHS>,mpl::div<Y,RHS>,mpl::div<Z,RHS>>> {};
+    
+    template<typename LHS , typename X , typename Y , typename Z>
+    struct div_t<LHS,math::vec3<X,Y,Z>> : public mpl::function<math::vec3<mpl::div<X,LHS>,mpl::div<Y,LHS>,mpl::div<Z,LHS>>> {};
+    
+    template<typename X , typename Y , typename Z , typename W , typename RHS>
+    struct div_t<math::vec4<X,Y,Z,W>,RHS> : public mpl::function<math::vec4<mpl::div<X,RHS>,mpl::div<Y,RHS>,mpl::div<Z,RHS>,mpl::div<W,RHS>>> {};
+    
+    template<typename LHS , typename X , typename Y , typename Z , typename W>
+    struct div_t<LHS,math::vec4<X,Y,Z,W>> : public mpl::function<math::vec4<mpl::div<X,LHS>,mpl::div<Y,LHS>,mpl::div<Z,LHS>,mpl::div<W,LHS>>> {};
 }
 
 #endif	/* VECTOR_HPP */
