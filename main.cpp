@@ -17,6 +17,7 @@
 #include "fixed_point.hpp"
 #include "vector.hpp"
 #include "trigonometry.hpp"
+#include "matrix3x3.hpp"
 
 #include <iostream>
 
@@ -37,6 +38,10 @@ using two = mpl::decimal<2>;
 using one_two = decltype( one() / two() );
 
 using iterations = mpl::uinteger<200>;
+
+
+
+using unity = math::unity3x3<mpl::decimal<0>>;
 
 int main()
 {
@@ -59,5 +64,7 @@ int main()
     std::cout << "cotan(" << mpl::to_string<math::pi>() << ") = " << mpl::to_string<math::cotan<math::pi,iterations>>() << std::endl;
     std::cout << "cotan(" << mpl::to_string<pi_2>() << ") = " << mpl::to_string<math::cotan<pi_2,iterations>>() << std::endl;
     std::cout << "cotan(" << mpl::to_string<pi_4>() << ") = " << mpl::to_string<math::cotan<pi_4,iterations>>() << std::endl;
+    
+    std::cout << mpl::to_string<decltype( unity() + unity()*mpl::decimal<123,-2>() )>() << std::endl;
 }
 

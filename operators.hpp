@@ -5,8 +5,7 @@
  * Created on 1 de septiembre de 2013, 20:39
  */
 
-#ifndef OPERATORS_HPP
-#define	OPERATORS_HPP
+#pragma once
 
 #include <type_traits>
 
@@ -179,5 +178,5 @@ namespace mpl
     template<typename BASE>
     using square = mpl::mul<BASE,BASE>;
 }
-#endif	/* OPERATORS_HPP */
+	/* OPERATORS_HPP */
 

@@ -11,7 +11,7 @@
       <itemPath>fixed_point.hpp</itemPath>
       <itemPath>iterator.hpp</itemPath>
       <itemPath>list.hpp</itemPath>
-      <itemPath>metafunction_specialization.hpp</itemPath>
+      <itemPath>matrix3x3.hpp</itemPath>
       <itemPath>newfile.hpp</itemPath>
       <itemPath>numeric_iterators.hpp</itemPath>
       <itemPath>operators.hpp</itemPath>
@@ -75,7 +75,7 @@
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="metafunction_specialization.hpp" ex="false" tool="3" flavor2="0">
+      <item path="matrix3x3.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="newfile.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -137,7 +137,7 @@
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="metafunction_specialization.hpp" ex="false" tool="3" flavor2="0">
+      <item path="matrix3x3.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="newfile.hpp" ex="false" tool="3" flavor2="0">
       </item>
