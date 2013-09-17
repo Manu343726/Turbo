@@ -65,6 +65,9 @@ namespace mpl
         
         /* Arithmetic functions */
         
+        
+        // matrix + matrix:
+        
         template<typename LHS11 , typename LHS12 , typename LHS13 ,
                  typename LHS21 , typename LHS22 , typename LHS23 ,
                  typename LHS31 , typename LHS32 , typename LHS33 ,
@@ -85,6 +88,8 @@ namespace mpl
                                                              mpl::add<LHS31,RHS21> , mpl::add<LHS32,RHS32> , mpl::add<LHS33,RHS33>>> 
         {};
         
+        
+        // matrix - matrix:
         
         template<typename LHS11 , typename LHS12 , typename LHS13 ,
                  typename LHS21 , typename LHS22 , typename LHS23 ,
@@ -107,10 +112,12 @@ namespace mpl
         {};
         
         
+        // matrix * scalar:
+        
         template<typename LHS11 , typename LHS12 , typename LHS13 ,
                  typename LHS21 , typename LHS22 , typename LHS23 ,
                  typename LHS31 , typename LHS32 , typename LHS33 , 
-                
+        
                  typename RHS>
         
         struct mul_t< 
@@ -121,6 +128,43 @@ namespace mpl
                     > : public mpl::function<math::matrix3x3<mpl::mul<LHS11,RHS> , mpl::mul<LHS12,RHS> , mpl::mul<LHS13,RHS> , 
                                                              mpl::mul<LHS21,RHS> , mpl::mul<LHS22,RHS> , mpl::mul<LHS23,RHS> , 
                                                              mpl::mul<LHS31,RHS> , mpl::mul<LHS32,RHS> , mpl::mul<LHS33,RHS>>> 
+        {};
+        
+        
+        // scalar * matrix:
+        
+        template<typename RHS11 , typename RHS12 , typename RHS13 ,
+                 typename RHS21 , typename RHS22 , typename RHS23 ,
+                 typename RHS31 , typename RHS32 , typename RHS33 , 
+        
+                 typename LHS>
+        
+        struct mul_t<LHS ,
+                     math::matrix3x3<RHS11,RHS12,RHS13,
+                                     RHS21,RHS22,RHS23,
+                                     RHS31,RHS32,RHS33>
+                    > : public mpl::function<math::matrix3x3<mpl::mul<RHS11,LHS> , mpl::mul<RHS12,LHS> , mpl::mul<RHS13,LHS> , 
+                                                             mpl::mul<RHS21,LHS> , mpl::mul<RHS22,LHS> , mpl::mul<RHS23,LHS> , 
+                                                             mpl::mul<RHS31,LHS> , mpl::mul<RHS32,LHS> , mpl::mul<RHS33,LHS>>> 
+        {};
+        
+        
+        //matrix / scalar:
+        
+        template<typename LHS11 , typename LHS12 , typename LHS13 ,
+                 typename LHS21 , typename LHS22 , typename LHS23 ,
+                 typename LHS31 , typename LHS32 , typename LHS33 , 
+        
+                 typename RHS>
+        
+        struct div_t< 
+                     math::matrix3x3<LHS11,LHS12,LHS13,
+                                     LHS21,LHS22,LHS23,
+                                     LHS31,LHS32,LHS33> , 
+                     RHS
+                    > : public mpl::function<math::matrix3x3<mpl::div<LHS11,RHS> , mpl::div<LHS12,RHS> , mpl::div<LHS13,RHS> , 
+                                                             mpl::div<LHS21,RHS> , mpl::div<LHS22,RHS> , mpl::div<LHS23,RHS> , 
+                                                             mpl::div<LHS31,RHS> , mpl::div<LHS32,RHS> , mpl::div<LHS33,RHS>>> 
         {};
          
 }

@@ -5,10 +5,11 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>basic_types.hpp</itemPath>
+      <itemPath>boolean_predicates.hpp</itemPath>
       <itemPath>common_functions.hpp</itemPath>
-      <itemPath>control_flow.hpp</itemPath>
       <itemPath>expressions.hpp</itemPath>
       <itemPath>fixed_point.hpp</itemPath>
+      <itemPath>for_loops.hpp</itemPath>
       <itemPath>iterator.hpp</itemPath>
       <itemPath>list.hpp</itemPath>
       <itemPath>matrix3x3.hpp</itemPath>
@@ -61,13 +62,15 @@
       </compileType>
       <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="common_functions.hpp" ex="false" tool="3" flavor2="0">
+      <item path="boolean_predicates.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="control_flow.hpp" ex="false" tool="3" flavor2="0">
+      <item path="common_functions.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="expressions.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="fixed_point.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="for_loops.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="iterator.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -123,13 +126,15 @@
       </compileType>
       <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="common_functions.hpp" ex="false" tool="3" flavor2="0">
+      <item path="boolean_predicates.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="control_flow.hpp" ex="false" tool="3" flavor2="0">
+      <item path="common_functions.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="expressions.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="fixed_point.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="for_loops.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="iterator.hpp" ex="false" tool="3" flavor2="0">
       </item>

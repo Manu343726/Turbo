@@ -11,7 +11,7 @@
 #include "operators.hpp"
 #include "expressions.hpp"
 #include "list.hpp"
-#include "control_flow.hpp"
+#include "for_loops.hpp"
 #include "numeric_iterators.hpp"
 #include "sort.hpp"
 #include "fixed_point.hpp"
@@ -21,23 +21,20 @@
 
 #include <iostream>
 
-using list = mpl::for_each<mpl::make_uinteger_forward_iterator<0>,mpl::make_uinteger_forward_iterator<10>,mpl::function>;
+template<typename T>
+using filter = mpl::boolean<(T::value % 2 == 0)>;
+
+using list = mpl::for_each<mpl::make_uinteger_forward_iterator<0>,mpl::make_uinteger_forward_iterator<10>,mpl::function,filter>;
 
 template<typename T , typename U>
 struct comparer : public mpl::boolean<(sizeof(T) > sizeof(U))> {};
 
 using sorted_list = mpl::sort<list , mpl::bigger_than>;
 
-
-using zero = mpl::decimal<0>;
 using pi_2 = mpl::div<math::pi,mpl::decimal<2>>;
 using pi_4 = mpl::div<math::pi,mpl::decimal<4>>;
 
-using one = mpl::decimal<1>;
-using two = mpl::decimal<2>;
-using one_two = decltype( one() / two() );
-
-using iterations = mpl::uinteger<200>;
+using iterations = mpl::uinteger<10>;
 
 
 
@@ -47,7 +44,6 @@ int main()
 {
     std::cout << mpl::to_string<list>() << std::endl;
     std::cout << mpl::to_string<sorted_list>() << std::endl;
-    std::cout << mpl::to_string<one_two>() << std::endl;
     
     std::cout << "sin(" << mpl::to_string<math::pi>() << ") = " << mpl::to_string<math::sin<math::pi,iterations>>() << std::endl;
     std::cout << "sin(" << mpl::to_string<pi_2>() << ") = " << mpl::to_string<math::sin<pi_2,iterations>>() << std::endl;
@@ -65,6 +61,6 @@ int main()
     std::cout << "cotan(" << mpl::to_string<pi_2>() << ") = " << mpl::to_string<math::cotan<pi_2,iterations>>() << std::endl;
     std::cout << "cotan(" << mpl::to_string<pi_4>() << ") = " << mpl::to_string<math::cotan<pi_4,iterations>>() << std::endl;
     
-    std::cout << mpl::to_string<decltype( unity() + unity()*mpl::decimal<123,-2>() )>() << std::endl;
+    std::cout << mpl::to_string<decltype( unity()/mpl::decimal<20>() + mpl::decimal<20>() * unity()*mpl::decimal<123,-2>() - unity()*mpl::decimal<10>() )>() << std::endl;
 }
 
