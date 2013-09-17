@@ -18,13 +18,14 @@
 #include "vector.hpp"
 #include "trigonometry.hpp"
 #include "matrix3x3.hpp"
+#include "prime_filter.hpp"
 
 #include <iostream>
 
 template<typename T>
-using filter = mpl::boolean<(T::value % 2 == 0)>;
+using filter = math::is_prime<T>;
 
-using list = mpl::for_each<mpl::make_uinteger_forward_iterator<0>,mpl::make_uinteger_forward_iterator<10>,mpl::function,filter>;
+using list = mpl::for_each<mpl::make_uinteger_forward_iterator<0>,mpl::make_uinteger_forward_iterator<200>,mpl::function,filter>;
 
 template<typename T , typename U>
 struct comparer : public mpl::boolean<(sizeof(T) > sizeof(U))> {};
