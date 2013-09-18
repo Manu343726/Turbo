@@ -161,7 +161,8 @@ namespace mpl
     using div = typename mpl::div_t<LHS,RHS>::result;
     
     
-    
+    template<typename VALUE>
+    using opposite = mpl::sub<mpl::zero<VALUE>,VALUE>;
 
     template<typename VALUE>
     using increment = mpl::add<VALUE,mpl::one<VALUE>>;

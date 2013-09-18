@@ -10,6 +10,8 @@
 
 #include "operators.hpp"
 #include "to_string.hpp"
+#include "trigonometry.hpp"
+#include "vector.hpp"
 
 #include <sstream>
 #include <string>
@@ -35,6 +37,45 @@ namespace math
                                          mpl::zero<T> , mpl::one<T>  , mpl::zero<T> ,
                                          mpl::zero<T> , mpl::zero<T> , mpl::one<T>>;
         
+        
+        /* 2d transformations */
+        
+        template<typename TRANSLATION>
+        struct translate_t;
+        
+        template<typename X , typename Y>
+        struct translate_t<math::vec2<X,Y>> : public mpl::function<math::matrix3x3<mpl::one<X>  , mpl::zero<X> , X ,
+                                                                                   mpl::zero<X> , mpl::one<X>  , Y ,
+                                                                                   mpl::zero<X> , mpl::zero<X> , mpl::one<X>>>
+        {};
+        
+        template<typename SCALE>
+        struct scale_t : public mpl::function<math::matrix3x3<       SCALE     , mpl::zero<SCALE> , mpl::zero<SCALE> ,
+                                                              mpl::zero<SCALE> ,       SCALE      , mpl::zero<SCALE> ,
+                                                              mpl::zero<SCALE> , mpl::zero<SCALE> ,       SCALE>>
+        {};
+        
+        template<typename X , typename Y>
+        struct scale_t<math::vec2<X,Y>> : public mpl::function<math::matrix3x3<      X      , mpl::zero<X> , mpl::zero<X> ,
+                                                                               mpl::zero<X> ,       Y      , mpl::zero<X> ,
+                                                                               mpl::zero<X> , mpl::zero<X> , mpl::one<X>>>
+        {};
+        
+        template<typename ANGLE>
+        struct rotate_t : public mpl::function<math::matrix3x3<math::cos<ANGLE>                , math::sin<ANGLE>  , mpl::zero<ANGLE> ,
+                                                               mpl::opposite<math::sin<ANGLE>> , math::cos<ANGLE>  , mpl::zero<ANGLE> ,
+                                                               mpl::zero<ANGLE>                , mpl::zero<ANGLE>  , mpl::one<ANGLE>>> 
+        {};
+        
+        
+        template<typename TRANSLATION>
+        using translate = typename translate_t<TRANSLATION>::result;
+        
+        template<typename SCALE>
+        using scale = typename scale_t<SCALE>::result;
+        
+        template<typename ANGLE>
+        using rotate = typename rotate_t<ANGLE>::result;
 }
 
 namespace mpl
@@ -162,11 +203,59 @@ namespace mpl
                                      LHS21,LHS22,LHS23,
                                      LHS31,LHS32,LHS33> , 
                      RHS
-                    > : public mpl::function<math::matrix3x3<mpl::div<LHS11,RHS> , mpl::div<LHS12,RHS> , mpl::div<LHS13,RHS> , 
+                    > : public mpl::function<math::matrix3x3<decltype(LHS11()/RHS()) , decltype(LHS12()/RHS()) , mpl::div<LHS13,RHS> , 
                                                              mpl::div<LHS21,RHS> , mpl::div<LHS22,RHS> , mpl::div<LHS23,RHS> , 
                                                              mpl::div<LHS31,RHS> , mpl::div<LHS32,RHS> , mpl::div<LHS33,RHS>>> 
         {};
-         
+        
+        
+        // matrix * matrix
+        
+        template<typename LHS11 , typename LHS12 , typename LHS13 ,
+                 typename LHS21 , typename LHS22 , typename LHS23 ,
+                 typename LHS31 , typename LHS32 , typename LHS33 ,
+                
+                 typename RHS11 , typename RHS12 , typename RHS13 ,
+                 typename RHS21 , typename RHS22 , typename RHS23 ,
+                 typename RHS31 , typename RHS32 , typename RHS33>
+        struct mul_t<
+                     math::matrix3x3<LHS11,LHS12,LHS13,
+                                     LHS21,LHS22,LHS23,
+                                     LHS31,LHS32,LHS33> , 
+                
+                     math::matrix3x3<RHS11,RHS12,RHS13,
+                                     RHS21,RHS22,RHS23,
+                                     RHS31,RHS32,RHS33>
+                    > : public mpl::function<math::matrix3x3<decltype( LHS11()*RHS11() + LHS12()*RHS21() + LHS13()*RHS31() ) , //M11
+                                                             decltype( LHS11()*RHS12() + LHS12()*RHS22() + LHS13()*RHS32() ) , //M12
+                                                             decltype( LHS11()*RHS13() + LHS12()*RHS23() + LHS13()*RHS33() ) , //M13
+                
+                                                             decltype( LHS21()*RHS11() + LHS22()*RHS21() + LHS23()*RHS31() ) , //M21
+                                                             decltype( LHS21()*RHS12() + LHS22()*RHS22() + LHS23()*RHS32() ) , //M22
+                                                             decltype( LHS21()*RHS13() + LHS22()*RHS23() + LHS23()*RHS33() ) , //M23
+                
+                                                             decltype( LHS31()*RHS11() + LHS32()*RHS21() + LHS33()*RHS31() ) , //M31
+                                                             decltype( LHS31()*RHS12() + LHS32()*RHS22() + LHS33()*RHS32() ) , //M32
+                                                             decltype( LHS31()*RHS13() + LHS32()*RHS23() + LHS33()*RHS33() )>> //M33
+        {};
+        
+        
+        // matrix * vector (Apply transform):
+        
+        template<typename LHS11 , typename LHS12 , typename LHS13 ,
+                 typename LHS21 , typename LHS22 , typename LHS23 ,
+                 typename LHS31 , typename LHS32 , typename LHS33 , 
+        
+                 typename X , typename Y>
+        
+        struct mul_t< 
+                     math::matrix3x3<LHS11,LHS12,LHS13,
+                                     LHS21,LHS22,LHS23,
+                                     LHS31,LHS32,LHS33> , 
+                math::vec2<X,Y>
+                    > : public mpl::function<math::vec2<decltype( LHS11()*X() + LHS12()*Y() + LHS13() ),
+                                                        decltype( LHS21()*X() + LHS22()*Y() + LHS23() )>>
+        {};
 }
 #endif	/* MATRIX3X3_HPP */
 

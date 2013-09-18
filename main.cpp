@@ -62,6 +62,6 @@ int main()
     std::cout << "cotan(" << mpl::to_string<pi_2>() << ") = " << mpl::to_string<math::cotan<pi_2,iterations>>() << std::endl;
     std::cout << "cotan(" << mpl::to_string<pi_4>() << ") = " << mpl::to_string<math::cotan<pi_4,iterations>>() << std::endl;
     
-    std::cout << mpl::to_string<decltype( unity()/mpl::decimal<20>() + mpl::decimal<20>() * unity()*mpl::decimal<123,-2>() - unity()*mpl::decimal<10>() )>() << std::endl;
+    std::cout << mpl::to_string<math::rotate<math::pi>>() << std::endl;
 }
 
