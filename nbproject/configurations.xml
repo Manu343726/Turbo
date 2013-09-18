@@ -13,6 +13,7 @@
       <itemPath>iterator.hpp</itemPath>
       <itemPath>list.hpp</itemPath>
       <itemPath>matrix3x3.hpp</itemPath>
+      <itemPath>matrix4x4.hpp</itemPath>
       <itemPath>newfile.hpp</itemPath>
       <itemPath>numeric_iterators.hpp</itemPath>
       <itemPath>operators.hpp</itemPath>
@@ -84,6 +85,8 @@
       </item>
       <item path="matrix3x3.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="matrix4x4.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="newfile.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="numeric_iterators.hpp" ex="false" tool="3" flavor2="0">
@@ -151,6 +154,8 @@
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="matrix3x3.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="matrix4x4.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="newfile.hpp" ex="false" tool="3" flavor2="0">
       </item>
