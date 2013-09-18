@@ -18,6 +18,7 @@
 #include "vector.hpp"
 #include "trigonometry.hpp"
 #include "matrix3x3.hpp"
+#include "matrix4x4.hpp"
 #include "prime_filter.hpp"
 
 #include <iostream>
@@ -41,27 +42,15 @@ using iterations = mpl::uinteger<100>;
 
 using unity = math::unity3x3<mpl::decimal<0>>;
 
+using vector_2d = math::vec2<mpl::decimal<10> , mpl::decimal<0>>;
+using vector_3d = math::vec3<mpl::decimal<10> , mpl::decimal<10> , mpl::decimal<10>>;
+
+using rotation_2d = math::rotate<pi_2,math::rotation_2d,iterations>;
+using rotation_3d = math::rotate<pi_2,math::x_axis,iterations>;
+
 int main()
-{
-    std::cout << mpl::to_string<list>() << std::endl;
-    std::cout << mpl::to_string<sorted_list>() << std::endl;
-    
-    std::cout << "sin(" << mpl::to_string<mpl::decimal<0>>() << ") = " << mpl::to_string<math::sin<mpl::decimal<0>,iterations>>() << std::endl;
-    std::cout << "sin(" << mpl::to_string<pi_2>() << ") = " << mpl::to_string<math::sin<pi_2,iterations>>() << std::endl;
-    std::cout << "sin(" << mpl::to_string<pi_4>() << ") = " << mpl::to_string<math::sin<pi_4,iterations>>() << std::endl;
-    
-    std::cout << "cos(" << mpl::to_string<mpl::decimal<0>>() << ") = " << mpl::to_string<math::cos<mpl::decimal<0>,iterations>>() << std::endl;
-    std::cout << "cos(" << mpl::to_string<pi_2>() << ") = " << mpl::to_string<math::cos<pi_2,iterations>>() << std::endl;
-    std::cout << "cos(" << mpl::to_string<pi_4>() << ") = " << mpl::to_string<math::cos<pi_4,iterations>>() << std::endl;
-    
-    std::cout << "tan(" << mpl::to_string<mpl::decimal<0>>() << ") = " << mpl::to_string<math::tan<mpl::decimal<0>,iterations>>() << std::endl;
-    std::cout << "tan(" << mpl::to_string<pi_2>() << ") = " << mpl::to_string<math::tan<pi_2,iterations>>() << std::endl;
-    std::cout << "tan(" << mpl::to_string<pi_4>() << ") = " << mpl::to_string<math::tan<pi_4,iterations>>() << std::endl;
-    
-    //std::cout << "cotan(" << mpl::to_string<mpl::decimal<0>>() << ") = " << mpl::to_string<math::cotan<mpl::decimal<0>,iterations>>() << std::endl;
-    std::cout << "cotan(" << mpl::to_string<pi_2>() << ") = " << mpl::to_string<math::cotan<pi_2,iterations>>() << std::endl;
-    std::cout << "cotan(" << mpl::to_string<pi_4>() << ") = " << mpl::to_string<math::cotan<pi_4,iterations>>() << std::endl;
-    
-    std::cout << mpl::to_string<math::rotate<math::pi>>() << std::endl;
+{  
+    std::cout << mpl::to_string<decltype(math::translate<math::vec2<mpl::decimal<1>,mpl::decimal<1>>>() * rotation_2d() * vector_2d())>() << std::endl;
+    std::cout << mpl::to_string<decltype(rotation_3d() * vector_3d())>() << std::endl;
 }
 

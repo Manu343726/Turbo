@@ -12,6 +12,7 @@
 #include "to_string.hpp"
 #include "trigonometry.hpp"
 #include "vector.hpp"
+#include "transformations.hpp"
 
 #include <sstream>
 #include <string>
@@ -40,9 +41,6 @@ namespace math
         
         /* 2d transformations */
         
-        template<typename TRANSLATION>
-        struct translate_t;
-        
         template<typename X , typename Y>
         struct translate_t<math::vec2<X,Y>> : public mpl::function<math::matrix3x3<mpl::one<X>  , mpl::zero<X> , X ,
                                                                                    mpl::zero<X> , mpl::one<X>  , Y ,
@@ -61,10 +59,11 @@ namespace math
                                                                                mpl::zero<X> , mpl::zero<X> , mpl::one<X>>>
         {};
         
-        template<typename ANGLE>
-        struct rotate_t : public mpl::function<math::matrix3x3<math::cos<ANGLE>                , math::sin<ANGLE>  , mpl::zero<ANGLE> ,
-                                                               mpl::opposite<math::sin<ANGLE>> , math::cos<ANGLE>  , mpl::zero<ANGLE> ,
-                                                               mpl::zero<ANGLE>                , mpl::zero<ANGLE>  , mpl::one<ANGLE>>> 
+        template<typename ANGLE,typename TRIGONOMETRY_APROX_TERMS>
+        struct rotate_t<ANGLE,math::rotation_2d,TRIGONOMETRY_APROX_TERMS> 
+        : public mpl::function<math::matrix3x3<math::cos<ANGLE,TRIGONOMETRY_APROX_TERMS>                , math::sin<ANGLE,TRIGONOMETRY_APROX_TERMS>  , mpl::zero<ANGLE> ,
+                                               mpl::opposite<math::sin<ANGLE,TRIGONOMETRY_APROX_TERMS>> , math::cos<ANGLE,TRIGONOMETRY_APROX_TERMS>  , mpl::zero<ANGLE> ,
+                                               mpl::zero<ANGLE>                                         ,               mpl::zero<ANGLE>             , mpl::one<ANGLE>>> 
         {};
         
         
@@ -118,8 +117,8 @@ namespace mpl
                                      RHS21,RHS22,RHS23,
                                      RHS31,RHS32,RHS33>
                     > : public mpl::function<math::matrix3x3<mpl::add<LHS11,RHS11> , mpl::add<LHS12,RHS12> , mpl::add<LHS13,RHS13> , 
-                                                             mpl::add<LHS21,RHS31> , mpl::add<LHS22,RHS22> , mpl::add<LHS23,RHS23> , 
-                                                             mpl::add<LHS31,RHS21> , mpl::add<LHS32,RHS32> , mpl::add<LHS33,RHS33>>> 
+                                                             mpl::add<LHS21,RHS21> , mpl::add<LHS22,RHS22> , mpl::add<LHS23,RHS23> , 
+                                                             mpl::add<LHS31,RHS31> , mpl::add<LHS32,RHS32> , mpl::add<LHS33,RHS33>>> 
         {};
         
         
@@ -141,8 +140,8 @@ namespace mpl
                                      RHS21,RHS22,RHS23,
                                      RHS31,RHS32,RHS33>
                     > : public mpl::function<math::matrix3x3<mpl::sub<LHS11,RHS11> , mpl::sub<LHS12,RHS12> , mpl::sub<LHS13,RHS13> , 
-                                                             mpl::sub<LHS21,RHS31> , mpl::sub<LHS22,RHS22> , mpl::sub<LHS23,RHS23> , 
-                                                             mpl::sub<LHS31,RHS21> , mpl::sub<LHS32,RHS32> , mpl::sub<LHS33,RHS33>>> 
+                                                             mpl::sub<LHS21,RHS21> , mpl::sub<LHS22,RHS22> , mpl::sub<LHS23,RHS23> , 
+                                                             mpl::sub<LHS31,RHS31> , mpl::sub<LHS32,RHS32> , mpl::sub<LHS33,RHS33>>> 
         {};
         
         

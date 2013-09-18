@@ -53,12 +53,16 @@ namespace math
     
     
     
+#ifndef TURBO_CUSTOM_TRIGONOMETRY_DEFAULT_TERMS
+    using default_trigonometry_approximation_terms = mpl::uinteger<10>;
+#else
+    using default_trigonometry_approximation_terms = mpl::uinteger<TURBO_CUSTOM_TRIGONOMETRY_DEFAULT_TERMS>;
+#endif
     
-    
-    template<typename T , typename TERMS_COUNT = mpl::uinteger<4>>
+    template<typename T , typename TERMS_COUNT>
     struct sin_t;
     
-    template<typename T , typename TERMS_COUNT = mpl::uinteger<4>>
+    template<typename T , typename TERMS_COUNT = math::default_trigonometry_approximation_terms>
     using sin = typename sin_t<T,TERMS_COUNT>::result;
     
     /*
@@ -119,10 +123,10 @@ namespace math
     
     
     
-    template<typename T , typename TERMS_COUNT = mpl::uinteger<4>>
+    template<typename T , typename TERMS_COUNT>
     struct cos_t;
     
-    template<typename T , typename TERMS_COUNT = mpl::uinteger<4>>
+    template<typename T , typename TERMS_COUNT = math::default_trigonometry_approximation_terms>
     using cos = typename cos_t<T,TERMS_COUNT>::result;
     
     /*

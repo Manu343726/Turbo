@@ -21,6 +21,7 @@
       <itemPath>sort.hpp</itemPath>
       <itemPath>to_string.hpp</itemPath>
       <itemPath>traits.hpp</itemPath>
+      <itemPath>transformations.hpp</itemPath>
       <itemPath>trigonometry.hpp</itemPath>
       <itemPath>unordered_map.hpp</itemPath>
       <itemPath>utilities.hpp</itemPath>
@@ -101,6 +102,8 @@
       </item>
       <item path="traits.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="transformations.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="trigonometry.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="unordered_map.hpp" ex="false" tool="3" flavor2="0">
@@ -170,6 +173,8 @@
       <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="traits.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="transformations.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="trigonometry.hpp" ex="false" tool="3" flavor2="0">
       </item>
