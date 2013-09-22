@@ -161,3 +161,45 @@ As the example shows, the implementation has little precision errors (`cos(90º)
 
     using cos_deg_90 = math::cos<deg_90,mpl::uinteger<200>>; //cos(90º) computed using 200 terms. 
 
+
+## Compile-time matrix algebra
+Turbo implements 3x3 and 4x4 matrices to provide **compile-time matrix algebra**.  It supports matrix addition, substraction, and multiplication. For example:
+
+	#include "matrix3x3.hpp"
+	
+	using unity = math::unity3x3<mpl::decimal>
+	using a = decltype( (unity() * unity()) * mpl::decimal<4>() );
+	using b = decltype( a() + a() );
+	
+	int main()
+	{
+		std::cout << mpl::to_string<b>() << std::endl;
+	}
+> | 8 0 0 |  
+| 0 8 0 |  
+| 0 0 8 |
+
+### Compile-time 2d/3d transformations
+In adition to matrices, Turbo implements 2d/3d/4d vectors and provides **transformation matrices** such as rotations, scales, translations, etc. For example:
+
+	#include "matrix4x4.hpp"
+	#include "vector.hpp"
+	
+	using v1 = math::vec3<mpl::decimal<1> , mpl::decimal<1> , mpl::decimal<1>>;
+	using translation = mpl::vector<mpl::decimal<1> , mpl::decimal<0> , mpl::decimal<0>>;
+	using angle = decltype(math::pi() / mpl::decimal<2>());
+	using transformation = decltype( math::translate<translation>() * mpl::rotate<angle,math::x_axis>() ); 
+	using v2 = decltype( transformation() * v1() );
+	
+	int main()
+	{
+		std::cout << mpl::to_string<v1>() << std::endl;
+		std::cout << mpl::to_string<v2>() << std::endl;
+	}
+> (1,1,1)  
+(2,1,-1)
+	
+
+
+
+
