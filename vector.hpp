@@ -65,6 +65,19 @@ namespace math
     /* vectors length */
     
     //NOT IMPLEMENTED YET: Compile-time square-root needed
+    
+    /* 3d cross product */
+    
+    template<typename V1 , typename V2>
+    struct cross_product_t;
+    
+    template<typename X1 , typename Y1 , typename Z1 , typename X2 , typename Y2 , typename Z2>
+    struct cross_product_t<math::vec3<X1,Y1,Z1>,math::vec3<X2,Y2,Z2>> : public mpl::function<math::vec3<decltype( Y1()*Z2()-Z1()*Y2() ) , 
+                                                                                                        decltype( Z1()*X2()-X1()*Z2() ) , 
+                                                                                                        decltype( X1()*Y2()-Y1()*X2() )>> {};
+                                                                                                    
+    template<typename V1 , typename V2>
+    using cross_product = typename cross_product_t<V1,V2>::result;
 }
 
 namespace mpl

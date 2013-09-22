@@ -20,6 +20,7 @@
 #include "matrix3x3.hpp"
 #include "matrix4x4.hpp"
 #include "prime_filter.hpp"
+#include "color.hpp"
 
 #include <iostream>
 
@@ -48,9 +49,13 @@ using vector_3d = math::vec3<mpl::decimal<10> , mpl::decimal<10> , mpl::decimal<
 using rotation_2d = math::rotate<pi_2,math::rotation_2d,iterations>;
 using rotation_3d = math::rotate<pi_2,math::x_axis,iterations>;
 
+using color = gfx::color<gfx::byte<255> , gfx::byte<0> , gfx::byte<0>>;
+
 int main()
 {  
     std::cout << mpl::to_string<decltype(math::translate<math::vec2<mpl::decimal<1>,mpl::decimal<1>>>() * rotation_2d() * vector_2d())>() << std::endl;
     std::cout << mpl::to_string<decltype(rotation_3d() * vector_3d())>() << std::endl;
+    
+    std::cout << mpl::to_string<color>() << std::endl;
 }
 

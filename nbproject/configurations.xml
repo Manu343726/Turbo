@@ -6,6 +6,7 @@
                    projectFiles="true">
       <itemPath>basic_types.hpp</itemPath>
       <itemPath>boolean_predicates.hpp</itemPath>
+      <itemPath>color.hpp</itemPath>
       <itemPath>common_functions.hpp</itemPath>
       <itemPath>expressions.hpp</itemPath>
       <itemPath>fixed_point.hpp</itemPath>
@@ -18,6 +19,7 @@
       <itemPath>numeric_iterators.hpp</itemPath>
       <itemPath>operators.hpp</itemPath>
       <itemPath>prime_filter.hpp</itemPath>
+      <itemPath>render.hpp</itemPath>
       <itemPath>sort.hpp</itemPath>
       <itemPath>to_string.hpp</itemPath>
       <itemPath>traits.hpp</itemPath>
@@ -70,6 +72,8 @@
       </item>
       <item path="boolean_predicates.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="color.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="common_functions.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="expressions.hpp" ex="false" tool="3" flavor2="0">
@@ -95,6 +99,8 @@
       <item path="operators.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="prime_filter.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="render.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="sort.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -142,6 +148,8 @@
       </item>
       <item path="boolean_predicates.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="color.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="common_functions.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="expressions.hpp" ex="false" tool="3" flavor2="0">
@@ -167,6 +175,8 @@
       <item path="operators.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="prime_filter.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="render.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="sort.hpp" ex="false" tool="3" flavor2="0">
       </item>
