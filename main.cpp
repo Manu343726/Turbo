@@ -59,6 +59,6 @@ int main()
     
     std::cout << mpl::to_string<color>() << std::endl;
     
-    std::cout << mpl::to_string<math::sqrt<mpl::decimal<2>>>() << std::endl;
+    std::cout << mpl::to_string<math::sqrt<mpl::decimal<25>>>() << std::endl;
 }
 
