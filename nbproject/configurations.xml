@@ -19,8 +19,10 @@
       <itemPath>numeric_iterators.hpp</itemPath>
       <itemPath>operators.hpp</itemPath>
       <itemPath>prime_filter.hpp</itemPath>
+      <itemPath>random.hpp</itemPath>
       <itemPath>render.hpp</itemPath>
       <itemPath>sort.hpp</itemPath>
+      <itemPath>sqrt.hpp</itemPath>
       <itemPath>to_string.hpp</itemPath>
       <itemPath>traits.hpp</itemPath>
       <itemPath>transformations.hpp</itemPath>
@@ -100,9 +102,13 @@
       </item>
       <item path="prime_filter.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="random.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="render.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="sort.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="sqrt.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -176,9 +182,13 @@
       </item>
       <item path="prime_filter.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="random.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="render.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="sort.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="sqrt.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
       </item>

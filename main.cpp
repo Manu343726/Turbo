@@ -21,6 +21,7 @@
 #include "matrix4x4.hpp"
 #include "prime_filter.hpp"
 #include "color.hpp"
+#include "sqrt.hpp"
 
 #include <iostream>
 
@@ -57,5 +58,7 @@ int main()
     std::cout << mpl::to_string<decltype(rotation_3d() * vector_3d())>() << std::endl;
     
     std::cout << mpl::to_string<color>() << std::endl;
+    
+    std::cout << mpl::to_string<math::sqrt<mpl::decimal<2>>>() << std::endl;
 }
 
