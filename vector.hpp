@@ -13,6 +13,7 @@
 #include "expressions.hpp"
 #include "fixed_point.hpp"
 #include "to_string.hpp"
+#include "sqrt.hpp"
 
 #include <sstream>
 
@@ -62,9 +63,25 @@ namespace math
     template<typename X , typename Y , typename Z , typename W>
     struct square_length_t<math::vec4<X,Y,Z,W>> : public mpl::function<decltype( X() * X() + Y() * Y() + Z() * Z() + W() * W() )> {};
     
+    template<typename VECTOR>
+    using square_length = typename square_length_t<VECTOR>::result;
+    
     /* vectors length */
     
-    //NOT IMPLEMENTED YET: Compile-time square-root needed
+    template<typename X , typename Y>
+    struct length_t<math::vec2<X,Y>> : public mpl::function<math::sqrt<decltype( X() * X() + Y() * Y() )>> {};
+    
+    template<typename X , typename Y , typename Z>
+    struct length_t<math::vec3<X,Y,Z>> : public mpl::function<math::sqrt<decltype( X() * X() + Y() * Y() + Z() * Z() )>> {};
+    
+    template<typename X , typename Y , typename Z , typename W>
+    struct length_t<math::vec4<X,Y,Z,W>> : public mpl::function<math::sqrt<decltype( X() * X() + Y() * Y() + Z() * Z() + W() * W() )>> {};
+    
+    template<typename VECTOR>
+    using length = typename length_t<VECTOR>::result;
+    
+    template<typename VECTOR>
+    using normalize = mpl::div<VECTOR,math::length<VECTOR>>;
     
     /* 3d cross product */
     
