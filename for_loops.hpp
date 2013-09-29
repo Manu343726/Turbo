@@ -15,6 +15,14 @@
 
 namespace mpl
 {
+    template<bool BREAK_CONDITION>
+    struct loop_kernel
+    {
+        static const bool abort = BREAK_CONDITION;
+    };
+    
+    using no_abort_kernel = mpl::loop_kernel<false>;
+    
     namespace 
     {
         template<bool FLAG , typename A , typename B>
@@ -27,7 +35,7 @@ namespace mpl
         struct _conditional<false,A,B> : public mpl::type_t<B> {};
         
         
-        template<typename BEGIN , typename END , typename START_RESULT , template<typename,typename> class KERNEL>
+        template<typename BEGIN , typename END , typename START_RESULT , template<typename,typename> class KERNEL , typename STEP>
         class __for_loop
         {
         private:
@@ -35,8 +43,30 @@ namespace mpl
             struct _for_loop
             {
                 using kernel_result = typename KERNEL<typename CURRENT::value , PREVIOUS_RESULT>::result;
-                using next = _for_loop<mpl::next<CURRENT> , _END , kernel_result,mpl::equal<mpl::next<CURRENT>,_END>::value>;
-                using result = typename next::result;
+                static const bool abort = KERNEL<typename CURRENT::value , PREVIOUS_RESULT>::abort;
+                
+                //static_assert( !abort , "LOOP ABORTED!" );
+                
+                /* lazy evaluation */
+                
+                template<bool LOOP_ABORTED , typename NON_GLOBAL_SPECIALIZATION_WORKAROUND = mpl::no_type>
+                struct loop_result;
+                
+                template<typename WAROUND>
+                struct loop_result<true , WAROUND>
+                {
+                    using result = kernel_result;
+                };
+                
+                template<typename WAROUND>
+                struct loop_result<false , WAROUND>
+                {
+                    using next = _for_loop<mpl::next<CURRENT,STEP> , _END , kernel_result,mpl::equal<mpl::next<CURRENT,STEP>,_END>::value>;
+                    using result = typename next::result;
+                };
+                
+              
+                using result = typename loop_result<abort>::result;
             };
 
             template<typename CURRENT , typename _END , typename PREVIOUS_RESULT>
@@ -48,10 +78,8 @@ namespace mpl
         public:
             using result = typename _for_loop<BEGIN,END,START_RESULT,mpl::equal<BEGIN,END>::value>::result;
         };
-
         
-        
-        template<typename BEGIN , typename END , template<typename> class KERNEL , template<typename> class FILTER>
+        template<typename BEGIN , typename END , template<typename> class KERNEL , template<typename> class FILTER , typename STEP>
         class __for_each
         {
             template<typename CURRENT , bool FINISHED , typename... KERNELS>
@@ -67,11 +95,11 @@ namespace mpl
                 
                 //The value passes the filter: The kernel is instantiated
                 template<bool FILTER_RESULT , typename NON_GLOBAL_SPECIALIZATION_WORKAROUND = mpl::no_type>
-                struct _result : public _for_each<mpl::next<CURRENT>, mpl::equal<mpl::next<CURRENT>,END>::value,KERNELS...,typename KERNEL<typename CURRENT::value>::result> {};
+                struct _result : public _for_each<mpl::next<CURRENT,STEP>, mpl::equal<mpl::next<CURRENT,STEP>,END>::value,KERNELS...,typename KERNEL<typename CURRENT::value>::result> {};
                 
                 //The value desn't pass the filter: The kernel is not instantiated
                 template<typename NON_GLOBAL_SPECIALIZATION_WORKAROUND>
-                struct _result<false,NON_GLOBAL_SPECIALIZATION_WORKAROUND> : public _for_each<mpl::next<CURRENT>, mpl::equal<mpl::next<CURRENT>,END>::value,KERNELS...> {};
+                struct _result<false,NON_GLOBAL_SPECIALIZATION_WORKAROUND> : public _for_each<mpl::next<CURRENT,STEP>, mpl::equal<mpl::next<CURRENT,STEP>,END>::value,KERNELS...> {};
                 
                 
                 using kernel_result = typename KERNEL<typename CURRENT::value>::result;
@@ -87,15 +115,36 @@ namespace mpl
         public:
             using result = typename _for_each<BEGIN,false>::result;
         };
+        
+        
+        /* Optimized for_each version: */
+        
+        template<typename LIST , template<typename> class KERNEL , template<typename> class FILTER , typename STEP>
+        struct __for_each_in_list;
+        
+        //O(n)
+        template<typename... Ts , template<typename> class KERNEL , template<typename> class FILTER , typename STEP>
+        struct __for_each_in_list<mpl::list<Ts...> , KERNEL , FILTER , STEP> : public __for_each<mpl::begin<mpl::list<Ts...>> , mpl::end<mpl::list<Ts...>> , KERNEL , FILTER , STEP> {};
+        
+        //O(1)
+        template<typename... Ts , template<typename> class KERNEL , typename STEP>
+        struct __for_each_in_list<mpl::list<Ts...> , KERNEL , mpl::true_predicate , STEP> : public mpl::function<mpl::list<typename KERNEL<Ts>::result...>> {};
+        
+        //O(1)
+        template<typename... Ts , template<typename> class KERNEL , typename STEP>
+        struct __for_each_in_list<mpl::list<Ts...> , KERNEL , mpl::false_predicate , STEP> : public mpl::function<mpl::empty_list> {};
+        
     }
     
     template<typename CONDITION , typename A , typename B>
     using conditional = typename _conditional<CONDITION::value,A,B>::type;
     
-    template<typename BEGIN , typename END , typename INIT_DATA , template<typename,typename> class KERNEL>
-    using for_loop = typename __for_loop<BEGIN,END,INIT_DATA,KERNEL>::result;
+    template<typename BEGIN , typename END , typename INIT_DATA , template<typename,typename> class KERNEL , typename STEP = mpl::no_type>
+    using for_loop = typename __for_loop<BEGIN,END,INIT_DATA,KERNEL,STEP>::result;
     
-    template<typename BEGIN , typename END , template<typename> class KERNEL , template<typename> class FILTER = mpl::true_predicate>
-    using for_each = typename __for_each<BEGIN,END,KERNEL,FILTER>::result;
+    template<typename BEGIN , typename END , template<typename> class KERNEL , template<typename> class FILTER = mpl::true_predicate , typename STEP = mpl::no_type>
+    using for_each = typename __for_each<BEGIN,END,KERNEL,FILTER,STEP>::result;
+    
+    template<typename LIST , template<typename> class KERNEL , template<typename> class FILTER = mpl::true_predicate , typename STEP = mpl::no_type>
+    using for_each_in_list = typename __for_each_in_list<LIST,KERNEL,FILTER,STEP>::result;
 }
-

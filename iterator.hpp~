@@ -70,7 +70,7 @@ namespace mpl
     template<typename T>
     struct previous_t;
 
-    template<typename T , typename INCREMENT = mpl::no_type>
+    template<typename T>
     struct next_t;
    
     
@@ -89,8 +89,8 @@ namespace mpl
     template<typename T>
     using previous = typename mpl::previous_t<T>::result;
     
-    template<typename T , typename INCREMENT = mpl::no_type>
-    using next = typename mpl::next_t<T,INCREMENT>::result;
+    template<typename T>
+    using next = typename mpl::next_t<T>::result;
 
     template<typename T>
     using first = typename mpl::begin<T>::value;

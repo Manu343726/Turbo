@@ -68,6 +68,9 @@ namespace math
     
     /* vectors length */
     
+    template<typename VECTOR>
+    struct length_t;
+    
     template<typename X , typename Y>
     struct length_t<math::vec2<X,Y>> : public mpl::function<math::sqrt<decltype( X() * X() + Y() * Y() )>> {};
     

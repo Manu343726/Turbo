@@ -8,11 +8,13 @@
       <itemPath>boolean_predicates.hpp</itemPath>
       <itemPath>color.hpp</itemPath>
       <itemPath>common_functions.hpp</itemPath>
+      <itemPath>complex.hpp</itemPath>
       <itemPath>expressions.hpp</itemPath>
       <itemPath>fixed_point.hpp</itemPath>
       <itemPath>for_loops.hpp</itemPath>
       <itemPath>iterator.hpp</itemPath>
       <itemPath>list.hpp</itemPath>
+      <itemPath>mandelbrot.hpp</itemPath>
       <itemPath>matrix3x3.hpp</itemPath>
       <itemPath>matrix4x4.hpp</itemPath>
       <itemPath>newfile.hpp</itemPath>
@@ -77,6 +79,8 @@
       </item>
       <item path="common_functions.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="complex.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="expressions.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="fixed_point.hpp" ex="false" tool="3" flavor2="0">
@@ -88,6 +92,8 @@
       <item path="list.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mandelbrot.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="matrix3x3.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -155,6 +161,8 @@
       </item>
       <item path="common_functions.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="complex.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="expressions.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="fixed_point.hpp" ex="false" tool="3" flavor2="0">
@@ -166,6 +174,8 @@
       <item path="list.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="mandelbrot.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="matrix3x3.hpp" ex="false" tool="3" flavor2="0">
       </item>

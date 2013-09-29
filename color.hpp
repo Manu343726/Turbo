@@ -21,6 +21,8 @@ namespace gfx
     template<mpl::character_type VALUE>
     using byte = mpl::ucharacter<VALUE>;
     
+    using byte_t = unsigned char;
+    
     template<typename R , typename G , typename B , typename A = gfx::byte<255>>
     struct color
     {
@@ -34,6 +36,12 @@ namespace gfx
             return ((unsigned int)A::value << 24) | ((unsigned int)R::value << 16) | ((unsigned int)G::value << 8) | (unsigned int)B::value;
         }
     };
+    
+    template<byte_t R , byte_t G , byte_t B>
+    using from_rgb = gfx::color<gfx::byte<R>,gfx::byte<G>,gfx::byte<B>>;
+    
+    template<byte_t A , byte_t R , byte_t G , byte_t B>
+    using from_argb = gfx::color<gfx::byte<R>,gfx::byte<G>,gfx::byte<B>,gfx::byte<A>>;
 }
 
 namespace mpl
