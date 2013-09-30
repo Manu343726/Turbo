@@ -22,14 +22,17 @@
 #include "prime_filter.hpp"
 #include "color.hpp"
 #include "sqrt.hpp"
-#include "mandelbrot.hpp"
+//#include "mandelbrot.hpp"
+#include "complex.hpp"
 
 #include <iostream>
 
-using mandelbrot_result = mandelbrot::execute;
+using a = math::complex<mpl::decimal<1>,mpl::decimal<0>>;
+using b = math::complex<mpl::decimal<0>,mpl::decimal<1>>;
+using c = decltype( a() * b() + b() / a() );
 
 int main()
 {
-    mandelbrot::dump_to_file<mandelbrot_result>();
+    std::cout << mpl::to_string<c>() << std::endl;
 }
 
