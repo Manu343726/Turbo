@@ -22,7 +22,7 @@
 #include "prime_filter.hpp"
 #include "color.hpp"
 #include "sqrt.hpp"
-//#include "mandelbrot.hpp"
+#include "mandelbrot.hpp"
 #include "complex.hpp"
 
 #include <iostream>
