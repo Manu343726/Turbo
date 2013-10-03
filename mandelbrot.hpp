@@ -62,28 +62,28 @@ namespace mandelbrot
     
     
     template<typename LIST>
-    struct stract_to_array;
+    struct to_array;
     
     template<typename... Ts>
-    struct stract_to_array<mpl::list<Ts...>>
+    struct to_array<mpl::list<Ts...>>
     {      
         template<typename list>
-        struct stract_sub_array;
+        struct dump_sub_array;
         
         template<typename... Us>
-        struct stract_sub_array<mpl::list<Us...>>
+        struct dump_sub_array<mpl::list<Us...>>
         {
             static constexpr unsigned int result[size::value] = { Us::value... };
         };
         
-        static constexpr unsigned int result[size::value][size::value] = { {stract_sub_array<Ts>::result...} };
+        static constexpr unsigned int result[size::value][size::value] = { {dump_sub_array<Ts>::result...} };
     };
     
     template<typename LIST>
     void dump_to_file()
     {
-        auto begin = std::begin( stract_to_array<LIST>::result );
-        auto end   = std::end( stract_to_array<LIST>::result );
+        auto begin = std::begin( to_array<LIST>::result );
+        auto end   = std::end( to_array<LIST>::result );
         
         std::ofstream os("mandelbrot_output.ppm");
         
