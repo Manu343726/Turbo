@@ -14,6 +14,7 @@
 #include "color.hpp"
 
 #include <iostream>
+#include <fstream>
 #include <iterator>
 
 
@@ -24,8 +25,8 @@ namespace mandelbrot
 
     using begin = mpl::make_decimal_forward_iterator<begin_point>;
     using end   = mpl::make_decimal_forward_iterator<end_point>;
-    using size  = mpl::uinteger<10>; //Size in tiles 
-    using step  = decltype( (mpl::decimal<begin_point>() - mpl::decimal<end_point>()) / size() );
+    using size  = mpl::uinteger<1>; //Size in tiles 
+    using step  = decltype( (mpl::decimal<end_point>() - mpl::decimal<begin_point>()) / size() );
 
     using convergence_value = mpl::decimal<1>;
     using iteration_begin   = mpl::make_uinteger_forward_iterator<0>;
@@ -47,9 +48,11 @@ namespace mandelbrot
                 static const bool abort = decltype( math::square_length<result>() > convergence_value )::value;
             };
 
-            using result_number = mpl::for_loop<iteration_begin , iteration_end , number , iterate_number , step>; 
+            //using result_number = mpl::for_loop<iteration_begin , iteration_end , number , iterate_number , step>; COMPILER SEGFAULT HERE
+            using result_number = number;
 
-            using result = mpl::conditional<decltype( (math::square_length<result_number>() > convergence_value() ) ) , gfx::from_rgb<0,0,0> , gfx::from_rgb<255,255,255>>;
+            using result = mpl::conditional<mpl::true_type , gfx::from_rgb<0,0,0> , gfx::from_rgb<255,255,255>>;
+            //using result = gfx::from_rgb<255,255,255>;
         };
 
         using result = mpl::for_each<begin,end,inner_loop,mpl::true_predicate,step>;
@@ -63,18 +66,17 @@ namespace mandelbrot
     
     template<typename... Ts>
     struct stract_to_array<mpl::list<Ts...>>
-    {
-        template<typename LIST>
+    {      
+        template<typename list>
         struct stract_sub_array;
         
         template<typename... Us>
-        struct stract_sub_array
+        struct stract_sub_array<mpl::list<Us...>>
         {
-            static const unsigned int result[] = { Us()... };
-            using array_type = unsigned int[sizeof...(Us)];
+            static constexpr unsigned int result[size::value] = { Us::value... };
         };
         
-        static const typename stract_sub_array<mpl::first<mpl::list<Ts...>>>::array_type result[] = { stract_sub_array<Ts>::result... };
+        static constexpr unsigned int result[size::value][size::value] = { {stract_sub_array<Ts>::result...} };
     };
     
     template<typename LIST>
@@ -83,13 +85,13 @@ namespace mandelbrot
         auto begin = std::begin( stract_to_array<LIST>::result );
         auto end   = std::end( stract_to_array<LIST>::result );
         
-        std::ofstream os("raytracer_output.ppm");
+        std::ofstream os("mandelbrot_output.ppm");
         
         if(os)
         {
             os << "P6 " << size::value << " " << size::value << "255 ";
             
-            std::copy(begin,end,std::ostream_iterator(os));
+            std::copy(begin,end,std::ostream_iterator<unsigned int>(os));
         }   
     }
 }

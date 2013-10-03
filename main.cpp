@@ -31,8 +31,13 @@ using a = math::complex<mpl::decimal<1>,mpl::decimal<0>>;
 using b = math::complex<mpl::decimal<0>,mpl::decimal<1>>;
 using c = decltype( a() * b() + b() / a() );
 
+using mandelbrot_image = mandelbrot::execute;
+
 int main()
 {
     std::cout << mpl::to_string<c>() << std::endl;
+    std::cout << mpl::to_string<mpl::conditional<decltype(mpl::uinteger<0>() > mpl::uinteger<1>()),a,b>>() << std::endl;
+    
+    mandelbrot::dump_to_file<mandelbrot_image>();
 }
 

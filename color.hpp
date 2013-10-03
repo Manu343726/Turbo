@@ -24,17 +24,12 @@ namespace gfx
     using byte_t = unsigned char;
     
     template<typename R , typename G , typename B , typename A = gfx::byte<255>>
-    struct color
+    struct color : public mpl::uinteger<((unsigned int)A::value << 24) | ((unsigned int)R::value << 16) | ((unsigned int)G::value << 8) | (unsigned int)B::value>
     {
         using a = A;
         using r = R;
         using g = G;
         using b = B;
-        
-        constexpr operator unsigned int()
-        {
-            return ((unsigned int)A::value << 24) | ((unsigned int)R::value << 16) | ((unsigned int)G::value << 8) | (unsigned int)B::value;
-        }
     };
     
     template<byte_t R , byte_t G , byte_t B>

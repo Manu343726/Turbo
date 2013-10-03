@@ -79,6 +79,13 @@ namespace mpl
     template<fixed_point_bits BITS , fixed_point_precision PRECISION>
     struct one_t<mpl::fixed_point<BITS,PRECISION>> : public mpl::function<fixed_point<decimal_leftshift<1,PRECISION>::value,PRECISION>> {};
 
+    
+    /* Comparison operator */
+    
+    template<fixed_point_bits BITS1 , fixed_point_bits BITS2 , fixed_point_precision P1 , fixed_point_precision P2>
+    struct equal_t<mpl::fixed_point<BITS1,P1> , mpl::fixed_point<BITS2,P2>> : public mpl::function<mpl::boolean<BITS1 == BITS2 && P1 == P2>> {};
+
+    /* Arithmetic operators */
 
     template<fixed_point_bits BITS1 , fixed_point_bits BITS2 , fixed_point_precision PRECISION>
     struct add_t<mpl::fixed_point<BITS1,PRECISION> , mpl::fixed_point<BITS2,PRECISION>> : public mpl::function<fixed_point<BITS1+BITS2 , PRECISION>> {};

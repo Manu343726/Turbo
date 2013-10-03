@@ -39,7 +39,7 @@ namespace mpl
         class __for_loop
         {
         private:
-            template<typename CURRENT , typename _END , typename PREVIOUS_RESULT , bool FINISHED>
+            template<typename CURRENT , typename PREVIOUS_RESULT , bool FINISHED>
             struct _for_loop
             {
                 using kernel_result = typename KERNEL<typename CURRENT::value , PREVIOUS_RESULT>::result;
@@ -61,7 +61,8 @@ namespace mpl
                 template<typename WAROUND>
                 struct loop_result<false , WAROUND>
                 {
-                    using next = _for_loop<mpl::next<CURRENT,STEP> , _END , kernel_result,mpl::equal<mpl::next<CURRENT,STEP>,_END>::value>;
+                    using next_iterator = mpl::next<CURRENT,STEP>;
+                    using next = _for_loop<next_iterator , kernel_result,mpl::equal<next_iterator,END>::value>;
                     using result = typename next::result;
                 };
                 
@@ -69,14 +70,20 @@ namespace mpl
                 using result = typename loop_result<abort>::result;
             };
 
-            template<typename CURRENT , typename _END , typename PREVIOUS_RESULT>
-            struct _for_loop<CURRENT,_END,PREVIOUS_RESULT,true>
+            template<typename CURRENT , typename PREVIOUS_RESULT>
+            struct _for_loop<CURRENT,PREVIOUS_RESULT,true>
             {
                 using result = PREVIOUS_RESULT;
             };
 
         public:
-            using result = typename _for_loop<BEGIN,END,START_RESULT,mpl::equal<BEGIN,END>::value>::result;
+            using result = typename _for_loop<BEGIN,START_RESULT,false>::result;
+        };
+        
+        template<typename BEGIN , typename START_RESULT , template<typename,typename> class KERNEL , typename STEP>
+        class __for_loop<BEGIN,BEGIN,START_RESULT,KERNEL,STEP>
+        {
+            using result = START_RESULT;
         };
         
         template<typename BEGIN , typename END , template<typename> class KERNEL , template<typename> class FILTER , typename STEP>
