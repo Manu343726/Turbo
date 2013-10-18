@@ -42,7 +42,7 @@ namespace mpl
         using shifter = decimal_rightshift<NUMBER,-SHIFT>;
     };
 
-    template<int number , int shift>
+    template<long long number , int shift>
     struct decimal_shift
     {
         using shifter = typename decimal_shift_chooser<( shift >= 0 ) , number , shift>::shifter;
@@ -69,7 +69,7 @@ namespace mpl
         };
     };
 
-    template<int mantissa , int exponent = 0 , fixed_point_precision PRECISION = mpl::DEFAULT_FRACTIONAL_PRECISION> // MANTISSA x 10^EXPONENT
+    template<long long int mantissa , int exponent = 0 , fixed_point_precision PRECISION = mpl::DEFAULT_FRACTIONAL_PRECISION> // MANTISSA x 10^EXPONENT
     using decimal = mpl::fixed_point<decimal_shift<mantissa , PRECISION + exponent>::value , PRECISION>; 
 
 

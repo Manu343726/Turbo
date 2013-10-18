@@ -48,7 +48,11 @@ namespace math
          * For loop kernel: CURRENT (The value of the loop counter) is not used. The previous value holds Xn.
          */
         template<typename CURRENT , typename PREVIOUS>                                //2*Xn was rewritten as Xn + Xn due to a lack of the library...
-        struct newton_iter_kernel : public mpl::function<decltype( PREVIOUS() - ((mpl::square<PREVIOUS>() - N() ) / (PREVIOUS() + PREVIOUS())) )> {};
+        struct newton_iter_kernel 
+        {
+            using result = decltype( PREVIOUS() - ((mpl::square<PREVIOUS>() - N() ) / (PREVIOUS() + PREVIOUS())) );
+            using abort  = mpl::equal<PREVIOUS , result>; //When the function converges, the loop is aborted
+        };
         
         using begin = mpl::make_uinteger_forward_iterator<1>;
         using end   = mpl::make_uinteger_forward_iterator<ITERATIONS::value>;

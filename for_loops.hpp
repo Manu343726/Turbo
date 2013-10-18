@@ -18,7 +18,7 @@ namespace mpl
     template<bool BREAK_CONDITION>
     struct loop_kernel
     {
-        static const bool abort = BREAK_CONDITION;
+        using abort = mpl::boolean<BREAK_CONDITION>;
     };
     
     using no_abort_kernel = mpl::loop_kernel<false>;
@@ -43,23 +43,20 @@ namespace mpl
             struct _for_loop
             {
                 using kernel_result = typename KERNEL<typename CURRENT::value , PREVIOUS_RESULT>::result;
-                static const bool abort = KERNEL<typename CURRENT::value , PREVIOUS_RESULT>::abort;
-                
-                //static_assert( !abort , "LOOP ABORTED!" );
                 
                 /* lazy evaluation */
                 
-                template<bool LOOP_ABORTED , typename NON_GLOBAL_SPECIALIZATION_WORKAROUND = mpl::no_type>
+                template<typename LOOP_ABORTED , typename NON_GLOBAL_SPECIALIZATION_WORKAROUND = mpl::no_type>
                 struct loop_result;
                 
                 template<typename WAROUND>
-                struct loop_result<true , WAROUND>
+                struct loop_result<mpl::true_type , WAROUND>
                 {
                     using result = kernel_result;
                 };
                 
                 template<typename WAROUND>
-                struct loop_result<false , WAROUND>
+                struct loop_result<mpl::false_type , WAROUND>
                 {
                     using next_iterator = mpl::next<CURRENT,STEP>;
                     using next = _for_loop<next_iterator , kernel_result,mpl::equal<next_iterator,END>::value>;
@@ -67,7 +64,7 @@ namespace mpl
                 };
                 
               
-                using result = typename loop_result<abort>::result;
+                using result = typename loop_result<typename KERNEL<typename CURRENT::value , PREVIOUS_RESULT>::abort>::result;
             };
 
             template<typename CURRENT , typename PREVIOUS_RESULT>

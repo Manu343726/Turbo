@@ -18,8 +18,8 @@
 
 namespace gfx
 {
-    template<mpl::character_type VALUE>
-    using byte = mpl::ucharacter<VALUE>;
+    template<char VALUE>
+    using byte = mpl::value_t<char,VALUE>;
     
     using byte_t = unsigned char;
     

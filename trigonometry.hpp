@@ -115,7 +115,11 @@ namespace math
         using three = mpl::decimal<3,0,PRECISION>;
         
         template<typename K , typename VAL>
-        struct kernel : public mpl::function<decltype( one() - ( x() * x() )/(two() * K() + two())/(two()*K()+three())*VAL() )> {};
+        struct kernel
+        {
+            using result = decltype( one() - ( x() * x() )/(two() * K() + two())/(two()*K()+three())*VAL() );
+            using abort = mpl::equal<result,VAL>; //When the value converges, the loop is aborted
+        };
         
     public:
         using result = decltype( x() * mpl::for_loop<begin , end , one , kernel>() );
@@ -162,8 +166,11 @@ namespace math
         using two   = mpl::decimal<2,0,PRECISION>;
         
         template<typename K , typename VAL>
-        struct kernel : public mpl::function<decltype( one() - ( x() * x() )/(two() * K() + two())/(two()*K()+one())*VAL() )> {};
-        
+        struct kernel
+        {
+            using result = decltype( one() - ( x() * x() )/(two() * K() + two())/(two()*K()+one())*VAL() );
+            using abort = mpl::equal<result,VAL>; //When the value converges, the loop is aborted
+        };
     public:
         using result = mpl::for_loop<begin , end , one , kernel>;
     };

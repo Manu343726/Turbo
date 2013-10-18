@@ -42,7 +42,7 @@ namespace mpl
         
         using is_value_flag = _is_a_value;
         
-        constexpr T operator()() { return val; }
+        const constexpr T operator()() { return val; }
     }; 
     
     template<typename T>

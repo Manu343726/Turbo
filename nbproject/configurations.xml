@@ -67,6 +67,8 @@
       <compileType>
         <ccTool>
           <standard>8</standard>
+          <commandlineTool>clang</commandlineTool>
+          <commandLine>-std=c++11</commandLine>
         </ccTool>
       </compileType>
       <item path="README.md" ex="false" tool="3" flavor2="0">

@@ -25,7 +25,7 @@ namespace mandelbrot
 
     using begin = mpl::make_decimal_forward_iterator<begin_point>;
     using end   = mpl::make_decimal_forward_iterator<end_point>;
-    using size  = mpl::uinteger<1>; //Size in tiles 
+    using size  = mpl::uinteger<4>; //Size in tiles 
     using step  = decltype( (mpl::decimal<end_point>() - mpl::decimal<begin_point>()) / size() );
 
     using convergence_value = mpl::decimal<1>;
@@ -45,11 +45,11 @@ namespace mandelbrot
             {
                 using result = decltype( PREVIOUS() * PREVIOUS() + mpl::one<PREVIOUS>() );
 
-                static const bool abort = decltype( math::square_length<result>() > convergence_value )::value;
+                using abort = decltype( math::square_length<result>() > convergence_value );
             };
 
-            //using result_number = mpl::for_loop<iteration_begin , iteration_end , number , iterate_number , step>; COMPILER SEGFAULT HERE
-            using result_number = number;
+            using result_number = mpl::for_loop<iteration_begin , iteration_end , number , iterate_number , step>;
+            //using result_number = number;
 
             using result = mpl::conditional<mpl::true_type , gfx::from_rgb<0,0,0> , gfx::from_rgb<255,255,255>>;
             //using result = gfx::from_rgb<255,255,255>;
@@ -63,27 +63,27 @@ namespace mandelbrot
     
     template<typename LIST>
     struct to_array;
-    
+
     template<typename... Ts>
     struct to_array<mpl::list<Ts...>>
-    {      
-        template<typename list>
-        struct dump_sub_array;
-        
-        template<typename... Us>
-        struct dump_sub_array<mpl::list<Us...>>
-        {
-            static constexpr unsigned int result[size::value] = { Us::value... };
-        };
-        
-        static constexpr unsigned int result[size::value][size::value] = { {dump_sub_array<Ts>::result...} };
+    {
+        static constexpr unsigned int result[] = { Ts::value... };
+    }; 
+
+    template<typename LIST>
+    struct to_2d_array;
+
+    template<typename... Ts>
+    struct to_2d_array<mpl::list<Ts...>>
+    {
+        static constexpr unsigned int result[sizeof...(Ts)][sizeof...(Ts)] = { to_array<Ts>::result... };
     };
     
     template<typename LIST>
     void dump_to_file()
     {
-        auto begin = std::begin( to_array<LIST>::result );
-        auto end   = std::end( to_array<LIST>::result );
+        auto begin = std::begin( to_2d_array<LIST>::result );
+        auto end   = std::end( to_2d_array<LIST>::result );
         
         std::ofstream os("mandelbrot_output.ppm");
         

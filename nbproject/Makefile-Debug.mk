@@ -15,8 +15,8 @@ NM=nm
 CCADMIN=CCadmin
 RANLIB=ranlib
 CC=gcc
-CCC=g++
-CXX=g++
+CCC=clang
+CXX=clang
 FC=gfortran
 AS=as
 
@@ -42,8 +42,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=
-CXXFLAGS=
+CCFLAGS=-std=c++11
+CXXFLAGS=-std=c++11
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -65,7 +65,7 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/turbo: ${OBJECTFILES}
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g -std=c++11 -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
 
 # Subprojects
 .build-subprojects:
