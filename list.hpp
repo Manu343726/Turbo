@@ -219,6 +219,20 @@ namespace mpl
 
     template<typename ITEM>
     struct previous_t<mpl::backward_iterator<mpl::empty_list,ITEM>> : public mpl::make_backward_iterator<mpl::invalid_list , mpl::invalid_list_item> {};
+    
+    
+    
+    template<typename LIST>
+    struct from_list_t;
+    
+    template<typename LIST>
+    using from_list = mpl::result_of<from_list_t<LIST>>;
+    
+    template<typename T>
+    struct to_list_t;
+    
+    template<typename T>
+    using to_list = mpl::result_of<to_list_t<T>>;
 }
 
 #endif	/* LIST_HPP */
