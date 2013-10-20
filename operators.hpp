@@ -23,6 +23,9 @@ namespace mpl
         using result = RESULT;
     };
     
+    template<typename FUNCTION>
+    using result_of = typename FUNCTION::result;
+    
     /* Identities */
     
     template<typename T>
@@ -32,10 +35,10 @@ namespace mpl
     struct one_t : public mpl::function<T> {}; //default
     
     template<typename T>
-    using zero = typename mpl::zero_t<T>::result;
+    using zero = mpl::result_of<mpl::zero_t<T>>;
     
     template<typename T>
-    using one = typename mpl::one_t<T>::result;
+    using one = mpl::result_of<mpl::one_t<T>>;
     
     
 
@@ -54,16 +57,16 @@ namespace mpl
     struct logical_xor_t;
 
     template<typename OP>
-    using logical_not = typename mpl::logical_not_t<OP>::result;
+    using logical_not = mpl::result_of<mpl::logical_not_t<OP>>;
 
     template<typename LHS , typename RHS>
-    using logical_or = typename mpl::logical_or_t<LHS,RHS>::result;
+    using logical_or = mpl::result_of<mpl::logical_or_t<LHS,RHS>>;
     
     template<typename LHS , typename RHS>
-    using logical_and = typename mpl::logical_and_t<LHS,RHS>::result;
+    using logical_and = mpl::result_of<mpl::logical_and_t<LHS,RHS>>;
 
     template<typename LHS , typename RHS>
-    using logical_xor  = typename mpl::logical_xor_t<LHS,RHS>::result;
+    using logical_xor  = mpl::result_of<mpl::logical_xor_t<LHS,RHS>>;
     
     
 

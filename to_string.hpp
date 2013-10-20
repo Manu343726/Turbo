@@ -11,6 +11,8 @@
 #include "value_t.hpp"
 
 #include <string>
+#include <sstream>
+#include <typeinfo>
 
 namespace implementation__demangling
 {
@@ -44,7 +46,12 @@ namespace implementation__demangling
 
         return std::string( abi::__cxa_demangle( name.c_str() , 0 , 0 , &status ) );
     }
-#endif /* GCC */
+#else /* GCC */
+    std::string demangle(  const std::string& name )
+    { 
+        return name;
+    }
+#endif
 }
 
 namespace implementation__to_string

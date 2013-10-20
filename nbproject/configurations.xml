@@ -24,6 +24,7 @@
       <itemPath>render.hpp</itemPath>
       <itemPath>sort.hpp</itemPath>
       <itemPath>sqrt.hpp</itemPath>
+      <itemPath>tictactoe.hpp</itemPath>
       <itemPath>to_string.hpp</itemPath>
       <itemPath>traits.hpp</itemPath>
       <itemPath>transformations.hpp</itemPath>
@@ -32,6 +33,7 @@
       <itemPath>utilities.hpp</itemPath>
       <itemPath>value_t.hpp</itemPath>
       <itemPath>vector.hpp</itemPath>
+      <itemPath>wrapper.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -60,14 +62,13 @@
     <conf name="Debug" type="1">
       <toolsSet>
         <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
-        <compilerSet>default</compilerSet>
+        <compilerSet>GNU|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
         <ccTool>
           <standard>8</standard>
-          <commandlineTool>clang</commandlineTool>
           <commandLine>-std=c++11</commandLine>
         </ccTool>
       </compileType>
@@ -115,6 +116,8 @@
       </item>
       <item path="sqrt.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="tictactoe.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="traits.hpp" ex="false" tool="3" flavor2="0">
@@ -130,6 +133,8 @@
       <item path="value_t.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="vector.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="wrapper.hpp" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -197,6 +202,8 @@
       </item>
       <item path="sqrt.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="tictactoe.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="traits.hpp" ex="false" tool="3" flavor2="0">
@@ -212,6 +219,8 @@
       <item path="value_t.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="vector.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="wrapper.hpp" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

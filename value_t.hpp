@@ -9,7 +9,6 @@
 #define	VALUE_T_HPP
 
 #include "operators.hpp"
-#include "basic_types.hpp"
 
 #include <type_traits> //std::common_type
 

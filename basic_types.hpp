@@ -5,21 +5,15 @@
  * Created on 1 de septiembre de 2013, 14:08
  */
 
-#ifndef BASIC_TRAITS_HPP
-#define	BASIC_TRAITS_HPP
+#ifndef BASIC_TYPES_HPP
+#define	BASIC_TYPES_HPP
 
 #include "value_t.hpp"
 
-#include <cstddef>
-#include <type_traits>
-#include <typeinfo>
-#include <string>
-#include <sstream>
-
 namespace make_type_macro
 {
-    #define MAKE_TYPE(name , type) template<type VALUE> \
-                                   using name = mpl::value_t<type,VALUE>; \
+    #define MAKE_TYPE(name , type) template<type VALUE>                   \
+                                   using name = value_t<type,VALUE>; \
                                    using name##_type = type
 }
 
