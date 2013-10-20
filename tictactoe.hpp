@@ -115,6 +115,29 @@ namespace tictactoe
     
     template<typename BOARD>
     using check_game_state = typename check_game_state_t<BOARD>::result;
+    
+    
+    
+    
+    
+    namespace 
+    {
+
+        
+        template<typename BOARD , typename TURN>
+        struct compute_next_boards_t
+        {
+            template<typename T>
+            using cell_filter = mpl::equal<T , tictactoe::cell::empty>;
+            
+            template<typename CURRENT_CELL , typename EMPTY_CELLS_LIST>
+            struct search_empty_cells_kernel : public mpl::no_abort_kernel
+            {
+                using result = mpl::conditional<mpl::equal<CURRENT_CELL,tictactoe::cell::empty> ,
+                        mpl::a
+            };
+        };
+    }
 }
 
 namespace mpl

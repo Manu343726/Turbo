@@ -163,6 +163,40 @@ namespace mpl
         
         template<typename... Ts , typename... Us>
         struct _concat<mpl::list<Ts...>,mpl::list<Us...>> : public mpl::type_t<mpl::list<Ts...,Us...>>{};
+        
+        /* mpl::push_back */
+        
+        template<typename LIST , typename T>
+        struct push_back_t;
+        
+        template<typename... Ts , typename T>
+        struct push_back_t<mpl::list<Ts...>> : public mpl::function<mpl::list<Ts...,T>> {};
+        
+        /* mpl::pop_back */
+        
+        template<typename LIST>
+        struct pop_back_t;
+        
+        template<typename... Ts , typename BACK>
+        struct pop_back_t<mpl::list<Ts...,BACK>> : public mpl::function<mpl::list<Ts...>> {};
+        
+        
+        /* mpl::push_front */
+        
+        template<typename LIST , typename T>
+        struct push_front_t;
+        
+        template<typename... Ts , typename T>
+        struct push_front_t<mpl::list<Ts...>> : public mpl::function<mpl::list<T,Ts...>> {};
+        
+        /* mpl::pop_front */
+        
+        template<typename LIST>
+        struct pop_front_t;
+        
+        template<typename FRONT , typename... Ts>
+        struct pop_front_t<mpl::list<FRONT,Ts...>> : public mpl::function<mpl::list<Ts...,>> {};
+       
     }
     
     
@@ -186,6 +220,18 @@ namespace mpl
     
     template<typename LHS , typename RHS>
     using concat = typename _concat<LHS,RHS>::type;
+    
+    template<typename LIST , typename T>
+    using push_back = mpl::result_of<push_back_t<LIST,T>>;
+    
+    template<typename LIST>
+    using pop_back = mpl::result_of<pop_back_t<LIST>>;
+        
+    template<typename LIST , typename T>
+    using push_front = mpl::result_of<push_front_t<LIST,T>>;
+    
+    template<typename LIST>
+    using pop_front = mpl::result_of<pop_front_t<LIST>>;
     
     
     using empty_list = list<>;
