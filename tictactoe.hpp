@@ -119,7 +119,6 @@ namespace tictactoe
     
     
     
-    
     namespace 
     {
 
@@ -134,7 +133,9 @@ namespace tictactoe
             struct search_empty_cells_kernel : public mpl::no_abort_kernel
             {
                 using result = mpl::conditional<mpl::equal<CURRENT_CELL,tictactoe::cell::empty> ,
-                        mpl::a
+                                                mpl::push_back<EMPTY_CELLS_LIST,TURN> ,
+                                                mpl::push_back<EMPTY_CELLS_LIST,CURRENT_CELL
+                                               >;
             };
         };
     }
