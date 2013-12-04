@@ -106,21 +106,53 @@ typedef unsigned int uint;
   template <uint x, uint y, uint z>
   cuboid<x, y, z> operator| (eL_symbols<half_cuboid<x, y, z>, z>, lower_rectangle<x, 1>) { return gen(); }
 
-// Arithmetic operators:
+// Arithmetic operators (line):
+    
+    template<uint n , mpl::uinteger_type rhs_n>
+    line<n*rhs_n> operator*( const line<n>& lhs , mpl::uinteger<rhs_n> rhs )
+    {
+        return gen();
+    }
 
-    template<typename x , typename y , mpl::uinteger_type rhs_n>
+    template<uint n , mpl::uinteger_type lhs_n>
+    line<n*lhs_n> operator*( mpl::uinteger<lhs_n> lhs , const line<n>& rhs )
+    {
+        return gen();
+    }
+
+    template<uint n , mpl::uinteger_type rhs_n>
+    line<n/rhs_n> operator/( const line<n>& lhs , mpl::uinteger<rhs_n> rhs )
+    {
+        return gen();
+    } 
+
+    template<mpl::uinteger_type lhs_n , mpl::uinteger_type rhs_n>
+    line<lhs_n+rhs_n> operator+( const line<lhs_n>& , const line<rhs_n>& )
+    {
+        return gen();
+    }
+
+    template<mpl::uinteger_type lhs_n , mpl::uinteger_type rhs_n>
+    line<lhs_n-rhs_n> operator-( const line<lhs_n>& , const line<rhs_n>& )
+    {
+        return gen();
+    }
+
+// Arithmetic operators (Rectangle):
+    
+    template<uint x , uint y , mpl::uinteger_type rhs_n>
     rectangle<x*rhs_n,y*rhs_n> operator*( const rectangle<x,y>& lhs , mpl::uinteger<rhs_n> rhs )
     {
         return gen();      
     }
 
-    template<typename x , typename y , mpl::uinteger_type lhs_n>
+    template<uint x , uint y , mpl::uinteger_type lhs_n>
     rectangle<x*lhs_n,y*lhs_n> operator*( mpl::uinteger<lhs_n> lhs , const rectangle<x,y>& rhs )
     {
         return gen();      
     }
 
-    template<typename x , typename y , mpl::uinteger_type rhs_n>
+    template<uint x , uint y , mpl::uinteger_type rhs_n>
     rectangle<x/rhs_n , y/rhs_n> operator/( const rectangle<x,y>& lhs , mpl::uinteger<rhs_n> rhs )
     {
         return gen();
