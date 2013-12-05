@@ -66,7 +66,7 @@ namespace mpl
     template<typename T>
     struct rend_t;
 
-    template<typename T>
+    template<typename T , typename INCREMENT = mpl::no_type>
     struct previous_t;
 
     template<typename T , typename INCREMENT = mpl::no_type>

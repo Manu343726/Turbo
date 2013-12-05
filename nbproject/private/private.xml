@@ -5,7 +5,14 @@
         <activeConfIndexElem>0</activeConfIndexElem>
     </data>
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
-    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
-        <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/tictactoe.hpp</file>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/numeric_iterators.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/main.cpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/iterator.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/analogliterals.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/for_loops.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/list.hpp</file>
+        </group>
     </open-files>
 </project-private>

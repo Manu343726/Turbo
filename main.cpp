@@ -7,23 +7,34 @@
 
 //#define MPL_CUSTOM_FIXED_POINT_DEFAULT_PRECISION 8
 
+#include "analogliterals.hpp"
 #include "to_string.hpp"
-#include "tictactoe.hpp"
-#include "color.hpp"
 
 #include <iostream>
 
-using x = tictactoe::cell::x;
-using o = tictactoe::cell::o;
-using e = tictactoe::cell::empty;
+using begin = mpl::make_integer_forward_iterator<100>;
+using end   = mpl::make_integer_forward_iterator<-100>;
 
-using my_board = tictactoe::board<x,e,e,
-                                  e,e,e,
-                                  o,o,o>;
+using numbers = mpl::list<mpl::integer<-1003> , mpl::integer<-11> , mpl::integer<-3> , mpl::integer<-100>>;
+using sorted  = mpl::sort<numbers,mpl::bigger_than>;
 
 int main()
 {
-    std::cout << mpl::to_string<my_board>() << std::endl << std::endl;
-    std::cout << mpl::to_string<tictactoe::check_game_state<my_board>>() << std::endl;
+    using namespace mpl::utils::analog_literals::shapes;
+    using namespace mpl::utils::analog_literals::symbols;
+    
+    auto rectangle = o---------------------o
+                     |                     !
+                     !                     !
+                     !                     !
+                     !                     !
+                     !                     !
+                     !                     !
+                     !                     !
+                     o---------------------o * mpl::uinteger<4>();
+    
+    std::cout << rectangle.width << "," << rectangle.height << std::endl;
+    
+    std::cout << mpl::to_string<numbers>() << std::endl;
+    std::cout << mpl::to_string<sorted>() << std::endl;
 }
-

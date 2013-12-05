@@ -38,6 +38,13 @@ namespace mpl
     template<typename T , T v>
     struct next_t<mpl::forward_iterator<mpl::value_t<T,v>,mpl::no_type>,mpl::no_type> : mpl::make_forward_iterator<mpl::value_t<T,v+1>,mpl::no_type> {};
     
+    template<typename T , T v , typename STEP>
+    struct previous_t<mpl::backward_iterator<mpl::value_t<T,v>,mpl::no_type>,STEP> : mpl::make_backward_iterator<mpl::no_type,mpl::value_t<T,v-STEP::value>> {};
+    
+    template<typename T , T v>
+    struct previous_t<mpl::backward_iterator<mpl::value_t<T,v>,mpl::no_type>,mpl::no_type> : mpl::make_backward_iterator<mpl::no_type , mpl::value_t<T,v-1>> {};
+    
+    
     template<mpl::fixed_point_bits BITS , mpl::fixed_point_precision PRECISION>
     struct begin_t<mpl::fixed_point<BITS,PRECISION>> : mpl::make_forward_iterator<mpl::fixed_point<std::numeric_limits<fixed_point_bits>::min(),PRECISION> , mpl::no_type> {};
     
@@ -56,6 +63,12 @@ namespace mpl
     
     template<mpl::fixed_point_bits BITS , mpl::fixed_point_precision PRECISION>
     struct next_t<mpl::forward_iterator<mpl::fixed_point<BITS,PRECISION>,mpl::no_type>,mpl::no_type> : mpl::make_forward_iterator<mpl::add<mpl::fixed_point<BITS,PRECISION>,mpl::one<mpl::fixed_point<BITS,PRECISION>>>,mpl::no_type> {};
+    
+    template<mpl::fixed_point_bits BITS , mpl::fixed_point_precision PRECISION , typename STEP>
+    struct previous_t<mpl::backward_iterator<mpl::no_type,mpl::fixed_point<BITS,PRECISION>>,STEP> : mpl::make_backward_iterator<mpl::no_type , mpl::sub<mpl::fixed_point<BITS,PRECISION>,STEP>> {};
+    
+    template<mpl::fixed_point_bits BITS , mpl::fixed_point_precision PRECISION>
+    struct previous_t<mpl::backward_iterator<mpl::no_type,mpl::fixed_point<BITS,PRECISION>>,mpl::no_type> : mpl::make_backward_iterator<mpl::no_type , mpl::sub<mpl::fixed_point<BITS,PRECISION>,mpl::one<mpl::fixed_point<BITS,PRECISION>>>> {};
     
     
     namespace

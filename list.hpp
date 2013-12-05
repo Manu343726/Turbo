@@ -170,7 +170,7 @@ namespace mpl
         struct push_back_t;
         
         template<typename... Ts , typename T>
-        struct push_back_t<mpl::list<Ts...>> : public mpl::function<mpl::list<Ts...,T>> {};
+        struct push_back_t<mpl::list<Ts...>,T> : public mpl::function<mpl::list<Ts...,T>> {};
         
         /* mpl::pop_back */
         
@@ -187,7 +187,7 @@ namespace mpl
         struct push_front_t;
         
         template<typename... Ts , typename T>
-        struct push_front_t<mpl::list<Ts...>> : public mpl::function<mpl::list<T,Ts...>> {};
+        struct push_front_t<mpl::list<Ts...>,T> : public mpl::function<mpl::list<T,Ts...>> {};
         
         /* mpl::pop_front */
         
@@ -195,7 +195,7 @@ namespace mpl
         struct pop_front_t;
         
         template<typename FRONT , typename... Ts>
-        struct pop_front_t<mpl::list<FRONT,Ts...>> : public mpl::function<mpl::list<Ts...,>> {};
+        struct pop_front_t<mpl::list<FRONT,Ts...>> : public mpl::function<mpl::list<Ts...>> {};
        
     }
     
