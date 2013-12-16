@@ -18,6 +18,8 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
+#pragma once
+
 #ifndef ANALOGLITERALS_HPP
 #define ANALOGLITERALS_HPP
 
