@@ -1,7 +1,7 @@
 /******************************************************************************
 * Turbo C++11 metaprogramming Library                                         *
 *                                                                             *
-* Copyright (C) 2013, Manuel Sánchez Pérez                                    *
+* Copyright (C) 2013 - 2014, Manuel Sánchez Pérez                             *
 *                                                                             *
 * This file is part of The Turbo Library.                                     *
 *                                                                             *
@@ -21,18 +21,21 @@
 #ifndef TO_STRING_HPP
 #define	TO_STRING_HPP
 
+#ifndef DISABLE_TURBO_DEPENDENCIES
 #include "value_t.hpp"
+#endif
 
 #include <string>
 #include <sstream>
 #include <typeinfo>
+#include <iterator>
 
 namespace implementation__demangling
 {
 #if defined( _MSC_VER )
     #include <Dbghelp.h>
 
-    const unsigned int UNDECORATED_NAME_LENGHT = 512; //No creo que haya nombres mucho más largos
+    const std::size_t UNDECORATED_NAME_LENGHT = 512; //No creo que haya nombres mucho más largos
 
     //MSVC demangling implementation
     std::string demangle(const std::string& name)
@@ -44,7 +47,7 @@ namespace implementation__demangling
             return std::string( output_buffer );
         }
         else
-            return std::string( name );
+            return name;
     }
 #endif /* MSVC */
 
@@ -57,9 +60,18 @@ namespace implementation__demangling
     { 
         int status;
 
-        return std::string( abi::__cxa_demangle( name.c_str() , 0 , 0 , &status ) );
+        char* demangled_name = abi::__cxa_demangle( name.c_str() , 0 , 0 , &status );
+
+        if( status != 0 )
+            throw;
+
+        std::string result = demangled_name;
+
+        free( demangled_name );
+
+        return result;
     }
-#else /* GCC */
+#else /* Others... */
     std::string demangle(  const std::string& name )
     { 
         return name;
@@ -92,8 +104,14 @@ namespace implementation__to_string
 
 namespace mpl
 {
+
+#ifndef DISABLE_TURBO_DEPENDENCIES
     template<typename T>
     struct to_string_t : public implementation__to_string::_to_string<T,mpl::is_value<T>::value> {};
+#else
+    template<typename T>
+    struct to_string_t : public implementation__to_string::_to_string<T,false> {};
+#endif
     
 
     template<typename T>

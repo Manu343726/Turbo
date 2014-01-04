@@ -1,7 +1,7 @@
 /******************************************************************************
 * Turbo C++11 metaprogramming Library                                         *
 *                                                                             *
-* Copyright (C) 2013, Manuel Sánchez Pérez                                    *
+* Copyright (C) 2013 - 2014, Manuel Sánchez Pérez                             *
 *                                                                             *
 * This file is part of The Turbo Library.                                     *
 *                                                                             *
