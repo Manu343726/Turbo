@@ -30,7 +30,7 @@ namespace make_type_macro
                                    using name##_type = type
 }
 
-namespace mpl
+namespace tb
 {
     
     template<typename T>
@@ -59,17 +59,17 @@ namespace mpl
     MAKE_TYPE(size_t             , std::size_t);
   
     
-    using false_type = mpl::boolean<false>;
-    using true_type  = mpl::boolean<true>;
+    using false_type = tb::boolean<false>;
+    using true_type  = tb::boolean<true>;
     
     template<typename T>
-    struct equal_t<mpl::no_type,T> : public mpl::function<mpl::false_type> {};
+    struct equal_t<tb::no_type,T> : public tb::function<tb::false_type> {};
     
     template<typename T>
-    struct equal_t<T,mpl::no_type> : public mpl::function<mpl::false_type> {};
+    struct equal_t<T,tb::no_type> : public tb::function<tb::false_type> {};
     
     template<>
-    struct equal_t<mpl::no_type,mpl::no_type> : public mpl::function<mpl::true_type> {};
+    struct equal_t<tb::no_type,tb::no_type> : public tb::function<tb::true_type> {};
 }
 
 #endif	/* BASIC_TRAITS_HPP */

@@ -25,20 +25,20 @@
 #include "to_string.hpp"
 
 
-namespace mpl
+namespace tb
 {
-    template<typename T , typename HASH = mpl::no_type>
-    struct wrapper_t : public mpl::function<T>
+    template<typename T , typename HASH = tb::no_type>
+    struct wrapper_t : public tb::function<T>
     {
         using type = T;
         using hash = HASH;
     };
     
-    template<typename T , typename HASH = mpl::no_type>
+    template<typename T , typename HASH = tb::no_type>
     using wrapper = wrapper_t<T,HASH>;
     
     template<typename T , typename HASH>
-    struct to_string_t<mpl::wrapper<T,HASH>> : public to_string_t<T> {};
+    struct to_string_t<tb::wrapper<T,HASH>> : public to_string_t<T> {};
 }
 
 #endif	/* WRAPPER_HPP */

@@ -24,24 +24,24 @@
 #include "basic_types.hpp"
 #include "list.hpp"
 
-namespace mpl
+namespace tb
 {
     template<typename... PAIRS>
     class unordered_map;
     
     template<typename... KEYS , typename... VALUES>
-    class unordered_map<mpl::pair<KEYS,VALUES>...>
+    class unordered_map<tb::pair<KEYS,VALUES>...>
     {
     private:
-        using keys   = mpl::list<KEYS...>;
-        using values = mpl::list<VALUES...>;
+        using keys   = tb::list<KEYS...>;
+        using values = tb::list<VALUES...>;
         
     public:
         template<typename KEY>
-        using get_value = mpl::type_at<values,mpl::index_of<keys,KEY>::value>;
+        using get_value = tb::type_at<values,tb::index_of<keys,KEY>::value>;
         
         template<typename KEY>
-        using get_pair  = mpl::pair<KEY,get_value<KEY>>;
+        using get_pair  = tb::pair<KEY,get_value<KEY>>;
     };
 }
 

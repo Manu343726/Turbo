@@ -28,26 +28,26 @@
 namespace
 {
 #define MAKE_TRAIT(type_name) template<typename T>                          \
-                         struct is_##type_name : public mpl::false_type {}; \
+                         struct is_##type_name : public tb::false_type {}; \
                                                                             \
-                         template<mpl::type_name##_type VALUE>              \
-                         struct is_##type_name<mpl::type_name<VALUE>> : public mpl::true_type {}
+                         template<tb::type_name##_type VALUE>              \
+                         struct is_##type_name<tb::type_name<VALUE>> : public tb::true_type {}
 }
 
-namespace mpl
+namespace tb
 {   
     template<typename T>
-    struct is_value_t : public mpl::false_type {};
+    struct is_value_t : public tb::false_type {};
     
     template<typename T , T VALUE>
-    struct is_value_t<mpl::value_t<T,VALUE>> : public mpl::true_type {};
+    struct is_value_t<tb::value_t<T,VALUE>> : public tb::true_type {};
     
     
     template<typename T>
-    struct is_type_t : public mpl::false_type {};
+    struct is_type_t : public tb::false_type {};
     
     template<typename T>
-    struct is_type_t<mpl::type_t<T>> : public mpl::true_type {};
+    struct is_type_t<tb::type_t<T>> : public tb::true_type {};
     
     /*
     MAKE_TRAIT( ubyte );

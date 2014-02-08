@@ -25,7 +25,7 @@
 #include "expressions.hpp"
 
 
-namespace mpl
+namespace tb
 {
     template<typename VALUE>
     struct iterator
@@ -57,13 +57,13 @@ namespace mpl
     
     
     template<typename VALUE , typename RIGHT>
-    using make_forward_iterator = mpl::function<mpl::forward_iterator<VALUE,RIGHT>>;
+    using make_forward_iterator = tb::function<tb::forward_iterator<VALUE,RIGHT>>;
     
     template<typename LEFT , typename VALUE>
-    using make_backward_iterator = mpl::function<mpl::backward_iterator<LEFT,VALUE>>;
+    using make_backward_iterator = tb::function<tb::backward_iterator<LEFT,VALUE>>;
     
     template<typename LEFT , typename VALUE , typename RIGHT>
-    using make_bidirectional_iterator = mpl::function<mpl::bidirectional_iterator<LEFT,VALUE,RIGHT>>;
+    using make_bidirectional_iterator = tb::function<tb::bidirectional_iterator<LEFT,VALUE,RIGHT>>;
     
 
 
@@ -79,54 +79,54 @@ namespace mpl
     template<typename T>
     struct rend_t;
 
-    template<typename T , typename INCREMENT = mpl::no_type>
+    template<typename T , typename INCREMENT = tb::no_type>
     struct previous_t;
 
-    template<typename T , typename INCREMENT = mpl::no_type>
+    template<typename T , typename INCREMENT = tb::no_type>
     struct next_t;
    
     
     template<typename T>
-    using begin = typename mpl::begin_t<T>::result;
+    using begin = typename tb::begin_t<T>::result;
     
     template<typename T>
-    using end = typename mpl::end_t<T>::result;
+    using end = typename tb::end_t<T>::result;
     
     template<typename T>
-    using rbegin = typename mpl::rbegin_t<T>::result;
+    using rbegin = typename tb::rbegin_t<T>::result;
     
     template<typename T>
-    using rend = typename mpl::rend_t<T>::result;
+    using rend = typename tb::rend_t<T>::result;
     
     template<typename T>
-    using previous = typename mpl::previous_t<T>::result;
+    using previous = typename tb::previous_t<T>::result;
     
-    template<typename T , typename INCREMENT = mpl::no_type>
-    using next = typename mpl::next_t<T,INCREMENT>::result;
+    template<typename T , typename INCREMENT = tb::no_type>
+    using next = typename tb::next_t<T,INCREMENT>::result;
 
     template<typename T>
-    using first = typename mpl::begin<T>::value;
+    using first = typename tb::begin<T>::value;
 
     template<typename T>
-    using last = typename mpl::rbegin<T>::value;
+    using last = typename tb::rbegin<T>::value;
     
     
     //Apaño:
     template<typename LEFT , typename VALUE>
-    struct next_t<mpl::backward_iterator<LEFT,VALUE>> : public mpl::function<mpl::previous<mpl::backward_iterator<LEFT,VALUE>>> {};
+    struct next_t<tb::backward_iterator<LEFT,VALUE>> : public tb::function<tb::previous<tb::backward_iterator<LEFT,VALUE>>> {};
     
 
     template<typename VALUE1 , typename VALUE2>
-    struct equal_t<mpl::iterator<VALUE1> , mpl::iterator<VALUE2>> : public mpl::function<mpl::equal<VALUE1 , VALUE2>> {};
+    struct equal_t<tb::iterator<VALUE1> , tb::iterator<VALUE2>> : public tb::function<tb::equal<VALUE1 , VALUE2>> {};
 
     template<typename VALUE1 , typename RIGHT1 , typename VALUE2 , typename RIGHT2>
-    struct equal_t<mpl::forward_iterator<VALUE1,RIGHT1> , forward_iterator<VALUE2,RIGHT2>> : public mpl::function<mpl::logical_and<equal<VALUE1,VALUE2> , mpl::equal<RIGHT1,RIGHT2>>> {};
+    struct equal_t<tb::forward_iterator<VALUE1,RIGHT1> , forward_iterator<VALUE2,RIGHT2>> : public tb::function<tb::logical_and<equal<VALUE1,VALUE2> , tb::equal<RIGHT1,RIGHT2>>> {};
 
     template<typename VALUE1 , typename LEFT1 , typename VALUE2 , typename LEFT2>
-    struct equal_t<mpl::backward_iterator<LEFT1 , VALUE1> , backward_iterator<LEFT2,VALUE2>> : public mpl::function<mpl::logical_and<equal<VALUE1,VALUE2> , mpl::equal<LEFT1,LEFT2>>> {};
+    struct equal_t<tb::backward_iterator<LEFT1 , VALUE1> , backward_iterator<LEFT2,VALUE2>> : public tb::function<tb::logical_and<equal<VALUE1,VALUE2> , tb::equal<LEFT1,LEFT2>>> {};
 
     template<typename LEFT1 , typename VALUE1 , typename RIGHT1 , typename LEFT2 , typename VALUE2 , typename RIGHT2>
-    struct equal_t<mpl::bidirectional_iterator<LEFT1,VALUE1,RIGHT1> , mpl::bidirectional_iterator<LEFT2,VALUE2,RIGHT2>> : public mpl::function<decltype( mpl::equal<LEFT1,LEFT2>() && mpl::equal<VALUE1,VALUE2>() && mpl::equal<RIGHT1,RIGHT2>())> {};
+    struct equal_t<tb::bidirectional_iterator<LEFT1,VALUE1,RIGHT1> , tb::bidirectional_iterator<LEFT2,VALUE2,RIGHT2>> : public tb::function<decltype( tb::equal<LEFT1,LEFT2>() && tb::equal<VALUE1,VALUE2>() && tb::equal<RIGHT1,RIGHT2>())> {};
 
 
     namespace
@@ -135,13 +135,13 @@ namespace mpl
         struct _add_t;
         
         template<typename ITERATOR , std::size_t DISTANCE>
-        struct _add_t<ITERATOR,mpl::size_t<DISTANCE>>
+        struct _add_t<ITERATOR,tb::size_t<DISTANCE>>
         {
-            using result = typename _add_t<mpl::next<ITERATOR> , mpl::size_t<DISTANCE-1>>::result;
+            using result = typename _add_t<tb::next<ITERATOR> , tb::size_t<DISTANCE-1>>::result;
         };
         
         template<typename ITERATOR>
-        struct _add_t<ITERATOR,mpl::size_t<0>>
+        struct _add_t<ITERATOR,tb::size_t<0>>
         {
             using result = ITERATOR;
         };
@@ -151,23 +151,23 @@ namespace mpl
         struct _sub_t;
         
         template<typename ITERATOR , std::size_t DISTANCE>
-        struct _sub_t<ITERATOR,mpl::size_t<DISTANCE>>
+        struct _sub_t<ITERATOR,tb::size_t<DISTANCE>>
         {
-            using result = typename _sub_t<mpl::previous<ITERATOR> , mpl::size_t<DISTANCE-1>>::result;
+            using result = typename _sub_t<tb::previous<ITERATOR> , tb::size_t<DISTANCE-1>>::result;
         };
         
         template<typename ITERATOR>
-        struct _sub_t<ITERATOR,mpl::size_t<0>>
+        struct _sub_t<ITERATOR,tb::size_t<0>>
         {
             using result = ITERATOR;
         };
     }
     
     template<typename VALUE , typename RIGHT , std::size_t DISTANCE>
-    struct add_t<mpl::forward_iterator<VALUE,RIGHT>,mpl::size_t<DISTANCE>> : public mpl::function<typename _add_t<mpl::forward_iterator<VALUE,RIGHT>,mpl::size_t<DISTANCE>>::result> {};
+    struct add_t<tb::forward_iterator<VALUE,RIGHT>,tb::size_t<DISTANCE>> : public tb::function<typename _add_t<tb::forward_iterator<VALUE,RIGHT>,tb::size_t<DISTANCE>>::result> {};
     
     template<typename LEFT , typename VALUE , std::size_t DISTANCE>
-    struct sub_t<mpl::backward_iterator<LEFT,VALUE>,mpl::size_t<DISTANCE>> : public mpl::function<typename _sub_t<mpl::backward_iterator<LEFT,VALUE>,mpl::size_t<DISTANCE>>::result> {};
+    struct sub_t<tb::backward_iterator<LEFT,VALUE>,tb::size_t<DISTANCE>> : public tb::function<typename _sub_t<tb::backward_iterator<LEFT,VALUE>,tb::size_t<DISTANCE>>::result> {};
     
     
 }

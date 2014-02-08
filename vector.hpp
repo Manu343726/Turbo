@@ -68,13 +68,13 @@ namespace math
     
     
     template<typename X , typename Y>
-    struct square_length_t<math::vec2<X,Y>> : public mpl::function<decltype( X() * X() + Y() * Y() )> {};
+    struct square_length_t<math::vec2<X,Y>> : public tb::function<decltype( X() * X() + Y() * Y() )> {};
     
     template<typename X , typename Y , typename Z>
-    struct square_length_t<math::vec3<X,Y,Z>> : public mpl::function<decltype( X() * X() + Y() * Y() + Z() * Z() )> {};
+    struct square_length_t<math::vec3<X,Y,Z>> : public tb::function<decltype( X() * X() + Y() * Y() + Z() * Z() )> {};
     
     template<typename X , typename Y , typename Z , typename W>
-    struct square_length_t<math::vec4<X,Y,Z,W>> : public mpl::function<decltype( X() * X() + Y() * Y() + Z() * Z() + W() * W() )> {};
+    struct square_length_t<math::vec4<X,Y,Z,W>> : public tb::function<decltype( X() * X() + Y() * Y() + Z() * Z() + W() * W() )> {};
     
     template<typename VECTOR>
     using square_length = typename square_length_t<VECTOR>::result;
@@ -85,19 +85,19 @@ namespace math
     struct length_t;
     
     template<typename X , typename Y>
-    struct length_t<math::vec2<X,Y>> : public mpl::function<math::sqrt<decltype( X() * X() + Y() * Y() )>> {};
+    struct length_t<math::vec2<X,Y>> : public tb::function<math::sqrt<decltype( X() * X() + Y() * Y() )>> {};
     
     template<typename X , typename Y , typename Z>
-    struct length_t<math::vec3<X,Y,Z>> : public mpl::function<math::sqrt<decltype( X() * X() + Y() * Y() + Z() * Z() )>> {};
+    struct length_t<math::vec3<X,Y,Z>> : public tb::function<math::sqrt<decltype( X() * X() + Y() * Y() + Z() * Z() )>> {};
     
     template<typename X , typename Y , typename Z , typename W>
-    struct length_t<math::vec4<X,Y,Z,W>> : public mpl::function<math::sqrt<decltype( X() * X() + Y() * Y() + Z() * Z() + W() * W() )>> {};
+    struct length_t<math::vec4<X,Y,Z,W>> : public tb::function<math::sqrt<decltype( X() * X() + Y() * Y() + Z() * Z() + W() * W() )>> {};
     
     template<typename VECTOR>
     using length = typename length_t<VECTOR>::result;
     
     template<typename VECTOR>
-    using normalize = mpl::div<VECTOR,math::length<VECTOR>>;
+    using normalize = tb::div<VECTOR,math::length<VECTOR>>;
     
     /* 3d cross product */
     
@@ -105,7 +105,7 @@ namespace math
     struct cross_product_t;
     
     template<typename X1 , typename Y1 , typename Z1 , typename X2 , typename Y2 , typename Z2>
-    struct cross_product_t<math::vec3<X1,Y1,Z1>,math::vec3<X2,Y2,Z2>> : public mpl::function<math::vec3<decltype( Y1()*Z2()-Z1()*Y2() ) , 
+    struct cross_product_t<math::vec3<X1,Y1,Z1>,math::vec3<X2,Y2,Z2>> : public tb::function<math::vec3<decltype( Y1()*Z2()-Z1()*Y2() ) , 
                                                                                                         decltype( Z1()*X2()-X1()*Z2() ) , 
                                                                                                         decltype( X1()*Y2()-Y1()*X2() )>> {};
                                                                                                     
@@ -113,7 +113,7 @@ namespace math
     using cross_product = typename cross_product_t<V1,V2>::result;
 }
 
-namespace mpl
+namespace tb
 {
     /* mpl::to_string specialization */
     
@@ -123,7 +123,7 @@ namespace mpl
         operator std::string()
         {
             std::ostringstream os;
-            os << "(" << mpl::to_string<X>() << "," << mpl::to_string<Y>() << ")";
+            os << "(" << tb::to_string<X>() << "," << tb::to_string<Y>() << ")";
             return os.str();
         }
     };
@@ -134,7 +134,7 @@ namespace mpl
         operator std::string()
         {
             std::ostringstream os;
-            os << "(" << mpl::to_string<X>() << "," << mpl::to_string<Y>() << "," << mpl::to_string<Z>() + ")";
+            os << "(" << tb::to_string<X>() << "," << tb::to_string<Y>() << "," << tb::to_string<Z>() + ")";
             return os.str();
         }
     };
@@ -145,7 +145,7 @@ namespace mpl
         operator std::string()
         {
             std::ostringstream os;
-            os << "(" << mpl::to_string<X>() << "," << mpl::to_string<Y>() << "," << mpl::to_string<Z>() << "," << mpl::to_string<W>() << ")";
+            os << "(" << tb::to_string<X>() << "," << tb::to_string<Y>() << "," << tb::to_string<Z>() << "," << tb::to_string<W>() << ")";
             return os.str();
         }
     };
@@ -155,75 +155,75 @@ namespace mpl
     //Addition:
     
     template<typename X1 , typename Y1 , typename X2 , typename Y2>
-    struct add_t<math::vec2<X1,Y1>,math::vec2<X2,Y2>> : public mpl::function<math::vec2<mpl::add<X1,X2> , mpl::add<Y1,Y2>>> {};
+    struct add_t<math::vec2<X1,Y1>,math::vec2<X2,Y2>> : public tb::function<math::vec2<tb::add<X1,X2> , tb::add<Y1,Y2>>> {};
     
     template<typename X1 , typename Y1 , typename Z1 , typename X2 , typename Y2 , typename Z2>
-    struct add_t<math::vec3<X1,Y1,Z1>,math::vec3<X2,Y2,Z2>> : public mpl::function<math::vec3<mpl::add<X1,X2> , mpl::add<Y1,Y2> , mpl::add<Z1,Z2>>> {};
+    struct add_t<math::vec3<X1,Y1,Z1>,math::vec3<X2,Y2,Z2>> : public tb::function<math::vec3<tb::add<X1,X2> , tb::add<Y1,Y2> , tb::add<Z1,Z2>>> {};
     
     template<typename X1 , typename Y1 , typename Z1 , typename W1 , typename X2 , typename Y2 , typename Z2 , typename W2>
-    struct add_t<math::vec4<X1,Y1,Z1,W1>,math::vec4<X2,Y2,Z2,W2>> : public mpl::function<math::vec4<mpl::add<X1,X2> , mpl::add<Y1,Y2> , mpl::add<Z1,Z2> , mpl::add<W1,W2>>> {};
+    struct add_t<math::vec4<X1,Y1,Z1,W1>,math::vec4<X2,Y2,Z2,W2>> : public tb::function<math::vec4<tb::add<X1,X2> , tb::add<Y1,Y2> , tb::add<Z1,Z2> , tb::add<W1,W2>>> {};
     
     //Substraction:
     
     template<typename X1 , typename Y1 , typename X2 , typename Y2>
-    struct sub_t<math::vec2<X1,Y1>,math::vec2<X2,Y2>> : public mpl::function<math::vec2<mpl::sub<X1,X2> , mpl::sub<Y1,Y2>>> {};
+    struct sub_t<math::vec2<X1,Y1>,math::vec2<X2,Y2>> : public tb::function<math::vec2<tb::sub<X1,X2> , tb::sub<Y1,Y2>>> {};
     
     template<typename X1 , typename Y1 , typename Z1 , typename X2 , typename Y2 , typename Z2>
-    struct sub_t<math::vec3<X1,Y1,Z1>,math::vec3<X2,Y2,Z2>> : public mpl::function<math::vec3<mpl::sub<X1,X2> , mpl::sub<Y1,Y2> , mpl::sub<Z1,Z2>>> {};
+    struct sub_t<math::vec3<X1,Y1,Z1>,math::vec3<X2,Y2,Z2>> : public tb::function<math::vec3<tb::sub<X1,X2> , tb::sub<Y1,Y2> , tb::sub<Z1,Z2>>> {};
     
     template<typename X1 , typename Y1 , typename Z1 , typename W1 , typename X2 , typename Y2 , typename Z2 , typename W2>
-    struct sub_t<math::vec4<X1,Y1,Z1,W1>,math::vec4<X2,Y2,Z2,W2>> : public mpl::function<math::vec4<mpl::sub<X1,X2> , mpl::sub<Y1,Y2> , mpl::sub<Z1,Z2> , mpl::sub<W1,W2>>> {};
+    struct sub_t<math::vec4<X1,Y1,Z1,W1>,math::vec4<X2,Y2,Z2,W2>> : public tb::function<math::vec4<tb::sub<X1,X2> , tb::sub<Y1,Y2> , tb::sub<Z1,Z2> , tb::sub<W1,W2>>> {};
 
     //Scalar product:
     
     template<typename X1 , typename Y1 , typename X2 , typename Y2>
-    struct mul_t<math::vec2<X1,Y1>,math::vec2<X2,Y2>> : public mpl::function<decltype( X1() * X2() + Y1() * Y2())> {};
+    struct mul_t<math::vec2<X1,Y1>,math::vec2<X2,Y2>> : public tb::function<decltype( X1() * X2() + Y1() * Y2())> {};
     
     template<typename X1 , typename Y1 , typename Z1 , typename X2 , typename Y2 , typename Z2>
-    struct mul_t<math::vec3<X1,Y1,Z1>,math::vec3<X2,Y2,Z2>> : public mpl::function<decltype( X1() * X2() + Y1() * Y2() + Z1() * Z2())> {};
+    struct mul_t<math::vec3<X1,Y1,Z1>,math::vec3<X2,Y2,Z2>> : public tb::function<decltype( X1() * X2() + Y1() * Y2() + Z1() * Z2())> {};
     
     template<typename X1 , typename Y1 , typename Z1 , typename W1 , typename X2 , typename Y2 , typename Z2 , typename W2>
-    struct mul_t<math::vec4<X1,Y1,Z1,W1>,math::vec4<X2,Y2,Z2,W2>> : public mpl::function<decltype( X1() * X2() + Y1() * Y2() + Z1() * Z2() + W1() * W2())> {};
+    struct mul_t<math::vec4<X1,Y1,Z1,W1>,math::vec4<X2,Y2,Z2,W2>> : public tb::function<decltype( X1() * X2() + Y1() * Y2() + Z1() * Z2() + W1() * W2())> {};
 
     //Porduct:
 
     template<typename X , typename Y , typename RHS>
-    struct mul_t<math::vec2<X,Y>,RHS> : public mpl::function<math::vec2<mpl::mul<X,RHS>,mpl::mul<Y,RHS>>> {};
+    struct mul_t<math::vec2<X,Y>,RHS> : public tb::function<math::vec2<tb::mul<X,RHS>,tb::mul<Y,RHS>>> {};
     
     template<typename LHS , typename X , typename Y>
-    struct mul_t<LHS,math::vec2<X,Y>> : public mpl::function<math::vec2<mpl::mul<X,LHS>,mpl::mul<Y,LHS>>> {};
+    struct mul_t<LHS,math::vec2<X,Y>> : public tb::function<math::vec2<tb::mul<X,LHS>,tb::mul<Y,LHS>>> {};
     
     template<typename X , typename Y , typename Z , typename RHS>
-    struct mul_t<math::vec3<X,Y,Z>,RHS> : public mpl::function<math::vec3<mpl::mul<X,RHS>,mpl::mul<Y,RHS>,mpl::mul<Z,RHS>>> {};
+    struct mul_t<math::vec3<X,Y,Z>,RHS> : public tb::function<math::vec3<tb::mul<X,RHS>,tb::mul<Y,RHS>,tb::mul<Z,RHS>>> {};
     
     template<typename LHS , typename X , typename Y , typename Z>
-    struct mul_t<LHS,math::vec3<X,Y,Z>> : public mpl::function<math::vec3<mpl::mul<X,LHS>,mpl::mul<Y,LHS>,mpl::mul<Z,LHS>>> {};
+    struct mul_t<LHS,math::vec3<X,Y,Z>> : public tb::function<math::vec3<tb::mul<X,LHS>,tb::mul<Y,LHS>,tb::mul<Z,LHS>>> {};
     
     template<typename X , typename Y , typename Z , typename W , typename RHS>
-    struct mul_t<math::vec4<X,Y,Z,W>,RHS> : public mpl::function<math::vec4<mpl::mul<X,RHS>,mpl::mul<Y,RHS>,mpl::mul<Z,RHS>,mpl::mul<W,RHS>>> {};
+    struct mul_t<math::vec4<X,Y,Z,W>,RHS> : public tb::function<math::vec4<tb::mul<X,RHS>,tb::mul<Y,RHS>,tb::mul<Z,RHS>,tb::mul<W,RHS>>> {};
     
     template<typename LHS , typename X , typename Y , typename Z , typename W>
-    struct mul_t<LHS,math::vec4<X,Y,Z,W>> : public mpl::function<math::vec4<mpl::mul<X,LHS>,mpl::mul<Y,LHS>,mpl::mul<Z,LHS>,mpl::mul<W,LHS>>> {};
+    struct mul_t<LHS,math::vec4<X,Y,Z,W>> : public tb::function<math::vec4<tb::mul<X,LHS>,tb::mul<Y,LHS>,tb::mul<Z,LHS>,tb::mul<W,LHS>>> {};
     
     //Division:
     
     template<typename X , typename Y , typename RHS>
-    struct div_t<math::vec2<X,Y>,RHS> : public mpl::function<math::vec2<mpl::div<X,RHS>,mpl::div<Y,RHS>>> {};
+    struct div_t<math::vec2<X,Y>,RHS> : public tb::function<math::vec2<tb::div<X,RHS>,tb::div<Y,RHS>>> {};
     
     template<typename LHS , typename X , typename Y>
-    struct div_t<LHS,math::vec2<X,Y>> : public mpl::function<math::vec2<mpl::div<X,LHS>,mpl::div<Y,LHS>>> {};
+    struct div_t<LHS,math::vec2<X,Y>> : public tb::function<math::vec2<tb::div<X,LHS>,tb::div<Y,LHS>>> {};
     
     template<typename X , typename Y , typename Z , typename RHS>
-    struct div_t<math::vec3<X,Y,Z>,RHS> : public mpl::function<math::vec3<mpl::div<X,RHS>,mpl::div<Y,RHS>,mpl::div<Z,RHS>>> {};
+    struct div_t<math::vec3<X,Y,Z>,RHS> : public tb::function<math::vec3<tb::div<X,RHS>,tb::div<Y,RHS>,tb::div<Z,RHS>>> {};
     
     template<typename LHS , typename X , typename Y , typename Z>
-    struct div_t<LHS,math::vec3<X,Y,Z>> : public mpl::function<math::vec3<mpl::div<X,LHS>,mpl::div<Y,LHS>,mpl::div<Z,LHS>>> {};
+    struct div_t<LHS,math::vec3<X,Y,Z>> : public tb::function<math::vec3<tb::div<X,LHS>,tb::div<Y,LHS>,tb::div<Z,LHS>>> {};
     
     template<typename X , typename Y , typename Z , typename W , typename RHS>
-    struct div_t<math::vec4<X,Y,Z,W>,RHS> : public mpl::function<math::vec4<mpl::div<X,RHS>,mpl::div<Y,RHS>,mpl::div<Z,RHS>,mpl::div<W,RHS>>> {};
+    struct div_t<math::vec4<X,Y,Z,W>,RHS> : public tb::function<math::vec4<tb::div<X,RHS>,tb::div<Y,RHS>,tb::div<Z,RHS>,tb::div<W,RHS>>> {};
     
     template<typename LHS , typename X , typename Y , typename Z , typename W>
-    struct div_t<LHS,math::vec4<X,Y,Z,W>> : public mpl::function<math::vec4<mpl::div<X,LHS>,mpl::div<Y,LHS>,mpl::div<Z,LHS>,mpl::div<W,LHS>>> {};
+    struct div_t<LHS,math::vec4<X,Y,Z,W>> : public tb::function<math::vec4<tb::div<X,LHS>,tb::div<Y,LHS>,tb::div<Z,LHS>,tb::div<W,LHS>>> {};
 }
 
 #endif	/* VECTOR_HPP */

@@ -50,7 +50,7 @@ namespace math
     using scale = typename scale_t<SCALE>::result;
 
     template<typename ANGLE , typename AXIS = math::rotation_2d , typename TRIGONOMETRY_APROX_TERMS = math::default_trigonometry_approximation_terms>
-    using rotate = typename rotate_t<mpl::opposite<ANGLE>,AXIS,TRIGONOMETRY_APROX_TERMS>::result; //Apaño: He escrito las matrices de rotación al revés
+    using rotate = typename rotate_t<tb::opposite<ANGLE>,AXIS,TRIGONOMETRY_APROX_TERMS>::result; //Apaño: He escrito las matrices de rotación al revés
 }
 
 #endif	/* TRANSFORMATIONS_HPP */

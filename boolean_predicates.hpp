@@ -24,13 +24,13 @@
 #include "basic_types.hpp"
 
 
-namespace mpl
+namespace tb
 {
     template<typename T>
-    using true_predicate = mpl::true_type;
+    using true_predicate = tb::true_type;
     
     template<typename T>
-    using false_predicate = mpl::false_type;
+    using false_predicate = tb::false_type;
 }
 
 #endif	/* BOOLEAN_PREDICATES_HPP */

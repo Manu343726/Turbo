@@ -22,7 +22,7 @@
 
 #include <type_traits>
 
-namespace mpl
+namespace tb
 {
     /* unmeaning sentinel type */
     
@@ -42,16 +42,16 @@ namespace mpl
     /* Identities */
     
     template<typename T>
-    struct zero_t : public mpl::function<mpl::no_type> {}; //default
+    struct zero_t : public tb::function<tb::no_type> {}; //default
     
     template<typename T>
-    struct one_t : public mpl::function<T> {}; //default
+    struct one_t : public tb::function<T> {}; //default
     
     template<typename T>
-    using zero = mpl::result_of<mpl::zero_t<T>>;
+    using zero = tb::result_of<tb::zero_t<T>>;
     
     template<typename T>
-    using one = mpl::result_of<mpl::one_t<T>>;
+    using one = tb::result_of<tb::one_t<T>>;
     
     
 
@@ -70,16 +70,16 @@ namespace mpl
     struct logical_xor_t;
 
     template<typename OP>
-    using logical_not = mpl::result_of<mpl::logical_not_t<OP>>;
+    using logical_not = tb::result_of<tb::logical_not_t<OP>>;
 
     template<typename LHS , typename RHS>
-    using logical_or = mpl::result_of<mpl::logical_or_t<LHS,RHS>>;
+    using logical_or = tb::result_of<tb::logical_or_t<LHS,RHS>>;
     
     template<typename LHS , typename RHS>
-    using logical_and = mpl::result_of<mpl::logical_and_t<LHS,RHS>>;
+    using logical_and = tb::result_of<tb::logical_and_t<LHS,RHS>>;
 
     template<typename LHS , typename RHS>
-    using logical_xor  = mpl::result_of<mpl::logical_xor_t<LHS,RHS>>;
+    using logical_xor  = tb::result_of<tb::logical_xor_t<LHS,RHS>>;
     
     
 
@@ -105,22 +105,22 @@ namespace mpl
     struct bitwise_xor_t;
 
     template<typename OP , typename SHIFT>
-    using bitwise_leftshift = typename mpl::bitwise_leftshift_t<OP,SHIFT>::result;
+    using bitwise_leftshift = typename tb::bitwise_leftshift_t<OP,SHIFT>::result;
 
     template<typename OP , typename SHIFT>
-    using bitwise_rightshift = typename mpl::bitwise_rightshift_t<OP,SHIFT>::result;
+    using bitwise_rightshift = typename tb::bitwise_rightshift_t<OP,SHIFT>::result;
 
     template<typename OP>
-    using bitwise_not = typename mpl::bitwise_not_t<OP>::result;
+    using bitwise_not = typename tb::bitwise_not_t<OP>::result;
 
     template<typename LHS , typename RHS>
-    using bitwise_or = typename mpl::bitwise_or_t<LHS,RHS>::result;
+    using bitwise_or = typename tb::bitwise_or_t<LHS,RHS>::result;
 
     template<typename LHS , typename RHS>
-    using bitwise_and = typename mpl::bitwise_and_t<LHS,RHS>::result;
+    using bitwise_and = typename tb::bitwise_and_t<LHS,RHS>::result;
 
     template<typename LHS , typename RHS>
-    using bitwise_xor = typename mpl::bitwise_xor_t<LHS,RHS>::result;
+    using bitwise_xor = typename tb::bitwise_xor_t<LHS,RHS>::result;
 
 
     /* Comparison functions */
@@ -132,22 +132,22 @@ namespace mpl
     struct less_than_t;
     
     template<typename LHS , typename RHS>
-    using equal = typename mpl::equal_t<LHS,RHS>::result;
+    using equal = typename tb::equal_t<LHS,RHS>::result;
 
     template<typename LHS , typename RHS>
-    using not_equal = mpl::logical_not<mpl::equal<LHS,RHS>>;
+    using not_equal = tb::logical_not<tb::equal<LHS,RHS>>;
     
     template<typename LHS , typename RHS>
-    using less_than = typename mpl::less_than_t<LHS,RHS>::result;
+    using less_than = typename tb::less_than_t<LHS,RHS>::result;
 
     template<typename LHS , typename RHS>
-    using bigger_than = mpl::less_than<RHS,LHS>;
+    using bigger_than = tb::less_than<RHS,LHS>;
 
     template<typename LHS , typename RHS>
-    using less_or_equal = mpl::logical_not<mpl::bigger_than<LHS,RHS>>;
+    using less_or_equal = tb::logical_not<tb::bigger_than<LHS,RHS>>;
 
     template<typename LHS , typename RHS>
-    using bigger_or_equal = mpl::logical_not<mpl::less_than<LHS,RHS>>;
+    using bigger_or_equal = tb::logical_not<tb::less_than<LHS,RHS>>;
 
 
     /* Arithmetic functions */
@@ -165,35 +165,35 @@ namespace mpl
     struct div_t;
     
     template<typename LHS , typename RHS>
-    using add = typename mpl::add_t<LHS,RHS>::result;
+    using add = typename tb::add_t<LHS,RHS>::result;
     
     template<typename LHS , typename RHS>
-    using sub = typename mpl::sub_t<LHS,RHS>::result;
+    using sub = typename tb::sub_t<LHS,RHS>::result;
     
     template<typename LHS , typename RHS>
-    using mul = typename mpl::mul_t<LHS,RHS>::result;
+    using mul = typename tb::mul_t<LHS,RHS>::result;
     
     template<typename LHS , typename RHS>
-    using div = typename mpl::div_t<LHS,RHS>::result;
+    using div = typename tb::div_t<LHS,RHS>::result;
     
     
     template<typename VALUE>
-    using opposite = mpl::sub<mpl::zero<VALUE>,VALUE>;
+    using opposite = tb::sub<tb::zero<VALUE>,VALUE>;
 
     template<typename VALUE>
-    using increment = mpl::add<VALUE,mpl::one<VALUE>>;
+    using increment = tb::add<VALUE,tb::one<VALUE>>;
 
     template<typename VALUE>
-    using decrement = mpl::sub<VALUE,mpl::one<VALUE>>;
+    using decrement = tb::sub<VALUE,tb::one<VALUE>>;
 
     template<typename BASE , typename EXPONENT>
-    struct pow : public mpl::mul<BASE , pow<BASE,mpl::decrement<EXPONENT>>> {};
+    struct pow : public tb::mul<BASE , pow<BASE,tb::decrement<EXPONENT>>> {};
 
     template<typename BASE>
-    struct pow<BASE,zero<BASE>> : public mpl::one<BASE> {};
+    struct pow<BASE,zero<BASE>> : public tb::one<BASE> {};
 
     template<typename BASE>
-    using square = mpl::mul<BASE,BASE>;
+    using square = tb::mul<BASE,BASE>;
 }
 	/* OPERATORS_HPP */
 

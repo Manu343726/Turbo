@@ -29,19 +29,19 @@
 #include <cmath> //std::pow())
 
 
-namespace mpl
+namespace tb
 {
     template<int base , int exponent>
-    struct positive_pow : public mpl::long_long_integer<base * positive_pow<base,exponent-1>::value> {};
+    struct positive_pow : public tb::long_long_integer<base * positive_pow<base,exponent-1>::value> {};
 
     template<int base>
-    struct positive_pow<base,0> : public mpl::long_long_integer<1> {};
+    struct positive_pow<base,0> : public tb::long_long_integer<1> {};
 
     template<long long int number , int shift>
-    struct decimal_leftshift : public mpl::long_long_integer<number * positive_pow<10, shift>::value> {};
+    struct decimal_leftshift : public tb::long_long_integer<number * positive_pow<10, shift>::value> {};
 
     template<long long int number , int shift>
-    struct decimal_rightshift : public mpl::long_long_integer<number / positive_pow<10, shift>::value> {};
+    struct decimal_rightshift : public tb::long_long_integer<number / positive_pow<10, shift>::value> {};
 
     template<bool CONDITION , int NUMBER , int SHIFT>
     struct decimal_shift_chooser
@@ -82,65 +82,65 @@ namespace mpl
         };
     };
 
-    template<long long int mantissa , int exponent = 0 , fixed_point_precision PRECISION = mpl::DEFAULT_FRACTIONAL_PRECISION> // MANTISSA x 10^EXPONENT
-    using decimal = mpl::fixed_point<decimal_shift<mantissa , PRECISION + exponent>::value , PRECISION>; 
+    template<long long int mantissa , int exponent = 0 , fixed_point_precision PRECISION = tb::DEFAULT_FRACTIONAL_PRECISION> // MANTISSA x 10^EXPONENT
+    using decimal = tb::fixed_point<decimal_shift<mantissa , PRECISION + exponent>::value , PRECISION>; 
 
 
     template<fixed_point_bits BITS , fixed_point_precision PRECISION>
-    struct zero_t<mpl::fixed_point<BITS,PRECISION>> : public mpl::function<mpl::fixed_point<0,PRECISION>> {};
+    struct zero_t<tb::fixed_point<BITS,PRECISION>> : public tb::function<tb::fixed_point<0,PRECISION>> {};
 
     template<fixed_point_bits BITS , fixed_point_precision PRECISION>
-    struct one_t<mpl::fixed_point<BITS,PRECISION>> : public mpl::function<fixed_point<decimal_leftshift<1,PRECISION>::value,PRECISION>> {};
+    struct one_t<tb::fixed_point<BITS,PRECISION>> : public tb::function<fixed_point<decimal_leftshift<1,PRECISION>::value,PRECISION>> {};
 
     
     /* Comparison operator */
     
     template<fixed_point_bits BITS1 , fixed_point_bits BITS2 , fixed_point_precision P1 , fixed_point_precision P2>
-    struct equal_t<mpl::fixed_point<BITS1,P1> , mpl::fixed_point<BITS2,P2>> : public mpl::function<mpl::boolean<BITS1 == BITS2 && P1 == P2>> {};
+    struct equal_t<tb::fixed_point<BITS1,P1> , tb::fixed_point<BITS2,P2>> : public tb::function<tb::boolean<BITS1 == BITS2 && P1 == P2>> {};
 
     /* Arithmetic operators */
 
     template<fixed_point_bits BITS1 , fixed_point_bits BITS2 , fixed_point_precision PRECISION>
-    struct add_t<mpl::fixed_point<BITS1,PRECISION> , mpl::fixed_point<BITS2,PRECISION>> : public mpl::function<fixed_point<BITS1+BITS2 , PRECISION>> {};
+    struct add_t<tb::fixed_point<BITS1,PRECISION> , tb::fixed_point<BITS2,PRECISION>> : public tb::function<fixed_point<BITS1+BITS2 , PRECISION>> {};
 
     template<fixed_point_bits BITS1 , fixed_point_bits BITS2 , fixed_point_precision PRECISION>
-    struct sub_t<mpl::fixed_point<BITS1,PRECISION> , mpl::fixed_point<BITS2,PRECISION>> : public mpl::function<fixed_point<BITS1-BITS2 , PRECISION>> {};
+    struct sub_t<tb::fixed_point<BITS1,PRECISION> , tb::fixed_point<BITS2,PRECISION>> : public tb::function<fixed_point<BITS1-BITS2 , PRECISION>> {};
 
     template<fixed_point_bits BITS1 , fixed_point_bits BITS2 , fixed_point_precision PRECISION>
-    struct mul_t<mpl::fixed_point<BITS1,PRECISION> , mpl::fixed_point<BITS2,PRECISION>> : public mpl::function<fixed_point<decimal_rightshift<BITS1*BITS2,PRECISION>::value , PRECISION>> {};
+    struct mul_t<tb::fixed_point<BITS1,PRECISION> , tb::fixed_point<BITS2,PRECISION>> : public tb::function<fixed_point<decimal_rightshift<BITS1*BITS2,PRECISION>::value , PRECISION>> {};
 
     template<fixed_point_bits BITS1 , fixed_point_bits BITS2 , fixed_point_precision PRECISION>
-    struct div_t<mpl::fixed_point<BITS1,PRECISION> , mpl::fixed_point<BITS2,PRECISION>> : public mpl::function<fixed_point<decimal_leftshift<BITS1,PRECISION>::value/BITS2 , PRECISION>> {};
+    struct div_t<tb::fixed_point<BITS1,PRECISION> , tb::fixed_point<BITS2,PRECISION>> : public tb::function<fixed_point<decimal_leftshift<BITS1,PRECISION>::value/BITS2 , PRECISION>> {};
     
     
     /* Operations between integral and fixed-point values */
     
     template<typename T , T v , fixed_point_bits BITS , fixed_point_precision PRECISION>
-    struct add_t<mpl::value_t<T,v>,mpl::fixed_point<BITS,PRECISION>> : public mpl::function<mpl::add<mpl::decimal<(fixed_point_bits)v,0,PRECISION>,mpl::fixed_point<BITS,PRECISION>>> {};
+    struct add_t<tb::value_t<T,v>,tb::fixed_point<BITS,PRECISION>> : public tb::function<tb::add<tb::decimal<(fixed_point_bits)v,0,PRECISION>,tb::fixed_point<BITS,PRECISION>>> {};
 
     template<typename T , T v , fixed_point_bits BITS , fixed_point_precision PRECISION>
-    struct add_t<mpl::fixed_point<BITS,PRECISION>,mpl::value_t<T,v>> : public mpl::function<mpl::add<mpl::fixed_point<BITS,PRECISION>,mpl::decimal<(fixed_point_bits)v,0,PRECISION>>> {};
+    struct add_t<tb::fixed_point<BITS,PRECISION>,tb::value_t<T,v>> : public tb::function<tb::add<tb::fixed_point<BITS,PRECISION>,tb::decimal<(fixed_point_bits)v,0,PRECISION>>> {};
     
     
     template<typename T , T v , fixed_point_bits BITS , fixed_point_precision PRECISION>
-    struct sub_t<mpl::value_t<T,v>,mpl::fixed_point<BITS,PRECISION>> : public mpl::function<mpl::sub<mpl::decimal<(fixed_point_bits)v,0,PRECISION>,mpl::fixed_point<BITS,PRECISION>>> {};
+    struct sub_t<tb::value_t<T,v>,tb::fixed_point<BITS,PRECISION>> : public tb::function<tb::sub<tb::decimal<(fixed_point_bits)v,0,PRECISION>,tb::fixed_point<BITS,PRECISION>>> {};
 
     template<typename T , T v , fixed_point_bits BITS , fixed_point_precision PRECISION>
-    struct sub_t<mpl::fixed_point<BITS,PRECISION>,mpl::value_t<T,v>> : public mpl::function<mpl::sub<mpl::fixed_point<BITS,PRECISION>,mpl::decimal<(fixed_point_bits)v,0,PRECISION>>> {};
+    struct sub_t<tb::fixed_point<BITS,PRECISION>,tb::value_t<T,v>> : public tb::function<tb::sub<tb::fixed_point<BITS,PRECISION>,tb::decimal<(fixed_point_bits)v,0,PRECISION>>> {};
     
     
     template<typename T , T v , fixed_point_bits BITS , fixed_point_precision PRECISION>
-    struct mul_t<mpl::value_t<T,v>,mpl::fixed_point<BITS,PRECISION>> : public mpl::function<mpl::mul<mpl::decimal<(fixed_point_bits)v,0,PRECISION>,mpl::fixed_point<BITS,PRECISION>>> {};
+    struct mul_t<tb::value_t<T,v>,tb::fixed_point<BITS,PRECISION>> : public tb::function<tb::mul<tb::decimal<(fixed_point_bits)v,0,PRECISION>,tb::fixed_point<BITS,PRECISION>>> {};
 
     template<typename T , T v , fixed_point_bits BITS , fixed_point_precision PRECISION>
-    struct mul_t<mpl::fixed_point<BITS,PRECISION>,mpl::value_t<T,v>> : public mpl::function<mpl::mul<mpl::fixed_point<BITS,PRECISION>,mpl::decimal<(fixed_point_bits)v,0,PRECISION>>> {};
+    struct mul_t<tb::fixed_point<BITS,PRECISION>,tb::value_t<T,v>> : public tb::function<tb::mul<tb::fixed_point<BITS,PRECISION>,tb::decimal<(fixed_point_bits)v,0,PRECISION>>> {};
     
     
     template<typename T , T v , fixed_point_bits BITS , fixed_point_precision PRECISION>
-    struct div_t<mpl::value_t<T,v>,mpl::fixed_point<BITS,PRECISION>> : public mpl::function<mpl::div<mpl::decimal<(fixed_point_bits)v,0,PRECISION>,mpl::fixed_point<BITS,PRECISION>>> {};
+    struct div_t<tb::value_t<T,v>,tb::fixed_point<BITS,PRECISION>> : public tb::function<tb::div<tb::decimal<(fixed_point_bits)v,0,PRECISION>,tb::fixed_point<BITS,PRECISION>>> {};
 
     template<typename T , T v , fixed_point_bits BITS , fixed_point_precision PRECISION>
-    struct div_t<mpl::fixed_point<BITS,PRECISION>,mpl::value_t<T,v>> : public mpl::function<mpl::div<mpl::fixed_point<BITS,PRECISION>,mpl::decimal<(fixed_point_bits)v,0,PRECISION>>> {};
+    struct div_t<tb::fixed_point<BITS,PRECISION>,tb::value_t<T,v>> : public tb::function<tb::div<tb::fixed_point<BITS,PRECISION>,tb::decimal<(fixed_point_bits)v,0,PRECISION>>> {};
 
 
 
@@ -148,12 +148,12 @@ namespace mpl
     /* mpl::to_string */
     
     template<fixed_point_bits BITS , fixed_point_precision PRECISION>
-    struct to_string_t<mpl::fixed_point<BITS,PRECISION>>
+    struct to_string_t<tb::fixed_point<BITS,PRECISION>>
     {
         operator std::string() const
         {
             std::ostringstream os;
-            os << mpl::fixed_point<BITS,PRECISION>();
+            os << tb::fixed_point<BITS,PRECISION>();
             return os.str();
         }
     };

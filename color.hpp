@@ -32,12 +32,12 @@
 namespace gfx
 {
     template<char VALUE>
-    using byte = mpl::value_t<char,VALUE>;
+    using byte = tb::value_t<char,VALUE>;
     
     using byte_t = unsigned char;
     
     template<typename R , typename G , typename B , typename A = gfx::byte<255>>
-    struct color : public mpl::uinteger<((unsigned int)A::value << 24) | ((unsigned int)R::value << 16) | ((unsigned int)G::value << 8) | (unsigned int)B::value>
+    struct color : public tb::uinteger<((unsigned int)A::value << 24) | ((unsigned int)R::value << 16) | ((unsigned int)G::value << 8) | (unsigned int)B::value>
     {
         using a = A;
         using r = R;
@@ -52,7 +52,7 @@ namespace gfx
     using from_argb = gfx::color<gfx::byte<R>,gfx::byte<G>,gfx::byte<B>,gfx::byte<A>>;
 }
 
-namespace mpl
+namespace tb
 {
     template<typename A , typename R , typename G , typename B>
     struct to_string_t<gfx::color<R,G,B,A>>

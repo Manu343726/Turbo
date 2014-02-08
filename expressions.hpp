@@ -45,74 +45,74 @@ namespace
                                                                                       >::type   
 }
 
-namespace mpl
+namespace tb
 {
     
     template<typename LHS , typename RHS>
-    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::add) operator+(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(tb::add) operator+(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::sub) operator-(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(tb::sub) operator-(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::mul) operator*(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(tb::mul) operator*(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::div) operator/(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(tb::div) operator/(const LHS& , const RHS&);
     
     
     
     
     template<typename LHS , typename RHS>
-    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::bitwise_leftshift)  operator<<(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(tb::bitwise_leftshift)  operator<<(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::bitwise_rightshift) operator>>(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(tb::bitwise_rightshift) operator>>(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::bitwise_and) operator&(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(tb::bitwise_and) operator&(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::bitwise_or)  operator|(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(tb::bitwise_or)  operator|(const LHS& , const RHS&);
     
     template<typename T>
-    ENABLE_ONLY_FOR_SPECIALIZED_UNARY(mpl::bitwise_not)  operator~(const T&);
+    ENABLE_ONLY_FOR_SPECIALIZED_UNARY(tb::bitwise_not)  operator~(const T&);
     
     
     
     
     template<typename LHS , typename RHS>
-    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::logical_and) operator&&(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(tb::logical_and) operator&&(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::logical_or)  operator||(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(tb::logical_or)  operator||(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::logical_xor) operator^(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(tb::logical_xor) operator^(const LHS& , const RHS&);
     
     template<typename T>
-    ENABLE_ONLY_FOR_SPECIALIZED_UNARY(mpl::logical_not)  operator!(const T&);
+    ENABLE_ONLY_FOR_SPECIALIZED_UNARY(tb::logical_not)  operator!(const T&);
     
     
     
     
     template<typename LHS , typename RHS>
-    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::equal)           operator==(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(tb::equal)           operator==(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::not_equal)       operator!=(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(tb::not_equal)       operator!=(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::bigger_than)     operator>(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(tb::bigger_than)     operator>(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::less_than)       operator<(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(tb::less_than)       operator<(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::bigger_or_equal) operator>=(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(tb::bigger_or_equal) operator>=(const LHS& , const RHS&);
     
     template<typename LHS , typename RHS>
-    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(mpl::less_or_equal)   operator<=(const LHS& , const RHS&);
+    ENABLE_ONLY_FOR_SPECIALIZED_BINARY(tb::less_or_equal)   operator<=(const LHS& , const RHS&);
     
     
 }

@@ -29,47 +29,47 @@
 
 namespace math
 {
-    template<mpl::fixed_point_precision PRECISION>
-    struct pi_t : public mpl::function<mpl::decimal<3141592654,-9,PRECISION>> {};
+    template<tb::fixed_point_precision PRECISION>
+    struct pi_t : public tb::function<tb::decimal<3141592654,-9,PRECISION>> {};
     
     template<>
-    struct pi_t<0> : public mpl::function<mpl::decimal<3,0,0>> {};
+    struct pi_t<0> : public tb::function<tb::decimal<3,0,0>> {};
     
     template<>
-    struct pi_t<1> : public mpl::function<mpl::decimal<31,-1,1>> {};
+    struct pi_t<1> : public tb::function<tb::decimal<31,-1,1>> {};
     
     template<>
-    struct pi_t<2> : public mpl::function<mpl::decimal<314,-2,2>> {};
+    struct pi_t<2> : public tb::function<tb::decimal<314,-2,2>> {};
     
     template<>
-    struct pi_t<3> : public mpl::function<mpl::decimal<3141,-3,3>> {};
+    struct pi_t<3> : public tb::function<tb::decimal<3141,-3,3>> {};
     
     template<>
-    struct pi_t<4> : public mpl::function<mpl::decimal<31416,-4,4>> {};
+    struct pi_t<4> : public tb::function<tb::decimal<31416,-4,4>> {};
     
     template<>
-    struct pi_t<5> : public mpl::function<mpl::decimal<314159,-5,5>> {};
+    struct pi_t<5> : public tb::function<tb::decimal<314159,-5,5>> {};
     
     template<>
-    struct pi_t<6> : public mpl::function<mpl::decimal<3141592,-6,6>> {};
+    struct pi_t<6> : public tb::function<tb::decimal<3141592,-6,6>> {};
     
     template<>
-    struct pi_t<7> : public mpl::function<mpl::decimal<31415926,-7,7>> {};
+    struct pi_t<7> : public tb::function<tb::decimal<31415926,-7,7>> {};
     
     template<>
-    struct pi_t<8> : public mpl::function<mpl::decimal<314159265,-8,8>> {};
+    struct pi_t<8> : public tb::function<tb::decimal<314159265,-8,8>> {};
     
-    template<mpl::fixed_point_precision PRECISION = mpl::DEFAULT_FRACTIONAL_PRECISION>
+    template<tb::fixed_point_precision PRECISION = tb::DEFAULT_FRACTIONAL_PRECISION>
     using concrete_pi = typename math::pi_t<PRECISION>::result;
     
-    using pi = concrete_pi<mpl::DEFAULT_FRACTIONAL_PRECISION>;
+    using pi = concrete_pi<tb::DEFAULT_FRACTIONAL_PRECISION>;
     
     
     
 #ifndef TURBO_CUSTOM_TRIGONOMETRY_DEFAULT_TERMS
-    using default_trigonometry_approximation_terms = mpl::uinteger<10>;
+    using default_trigonometry_approximation_terms = tb::uinteger<10>;
 #else
-    using default_trigonometry_approximation_terms = mpl::uinteger<TURBO_CUSTOM_TRIGONOMETRY_DEFAULT_TERMS>;
+    using default_trigonometry_approximation_terms = tb::uinteger<TURBO_CUSTOM_TRIGONOMETRY_DEFAULT_TERMS>;
 #endif
     
     template<typename T , typename TERMS_COUNT>
@@ -114,28 +114,28 @@ namespace math
      * }
      */
     
-    template<mpl::fixed_point_bits BITS , mpl::fixed_point_precision PRECISION , unsigned int TERMS_COUNT>
-    struct sin_t<mpl::fixed_point<BITS,PRECISION>,mpl::uinteger<TERMS_COUNT>>
+    template<tb::fixed_point_bits BITS , tb::fixed_point_precision PRECISION , unsigned int TERMS_COUNT>
+    struct sin_t<tb::fixed_point<BITS,PRECISION>,tb::uinteger<TERMS_COUNT>>
     {
     private:
-        using x = mpl::fixed_point<BITS,PRECISION>;
+        using x = tb::fixed_point<BITS,PRECISION>;
         
-        using begin = mpl::make_integer_backward_iterator<TERMS_COUNT-1>;
-        using end   = mpl::make_integer_backward_iterator<-1>;
+        using begin = tb::make_integer_backward_iterator<TERMS_COUNT-1>;
+        using end   = tb::make_integer_backward_iterator<-1>;
         
-        using one   = mpl::decimal<1,0,PRECISION>;
-        using two   = mpl::decimal<2,0,PRECISION>;
-        using three = mpl::decimal<3,0,PRECISION>;
+        using one   = tb::decimal<1,0,PRECISION>;
+        using two   = tb::decimal<2,0,PRECISION>;
+        using three = tb::decimal<3,0,PRECISION>;
         
         template<typename K , typename VAL>
         struct kernel
         {
             using result = decltype( one() - ( x() * x() )/(two() * K() + two())/(two()*K()+three())*VAL() );
-            using abort = mpl::equal<result,VAL>; //When the value converges, the loop is aborted
+            using abort = tb::equal<result,VAL>; //When the value converges, the loop is aborted
         };
         
     public:
-        using result = decltype( x() * mpl::for_loop<begin , end , one , kernel>() );
+        using result = decltype( x() * tb::for_loop<begin , end , one , kernel>() );
     };
     
     
@@ -166,34 +166,34 @@ namespace math
      * }
      */
     
-    template<mpl::fixed_point_bits BITS , mpl::fixed_point_precision PRECISION , unsigned int TERMS_COUNT>
-    struct cos_t<mpl::fixed_point<BITS,PRECISION>,mpl::uinteger<TERMS_COUNT>>
+    template<tb::fixed_point_bits BITS , tb::fixed_point_precision PRECISION , unsigned int TERMS_COUNT>
+    struct cos_t<tb::fixed_point<BITS,PRECISION>,tb::uinteger<TERMS_COUNT>>
     {
     private:
-        using x = mpl::fixed_point<BITS,PRECISION>;
+        using x = tb::fixed_point<BITS,PRECISION>;
         
-        using begin = mpl::make_integer_backward_iterator<TERMS_COUNT-1>;
-        using end   = mpl::make_integer_backward_iterator<-1>;
+        using begin = tb::make_integer_backward_iterator<TERMS_COUNT-1>;
+        using end   = tb::make_integer_backward_iterator<-1>;
         
-        using one   = mpl::decimal<1,0,PRECISION>;
-        using two   = mpl::decimal<2,0,PRECISION>;
+        using one   = tb::decimal<1,0,PRECISION>;
+        using two   = tb::decimal<2,0,PRECISION>;
         
         template<typename K , typename VAL>
         struct kernel
         {
             using result = decltype( one() - ( x() * x() )/(two() * K() + two())/(two()*K()+one())*VAL() );
-            using abort = mpl::equal<result,VAL>; //When the value converges, the loop is aborted
+            using abort = tb::equal<result,VAL>; //When the value converges, the loop is aborted
         };
     public:
-        using result = mpl::for_loop<begin , end , one , kernel>;
+        using result = tb::for_loop<begin , end , one , kernel>;
     };
     
     
-    template<typename T , typename TERMS_COUNT = mpl::uinteger<10>>
-    using tan   = mpl::div<sin<T,TERMS_COUNT>,cos<T,TERMS_COUNT>>;
+    template<typename T , typename TERMS_COUNT = tb::uinteger<10>>
+    using tan   = tb::div<sin<T,TERMS_COUNT>,cos<T,TERMS_COUNT>>;
     
-    template<typename T , typename TERMS_COUNT = mpl::uinteger<10>>
-    using cotan = mpl::div<cos<T,TERMS_COUNT>,sin<T,TERMS_COUNT>>;
+    template<typename T , typename TERMS_COUNT = tb::uinteger<10>>
+    using cotan = tb::div<cos<T,TERMS_COUNT>,sin<T,TERMS_COUNT>>;
 }
 
 #endif	/* SIN_HPP */
