@@ -160,6 +160,26 @@ namespace tb
                 return gen();
             }
 
+        // Arithmetic operators (Cuboid):
+
+            template<uint x , uint y , uint z , mpl::uinteger_type rhs_n>
+            cuboid<x*rhs_n,y*rhs_n,z*rhs_n> operator*( const cuboid<x,y,z>& lhs , mpl::uinteger<rhs_n> rhs )
+            {
+                return gen();      
+            }
+
+            template<uint x , uint y , uint z , mpl::uinteger_type lhs_n>
+            cuboid<x*lhs_n,y*lhs_n,z*lhs_n> operator*( mpl::uinteger<lhs_n> lhs , const cuboid<x,y,z>& rhs )
+            {
+                return gen();      
+            }
+
+            template<uint x , uint y , uint z , mpl::uinteger_type rhs_n>
+            cuboid<x/rhs_n , y/rhs_n,z/rhs_n> operator/( const cuboid<x,y,z>& lhs , mpl::uinteger<rhs_n> rhs )
+            {
+                return gen();
+            }
+            
         // Arithmetic operators (Rectangle):
 
             template<uint x , uint y , tb::uinteger_type rhs_n>
