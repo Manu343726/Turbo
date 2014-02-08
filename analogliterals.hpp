@@ -23,9 +23,7 @@
 #ifndef ANALOGLITERALS_HPP
 #define ANALOGLITERALS_HPP
 
-#include "operators.hpp"
-#include "basic_types.hpp"
-#include "expressions.hpp"
+#include "core.hpp"
 
 namespace tb
 {

@@ -18,40 +18,18 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
-#ifndef RENDER_HPP
-#define	RENDER_HPP
 
-#include "operators.hpp"
-#include "vector.hpp"
-#include "for_loops.hpp"
+/* This header only defines the core of the library: The minimum set of dependent functionality */
 
-namespace gfx
-{
-    template<typename V1 , typename V2 , typename V3>
-    struct triangle
-    {
-        using v1 = V1;
-        using v2 = V2;
-        using v3 = V3;
-        
-        using normal = math::cross_product<tb::sub<V2,V1> , tb::sub<V3,V1>>;
-    };
-    
-    template<typename VIEW_VECTOR , typename NORMAL>
-    using backface_cull_filter = decltype( tb::mul<VIEW_VECTOR,NORMAL>() < tb::zero<typename NORMAL::x>() );
-    
-    template<typename VIEW_VECTOR , typename TRIANGLE_LIST>
-    struct backface_culling_t
-    {
-        template<typename TRIANGLE>
-        using filter = backface_cull_filter<VIEW_VECTOR,typename TRIANGLE::normal>;
-        
-        using result = tb::for_each<tb::begin<TRIANGLE_LIST> , tb::end<TRIANGLE_LIST> , tb::function , filter>;
-    };
-    
-    template<typename VIEW_VECTOR , typename TRIANGLE_LIST>
-    using backface_culling = typename backface_culling_t<VIEW_VECTOR,TRIANGLE_LIST>::result;
-}
+#ifndef CORE_HPP
+#define	CORE_HPP
 
-#endif	/* RENDER_HPP */
+#include "core/value_t.hpp"
+#include "core/basic_types.hpp"
+#include "core/basic_numeric_arithmetic.hpp"
+#include "core/function.hpp"
+#include "core/boolean_predicates.hpp"
+#include "core/concepts.hpp"
+
+#endif	/* CORE_HPP */
 

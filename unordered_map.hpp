@@ -21,7 +21,7 @@
 #ifndef UNORDERED_MAP_HPP
 #define	UNORDERED_MAP_HPP
 
-#include "basic_types.hpp"
+#include "core.hpp"
 #include "list.hpp"
 
 namespace tb

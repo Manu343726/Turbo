@@ -10,7 +10,7 @@
 * the Free Software Foundation, version 2 of the License.                     *
 *                                                                             *
 * The Turbo Library is distributed in the hope that it will be useful,        *
-* but WITHOUT ANY WARRANTY; without even the implied warranty of              * 
+* but WITHOUT ANY WARRANTY; without even the itbied warranty of              * 
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
 * GNU Lesser General Public License for more details.                         *
 *                                                                             *
@@ -26,84 +26,90 @@
 
 namespace tb
 {   
-    template<typename LIST , template<typename,typename> class COMPARER = mtb:bigger_than , typename DEBUG_TRACE = mptbempty_list>
+    template<typename LIST , template<typename,typename> class COMPARER = tb::bigger_than , typename DEBUG_TRACE = tb::empty_list>
     class qsort;
     
     template<template<typename,typename> class COMPARER , typename DEBUG_TRACE>
-    struct qsort<mpltbmpty_list,COMPARER,DEBUG_TRACE>
+    struct qsort<tb::empty_list,COMPARER,DEBUG_TRACE>
     {
-        using result = tb:tbpty_list;
-        using debug_trace = tb::tbt<result>;
+        using result = tb::empty_list;
+        using debug_trace = tb::list<result>;
     };
     
     template<typename T,template<typename,typename> class COMPARER , typename DEBUG_TRACE>
-    struct qsort<tb::ltb<T>,COMPARER,DEBUG_TRACE>
+    struct qsort<tb::list<T>,COMPARER,DEBUG_TRACE>
     {
-        using result = tb::litbT>;
-        using debug_trace = tb::listbesult>;
+        using result = tb::list<T>;
+        using debug_trace = tb::list<result>;
     };
     
     template<typename A , typename B , template<typename,typename> class COMPARER , typename DEBUG_TRACE>
-    struct qsort<tb::listtbB>,COMPARER,DEBUG_TRACE>
+    struct qsort<tb::list<A,B>,COMPARER,DEBUG_TRACE>
     {
-        using result = tb::conditbnal<COMPARER<A,B>,tb::list<Atb,tb::list<B,tb;
-        using debug_trace = tb::list<restb>;
+        using result = tb::conditional<COMPARER<A,B>,tb::list<A,B>,tb::list<B,A>>;
+        using debug_trace = tb::list<result>;
     };
     
     template<typename... Ts , template<typename,typename> class COMPARER , typename DEBUG_TRACE>
-    struct qsort<tb::list<Ts..tbCOMPARER,DEBUG_TRACE>
+    struct qsort<tb::list<Ts...>,COMPARER,DEBUG_TRACE>
     {
         template<typename PIVOT , std::size_t PIVOT_INDEX , std::size_t INDEX , typename LEFT_LIST , typename RIGHT_LIST , typename LIST>
         struct reorder_sublists;
         
         template<typename PIVOT , std::size_t PIVOT_INDEX , std::size_t INDEX, typename... LEFT_LIST , typename... RIGHT_LIST , typename HEAD , typename... TAIL>
-        struct reorder_sublists<PIVOT, PIVOT_INDEX , INDEX ,tb::list<LEFT_tbT...>,tb::list<RIGHT_tbT...>,tb::list<HEAD,TAtb..>>
+        struct reorder_sublists<PIVOT, PIVOT_INDEX , INDEX ,tb::list<LEFT_LIST...>,tb::list<RIGHT_LIST...>,tb::list<HEAD,TAIL...>>
         {
-            using next_left  = tb::conditional<CtbARER<HEAD,PIVOT>,tb::list<LEFT_LISTtb,HEAD>,tb::list<LEFT_LIST.tb>;
-            using next_right = tb::conditional<COMPtbR<HEAD,PIVOT>,tb::list<RIGHT_LIST..tbmpl::list<HEAD,RIGHT_LItb..>>;
+            using next_left  = tb::conditional<COMPARER<HEAD,PIVOT>,tb::list<LEFT_LIST...,HEAD>,tb::list<LEFT_LIST...>>;
+            using next_right = tb::conditional<COMPARER<HEAD,PIVOT>,tb::list<RIGHT_LIST...>,tb::list<HEAD,RIGHT_LIST...>>;
             
             using next_iteration = reorder_sublists<PIVOT,PIVOT_INDEX,INDEX+1,next_left,next_right,tb::list<TAIL...>>;
-   tb      
+            
             using left = typename next_iteration::left;
             using right = typename next_iteration::right;
         };
         
         template<typename PIVOT , std::size_t PIVOT_INDEX , typename... LEFT_LIST , typename... RIGHT_LIST , typename HEAD , typename... TAIL>
-        struct reorder_sublists<PIVOT, PIVOT_INDEX , PIVOT_INDEX ,tb::list<LEFT_LIST...>,mtb:list<RIGHT_LIST...>,mtb:list<HEAD,TAIL...>>
-  tb   {
+        struct reorder_sublists<PIVOT, PIVOT_INDEX , PIVOT_INDEX ,tb::list<LEFT_LIST...>,tb::list<RIGHT_LIST...>,tb::list<HEAD,TAIL...>>
+        {
             using next_left = tb::list<LEFT_LIST...>;
-   tb      using next_right = tb::list<RIGHT_LIST...>;
-   tb      
+            using next_right = tb::list<RIGHT_LIST...>;
+            
             using next_iteration = reorder_sublists<PIVOT,PIVOT_INDEX,PIVOT_INDEX+1,next_left,next_right,tb::list<TAIL...>>;
-         tb
+            
             using left = typename next_iteration::left;
             using right = typename next_iteration::right;
         };
         
         template<typename PIVOT , std::size_t PIVOT_INDEX , std::size_t INDEX , typename... LEFT_LIST , typename... RIGHT_LIST>
-        struct reorder_sublists<PIVOT,PIVOT_INDEX,INDEX,tb::list<LEFT_LIST...>,tb::litbRIGHT_LIST...>,tb::emtb_list>
+        struct reorder_sublists<PIVOT,PIVOT_INDEX,INDEX,tb::list<LEFT_LIST...>,tb::list<RIGHT_LIST...>,tb::empty_list>
         {
-      tb   using left = tb::list<LEFT_LIST...>;
-         tbusing right = tb::list<RIGHT_LIST...>;
-        }tb       
-        using pivot = tb::type_at<tb::list<Ts...>,tb::stb_t<sizeof..tbs)/2>>;
-       tbing left_sublist = typename reorder_sublists<pivot,sizeof...(Ts)/2,0,tb::empty_list,tb::empty_list,tb::litbTs...>>::left;tb      using ritb_sublist = typename reorder_sublists<pivot,sizeof...(Ts)/2,0,tb::empty_list,tb::empty_list,tb::list<tb..>>::right;
- tb    
-        utbg ordered_left  = typename tb::qsort<left_sublist,COMPARER,tb::concat<tbUG_TRACE,left_sublist>>::resulttb       using ordered_right = typename tb::qsort<right_sublist,COMPARER,tb::concat<DtbG_TRACE,right_sublist>>::result;tb      
-        using ordered_left_debug_trace  = typename tb::qsort<left_sublist,COMPARER,DEBUG_TRACE>::detb_trace;
-        using ordered_right_debug_trace = typename tb::qsort<right_sublist,COMPARER,DEBUG_TRACE>::detb_trace;
+            using left = tb::list<LEFT_LIST...>;
+            using right = tb::list<RIGHT_LIST...>;
+        };
         
-        using concated = tb::concat<ordered_left,tb::concat<tb::list<pivotbordered_right>>;
-      tb    publictb       using result = concated;
-        using debug_trace = tb::list<ordered_left_debug_trace,pivot,ordered_righttbbug_trace>;
+        using pivot = tb::type_at<tb::list<Ts...>,tb::size_t<sizeof...(Ts)/2>>;
+        using left_sublist = typename reorder_sublists<pivot,sizeof...(Ts)/2,0,tb::empty_list,tb::empty_list,tb::list<Ts...>>::left;
+        using right_sublist = typename reorder_sublists<pivot,sizeof...(Ts)/2,0,tb::empty_list,tb::empty_list,tb::list<Ts...>>::right;
+        
+        using ordered_left  = typename tb::qsort<left_sublist,COMPARER,tb::concat<DEBUG_TRACE,left_sublist>>::result;
+        using ordered_right = typename tb::qsort<right_sublist,COMPARER,tb::concat<DEBUG_TRACE,right_sublist>>::result;
+        
+        using ordered_left_debug_trace  = typename tb::qsort<left_sublist,COMPARER,DEBUG_TRACE>::debug_trace;
+        using ordered_right_debug_trace = typename tb::qsort<right_sublist,COMPARER,DEBUG_TRACE>::debug_trace;
+        
+        using concated = tb::concat<ordered_left,tb::concat<tb::list<pivot>,ordered_right>>;
+        
+    public:
+        using result = concated;
+        using debug_trace = tb::list<ordered_left_debug_trace,pivot,ordered_right_debug_trace>;
     };
     
     
-    template<typename LIST , template<typename,typename> class COMPARER = tb::bigger_than , template<typename,template<typename,tbename>class,typename> class ALGORITHM = tb::qsort>
-    using sort = typename ALGORITHM<LIST,COMtbER,tb::empty_list>::result;
+    template<typename LIST , template<typename,typename> class COMPARER = tb::bigger_than , template<typename,template<typename,typename>class,typename> class ALGORITHM = tb::qsort>
+    using sort = typename ALGORITHM<LIST,COMPARER,tb::empty_list>::result;
     
-    template<typename LISTtbtemplate<typename,typename> class COMPARER = tb::bigger_than , template<typename,template<typename,typtbme>class,typename> class ALGORITHM = tb::qsort>
-    using debug_sort = tb::pair<typename ALGORtbM<LIST,COMPARER,tb::empty_list>:tbsult,typename ALGORITHM<LIST,COMPARER,mpltbmpty_list>::debug_trace>;
+    template<typename LIST , template<typename,typename> class COMPARER = tb::bigger_than , template<typename,template<typename,typename>class,typename> class ALGORITHM = tb::qsort>
+    using debug_sort = tb::pair<typename ALGORITHM<LIST,COMPARER,tb::empty_list>::result,typename ALGORITHM<LIST,COMPARER,tb::empty_list>::debug_trace>;
 }
 
 #endif	/* SORT_HPP */

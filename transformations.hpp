@@ -21,7 +21,7 @@
 #ifndef TRANSFORMATIONS_HPP
 #define	TRANSFORMATIONS_HPP
 
-#include "operators.hpp"
+#include "core.hpp"
 #include "trigonometry.hpp"
 
 

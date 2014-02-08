@@ -22,7 +22,7 @@
 #define	TO_STRING_HPP
 
 #ifndef DISABLE_TURBO_DEPENDENCIES
-#include "value_t.hpp"
+#include "core.hpp"
 #endif
 
 #include <string>

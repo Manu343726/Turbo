@@ -7,12 +7,20 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/numeric_iterators.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/main.cpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/iterator.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/color.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/complex.hpp</file>
             <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/analogliterals.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/render.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/to_string.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/transformations.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/fixed_point.hpp</file>
             <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/for_loops.hpp</file>
             <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/list.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/iterator.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/sort.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/traits.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/trigonometry.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/unordered_map.hpp</file>
         </group>
     </open-files>
 </project-private>

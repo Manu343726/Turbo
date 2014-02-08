@@ -21,10 +21,9 @@
 #ifndef SIN_HPP
 #define	SIN_HPP
 
+#include "core.hpp"
 #include "fixed_point.hpp"
-#include "basic_types.hpp"
 #include "for_loops.hpp"
-#include "operators.hpp"
 #include "numeric_iterators.hpp"
 
 namespace math

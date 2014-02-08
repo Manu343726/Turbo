@@ -21,7 +21,7 @@
 #ifndef MATRIX3X3_HPP
 #define	MATRIX3X3_HPP
 
-#include "operators.hpp"
+#include "core.hpp"
 #include "to_string.hpp"
 #include "trigonometry.hpp"
 #include "vector.hpp"

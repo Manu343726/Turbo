@@ -21,9 +21,7 @@
 #ifndef COMPLEX_HPP
 #define	COMPLEX_HPP
 
-#include "operators.hpp"
-#include "expressions.hpp"
-#include "basic_types.hpp"
+#include "core.hpp"
 #include "fixed_point.hpp"
 #include "sqrt.hpp"
 #include "to_string.hpp"

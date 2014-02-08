@@ -4,12 +4,21 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <logicalFolder name="core" displayName="core" projectFiles="true">
+        <itemPath>core/arithmetic_functions.hpp</itemPath>
+        <itemPath>core/basic_numeric_arithmetic.hpp</itemPath>
+        <itemPath>core/basic_types.hpp</itemPath>
+        <itemPath>core/boolean_predicates.hpp</itemPath>
+        <itemPath>core/concepts.hpp</itemPath>
+        <itemPath>core/expressions.hpp</itemPath>
+        <itemPath>core/function.hpp</itemPath>
+        <itemPath>traits.hpp</itemPath>
+        <itemPath>core/value_t.hpp</itemPath>
+      </logicalFolder>
       <itemPath>analogliterals.hpp</itemPath>
-      <itemPath>basic_types.hpp</itemPath>
-      <itemPath>boolean_predicates.hpp</itemPath>
       <itemPath>color.hpp</itemPath>
       <itemPath>complex.hpp</itemPath>
-      <itemPath>expressions.hpp</itemPath>
+      <itemPath>core.hpp</itemPath>
       <itemPath>fixed_point.hpp</itemPath>
       <itemPath>for_loops.hpp</itemPath>
       <itemPath>iterator.hpp</itemPath>
@@ -18,19 +27,13 @@
       <itemPath>matrix3x3.hpp</itemPath>
       <itemPath>matrix4x4.hpp</itemPath>
       <itemPath>numeric_iterators.hpp</itemPath>
-      <itemPath>operators.hpp</itemPath>
-      <itemPath>prime_filter.hpp</itemPath>
-      <itemPath>render.hpp</itemPath>
       <itemPath>sort.hpp</itemPath>
       <itemPath>sqrt.hpp</itemPath>
       <itemPath>tictactoe.hpp</itemPath>
       <itemPath>to_string.hpp</itemPath>
-      <itemPath>traits.hpp</itemPath>
       <itemPath>transformations.hpp</itemPath>
       <itemPath>trigonometry.hpp</itemPath>
       <itemPath>unordered_map.hpp</itemPath>
-      <itemPath>utilities.hpp</itemPath>
-      <itemPath>value_t.hpp</itemPath>
       <itemPath>vector.hpp</itemPath>
       <itemPath>wrapper.hpp</itemPath>
     </logicalFolder>
@@ -54,35 +57,58 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
-    <itemPath>README.md</itemPath>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>.</Elem>
+    <Elem>.</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="Debug" type="1">
       <toolsSet>
-        <compilerSet>GNU|GNU</compilerSet>
+        <compilerSet>default</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
         <ccTool>
           <standard>8</standard>
-          <commandLine>-std=c++11</commandLine>
         </ccTool>
       </compileType>
-      <item path="README.md" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="analogliterals.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="boolean_predicates.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="color.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="complex.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="expressions.hpp" ex="false" tool="3" flavor2="0">
+      <item path="core.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="core/arithmetic_functions.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="core/basic_numeric_arithmetic.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="core/basic_types.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="core/boolean_predicates.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="core/concepts.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="core/expressions.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="core/function.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="core/value_t.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="fixed_point.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -102,12 +128,6 @@
       </item>
       <item path="numeric_iterators.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="operators.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="prime_filter.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="render.hpp" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="sort.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="sqrt.hpp" ex="false" tool="3" flavor2="0">
@@ -123,10 +143,6 @@
       <item path="trigonometry.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="unordered_map.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="utilities.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="value_t.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="vector.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -145,6 +161,7 @@
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
+          <standard>8</standard>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -153,19 +170,29 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="README.md" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="analogliterals.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="boolean_predicates.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="color.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="complex.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="expressions.hpp" ex="false" tool="3" flavor2="0">
+      <item path="core.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="core/arithmetic_functions.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="core/basic_numeric_arithmetic.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="core/basic_types.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="core/boolean_predicates.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="core/concepts.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="core/expressions.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="core/function.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="core/value_t.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="fixed_point.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -185,12 +212,6 @@
       </item>
       <item path="numeric_iterators.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="operators.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="prime_filter.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="render.hpp" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="sort.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="sqrt.hpp" ex="false" tool="3" flavor2="0">
@@ -206,10 +227,6 @@
       <item path="trigonometry.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="unordered_map.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="utilities.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="value_t.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="vector.hpp" ex="false" tool="3" flavor2="0">
       </item>

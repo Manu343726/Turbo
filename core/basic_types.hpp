@@ -18,28 +18,50 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
-#ifndef WRAPPER_HPP
-#define	WRAPPER_HPP
+#ifndef BASIC_TYPES_HPP
+#define	BASIC_TYPES_HPP
 
-#include "core.hpp"
-#include "to_string.hpp"
+#include "value_t.hpp"
 
+namespace make_type_macro
+{
+    #define MAKE_TYPE(name , type) template<type VALUE>                   \
+                                   using name = value_t<type,VALUE>; \
+                                   using name##_type = type
+}
 
 namespace tb
 {
-    template<typename T , typename HASH = tb::no_type>
-    struct wrapper_t : public tb::function<T>
+    
+    template<typename T>
+    struct type_t
     {
         using type = T;
-        using hash = HASH;
     };
     
-    template<typename T , typename HASH = tb::no_type>
-    using wrapper = wrapper_t<T,HASH>;
     
-    template<typename T , typename HASH>
-    struct to_string_t<tb::wrapper<T,HASH>> : public to_string_t<T> {};
+    template<typename T , typename U>
+    struct pair
+    {
+        using first  = T;
+        using second = U;
+    };
+    
+    MAKE_TYPE(ucharacter         , unsigned char);
+    MAKE_TYPE(character          , char);
+    MAKE_TYPE(uinteger           , unsigned int);
+    MAKE_TYPE(integer            , int);
+    MAKE_TYPE(ulong_integer      , unsigned long int);
+    MAKE_TYPE(long_integer       , long int);
+    MAKE_TYPE(ulong_long_integer , unsigned long long int);
+    MAKE_TYPE(long_long_integer  , long long int);
+    MAKE_TYPE(boolean            , bool);
+    MAKE_TYPE(size_t             , std::size_t);
+  
+    
+    using false_type = tb::boolean<false>;
+    using true_type  = tb::boolean<true>;
 }
 
-#endif	/* WRAPPER_HPP */
+#endif	/* BASIC_TRAITS_HPP */
 

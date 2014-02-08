@@ -21,9 +21,7 @@
 #ifndef COLOR_HPP
 #define	COLOR_HPP
 
-#include "basic_types.hpp"
-#include "operators.hpp"
-#include "expressions.hpp"
+#include "core.hpp"
 #include "to_string.hpp"
 
 #include <sstream>

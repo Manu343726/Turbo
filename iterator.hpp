@@ -21,8 +21,7 @@
 #ifndef ITERATOR_HPP
 #define	ITERATOR_HPP
 
-#include "operators.hpp"
-#include "expressions.hpp"
+#include "core.hpp"
 
 
 namespace tb

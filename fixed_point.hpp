@@ -21,8 +21,7 @@
 #ifndef FIXED_POINT_HPP
 #define	FIXED_POINT_HPP
 
-#include "basic_types.hpp"
-#include "operators.hpp"
+#include "core.hpp"
 #include "iterator.hpp"
 #include "to_string.hpp"
 

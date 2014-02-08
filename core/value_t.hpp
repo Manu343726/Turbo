@@ -18,28 +18,46 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
-#ifndef WRAPPER_HPP
-#define	WRAPPER_HPP
+#ifndef VALUE_T_HPP
+#define	VALUE_T_HPP
 
-#include "core.hpp"
-#include "to_string.hpp"
+#include <type_traits> //std::common_type
 
+namespace implementation__is_value
+{
+    template<typename T>
+    struct _is_value
+    {       
+    private:
+        typedef struct { char c[1]; } yes;
+        typedef struct { char c[2]; } no;
+        
+        template<typename C> static yes test(typename C::is_value_flag*);
+        template<typename C> static no  test(...);
+    public:
+        static const bool value = sizeof(test<T>(0)) == sizeof( yes );
+    };
+}
 
 namespace tb
 {
-    template<typename T , typename HASH = tb::no_type>
-    struct wrapper_t : public tb::function<T>
+    template<typename T , T val>
+    struct value_t
     {
-        using type = T;
-        using hash = HASH;
-    };
+    private:
+        struct _is_a_value {};
+    public:
+        static const T value = val;
+        using value_type = T;
+        
+        using is_value_flag = _is_a_value;
+        
+        const constexpr T operator()() { return val; }
+    }; 
     
-    template<typename T , typename HASH = tb::no_type>
-    using wrapper = wrapper_t<T,HASH>;
-    
-    template<typename T , typename HASH>
-    struct to_string_t<tb::wrapper<T,HASH>> : public to_string_t<T> {};
+    template<typename T>
+    using is_value = tb::value_t<bool,implementation__is_value::_is_value<T>::value>;
 }
 
-#endif	/* WRAPPER_HPP */
+#endif	/* VALUE_T_HPP */
 

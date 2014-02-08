@@ -22,9 +22,8 @@
 #define	NUMERIC_ITERATORS_HPP
 
 #include "iterator.hpp"
-#include "basic_types.hpp"
+#include "core.hpp"
 #include "fixed_point.hpp"
-#include "operators.hpp"
 #include "for_loops.hpp"
 
 #include <limits>

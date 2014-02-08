@@ -21,7 +21,7 @@
 #ifndef MATRIX4X4_HPP
 #define	MATRIX4X4_HPP
 
-#include "operators.hpp"
+#include "core.hpp"
 #include "to_string.hpp"
 #include "trigonometry.hpp"
 #include "transformations.hpp"

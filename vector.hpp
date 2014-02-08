@@ -21,9 +21,7 @@
 #ifndef VECTOR_HPP
 #define	VECTOR_HPP
 
-#include "basic_types.hpp"
-#include "operators.hpp"
-#include "expressions.hpp"
+#include "core.hpp"
 #include "fixed_point.hpp"
 #include "to_string.hpp"
 #include "sqrt.hpp"
