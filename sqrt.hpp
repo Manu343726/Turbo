@@ -49,9 +49,9 @@ namespace math
 {
     
 #ifndef TURBO_CUSTOM_SQRT_DEFAULT_ITERATIONS
-    using default_sqrt_newton_iterations = tb::uinteger<10>;
+    using default_sqrt_newton_iterations = tml::uinteger<10>;
 #else
-    using default_sqrt_newton_iterations = tb::uinteger<TURBO_CUSTOM_SQRT_DEFAULT_ITERATIONS>;
+    using default_sqrt_newton_iterations = tml::uinteger<TURBO_CUSTOM_SQRT_DEFAULT_ITERATIONS>;
 #endif
     
     template<typename N , typename ITERATIONS>
@@ -63,15 +63,15 @@ namespace math
         template<typename CURRENT , typename PREVIOUS>                                //2*Xn was rewritten as Xn + Xn due to a lack of the library...
         struct newton_iter_kernel 
         {
-            using result = decltype( PREVIOUS() - ((tb::square<PREVIOUS>() - N() ) / (PREVIOUS() + PREVIOUS())) );
-            using abort  = tb::equal<PREVIOUS , result>; //When the function converges, the loop is aborted
+            using result = decltype( PREVIOUS() - ((tml::square<PREVIOUS>() - N() ) / (PREVIOUS() + PREVIOUS())) );
+            using abort  = tml::equal<PREVIOUS , result>; //When the function converges, the loop is aborted
         };
         
-        using begin = tb::make_uinteger_forward_iterator<1>;
-        using end   = tb::make_uinteger_forward_iterator<ITERATIONS::value>;
-        using guess = tb::one<N>;
+        using begin = tml::make_uinteger_forward_iterator<1>;
+        using end   = tml::make_uinteger_forward_iterator<ITERATIONS::value>;
+        using guess = tml::one<N>;
         
-        using result = tb::for_loop<begin,end,guess,newton_iter_kernel>;
+        using result = tml::for_loop<begin,end,guess,newton_iter_kernel>;
     };
     
     template<typename N , typename ITERATIONS = math::default_sqrt_newton_iterations>

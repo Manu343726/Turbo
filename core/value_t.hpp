@@ -39,7 +39,7 @@ namespace implementation__is_value
     };
 }
 
-namespace tb
+namespace tml
 {
     template<typename T , T val>
     struct value_t
@@ -56,7 +56,7 @@ namespace tb
     }; 
     
     template<typename T>
-    using is_value = tb::value_t<bool,implementation__is_value::_is_value<T>::value>;
+    using is_value = tml::value_t<bool,implementation__is_value::_is_value<T>::value>;
 }
 
 #endif	/* VALUE_T_HPP */

@@ -25,7 +25,7 @@
  * On TMP every template with a public type alias could be considered a metafunction. This header defines a unary metafunction template to provide a
  * common interface for the library and the user. The library considers a metafunction any template with a "result" public type alias.
  * 
- * As the TMP functionality provided by the Turbo Library is created defining or specializing metafunctions, a template like tb::function is useful
+ * As the TMP functionality provided by the Turbo Library is created defining or specializing metafunctions, a template like tml::function is useful
  * for the user (And the library developer) to make that specializations. Consider a metafunction like this:
  * 
  * template<typename T>
@@ -40,15 +40,15 @@
  *     using result = unsigned char;
  * };
  * 
- * That repetitive code could be simplified using the unary metafunction tb::function:
+ * That repetitive code could be simplified using the unary metafunction tml::function:
  * 
  * template<>
- * struct unsigned_type<char> : tb::function<unsigned char> {};
+ * struct unsigned_type<char> : tml::function<unsigned char> {};
  * 
  * Which can be easily readed as: unsigned_type( char ) --> unsigned char.
  * 
  * The Turbo Metaprogramming Library uses a "specialize with function, return with alias" approach to write metafunctions.
- * That approach consits on writting internal (only for implementation) metafunctions, specialize them with the tb::function way described above,
+ * That approach consits on writting internal (only for implementation) metafunctions, specialize them with the tml::function way described above,
  * and just define a type alias which returns the result of the implementation metafunction:
  * 
  * template<typename T>
@@ -67,7 +67,7 @@
 #ifndef FUNCTION_HPP
 #define	FUNCTION_HPP
 
-namespace tb
+namespace tml
 {
     template<typename RESULT>
     struct function
@@ -117,7 +117,7 @@ namespace tb
  * Now the implementation:
  * 
  *     template<typename T , typename U>
- *     struct first_of_t<T,U> : tb::function<T> {};
+ *     struct first_of_t<T,U> : tml::function<T> {};
  * 
  * And an usage example:
  *     

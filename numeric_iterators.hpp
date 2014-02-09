@@ -28,67 +28,67 @@
 
 #include <limits>
 
-namespace tb
+namespace tml
 {
     template<typename T , T v>
-    struct begin_t<tb::value_t<T,v>> : tb::make_forward_iterator<tb::value_t<T, std::numeric_limits<T>::min()> , tb::no_type> {};
+    struct begin_t<tml::value_t<T,v>> : tml::make_forward_iterator<tml::value_t<T, std::numeric_limits<T>::min()> , tml::no_type> {};
     
     template<typename T , T v>
-    struct end_t<tb::value_t<T,v>> : tb::make_forward_iterator<tb::value_t<T, std::numeric_limits<T>::max()> , tb::no_type> {};
+    struct end_t<tml::value_t<T,v>> : tml::make_forward_iterator<tml::value_t<T, std::numeric_limits<T>::max()> , tml::no_type> {};
     
     template<typename T , T v>
-    struct rbegin_t<tb::value_t<T,v>> : tb::make_backward_iterator<tb::no_type,tb::value_t<T, std::numeric_limits<T>::min()>> {};
+    struct rbegin_t<tml::value_t<T,v>> : tml::make_backward_iterator<tml::no_type,tml::value_t<T, std::numeric_limits<T>::min()>> {};
     
     template<typename T , T v>
-    struct rend_t<tb::value_t<T,v>> : tb::make_backward_iterator<tb::no_type,tb::value_t<T, std::numeric_limits<T>::max()>> {};
+    struct rend_t<tml::value_t<T,v>> : tml::make_backward_iterator<tml::no_type,tml::value_t<T, std::numeric_limits<T>::max()>> {};
     
     
     
     template<typename T , T v , typename STEP>
-    struct next_t<tb::forward_iterator<tb::value_t<T,v>,tb::no_type>,STEP> : tb::make_forward_iterator<tb::value_t<T,v+STEP::value>,tb::no_type> {};
+    struct next_t<tml::forward_iterator<tml::value_t<T,v>,tml::no_type>,STEP> : tml::make_forward_iterator<tml::value_t<T,v+STEP::value>,tml::no_type> {};
     
     template<typename T , T v>
-    struct next_t<tb::forward_iterator<tb::value_t<T,v>,tb::no_type>,tb::no_type> : tb::make_forward_iterator<tb::value_t<T,v+1>,tb::no_type> {};
+    struct next_t<tml::forward_iterator<tml::value_t<T,v>,tml::no_type>,tml::no_type> : tml::make_forward_iterator<tml::value_t<T,v+1>,tml::no_type> {};
     
     template<typename T , T v , typename STEP>
-    struct previous_t<tb::backward_iterator<tb::value_t<T,v>,tb::no_type>,STEP> : tb::make_backward_iterator<tb::no_type,tb::value_t<T,v-STEP::value>> {};
+    struct previous_t<tml::backward_iterator<tml::value_t<T,v>,tml::no_type>,STEP> : tml::make_backward_iterator<tml::no_type,tml::value_t<T,v-STEP::value>> {};
     
     template<typename T , T v>
-    struct previous_t<tb::backward_iterator<tb::value_t<T,v>,tb::no_type>,tb::no_type> : tb::make_backward_iterator<tb::no_type , tb::value_t<T,v-1>> {};
+    struct previous_t<tml::backward_iterator<tml::value_t<T,v>,tml::no_type>,tml::no_type> : tml::make_backward_iterator<tml::no_type , tml::value_t<T,v-1>> {};
     
     
-    template<tb::fixed_point_bits BITS , tb::fixed_point_precision PRECISION>
-    struct begin_t<tb::fixed_point<BITS,PRECISION>> : tb::make_forward_iterator<tb::fixed_point<std::numeric_limits<fixed_point_bits>::min(),PRECISION> , tb::no_type> {};
+    template<tml::fixed_point_bits BITS , tml::fixed_point_precision PRECISION>
+    struct begin_t<tml::fixed_point<BITS,PRECISION>> : tml::make_forward_iterator<tml::fixed_point<std::numeric_limits<fixed_point_bits>::min(),PRECISION> , tml::no_type> {};
     
-    template<tb::fixed_point_bits BITS , tb::fixed_point_precision PRECISION>
-    struct end_t<tb::fixed_point<BITS,PRECISION>> : tb::make_forward_iterator<tb::fixed_point<std::numeric_limits<fixed_point_bits>::min(),PRECISION> , tb::no_type> {};
+    template<tml::fixed_point_bits BITS , tml::fixed_point_precision PRECISION>
+    struct end_t<tml::fixed_point<BITS,PRECISION>> : tml::make_forward_iterator<tml::fixed_point<std::numeric_limits<fixed_point_bits>::min(),PRECISION> , tml::no_type> {};
     
-    template<tb::fixed_point_bits BITS , tb::fixed_point_precision PRECISION>
-    struct rbegin_t<tb::fixed_point<BITS,PRECISION>> : tb::make_backward_iterator<tb::no_type,tb::fixed_point<std::numeric_limits<fixed_point_bits>::min(),PRECISION>> {};
+    template<tml::fixed_point_bits BITS , tml::fixed_point_precision PRECISION>
+    struct rbegin_t<tml::fixed_point<BITS,PRECISION>> : tml::make_backward_iterator<tml::no_type,tml::fixed_point<std::numeric_limits<fixed_point_bits>::min(),PRECISION>> {};
     
-    template<tb::fixed_point_bits BITS , tb::fixed_point_precision PRECISION>
-    struct rend_t<tb::fixed_point<BITS,PRECISION>> : tb::make_backward_iterator<tb::no_type,tb::fixed_point<std::numeric_limits<fixed_point_bits>::min(),PRECISION>> {};
+    template<tml::fixed_point_bits BITS , tml::fixed_point_precision PRECISION>
+    struct rend_t<tml::fixed_point<BITS,PRECISION>> : tml::make_backward_iterator<tml::no_type,tml::fixed_point<std::numeric_limits<fixed_point_bits>::min(),PRECISION>> {};
     
     
-    template<tb::fixed_point_bits BITS , tb::fixed_point_precision PRECISION , typename STEP>
-    struct next_t<tb::forward_iterator<tb::fixed_point<BITS,PRECISION>,tb::no_type>,STEP> : tb::make_forward_iterator<tb::add<tb::fixed_point<BITS,PRECISION>,STEP>,tb::no_type> {};
+    template<tml::fixed_point_bits BITS , tml::fixed_point_precision PRECISION , typename STEP>
+    struct next_t<tml::forward_iterator<tml::fixed_point<BITS,PRECISION>,tml::no_type>,STEP> : tml::make_forward_iterator<tml::add<tml::fixed_point<BITS,PRECISION>,STEP>,tml::no_type> {};
     
-    template<tb::fixed_point_bits BITS , tb::fixed_point_precision PRECISION>
-    struct next_t<tb::forward_iterator<tb::fixed_point<BITS,PRECISION>,tb::no_type>,tb::no_type> : tb::make_forward_iterator<tb::add<tb::fixed_point<BITS,PRECISION>,tb::one<tb::fixed_point<BITS,PRECISION>>>,tb::no_type> {};
+    template<tml::fixed_point_bits BITS , tml::fixed_point_precision PRECISION>
+    struct next_t<tml::forward_iterator<tml::fixed_point<BITS,PRECISION>,tml::no_type>,tml::no_type> : tml::make_forward_iterator<tml::add<tml::fixed_point<BITS,PRECISION>,tml::one<tml::fixed_point<BITS,PRECISION>>>,tml::no_type> {};
     
-    template<tb::fixed_point_bits BITS , tb::fixed_point_precision PRECISION , typename STEP>
-    struct previous_t<tb::backward_iterator<tb::no_type,tb::fixed_point<BITS,PRECISION>>,STEP> : tb::make_backward_iterator<tb::no_type , tb::sub<tb::fixed_point<BITS,PRECISION>,STEP>> {};
+    template<tml::fixed_point_bits BITS , tml::fixed_point_precision PRECISION , typename STEP>
+    struct previous_t<tml::backward_iterator<tml::no_type,tml::fixed_point<BITS,PRECISION>>,STEP> : tml::make_backward_iterator<tml::no_type , tml::sub<tml::fixed_point<BITS,PRECISION>,STEP>> {};
     
-    template<tb::fixed_point_bits BITS , tb::fixed_point_precision PRECISION>
-    struct previous_t<tb::backward_iterator<tb::no_type,tb::fixed_point<BITS,PRECISION>>,tb::no_type> : tb::make_backward_iterator<tb::no_type , tb::sub<tb::fixed_point<BITS,PRECISION>,tb::one<tb::fixed_point<BITS,PRECISION>>>> {};
+    template<tml::fixed_point_bits BITS , tml::fixed_point_precision PRECISION>
+    struct previous_t<tml::backward_iterator<tml::no_type,tml::fixed_point<BITS,PRECISION>>,tml::no_type> : tml::make_backward_iterator<tml::no_type , tml::sub<tml::fixed_point<BITS,PRECISION>,tml::one<tml::fixed_point<BITS,PRECISION>>>> {};
     
     
     namespace
     {
-#define MAKE_NUMERIC_INTEGRAL_ITERATOR(type_name) template<tb::type_name##_type VALUE> \
-                                         using make_##type_name##_forward_iterator = tb::forward_iterator<tb::type_name<VALUE>,tb::no_type>; \
-                                         template<tb::type_name##_type VALUE> \
-                                         using make_##type_name##_backward_iterator = tb::backward_iterator<tb::no_type,tb::type_name<VALUE>>
+#define MAKE_NUMERIC_INTEGRAL_ITERATOR(type_name) template<tml::type_name##_type VALUE> \
+                                         using make_##type_name##_forward_iterator = tml::forward_iterator<tml::type_name<VALUE>,tml::no_type>; \
+                                         template<tml::type_name##_type VALUE> \
+                                         using make_##type_name##_backward_iterator = tml::backward_iterator<tml::no_type,tml::type_name<VALUE>>
     }
         
     MAKE_NUMERIC_INTEGRAL_ITERATOR(ucharacter);
@@ -102,11 +102,11 @@ namespace tb
     MAKE_NUMERIC_INTEGRAL_ITERATOR(boolean);
     MAKE_NUMERIC_INTEGRAL_ITERATOR(size_t );
     
-    template<int mantissa , int exponent = 0 , fixed_point_precision PRECISION = tb::DEFAULT_FRACTIONAL_PRECISION>
-    using make_decimal_forward_iterator = tb::forward_iterator<tb::decimal<mantissa,exponent,PRECISION>,tb::no_type>;
+    template<int mantissa , int exponent = 0 , fixed_point_precision PRECISION = tml::DEFAULT_FRACTIONAL_PRECISION>
+    using make_decimal_forward_iterator = tml::forward_iterator<tml::decimal<mantissa,exponent,PRECISION>,tml::no_type>;
     
-    template<int mantissa , int exponent = 0 , fixed_point_precision PRECISION = tb::DEFAULT_FRACTIONAL_PRECISION>
-    using make_decimal_backword_iterator = tb::backward_iterator<tb::no_type,tb::decimal<mantissa,exponent,PRECISION>>;
+    template<int mantissa , int exponent = 0 , fixed_point_precision PRECISION = tml::DEFAULT_FRACTIONAL_PRECISION>
+    using make_decimal_backword_iterator = tml::backward_iterator<tml::no_type,tml::decimal<mantissa,exponent,PRECISION>>;
 }
 
 #endif	/* NUMERIC_ITERATORS_HPP */

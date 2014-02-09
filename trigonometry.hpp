@@ -28,47 +28,47 @@
 
 namespace math
 {
-    template<tb::fixed_point_precision PRECISION>
-    struct pi_t : public tb::function<tb::decimal<3141592654,-9,PRECISION>> {};
+    template<tml::fixed_point_precision PRECISION>
+    struct pi_t : public tml::function<tml::decimal<3141592654,-9,PRECISION>> {};
     
     template<>
-    struct pi_t<0> : public tb::function<tb::decimal<3,0,0>> {};
+    struct pi_t<0> : public tml::function<tml::decimal<3,0,0>> {};
     
     template<>
-    struct pi_t<1> : public tb::function<tb::decimal<31,-1,1>> {};
+    struct pi_t<1> : public tml::function<tml::decimal<31,-1,1>> {};
     
     template<>
-    struct pi_t<2> : public tb::function<tb::decimal<314,-2,2>> {};
+    struct pi_t<2> : public tml::function<tml::decimal<314,-2,2>> {};
     
     template<>
-    struct pi_t<3> : public tb::function<tb::decimal<3141,-3,3>> {};
+    struct pi_t<3> : public tml::function<tml::decimal<3141,-3,3>> {};
     
     template<>
-    struct pi_t<4> : public tb::function<tb::decimal<31416,-4,4>> {};
+    struct pi_t<4> : public tml::function<tml::decimal<31416,-4,4>> {};
     
     template<>
-    struct pi_t<5> : public tb::function<tb::decimal<314159,-5,5>> {};
+    struct pi_t<5> : public tml::function<tml::decimal<314159,-5,5>> {};
     
     template<>
-    struct pi_t<6> : public tb::function<tb::decimal<3141592,-6,6>> {};
+    struct pi_t<6> : public tml::function<tml::decimal<3141592,-6,6>> {};
     
     template<>
-    struct pi_t<7> : public tb::function<tb::decimal<31415926,-7,7>> {};
+    struct pi_t<7> : public tml::function<tml::decimal<31415926,-7,7>> {};
     
     template<>
-    struct pi_t<8> : public tb::function<tb::decimal<314159265,-8,8>> {};
+    struct pi_t<8> : public tml::function<tml::decimal<314159265,-8,8>> {};
     
-    template<tb::fixed_point_precision PRECISION = tb::DEFAULT_FRACTIONAL_PRECISION>
+    template<tml::fixed_point_precision PRECISION = tml::DEFAULT_FRACTIONAL_PRECISION>
     using concrete_pi = typename math::pi_t<PRECISION>::result;
     
-    using pi = concrete_pi<tb::DEFAULT_FRACTIONAL_PRECISION>;
+    using pi = concrete_pi<tml::DEFAULT_FRACTIONAL_PRECISION>;
     
     
     
 #ifndef TURBO_CUSTOM_TRIGONOMETRY_DEFAULT_TERMS
-    using default_trigonometry_approximation_terms = tb::uinteger<10>;
+    using default_trigonometry_approximation_terms = tml::uinteger<10>;
 #else
-    using default_trigonometry_approximation_terms = tb::uinteger<TURBO_CUSTOM_TRIGONOMETRY_DEFAULT_TERMS>;
+    using default_trigonometry_approximation_terms = tml::uinteger<TURBO_CUSTOM_TRIGONOMETRY_DEFAULT_TERMS>;
 #endif
     
     template<typename T , typename TERMS_COUNT>
@@ -113,28 +113,28 @@ namespace math
      * }
      */
     
-    template<tb::fixed_point_bits BITS , tb::fixed_point_precision PRECISION , unsigned int TERMS_COUNT>
-    struct sin_t<tb::fixed_point<BITS,PRECISION>,tb::uinteger<TERMS_COUNT>>
+    template<tml::fixed_point_bits BITS , tml::fixed_point_precision PRECISION , unsigned int TERMS_COUNT>
+    struct sin_t<tml::fixed_point<BITS,PRECISION>,tml::uinteger<TERMS_COUNT>>
     {
     private:
-        using x = tb::fixed_point<BITS,PRECISION>;
+        using x = tml::fixed_point<BITS,PRECISION>;
         
-        using begin = tb::make_integer_backward_iterator<TERMS_COUNT-1>;
-        using end   = tb::make_integer_backward_iterator<-1>;
+        using begin = tml::make_integer_backward_iterator<TERMS_COUNT-1>;
+        using end   = tml::make_integer_backward_iterator<-1>;
         
-        using one   = tb::decimal<1,0,PRECISION>;
-        using two   = tb::decimal<2,0,PRECISION>;
-        using three = tb::decimal<3,0,PRECISION>;
+        using one   = tml::decimal<1,0,PRECISION>;
+        using two   = tml::decimal<2,0,PRECISION>;
+        using three = tml::decimal<3,0,PRECISION>;
         
         template<typename K , typename VAL>
         struct kernel
         {
             using result = decltype( one() - ( x() * x() )/(two() * K() + two())/(two()*K()+three())*VAL() );
-            using abort = tb::equal<result,VAL>; //When the value converges, the loop is aborted
+            using abort = tml::equal<result,VAL>; //When the value converges, the loop is aborted
         };
         
     public:
-        using result = decltype( x() * tb::for_loop<begin , end , one , kernel>() );
+        using result = decltype( x() * tml::for_loop<begin , end , one , kernel>() );
     };
     
     
@@ -165,34 +165,34 @@ namespace math
      * }
      */
     
-    template<tb::fixed_point_bits BITS , tb::fixed_point_precision PRECISION , unsigned int TERMS_COUNT>
-    struct cos_t<tb::fixed_point<BITS,PRECISION>,tb::uinteger<TERMS_COUNT>>
+    template<tml::fixed_point_bits BITS , tml::fixed_point_precision PRECISION , unsigned int TERMS_COUNT>
+    struct cos_t<tml::fixed_point<BITS,PRECISION>,tml::uinteger<TERMS_COUNT>>
     {
     private:
-        using x = tb::fixed_point<BITS,PRECISION>;
+        using x = tml::fixed_point<BITS,PRECISION>;
         
-        using begin = tb::make_integer_backward_iterator<TERMS_COUNT-1>;
-        using end   = tb::make_integer_backward_iterator<-1>;
+        using begin = tml::make_integer_backward_iterator<TERMS_COUNT-1>;
+        using end   = tml::make_integer_backward_iterator<-1>;
         
-        using one   = tb::decimal<1,0,PRECISION>;
-        using two   = tb::decimal<2,0,PRECISION>;
+        using one   = tml::decimal<1,0,PRECISION>;
+        using two   = tml::decimal<2,0,PRECISION>;
         
         template<typename K , typename VAL>
         struct kernel
         {
             using result = decltype( one() - ( x() * x() )/(two() * K() + two())/(two()*K()+one())*VAL() );
-            using abort = tb::equal<result,VAL>; //When the value converges, the loop is aborted
+            using abort = tml::equal<result,VAL>; //When the value converges, the loop is aborted
         };
     public:
-        using result = tb::for_loop<begin , end , one , kernel>;
+        using result = tml::for_loop<begin , end , one , kernel>;
     };
     
     
-    template<typename T , typename TERMS_COUNT = tb::uinteger<10>>
-    using tan   = tb::div<sin<T,TERMS_COUNT>,cos<T,TERMS_COUNT>>;
+    template<typename T , typename TERMS_COUNT = tml::uinteger<10>>
+    using tan   = tml::div<sin<T,TERMS_COUNT>,cos<T,TERMS_COUNT>>;
     
-    template<typename T , typename TERMS_COUNT = tb::uinteger<10>>
-    using cotan = tb::div<cos<T,TERMS_COUNT>,sin<T,TERMS_COUNT>>;
+    template<typename T , typename TERMS_COUNT = tml::uinteger<10>>
+    using cotan = tml::div<cos<T,TERMS_COUNT>,sin<T,TERMS_COUNT>>;
 }
 
 #endif	/* SIN_HPP */

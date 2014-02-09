@@ -31,14 +31,14 @@ struct first_of_t
 
 //First argumment is bool "overload":
 template<typename U>
-struct first_of_t<bool,U> : public tb::function<U> {}; //haha, just confuse people when using booleans!
+struct first_of_t<bool,U> : public tml::function<U> {}; //haha, just confuse people when using booleans!
 
 int main()
 {
     first_of<char,bool> a;
     first_of<bool,char> b;
     
-    static_assert( tb::equal<decltype(a) , char>::value , "boom!" );
-    static_assert( tb::equal<decltype(a) , bool>::value , "haha, you lose!" );
+    static_assert( tml::equal<decltype(a) , char>::value , "boom!" );
+    static_assert( tml::equal<decltype(a) , bool>::value , "haha, you lose!" );
 }
 

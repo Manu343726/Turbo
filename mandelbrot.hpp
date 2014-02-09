@@ -36,14 +36,14 @@ namespace mandelbrot
     const int begin_point = -1;
     const int end_point   =  1;
 
-    using begin = tb::make_decimal_forward_iterator<begin_point>;
-    using end   = tb::make_decimal_forward_iterator<end_point>;
-    using size  = tb::uinteger<4>; //Size in tiles 
-    using step  = decltype( (tb::decimal<end_point>() - tb::decimal<begin_point>()) / size() );
+    using begin = tml::make_decimal_forward_iterator<begin_point>;
+    using end   = tml::make_decimal_forward_iterator<end_point>;
+    using size  = tml::uinteger<4>; //Size in tiles 
+    using step  = decltype( (tml::decimal<end_point>() - tml::decimal<begin_point>()) / size() );
 
-    using convergence_value = tb::decimal<1>;
-    using iteration_begin   = tb::make_uinteger_forward_iterator<0>;
-    using iteration_end     = tb::make_uinteger_forward_iterator<10>;
+    using convergence_value = tml::decimal<1>;
+    using iteration_begin   = tml::make_uinteger_forward_iterator<0>;
+    using iteration_end     = tml::make_uinteger_forward_iterator<10>;
 
     template<typename Y>
     struct outer_loop
@@ -56,29 +56,29 @@ namespace mandelbrot
             template<typename INDEX , typename PREVIOUS>
             struct iterate_number
             {
-                using result = decltype( PREVIOUS() * PREVIOUS() + tb::one<PREVIOUS>() );
+                using result = decltype( PREVIOUS() * PREVIOUS() + tml::one<PREVIOUS>() );
 
                 using abort = decltype( math::square_length<result>() > convergence_value );
             };
 
-            using result_number = tb::for_loop<iteration_begin , iteration_end , number , iterate_number , step>;
+            using result_number = tml::for_loop<iteration_begin , iteration_end , number , iterate_number , step>;
             //using result_number = number;
 
-            using result = tb::conditional<tb::true_type , gfx::from_rgb<0,0,0> , gfx::from_rgb<255,255,255>>;
+            using result = tml::conditional<tml::true_type , gfx::from_rgb<0,0,0> , gfx::from_rgb<255,255,255>>;
             //using result = gfx::from_rgb<255,255,255>;
         };
 
-        using result = tb::for_each<begin,end,inner_loop,tb::true_predicate,step>;
+        using result = tml::for_each<begin,end,inner_loop,tml::true_predicate,step>;
     };
     
-    using execute = tb::for_each<begin,end,outer_loop,tb::true_predicate,step>;
+    using execute = tml::for_each<begin,end,outer_loop,tml::true_predicate,step>;
     
     
     template<typename LIST>
     struct to_array;
 
     template<typename... Ts>
-    struct to_array<tb::list<Ts...>>
+    struct to_array<tml::list<Ts...>>
     {
         static constexpr unsigned int result[] = { Ts::value... };
     }; 
@@ -87,7 +87,7 @@ namespace mandelbrot
     struct to_2d_array;
 
     template<typename... Ts>
-    struct to_2d_array<tb::list<Ts...>>
+    struct to_2d_array<tml::list<Ts...>>
     {
         static constexpr unsigned int result[sizeof...(Ts)][sizeof...(Ts)] = { to_array<Ts>::result... };
     };

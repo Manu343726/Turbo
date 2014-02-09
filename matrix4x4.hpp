@@ -49,53 +49,53 @@ namespace math
         /* unitary matrix */
         
         template<typename T>
-        using unity4x4 = math::matrix4x4<tb::one<T>  , tb::zero<T> , tb::zero<T> , tb::zero<T> ,
-                                         tb::zero<T> , tb::one<T>  , tb::zero<T> , tb::zero<T> ,
-                                         tb::zero<T> , tb::zero<T> , tb::one<T>  , tb::zero<T> ,
-                                         tb::zero<T> , tb::zero<T> , tb::zero<T> , tb::one<T>>;
+        using unity4x4 = math::matrix4x4<tml::one<T>  , tml::zero<T> , tml::zero<T> , tml::zero<T> ,
+                                         tml::zero<T> , tml::one<T>  , tml::zero<T> , tml::zero<T> ,
+                                         tml::zero<T> , tml::zero<T> , tml::one<T>  , tml::zero<T> ,
+                                         tml::zero<T> , tml::zero<T> , tml::zero<T> , tml::one<T>>;
         
         
         /* 2d transformations */
         
         template<typename X , typename Y , typename Z>
-        struct translate_t<math::vec3<X,Y,Z>> : public tb::function<math::matrix4x4<tb::one<X>  , tb::zero<X> , tb::zero<X> , X ,
-                                                                                     tb::zero<X> , tb::one<X>  , tb::zero<X> , Y ,
-                                                                                     tb::zero<X> , tb::zero<X> , tb::one<X>  , Z ,
-                                                                                     tb::zero<X> , tb::zero<X> , tb::zero<X> , tb::one<X>>>
+        struct translate_t<math::vec3<X,Y,Z>> : public tml::function<math::matrix4x4<tml::one<X>  , tml::zero<X> , tml::zero<X> , X ,
+                                                                                     tml::zero<X> , tml::one<X>  , tml::zero<X> , Y ,
+                                                                                     tml::zero<X> , tml::zero<X> , tml::one<X>  , Z ,
+                                                                                     tml::zero<X> , tml::zero<X> , tml::zero<X> , tml::one<X>>>
         {};
         
         template<typename X , typename Y , typename Z>
-        struct scale_t<math::vec3<X,Y,Z>> : public tb::function<math::matrix4x4<      X      , tb::zero<X> , tb::zero<X> , tb::zero<X> ,
-                                                                                 tb::zero<X> ,       Y      , tb::zero<X> , tb::zero<X> ,
-                                                                                 tb::zero<X> , tb::zero<X> ,       Z      , tb::zero<X> ,
-                                                                                 tb::zero<X> , tb::zero<X> , tb::zero<X> , tb::one<X>>>
+        struct scale_t<math::vec3<X,Y,Z>> : public tml::function<math::matrix4x4<      X      , tml::zero<X> , tml::zero<X> , tml::zero<X> ,
+                                                                                 tml::zero<X> ,       Y      , tml::zero<X> , tml::zero<X> ,
+                                                                                 tml::zero<X> , tml::zero<X> ,       Z      , tml::zero<X> ,
+                                                                                 tml::zero<X> , tml::zero<X> , tml::zero<X> , tml::one<X>>>
         {};
         
         /* Rotations (T is the number of terms used by the trigonometric aproximations) */
         
         template<typename ANGLE,typename T>
-        struct rotate_t<ANGLE,math::x_axis,T> : public tb::function<math::matrix4x4<tb::one<ANGLE>  ,           tb::zero<ANGLE>        ,  tb::zero<ANGLE>  , tb::zero<ANGLE> , 
-                                                                                     tb::zero<ANGLE> ,          math::cos<ANGLE,T>       , math::sin<ANGLE,T> , tb::zero<ANGLE> , 
-                                                                                     tb::zero<ANGLE> , tb::opposite<math::sin<ANGLE,T>> , math::cos<ANGLE,T> , tb::zero<ANGLE> ,
-                                                                                     tb::zero<ANGLE> ,           tb::zero<ANGLE>        ,  tb::zero<ANGLE>  , tb::one<ANGLE>>>
+        struct rotate_t<ANGLE,math::x_axis,T> : public tml::function<math::matrix4x4<tml::one<ANGLE>  ,           tml::zero<ANGLE>        ,  tml::zero<ANGLE>  , tml::zero<ANGLE> , 
+                                                                                     tml::zero<ANGLE> ,          math::cos<ANGLE,T>       , math::sin<ANGLE,T> , tml::zero<ANGLE> , 
+                                                                                     tml::zero<ANGLE> , tml::opposite<math::sin<ANGLE,T>> , math::cos<ANGLE,T> , tml::zero<ANGLE> ,
+                                                                                     tml::zero<ANGLE> ,           tml::zero<ANGLE>        ,  tml::zero<ANGLE>  , tml::one<ANGLE>>>
         {};
         
         template<typename ANGLE,typename T>
-        struct rotate_t<ANGLE,math::y_axis,T> : public tb::function<math::matrix4x4<math::cos<ANGLE,T> , tb::zero<ANGLE> , tb::opposite<math::sin<ANGLE,T>> , tb::zero<ANGLE> , 
-                                                                                     tb::zero<ANGLE>   , tb::one<ANGLE>  ,           tb::zero<ANGLE>        , tb::zero<ANGLE> , 
-                                                                                     math::sin<ANGLE,T> , tb::zero<ANGLE> ,          math::cos<ANGLE,T>       , tb::zero<ANGLE> ,
-                                                                                     tb::zero<ANGLE>   , tb::zero<ANGLE> ,           tb::zero<ANGLE>        , tb::one<ANGLE>>>
+        struct rotate_t<ANGLE,math::y_axis,T> : public tml::function<math::matrix4x4<math::cos<ANGLE,T> , tml::zero<ANGLE> , tml::opposite<math::sin<ANGLE,T>> , tml::zero<ANGLE> , 
+                                                                                     tml::zero<ANGLE>   , tml::one<ANGLE>  ,           tml::zero<ANGLE>        , tml::zero<ANGLE> , 
+                                                                                     math::sin<ANGLE,T> , tml::zero<ANGLE> ,          math::cos<ANGLE,T>       , tml::zero<ANGLE> ,
+                                                                                     tml::zero<ANGLE>   , tml::zero<ANGLE> ,           tml::zero<ANGLE>        , tml::one<ANGLE>>>
         {};
         
         template<typename ANGLE,typename T>
-        struct rotate_t<ANGLE,math::z_axis,T> : public tb::function<math::matrix4x4<math::cos<ANGLE,T>                , math::sin<ANGLE,T> , tb::zero<ANGLE> , tb::zero<ANGLE> , 
-                                                                                     tb::opposite<math::sin<ANGLE,T>> , math::cos<ANGLE,T> , tb::zero<ANGLE> , tb::zero<ANGLE> , 
-                                                                                     tb::zero<ANGLE>                  , tb::zero<ANGLE>   , tb::one<ANGLE>  , tb::zero<ANGLE> ,
-                                                                                     tb::zero<ANGLE>                  , tb::zero<ANGLE>   , tb::zero<ANGLE> , tb::one<ANGLE>>>
+        struct rotate_t<ANGLE,math::z_axis,T> : public tml::function<math::matrix4x4<math::cos<ANGLE,T>                , math::sin<ANGLE,T> , tml::zero<ANGLE> , tml::zero<ANGLE> , 
+                                                                                     tml::opposite<math::sin<ANGLE,T>> , math::cos<ANGLE,T> , tml::zero<ANGLE> , tml::zero<ANGLE> , 
+                                                                                     tml::zero<ANGLE>                  , tml::zero<ANGLE>   , tml::one<ANGLE>  , tml::zero<ANGLE> ,
+                                                                                     tml::zero<ANGLE>                  , tml::zero<ANGLE>   , tml::zero<ANGLE> , tml::one<ANGLE>>>
         {};
 }
 
-namespace tb
+namespace tml
 {
         /* to string function specialization */
         
@@ -113,10 +113,10 @@ namespace tb
             {
                 std::ostringstream os;
                 
-                os << "|" << tb::to_string<M11>() << "," << tb::to_string<M12>() << "," << tb::to_string<M13>() << "," << tb::to_string<M14>() << "|" << std::endl;
-                os << "|" << tb::to_string<M21>() << "," << tb::to_string<M22>() << "," << tb::to_string<M23>() << "," << tb::to_string<M24>() << "|" << std::endl;
-                os << "|" << tb::to_string<M31>() << "," << tb::to_string<M32>() << "," << tb::to_string<M33>() << "," << tb::to_string<M34>() << "|" << std::endl;
-                os << "|" << tb::to_string<M41>() << "," << tb::to_string<M42>() << "," << tb::to_string<M43>() << "," << tb::to_string<M44>() << "|";
+                os << "|" << tml::to_string<M11>() << "," << tml::to_string<M12>() << "," << tml::to_string<M13>() << "," << tml::to_string<M14>() << "|" << std::endl;
+                os << "|" << tml::to_string<M21>() << "," << tml::to_string<M22>() << "," << tml::to_string<M23>() << "," << tml::to_string<M24>() << "|" << std::endl;
+                os << "|" << tml::to_string<M31>() << "," << tml::to_string<M32>() << "," << tml::to_string<M33>() << "," << tml::to_string<M34>() << "|" << std::endl;
+                os << "|" << tml::to_string<M41>() << "," << tml::to_string<M42>() << "," << tml::to_string<M43>() << "," << tml::to_string<M44>() << "|";
                 
                 return os.str();
             }
@@ -148,10 +148,10 @@ namespace tb
                                      RHS21,RHS22,RHS23,RHS24,
                                      RHS31,RHS32,RHS33,RHS34,
                                      RHS41,RHS42,RHS43,RHS44>
-                    > : public tb::function<math::matrix4x4<tb::add<LHS11,RHS11> , tb::add<LHS12,RHS12> , tb::add<LHS13,RHS13> , tb::add<LHS14,RHS14> ,
-                                                             tb::add<LHS21,RHS21> , tb::add<LHS22,RHS22> , tb::add<LHS23,RHS23> , tb::add<LHS24,RHS24> ,
-                                                             tb::add<LHS31,RHS31> , tb::add<LHS32,RHS32> , tb::add<LHS33,RHS33> , tb::add<LHS34,RHS34> ,
-                                                             tb::add<LHS41,RHS41> , tb::add<LHS42,RHS42> , tb::add<LHS43,RHS43> , tb::add<LHS44,RHS44>>>
+                    > : public tml::function<math::matrix4x4<tml::add<LHS11,RHS11> , tml::add<LHS12,RHS12> , tml::add<LHS13,RHS13> , tml::add<LHS14,RHS14> ,
+                                                             tml::add<LHS21,RHS21> , tml::add<LHS22,RHS22> , tml::add<LHS23,RHS23> , tml::add<LHS24,RHS24> ,
+                                                             tml::add<LHS31,RHS31> , tml::add<LHS32,RHS32> , tml::add<LHS33,RHS33> , tml::add<LHS34,RHS34> ,
+                                                             tml::add<LHS41,RHS41> , tml::add<LHS42,RHS42> , tml::add<LHS43,RHS43> , tml::add<LHS44,RHS44>>>
         {};
         
         
@@ -176,10 +176,10 @@ namespace tb
                                      RHS21,RHS22,RHS23,RHS24,
                                      RHS31,RHS32,RHS33,RHS34,
                                      RHS41,RHS42,RHS43,RHS44>
-                    > : public tb::function<math::matrix4x4<tb::sub<LHS11,RHS11> , tb::sub<LHS12,RHS12> , tb::sub<LHS13,RHS13> , tb::sub<LHS14,RHS14> ,
-                                                             tb::sub<LHS21,RHS21> , tb::sub<LHS22,RHS22> , tb::sub<LHS23,RHS23> , tb::sub<LHS24,RHS24> ,
-                                                             tb::sub<LHS31,RHS31> , tb::sub<LHS32,RHS32> , tb::sub<LHS33,RHS33> , tb::sub<LHS34,RHS34> ,
-                                                             tb::sub<LHS41,RHS41> , tb::sub<LHS42,RHS42> , tb::sub<LHS43,RHS43> , tb::sub<LHS44,RHS44>>>
+                    > : public tml::function<math::matrix4x4<tml::sub<LHS11,RHS11> , tml::sub<LHS12,RHS12> , tml::sub<LHS13,RHS13> , tml::sub<LHS14,RHS14> ,
+                                                             tml::sub<LHS21,RHS21> , tml::sub<LHS22,RHS22> , tml::sub<LHS23,RHS23> , tml::sub<LHS24,RHS24> ,
+                                                             tml::sub<LHS31,RHS31> , tml::sub<LHS32,RHS32> , tml::sub<LHS33,RHS33> , tml::sub<LHS34,RHS34> ,
+                                                             tml::sub<LHS41,RHS41> , tml::sub<LHS42,RHS42> , tml::sub<LHS43,RHS43> , tml::sub<LHS44,RHS44>>>
         {};
         
         
@@ -198,10 +198,10 @@ namespace tb
                                      LHS31,LHS32,LHS33,LHS34,
                                      LHS41,LHS42,LHS43,LHS44> , 
                      RHS
-                    > : public tb::function<math::matrix4x4<tb::mul<LHS11,RHS> , tb::mul<LHS12,RHS> , tb::mul<LHS13,RHS> , tb::mul<LHS14,RHS> ,
-                                                             tb::mul<LHS21,RHS> , tb::mul<LHS22,RHS> , tb::mul<LHS23,RHS> , tb::mul<LHS24,RHS> ,
-                                                             tb::mul<LHS31,RHS> , tb::mul<LHS32,RHS> , tb::mul<LHS33,RHS> , tb::mul<LHS34,RHS> ,
-                                                             tb::mul<LHS41,RHS> , tb::mul<LHS42,RHS> , tb::mul<LHS43,RHS> , tb::mul<LHS44,RHS>>>
+                    > : public tml::function<math::matrix4x4<tml::mul<LHS11,RHS> , tml::mul<LHS12,RHS> , tml::mul<LHS13,RHS> , tml::mul<LHS14,RHS> ,
+                                                             tml::mul<LHS21,RHS> , tml::mul<LHS22,RHS> , tml::mul<LHS23,RHS> , tml::mul<LHS24,RHS> ,
+                                                             tml::mul<LHS31,RHS> , tml::mul<LHS32,RHS> , tml::mul<LHS33,RHS> , tml::mul<LHS34,RHS> ,
+                                                             tml::mul<LHS41,RHS> , tml::mul<LHS42,RHS> , tml::mul<LHS43,RHS> , tml::mul<LHS44,RHS>>>
         {};
         
         
@@ -219,10 +219,10 @@ namespace tb
                                      RHS21,RHS22,RHS23,RHS24,
                                      RHS31,RHS32,RHS33,RHS34,
                                      RHS41,RHS42,RHS43,RHS44>
-                    > : public tb::function<math::matrix4x4<tb::mul<RHS11,LHS> , tb::mul<RHS12,LHS> , tb::mul<RHS13,LHS> , tb::mul<RHS14,LHS> ,
-                                                             tb::mul<RHS21,LHS> , tb::mul<RHS22,LHS> , tb::mul<RHS23,LHS> , tb::mul<RHS24,LHS> ,
-                                                             tb::mul<RHS31,LHS> , tb::mul<RHS32,LHS> , tb::mul<RHS33,LHS> , tb::mul<RHS34,LHS> ,
-                                                             tb::mul<RHS41,LHS> , tb::mul<RHS42,LHS> , tb::mul<RHS43,LHS> , tb::mul<RHS44,LHS>>>
+                    > : public tml::function<math::matrix4x4<tml::mul<RHS11,LHS> , tml::mul<RHS12,LHS> , tml::mul<RHS13,LHS> , tml::mul<RHS14,LHS> ,
+                                                             tml::mul<RHS21,LHS> , tml::mul<RHS22,LHS> , tml::mul<RHS23,LHS> , tml::mul<RHS24,LHS> ,
+                                                             tml::mul<RHS31,LHS> , tml::mul<RHS32,LHS> , tml::mul<RHS33,LHS> , tml::mul<RHS34,LHS> ,
+                                                             tml::mul<RHS41,LHS> , tml::mul<RHS42,LHS> , tml::mul<RHS43,LHS> , tml::mul<RHS44,LHS>>>
         {};
         
         
@@ -241,10 +241,10 @@ namespace tb
                                      LHS31,LHS32,LHS33,LHS34,
                                      LHS41,LHS42,LHS43,LHS44> , 
                      RHS
-                    > : public tb::function<math::matrix4x4<tb::div<LHS11,RHS> , tb::div<LHS12,RHS> , tb::div<LHS13,RHS> , tb::div<LHS14,RHS> ,
-                                                             tb::div<LHS21,RHS> , tb::div<LHS22,RHS> , tb::div<LHS23,RHS> , tb::div<LHS24,RHS> ,
-                                                             tb::div<LHS31,RHS> , tb::div<LHS32,RHS> , tb::div<LHS33,RHS> , tb::div<LHS34,RHS> ,
-                                                             tb::div<LHS41,RHS> , tb::div<LHS42,RHS> , tb::div<LHS43,RHS> , tb::div<LHS44,RHS>>>
+                    > : public tml::function<math::matrix4x4<tml::div<LHS11,RHS> , tml::div<LHS12,RHS> , tml::div<LHS13,RHS> , tml::div<LHS14,RHS> ,
+                                                             tml::div<LHS21,RHS> , tml::div<LHS22,RHS> , tml::div<LHS23,RHS> , tml::div<LHS24,RHS> ,
+                                                             tml::div<LHS31,RHS> , tml::div<LHS32,RHS> , tml::div<LHS33,RHS> , tml::div<LHS34,RHS> ,
+                                                             tml::div<LHS41,RHS> , tml::div<LHS42,RHS> , tml::div<LHS43,RHS> , tml::div<LHS44,RHS>>>
         {};
         
         
@@ -269,7 +269,7 @@ namespace tb
                                      RHS21,RHS22,RHS23,RHS24,
                                      RHS31,RHS32,RHS33,RHS34,
                                      RHS41,RHS42,RHS43,RHS44>
-                    > : public tb::function<math::matrix4x4<decltype( LHS11()*RHS11() + LHS12()*RHS21() + LHS13()*RHS31() + LHS14()*LHS41() ) , //M11
+                    > : public tml::function<math::matrix4x4<decltype( LHS11()*RHS11() + LHS12()*RHS21() + LHS13()*RHS31() + LHS14()*LHS41() ) , //M11
                                                              decltype( LHS11()*RHS12() + LHS12()*RHS22() + LHS13()*RHS32() + LHS14()*LHS42() ) , //M12
                                                              decltype( LHS11()*RHS13() + LHS12()*RHS23() + LHS13()*RHS33() + LHS14()*LHS43() ) , //M13
                                                              decltype( LHS11()*RHS14() + LHS12()*RHS24() + LHS13()*RHS34() + LHS14()*LHS44() ) , //M14
@@ -306,7 +306,7 @@ namespace tb
                                      LHS31,LHS32,LHS33,LHS34,
                                      LHS41,LHS42,LHS43,LHS44> , 
                 math::vec3<X,Y,Z>
-                    > : public tb::function<math::vec3<decltype( LHS11()*X() + LHS12()*Y() + LHS13()*Z() + LHS14() ),
+                    > : public tml::function<math::vec3<decltype( LHS11()*X() + LHS12()*Y() + LHS13()*Z() + LHS14() ),
                                                         decltype( LHS21()*X() + LHS22()*Y() + LHS23()*Z() + LHS24() ),
                                                         decltype( LHS31()*X() + LHS32()*Y() + LHS33()*Z() + LHS34() )>>
         {};

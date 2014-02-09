@@ -26,7 +26,7 @@
 
 #include <type_traits>
 
-namespace tb
+namespace tml
 {   
     /* Metafunction */
     
@@ -35,16 +35,16 @@ namespace tb
     /* Identities */
     
     template<typename T>
-    struct zero_t : public tb::function<tb::no_type> {}; //default
+    struct zero_t : public tml::function<tml::no_type> {}; //default
     
     template<typename T>
-    struct one_t : public tb::function<T> {}; //default
+    struct one_t : public tml::function<T> {}; //default
     
     template<typename T>
-    using zero = tb::result_of<tb::zero_t<T>>;
+    using zero = tml::result_of<tml::zero_t<T>>;
     
     template<typename T>
-    using one = tb::result_of<tb::one_t<T>>;
+    using one = tml::result_of<tml::one_t<T>>;
     
     
 
@@ -63,16 +63,16 @@ namespace tb
     struct logical_xor_t;
 
     template<typename OP>
-    using logical_not = tb::result_of<tb::logical_not_t<OP>>;
+    using logical_not = tml::result_of<tml::logical_not_t<OP>>;
 
     template<typename LHS , typename RHS>
-    using logical_or = tb::result_of<tb::logical_or_t<LHS,RHS>>;
+    using logical_or = tml::result_of<tml::logical_or_t<LHS,RHS>>;
     
     template<typename LHS , typename RHS>
-    using logical_and = tb::result_of<tb::logical_and_t<LHS,RHS>>;
+    using logical_and = tml::result_of<tml::logical_and_t<LHS,RHS>>;
 
     template<typename LHS , typename RHS>
-    using logical_xor  = tb::result_of<tb::logical_xor_t<LHS,RHS>>;
+    using logical_xor  = tml::result_of<tml::logical_xor_t<LHS,RHS>>;
     
     
 
@@ -98,52 +98,52 @@ namespace tb
     struct bitwise_xor_t;
 
     template<typename OP , typename SHIFT>
-    using bitwise_leftshift = typename tb::bitwise_leftshift_t<OP,SHIFT>::result;
+    using bitwise_leftshift = typename tml::bitwise_leftshift_t<OP,SHIFT>::result;
 
     template<typename OP , typename SHIFT>
-    using bitwise_rightshift = typename tb::bitwise_rightshift_t<OP,SHIFT>::result;
+    using bitwise_rightshift = typename tml::bitwise_rightshift_t<OP,SHIFT>::result;
 
     template<typename OP>
-    using bitwise_not = typename tb::bitwise_not_t<OP>::result;
+    using bitwise_not = typename tml::bitwise_not_t<OP>::result;
 
     template<typename LHS , typename RHS>
-    using bitwise_or = typename tb::bitwise_or_t<LHS,RHS>::result;
+    using bitwise_or = typename tml::bitwise_or_t<LHS,RHS>::result;
 
     template<typename LHS , typename RHS>
-    using bitwise_and = typename tb::bitwise_and_t<LHS,RHS>::result;
+    using bitwise_and = typename tml::bitwise_and_t<LHS,RHS>::result;
 
     template<typename LHS , typename RHS>
-    using bitwise_xor = typename tb::bitwise_xor_t<LHS,RHS>::result;
+    using bitwise_xor = typename tml::bitwise_xor_t<LHS,RHS>::result;
 
 
     /* Comparison functions */
 
     template<typename LHS , typename RHS>
-    struct equal_t : tb::false_function<> {};
+    struct equal_t : tml::false_function<> {};
     
     template<typename T>
-    struct equal_t<T,T> : tb::true_function<> {};
+    struct equal_t<T,T> : tml::true_function<> {};
 
     template<typename LHS , typename RHS>
     struct less_than_t;
     
     template<typename LHS , typename RHS>
-    using equal = typename tb::equal_t<LHS,RHS>::result;
+    using equal = typename tml::equal_t<LHS,RHS>::result;
 
     template<typename LHS , typename RHS>
-    using not_equal = tb::logical_not<tb::equal<LHS,RHS>>;
+    using not_equal = tml::logical_not<tml::equal<LHS,RHS>>;
     
     template<typename LHS , typename RHS>
-    using less_than = typename tb::less_than_t<LHS,RHS>::result;
+    using less_than = typename tml::less_than_t<LHS,RHS>::result;
 
     template<typename LHS , typename RHS>
-    using bigger_than = tb::less_than<RHS,LHS>;
+    using bigger_than = tml::less_than<RHS,LHS>;
 
     template<typename LHS , typename RHS>
-    using less_or_equal = tb::logical_not<tb::bigger_than<LHS,RHS>>;
+    using less_or_equal = tml::logical_not<tml::bigger_than<LHS,RHS>>;
 
     template<typename LHS , typename RHS>
-    using bigger_or_equal = tb::logical_not<tb::less_than<LHS,RHS>>;
+    using bigger_or_equal = tml::logical_not<tml::less_than<LHS,RHS>>;
 
 
     /* Arithmetic functions */
@@ -161,35 +161,35 @@ namespace tb
     struct div_t;
     
     template<typename LHS , typename RHS>
-    using add = typename tb::add_t<LHS,RHS>::result;
+    using add = typename tml::add_t<LHS,RHS>::result;
     
     template<typename LHS , typename RHS>
-    using sub = typename tb::sub_t<LHS,RHS>::result;
+    using sub = typename tml::sub_t<LHS,RHS>::result;
     
     template<typename LHS , typename RHS>
-    using mul = typename tb::mul_t<LHS,RHS>::result;
+    using mul = typename tml::mul_t<LHS,RHS>::result;
     
     template<typename LHS , typename RHS>
-    using div = typename tb::div_t<LHS,RHS>::result;
+    using div = typename tml::div_t<LHS,RHS>::result;
     
     
     template<typename VALUE>
-    using opposite = tb::sub<tb::zero<VALUE>,VALUE>;
+    using opposite = tml::sub<tml::zero<VALUE>,VALUE>;
 
     template<typename VALUE>
-    using increment = tb::add<VALUE,tb::one<VALUE>>;
+    using increment = tml::add<VALUE,tml::one<VALUE>>;
 
     template<typename VALUE>
-    using decrement = tb::sub<VALUE,tb::one<VALUE>>;
+    using decrement = tml::sub<VALUE,tml::one<VALUE>>;
 
     template<typename BASE , typename EXPONENT>
-    struct pow : public tb::mul<BASE , pow<BASE,tb::decrement<EXPONENT>>> {};
+    struct pow : public tml::mul<BASE , pow<BASE,tml::decrement<EXPONENT>>> {};
 
     template<typename BASE>
-    struct pow<BASE,zero<BASE>> : public tb::one<BASE> {};
+    struct pow<BASE,zero<BASE>> : public tml::one<BASE> {};
 
     template<typename BASE>
-    using square = tb::mul<BASE,BASE>;
+    using square = tml::mul<BASE,BASE>;
 }
 	/* OPERATORS_HPP */
 

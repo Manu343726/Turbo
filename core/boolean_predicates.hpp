@@ -26,19 +26,19 @@
 #include "arithmetic_functions.hpp"
 
 
-namespace tb
+namespace tml
 {
-    template<typename T = tb::null>
-    using true_function = tb::function<tb::true_type>;
+    template<typename T = tml::null>
+    using true_function = tml::function<tml::true_type>;
     
-    template<typename T = tb::null>
-    using false_function = tb::function<tb::false_type>;
+    template<typename T = tml::null>
+    using false_function = tml::function<tml::false_type>;
     
-    template<typename T = tb::null>
-    using true_predicate = tb::true_type;
+    template<typename T = tml::null>
+    using true_predicate = tml::true_type;
     
-    template<typename T = tb::null>
-    using false_predicate = tb::false_type;
+    template<typename T = tml::null>
+    using false_predicate = tml::false_type;
 }
 
 #endif	/* BOOLEAN_PREDICATES_HPP */

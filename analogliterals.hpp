@@ -25,7 +25,7 @@
 
 #include "core.hpp"
 
-namespace tb
+namespace tml
 {
     namespace utils
     {
@@ -128,31 +128,31 @@ namespace tb
 
         // Arithmetic operators (line):
 
-            template<uint n , tb::uinteger_type rhs_n>
-            line<n*rhs_n> operator*( const line<n>& lhs , tb::uinteger<rhs_n> rhs )
+            template<uint n , tml::uinteger_type rhs_n>
+            line<n*rhs_n> operator*( const line<n>& lhs , tml::uinteger<rhs_n> rhs )
             {
                 return gen();
             }
 
-            template<uint n , tb::uinteger_type lhs_n>
-            line<n*lhs_n> operator*( tb::uinteger<lhs_n> lhs , const line<n>& rhs )
+            template<uint n , tml::uinteger_type lhs_n>
+            line<n*lhs_n> operator*( tml::uinteger<lhs_n> lhs , const line<n>& rhs )
             {
                 return gen();
             }
 
-            template<uint n , tb::uinteger_type rhs_n>
-            line<n/rhs_n> operator/( const line<n>& lhs , tb::uinteger<rhs_n> rhs )
+            template<uint n , tml::uinteger_type rhs_n>
+            line<n/rhs_n> operator/( const line<n>& lhs , tml::uinteger<rhs_n> rhs )
             {
                 return gen();
             } 
 
-            template<tb::uinteger_type lhs_n , tb::uinteger_type rhs_n>
+            template<tml::uinteger_type lhs_n , tml::uinteger_type rhs_n>
             line<lhs_n+rhs_n> operator+( const line<lhs_n>& , const line<rhs_n>& )
             {
                 return gen();
             }
 
-            template<tb::uinteger_type lhs_n , tb::uinteger_type rhs_n>
+            template<tml::uinteger_type lhs_n , tml::uinteger_type rhs_n>
             line<lhs_n-rhs_n> operator-( const line<lhs_n>& , const line<rhs_n>& )
             {
                 return gen();
@@ -160,40 +160,40 @@ namespace tb
 
         // Arithmetic operators (Cuboid):
 
-            template<uint x , uint y , uint z , tb::uinteger_type rhs_n>
-            cuboid<x*rhs_n,y*rhs_n,z*rhs_n> operator*( const cuboid<x,y,z>& lhs , tb::uinteger<rhs_n> rhs )
+            template<uint x , uint y , uint z , tml::uinteger_type rhs_n>
+            cuboid<x*rhs_n,y*rhs_n,z*rhs_n> operator*( const cuboid<x,y,z>& lhs , tml::uinteger<rhs_n> rhs )
             {
                 return gen();      
             }
 
-            template<uint x , uint y , uint z , tb::uinteger_type lhs_n>
-            cuboid<x*lhs_n,y*lhs_n,z*lhs_n> operator*( tb::uinteger<lhs_n> lhs , const cuboid<x,y,z>& rhs )
+            template<uint x , uint y , uint z , tml::uinteger_type lhs_n>
+            cuboid<x*lhs_n,y*lhs_n,z*lhs_n> operator*( tml::uinteger<lhs_n> lhs , const cuboid<x,y,z>& rhs )
             {
                 return gen();      
             }
 
-            template<uint x , uint y , uint z , tb::uinteger_type rhs_n>
-            cuboid<x/rhs_n , y/rhs_n,z/rhs_n> operator/( const cuboid<x,y,z>& lhs , tb::uinteger<rhs_n> rhs )
+            template<uint x , uint y , uint z , tml::uinteger_type rhs_n>
+            cuboid<x/rhs_n , y/rhs_n,z/rhs_n> operator/( const cuboid<x,y,z>& lhs , tml::uinteger<rhs_n> rhs )
             {
                 return gen();
             }
             
         // Arithmetic operators (Rectangle):
 
-            template<uint x , uint y , tb::uinteger_type rhs_n>
-            rectangle<x*rhs_n,y*rhs_n> operator*( const rectangle<x,y>& lhs , tb::uinteger<rhs_n> rhs )
+            template<uint x , uint y , tml::uinteger_type rhs_n>
+            rectangle<x*rhs_n,y*rhs_n> operator*( const rectangle<x,y>& lhs , tml::uinteger<rhs_n> rhs )
             {
                 return gen();      
             }
 
-            template<uint x , uint y , tb::uinteger_type lhs_n>
-            rectangle<x*lhs_n,y*lhs_n> operator*( tb::uinteger<lhs_n> lhs , const rectangle<x,y>& rhs )
+            template<uint x , uint y , tml::uinteger_type lhs_n>
+            rectangle<x*lhs_n,y*lhs_n> operator*( tml::uinteger<lhs_n> lhs , const rectangle<x,y>& rhs )
             {
                 return gen();      
             }
 
-            template<uint x , uint y , tb::uinteger_type rhs_n>
-            rectangle<x/rhs_n , y/rhs_n> operator/( const rectangle<x,y>& lhs , tb::uinteger<rhs_n> rhs )
+            template<uint x , uint y , tml::uinteger_type rhs_n>
+            rectangle<x/rhs_n , y/rhs_n> operator/( const rectangle<x,y>& lhs , tml::uinteger<rhs_n> rhs )
             {
                 return gen();
             }

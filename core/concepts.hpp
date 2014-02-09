@@ -36,7 +36,7 @@
 //Macro to automatize the definition of unary trait predicates. Its defined as an evaluable boolean predicate (Defined as false by default)
 #define make_unary_trait( trait_name ) \
 template<typename T>                   \
-struct trait_name : public tb::false_predicate {}
+struct trait_name : public tml::false_predicate {}
 
 
 

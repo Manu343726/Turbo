@@ -30,7 +30,7 @@ namespace make_type_macro
                                    using name##_type = type
 }
 
-namespace tb
+namespace tml
 {
     /* unmeaning sentinel type */
     
@@ -65,8 +65,8 @@ namespace tb
     MAKE_TYPE(size_t             , std::size_t);
   
     
-    using false_type = tb::boolean<false>;
-    using true_type  = tb::boolean<true>;
+    using false_type = tml::boolean<false>;
+    using true_type  = tml::boolean<true>;
 }
 
 #endif	/* BASIC_TRAITS_HPP */

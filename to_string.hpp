@@ -102,12 +102,12 @@ namespace implementation__to_string
     };
 }
 
-namespace tb
+namespace tml
 {
 
 #ifndef DISABLE_TURBO_DEPENDENCIES
     template<typename T>
-    struct to_string_t : public implementation__to_string::_to_string<T,tb::is_value<T>::value> {};
+    struct to_string_t : public implementation__to_string::_to_string<T,tml::is_value<T>::value> {};
 #else
     template<typename T>
     struct to_string_t : public implementation__to_string::_to_string<T,false> {};
@@ -117,7 +117,7 @@ namespace tb
     template<typename T>
     std::string to_string() //Una función en lugar de un functor? Esta es la razón: http://stackoverflow.com/a/7505108/1609356
     {
-        return tb::to_string_t<T>();
+        return tml::to_string_t<T>();
     }
 }
 
