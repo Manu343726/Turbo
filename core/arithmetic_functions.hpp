@@ -21,15 +21,13 @@
 #pragma once
 
 #include "function.hpp"
+#include "basic_types.hpp"
+#include "boolean_predicates.hpp"
 
 #include <type_traits>
 
 namespace tb
-{
-    /* unmeaning sentinel type */
-    
-    struct no_type {};
-    
+{   
     /* Metafunction */
     
 
@@ -52,7 +50,8 @@ namespace tb
 
     /* Logical functions */
     
-    define_function( typename OP , logical_not , OP );
+    template<typename OP>
+    struct logical_not_t;
 
     template<typename LHS , typename RHS>
     struct logical_or_t;
@@ -120,7 +119,10 @@ namespace tb
     /* Comparison functions */
 
     template<typename LHS , typename RHS>
-    struct equal_t;
+    struct equal_t : tb::false_function<> {};
+    
+    template<typename T>
+    struct equal_t<T,T> : tb::true_function<> {};
 
     template<typename LHS , typename RHS>
     struct less_than_t;

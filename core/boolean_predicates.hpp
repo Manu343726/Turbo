@@ -22,14 +22,22 @@
 #define	BOOLEAN_PREDICATES_HPP
 
 #include "basic_types.hpp"
+#include "function.hpp"
+#include "arithmetic_functions.hpp"
 
 
 namespace tb
 {
-    template<typename T>
+    template<typename T = tb::null>
+    using true_function = tb::function<tb::true_type>;
+    
+    template<typename T = tb::null>
+    using false_function = tb::function<tb::false_type>;
+    
+    template<typename T = tb::null>
     using true_predicate = tb::true_type;
     
-    template<typename T>
+    template<typename T = tb::null>
     using false_predicate = tb::false_type;
 }
 

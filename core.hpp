@@ -30,6 +30,7 @@
 #include "core/function.hpp"
 #include "core/boolean_predicates.hpp"
 #include "core/concepts.hpp"
+#include "core/assert.hpp"
 
 #endif	/* CORE_HPP */
 

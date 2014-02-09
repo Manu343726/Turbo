@@ -6,6 +6,7 @@
                    projectFiles="true">
       <logicalFolder name="core" displayName="core" projectFiles="true">
         <itemPath>core/arithmetic_functions.hpp</itemPath>
+        <itemPath>core/assert.hpp</itemPath>
         <itemPath>core/basic_numeric_arithmetic.hpp</itemPath>
         <itemPath>core/basic_types.hpp</itemPath>
         <itemPath>core/boolean_predicates.hpp</itemPath>
@@ -96,6 +97,8 @@
       </item>
       <item path="core/arithmetic_functions.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="core/assert.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="core/basic_numeric_arithmetic.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="core/basic_types.hpp" ex="false" tool="3" flavor2="0">
@@ -179,6 +182,8 @@
       <item path="core.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="core/arithmetic_functions.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="core/assert.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="core/basic_numeric_arithmetic.hpp" ex="false" tool="3" flavor2="0">
       </item>

@@ -18,27 +18,25 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
-#include "core.hpp"
+#ifndef ASSERT_HPP
+#define	ASSERT_HPP
 
-TURBO_DEFINE_FUNCTION( first_of , (typename T , typename U) , (T , U) );
+#ifdef USE_CPP_TRICKS
 
-//Default "overload":
-template<typename T , typename U>
-struct first_of_t
-{
-    using result = T;
-};
+//Thanks to the lack of macro optional parameters, we should do this freaking tricks...:
 
-//First argumment is bool "overload":
-template<typename U>
-struct first_of_t<bool,U> : public tb::function<U> {}; //haha, just confuse people when using booleans!
+#define TURBO_ASSERT_IMPL_DEFAULT_MESSAGE( condition )        static_assert( condition() , "assertion failed" )
+#define TURBO_ASSERT_IMPL_USER_MESSAGE( condition , message ) static_assert( condition() , message )
 
-int main()
-{
-    first_of<char,bool> a;
-    first_of<bool,char> b;
-    
-    static_assert( tb::equal<decltype(a) , char>::value , "boom!" );
-    static_assert( tb::equal<decltype(a) , bool>::value , "haha, you lose!" );
-}
+#define CHOOSE_THIRD_ARG(first , second , third , ...) third
+#define CHOOSE_TURBO_ASSERT_OVERLOAD(...) CHOOSE_THIRD_ARG(__VA_ARGS__ , TURBO_ASSERT_IMPL_USER_MESSAGE , TURBO_ASSERT_IMPL_DEFAULT_MESSAGE )
+
+#define turbo_assert(...) CHOOSE_TURBO_ASSERT_OVERLOAD(__VA_ARGS__)(__VA_ARGS__)
+
+#else
+
+#define turbo_assert( condition ) static_assert( condition::value , "assertion failed" )
+
+#endif  /* USE_CPP */
+#endif	/* ASSERT_HPP */
 

@@ -32,6 +32,12 @@ namespace make_type_macro
 
 namespace tb
 {
+    /* unmeaning sentinel type */
+    
+    struct no_type {};
+    
+    using nil = no_type;
+    using null = nil;
     
     template<typename T>
     struct type_t
