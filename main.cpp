@@ -19,26 +19,11 @@
 ******************************************************************************/
 
 #include "core.hpp"
+#include "numeric_iterators.hpp"
+#include "list.hpp"
+#include "for_loops.hpp"
 
-TURBO_DEFINE_FUNCTION( first_of , (typename T , typename U) , (T , U) );
+using result = tml::for_each<tml::make_integer_forward_iterator<0> , tml::make_integer_forward_iterator<10> , tml::function>;
 
-//Default "overload":
-template<typename T , typename U>
-struct first_of_t
-{
-    using result = T;
-};
-
-//First argumment is bool "overload":
-template<typename U>
-struct first_of_t<bool,U> : public tml::function<U> {}; //haha, just confuse people when using booleans!
-
-int main()
-{
-    first_of<char,bool> a;
-    first_of<bool,char> b;
-    
-    static_assert( tml::equal<decltype(a) , char>::value , "boom!" );
-    static_assert( tml::equal<decltype(a) , bool>::value , "haha, you lose!" );
-}
+int main(){}
 

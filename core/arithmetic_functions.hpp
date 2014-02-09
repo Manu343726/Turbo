@@ -119,10 +119,16 @@ namespace tml
     /* Comparison functions */
 
     template<typename LHS , typename RHS>
-    struct equal_t : tml::false_function<> {};
+    struct equal_t;
+    
+    template<>
+    struct equal_t<tml::null,tml::null> : tml::function<tml::true_type> {};
     
     template<typename T>
-    struct equal_t<T,T> : tml::true_function<> {};
+    struct equal_t<T,tml::null> : tml::function<tml::false_type> {};
+    
+    template<typename T>
+    struct equal_t<tml::null,T> : tml::function<tml::false_type> {};
 
     template<typename LHS , typename RHS>
     struct less_than_t;
