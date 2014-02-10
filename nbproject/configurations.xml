@@ -35,6 +35,7 @@
       <itemPath>transformations.hpp</itemPath>
       <itemPath>trigonometry.hpp</itemPath>
       <itemPath>unordered_map.hpp</itemPath>
+      <itemPath>utility.hpp</itemPath>
       <itemPath>vector.hpp</itemPath>
       <itemPath>wrapper.hpp</itemPath>
     </logicalFolder>
@@ -147,6 +148,8 @@
       </item>
       <item path="unordered_map.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="utility.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="vector.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="wrapper.hpp" ex="false" tool="3" flavor2="0">
@@ -232,6 +235,8 @@
       <item path="trigonometry.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="unordered_map.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="utility.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="vector.hpp" ex="false" tool="3" flavor2="0">
       </item>
