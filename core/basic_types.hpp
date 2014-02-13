@@ -22,6 +22,7 @@
 #define	BASIC_TYPES_HPP
 
 #include "value_t.hpp"
+#include "function.hpp"
 
 namespace make_type_macro
 {
@@ -67,6 +68,8 @@ namespace tml
     
     using false_type = tml::boolean<false>;
     using true_type  = tml::boolean<true>;
+    
+    TURBO_DEFINE_FUNCTION( size_of , (typename T) , (T) , (tml::size_t<sizeof(T)>) );
 }
 
 #endif	/* BASIC_TRAITS_HPP */
