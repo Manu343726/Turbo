@@ -18,18 +18,12 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
-#include "to_string.hpp"
-#include "string.hpp"
+#include "core.hpp"
 
-#include <iostream>
+struct my_type{};
 
-TURBO_STRING_VARIABLE( hola     , "hola "    );
-TURBO_STRING_VARIABLE( caracola , "caracola" );
+TURBO_DEFINE_FUNCTION( is_my_type , (typename T) , (T) , (tml::equal<T,my_type>) );
+TURBO_DEFINE_FUNCTION( something  , (typename T) , (T) );
 
-using hola_caracola = tml::concat<hola,caracola>;
-
-int main()
-{  
-    std::cout << tml::to_string<hola_caracola>() << std::endl;
-}
+int main(){}
 

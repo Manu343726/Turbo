@@ -90,7 +90,7 @@ namespace tml
  * Given a function name "name", the implementation template is defined as "name_t", and the alias is defined as "name".
  * 
  * The macro is defined as:
- *     define_function( [function_name] , ([function_parameters]) , ([implementation_argumments_bypass]) );
+ *     define_function( [function_name] , ([function_parameters]) , ([implementation_argumments_bypass]) , |optional|([default_result]) );
  * 
  * Where:
  *  - function_name: The name of the metafunction. As described above, the implementation metafunction will be declared as "function_name_t".
@@ -99,6 +99,7 @@ namespace tml
  *    controls in which way the parameters are passed (forwarded) to the implementation. This could be interesting in situations where the user function
  *    (the alias) arranges the argumments in one order, but the implementation is easier to write using another order, or if the implementation just ignores
  *    one or more user params and just uses a set of predefined parameters.
+ * - default_result [optional]: A default result of the function.
  * 
  * 
  * 
@@ -124,12 +125,28 @@ namespace tml
  *     first_of<char,bool> a; //a is a char
  * 
  */
-#define TURBO_DEFINE_FUNCTION( function_name , template_args , function_args ) \
-        template< remove_parens template_args >                                \
-        struct function_name##_t;                                              \
-                                                                               \
-        template< remove_parens template_args >                                \
+
+
+#define TURBO_DEF_FUNC_NO_DEFAULT( function_name , template_args , function_args ) \
+        template< remove_parens template_args >                                    \
+        struct function_name##_t;                                                  \
+                                                                                   \
+        template< remove_parens template_args >                                    \
         using function_name = typename function_name##_t< remove_parens function_args >::result
+
+#define TURBO_DEF_FUNC_DEFAULT( function_name , template_args , function_args , default_result ) \
+        template< remove_parens template_args >                                                  \
+        struct function_name##_t : public tml::function< remove_parens default_result > {};      \
+                                                                                                 \
+        template< remove_parens template_args >                                                  \
+        using function_name = typename function_name##_t< remove_parens function_args >::result
+
+
+#define TURBO_SELECT_FIFTH_PARAM(first , second , third , fourth , fifth , ... ) fifth
+
+#define TURBO_SELECT_DEFINE_FUNCTION(...) TURBO_SELECT_FIFTH_PARAM( __VA_ARGS__ , TURBO_DEF_FUNC_DEFAULT , TURBO_DEF_FUNC_NO_DEFAULT )
+
+#define TURBO_DEFINE_FUNCTION(...) TURBO_SELECT_DEFINE_FUNCTION(__VA_ARGS__)(__VA_ARGS__)
 
 #endif	/* FUNCTION_HPP */
 

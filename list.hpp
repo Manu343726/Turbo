@@ -24,7 +24,7 @@
 #undef max
 #undef min
 
-#include "basic_types.hpp"
+#include "core.hpp"
 #include "iterator.hpp"
 #include "to_string.hpp"
 
