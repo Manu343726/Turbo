@@ -492,6 +492,22 @@ In adition to matrices, Turbo implements 2d/3d/4d vectors and provides **transfo
 (2,1,-1)
 	
 
+### Compile-time string manipulation
+Turbo explodes C++11 generalized constant expressions to manipulate raw strings and create types (metavariables) which the library can work with using template metaprogramming. For example:
 
+    #include "string.hpp"
+    #include "to_string.hpp"
+    
+    //TURBO_STRING_VARIABLE() macro defines a new string metavariable which holds the specified string:
+    
+    TURBO_STRING_VARIABLE( hello , "hello " );
+    TURBO_STRING_VARIABLE( world , "world!" );
+    
+    using hello_world = tml::concat<hello,world>;
+    
+    int main()
+    {
+        std::cout << tml::to_string<hello_world>() << std::endl;
+    }
 
-
+> hello world!
