@@ -18,18 +18,49 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
-#include "to_string.hpp"
-#include "string.hpp"
+#ifndef STRING_HPP
+#define	STRING_HPP
 
-#include <iostream>
+#include "core/basic_types.hpp"
+#include "list.hpp"
+#include "for_loops.hpp"
+#include "numeric_iterators.hpp"
 
-TURBO_STRING_VARIABLE( hola     , "hola "    );
-TURBO_STRING_VARIABLE( caracola , "caracola" );
+#include <string>
 
-using hola_caracola = tml::concat<hola,caracola>;
 
-int main()
-{  
-    std::cout << tml::to_string<hola_caracola>() << std::endl;
+namespace tml
+{
+#define TURBO_STRING_VARIABLE( name , string )                                                          \
+    template<typename INDEX>                                                                            \
+    using turbo_string_transform_function_##name = tml::function<tml::character<string[INDEX::value]>>; \
+                                                                                                        \
+    using name = tml::for_each<tml::make_size_t_forward_iterator<0>,tml::make_size_t_forward_iterator<sizeof(string)>,turbo_string_transform_function_##name>
+    
+    
+    template<tml::character_type... CHARS>
+    struct to_string_t<tml::list<tml::character<CHARS>...>>
+    {
+        operator std::string() const
+        {
+            return std::string{ { CHARS... } };
+        }
+    };
+    
+    
+    TURBO_DEFINE_FUNCTION( get_raw_string , (typename T) , (T) );
+    
+    template<tml::character_type... CHARS>
+    struct get_raw_string_t<tml::list<tml::character<CHARS>...>>
+    {
+        struct array_holder
+        {
+            static const tml::character_type string[sizeof...(CHARS)] = { CHARS... };
+        };
+        
+        using result = array_holder;
+    };
 }
+
+#endif	/* STRING_HPP */
 

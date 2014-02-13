@@ -30,6 +30,7 @@
       <itemPath>numeric_iterators.hpp</itemPath>
       <itemPath>sort.hpp</itemPath>
       <itemPath>sqrt.hpp</itemPath>
+      <itemPath>string.hpp</itemPath>
       <itemPath>tictactoe.hpp</itemPath>
       <itemPath>to_string.hpp</itemPath>
       <itemPath>transformations.hpp</itemPath>
@@ -136,6 +137,8 @@
       </item>
       <item path="sqrt.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="string.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="tictactoe.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
@@ -223,6 +226,8 @@
       <item path="sort.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="sqrt.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="string.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tictactoe.hpp" ex="false" tool="3" flavor2="0">
       </item>
