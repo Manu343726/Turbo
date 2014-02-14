@@ -19,14 +19,9 @@
 ******************************************************************************/
 
 #include "core.hpp"
+#include "string.hpp""
 
-struct my_type{};
-
-TURBO_DEFINE_FUNCTION( is_my_type , (typename T) , (T) , (tml::true_type) );
-TURBO_DEFINE_FUNCTION( something  , (typename T) , (T) );
-
-TURBO_ASSERT( (tml::equal<tml::size_of<char>,tml::size_t<1>>) , "non standard-compilant compiler?" );
-TURBO_ASSERT( (is_my_type<my_type>) );
+using onion = TURBO_STRING( "onion" );
 
 int main(){}
 
