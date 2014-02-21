@@ -27,6 +27,7 @@
 #include "numeric_iterators.hpp"
 
 #include <string>
+#include <array>
 
 
 namespace tml
@@ -41,27 +42,27 @@ namespace tml
     TURBO_DEFINE_FUNCTION( compact_string  , (typename STRING) , (STRING) );
     
     template<typename... CHARS , typename... TAIL>
-    struct compact_string_t<tml::list<CHARS...,tml::character<\0>,TAIL...>> : public tml::function<tml::list<CHARS...,tml::character<\0>>> {};
+    struct compact_string_t<tml::list<CHARS...,tml::character<0>,TAIL...>> : public tml::function<tml::list<CHARS...,tml::character<0>>> {};
     
     
-    template<typename N>
-    using integer_sequence = tml::for_each<tml::make_size_t_forward_iterator<0> , tml__make_size_t_forward_iterator<N> , tml::function >;
+    template<std::size_t N>
+    using integer_sequence = tml::for_each<tml::make_size_t_forward_iterator<0> , tml::make_size_t_forward_iterator<N> , tml::function >;
     
     
     
     template<typename... INDICES , std::size_t N>
-    constexpr auto compute_string( tml::list<INDICES...> , const char (&astring)[N] ) -> tml::list<tml::character<string[INDICES::value]>...>
+    constexpr auto compute_string( tml::list<INDICES...> , std::array<char,N> string )
     {
         return tml::list<tml::character<string[INDICES::value]>...>{}; 
     }
     
     template<std::size_t N>
-    constexpr auto compute_string( const char (&astring)[N] ) 
+    constexpr auto compute_string( const char (&string)[N] ) 
     {
         return compute_string( integer_sequence<N>{} , string );    
     }
     
-#define TURBO_STRING( string ) decltype( compute_string( string ) )
+#define TURBO_STRING( string ) decltype( tml::compute_string( string ) )
     
     
     template<tml::character_type... CHARS>

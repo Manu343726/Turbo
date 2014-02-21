@@ -18,18 +18,50 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
-#include "core.hpp"
-//#include "string.hpp"
-#include "to_string.hpp"
-#include "random.hpp"
+#ifndef RANDOM_HPP
+#define	RANDOM_HPP
 
-#include <iostream>
+#include "core/basic_types.hpp"
+#include "numeric_iterators.hpp"
 
 
-using numbers = tml::generate_n_random<tml::default_random_seed,tml::size_t<10>>;
-
-int main()
+namespace tml
 {
-    std::cout << tml::to_string<numbers>() << std::endl;
+    using default_random_seed = tml::uinteger<__LINE__>;
+    
+    using lcg_a = tml::uinteger<-1>;
+    using lcg_c = tml::uinteger<0>;
+    using lcg_m = tml::uinteger<48271>;
+    
+    
+    template<typename SEED>
+    using random = tml::uinteger<( tml::lcg_a::value * SEED::value + tml::lcg_c::value ) % tml::lcg_m::value>;
+    
+    
+    TURBO_DEFINE_FUNCTION( generate_n_random , (typename SEED , typename COUNT) , (SEED , COUNT) );
+    
+    template<tml::uinteger_type seed , tml::size_t_type count>
+    struct generate_n_random_t<tml::uinteger<seed>,tml::size_t<count>>
+    {
+        template<typename CURRENT , typename NUMBERS>
+        struct kernel;
+        
+        template<typename... NUMBERS , typename LAST , tml::size_t_type CURRENT>
+        struct kernel<tml::size_t<CURRENT>,tml::list<NUMBERS...,LAST>>
+        {
+            using current_seed = LAST;
+            using number = tml::random<current_seed>;
+            
+            using result = tml::list<NUMBERS...,number>;
+        };
+        
+        using result = tml::for_loop<tml::make_size_t_forward_iterator<0>,
+                                     tml::make_size_t_forward_iterator<count>,
+                                     tml::list<tml::uinteger<seed>>,
+                                     kernel
+                                    >;
+    };
 }
+
+#endif	/* RANDOM_HPP */
 

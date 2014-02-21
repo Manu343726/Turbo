@@ -28,6 +28,7 @@
       <itemPath>matrix3x3.hpp</itemPath>
       <itemPath>matrix4x4.hpp</itemPath>
       <itemPath>numeric_iterators.hpp</itemPath>
+      <itemPath>random.hpp</itemPath>
       <itemPath>sort.hpp</itemPath>
       <itemPath>sqrt.hpp</itemPath>
       <itemPath>string.hpp</itemPath>
@@ -133,6 +134,8 @@
       </item>
       <item path="numeric_iterators.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="random.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="sort.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="sqrt.hpp" ex="false" tool="3" flavor2="0">
@@ -222,6 +225,8 @@
       <item path="matrix4x4.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="numeric_iterators.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="random.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="sort.hpp" ex="false" tool="3" flavor2="0">
       </item>
