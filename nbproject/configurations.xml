@@ -17,6 +17,7 @@
         <itemPath>core/value_t.hpp</itemPath>
       </logicalFolder>
       <itemPath>analogliterals.hpp</itemPath>
+      <itemPath>chrono.hpp</itemPath>
       <itemPath>color.hpp</itemPath>
       <itemPath>complex.hpp</itemPath>
       <itemPath>core.hpp</itemPath>
@@ -91,6 +92,8 @@
         </ccTool>
       </compileType>
       <item path="analogliterals.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="chrono.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="color.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -183,6 +186,8 @@
         </asmTool>
       </compileType>
       <item path="analogliterals.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="chrono.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="color.hpp" ex="false" tool="3" flavor2="0">
       </item>
