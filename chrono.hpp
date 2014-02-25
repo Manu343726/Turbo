@@ -64,7 +64,7 @@ namespace tml
         struct time_cast_t<HOUR_VALUE,MINUTE_VALUE,SECOND_VALUE , tml::chrono::seconds> : public tml::function<tml::chrono::second<decltype( SECOND_VALUE() + tml::uinteger<60>()*MINUTE_VALUE() + tml::uinteger<3600>()*HOUR_VALUE() )>> {};
         
         template<typename HOUR_VALUE , typename MINUTE_VALUE , typename SECOND_VALUE>
-        struct time_cast_t<HOUR_VALUE,MINUTE_VALUE,SECOND_VALUE , tml::chrono::minutes> : public tml::function<tml::chrono::minute<decltype( SECOND_VALUE() + tml::uinteger<60>()*MINUTE_VALUE() + tml::uinteger<3600>()*HOUR_VALUE() )>> {};
+        struct time_cast_t<HOUR_VALUE,MINUTE_VALUE,SECOND_VALUE , tml::chrono::minutes> : public tml::function<tml::chrono::minute<decltype( MINUTE_VALUE() + tml::uinteger<60>()*HOUR_VALUE() )>> {};
         
         template<typename HOUR_VALUE , typename MINUTE_VALUE , typename SECOND_VALUE>
         struct time_cast_t<HOUR_VALUE,MINUTE_VALUE,SECOND_VALUE , tml::chrono::hours>   : public tml::function<tml::chrono::hour<HOUR_VALUE::value>> {};
@@ -80,7 +80,9 @@ namespace tml
         struct time_cast_t<FROM,tml::chrono::hours>   : public tml::function<tml::chrono::hour<( FROM::value * typename FROM::time_ratio::value ) / 3600>> {};
         
         
-                TURBO_DEFINE_FUNCTION( time_value , (typename... DATA) , (DATA...) );
+        
+        
+        TURBO_DEFINE_FUNCTION( time_value , (typename... DATA) , (DATA...) );
         
         template<typename HOUR , typename MINUTE , typename SECOND>
         struct time_value_t<HOUR,MINUTE,SECOND>
@@ -89,17 +91,19 @@ namespace tml
             using minute_value = MINUTE;
             using second_value = SECOND;
             
-            using hour_count = HOUR;
-            using minute_count  = decltype( minutes() + tml::uinteger<3600>()*hours() );
-            using seconds_count = decltype( seconds() + tml::uinteger<60>()*minutes() + tml::uinteger<3600>()*hours() );
+            using hour_count    = tml::chrono::time_cast<hour_value,minute_value,second_value,tml::chrono::hours>;
+            using minute_count  = tml::chrono::time_cast<hour_value,minute_value,second_value,tml::chrono::minutes>;
+            using seconds_count = tml::chrono::time_cast<hour_value,minute_value,second_value,tml::chrono::seconds>;
         };
         
         template<typename HOUR , typename MINUTE , typename SECOND>
         struct time_point : tml::chrono::time_value<HOUR,MINUTE,SECOND>
         {};
         
+        using now = tml::chrono::time_point<__TIME__[0]*10+__TIME__[1] , __TIME__[3]*10+__TIME__[4],__TIME__[6]*10+__TIME__[7]>; //Esperemos que tarde menos de un segundo en procesarlo...
+        
         template<typename TICKS>
-        struct duration : public tml::chrono::time<TICKS>
+        struct duration : public tml::chrono::time_value<TICKS>
         {
         };
         
@@ -107,11 +111,13 @@ namespace tml
     }
     
     template<typename HOUR_BEGIN , typename MINUTE_BEGIN , typename SECOND_BEGIN ,
-                 typename HOUR_END   , typename MINUTE_END   , typename SECOND_END>
+             typename HOUR_END   , typename MINUTE_END   , typename SECOND_END>
     struct sub_t<tml::chrono::time_point<HOUR_END,MINUTE_END,SECOND_END> , 
-                 tml::chrono::time_point<HOUR_END,MINUTE_END,SECOND_END>> : public tml::function<tml::chrono::duration<tml::chrono::time_cast<decltype(HOUR_END() - HOUR_BEGIN()),
-                                                                                                                                              decltype(HOUR_END() - HOUR_BEGIN()),
-                                                                                                                                              decltype(HOUR_END() - HOUR_BEGIN())>>>> {};
+                 tml::chrono::time_point<HOUR_BEGIN,MINUTE_BEGIN,SECOND_BEGIN>> : public tml::function<tml::chrono::duration<tml::chrono::time_cast<decltype(HOUR_END()   - HOUR_BEGIN()  ),
+                                                                                                                                                    decltype(MINUTE_END() - MINUTE_BEGIN()),
+                                                                                                                                                    decltype(SECOND_END() - SECOND_BEGIN()),
+                                                                                                                                                    tml::chrono::ticks
+                                                                                                                                                   >>> {};
 }
 
 #endif	/* TIME_HPP */
