@@ -27,97 +27,86 @@ namespace tml
 {
     namespace chrono
     {
-        //Time type tags:
-        struct hours   : public tml::uinteger<3600>{}; //Time type ratio
-        struct minutes : public tml::uinteger<60>{};
-        struct seconds : public tml::uinteger<1>{};
-        using  ticks = tml::chrono::seconds; //Time precision is second
         
-        
-        //Time values:
-        
-        template<typename COUNT>
-        struct hour : public COUNT 
+        template<unsigned int NUM , unsigned int DENOM = 1>
+        struct ratio
         {
-            using time_ratio = tml::chrono::hours;
+            using numerator   = NUM;
+            using denominator = DENOM;
         };
         
-        template<typename COUNT>
-        struct minute : public COUNT 
+        template<typename RATIO>
+        using num = typename RATIO::numerator;
+        
+        template<typename RATIO>
+        using denom = typename RATIO::denominator;
+        
+        
+        template<unsigned int LHS_N , unsigned int LHS_D , unsigned int RHS_N , unsigned int RHS_D>
+        struct add_t<tml::chrono::ratio<LHS_N,LHS_D>,
+                     tml::chrono::ratio<RHS_N,RHS_D>>
+                : public tml::function<tml::chrono::ratio<LHS_N*RHS_D + RHS_N*LHS_D , LHS_D*RHS_D>> {};
+                
+        template<unsigned int LHS_N , unsigned int LHS_D , unsigned int RHS_N , unsigned int RHS_D>
+        struct sub_t<tml::chrono::ratio<LHS_N,LHS_D>,
+                     tml::chrono::ratio<RHS_N,RHS_D>>
+                : public tml::function<tml::chrono::ratio<LHS_N*RHS_D + RHS_N*LHS_D , LHS_D*RHS_D>> {};
+                
+        template<unsigned int LHS_N , unsigned int LHS_D , unsigned int RHS_N , unsigned int RHS_D>
+        struct mul_t<tml::chrono::ratio<LHS_N,LHS_D>,
+                     tml::chrono::ratio<RHS_N,RHS_D>>
+                : public tml::function<tml::chrono::ratio<LHS_N*RHS_N , LHS_D*RHS_D>> {};
+                
+        template<unsigned int LHS_N , unsigned int LHS_D , unsigned int RHS_N , unsigned int RHS_D>
+        struct div_t<tml::chrono::ratio<LHS_N,LHS_D>,
+                     tml::chrono::ratio<RHS_N,RHS_D>>
+                : public tml::function<tml::chrono::ratio<LHS_N*RHS_D , LHS_D*RHS_N>> {};
+        
+        
+        template<typename TICKS , typename RATIO>
+        struct duration
         {
-            using time_ratio = tml::chrono::minutes;
+            using ticks = TICKS;
+            using ratio = RATIO;
         };
         
-        template<typename COUNT>
-        struct second : public COUNT 
-        {
-            using time_ratio = tml::chrono::seconds;
-        };
-        
-        template<typename COUNT>
-        using tick = tml::chrono::second<COUNT>;
-        
-      
-        TURBO_DEFINE_FUNCTION( time_cast , (typename... ARGS) , (ARGS...) );
-        
-        template<typename HOUR_VALUE , typename MINUTE_VALUE , typename SECOND_VALUE>
-        struct time_cast_t<HOUR_VALUE,MINUTE_VALUE,SECOND_VALUE , tml::chrono::seconds> : public tml::function<tml::chrono::second<decltype( SECOND_VALUE() + tml::uinteger<60>()*MINUTE_VALUE() + tml::uinteger<3600>()*HOUR_VALUE() )>> {};
-        
-        template<typename HOUR_VALUE , typename MINUTE_VALUE , typename SECOND_VALUE>
-        struct time_cast_t<HOUR_VALUE,MINUTE_VALUE,SECOND_VALUE , tml::chrono::minutes> : public tml::function<tml::chrono::minute<decltype( MINUTE_VALUE() + tml::uinteger<60>()*HOUR_VALUE() )>> {};
-        
-        template<typename HOUR_VALUE , typename MINUTE_VALUE , typename SECOND_VALUE>
-        struct time_cast_t<HOUR_VALUE,MINUTE_VALUE,SECOND_VALUE , tml::chrono::hours>   : public tml::function<tml::chrono::hour<HOUR_VALUE::value>> {};
-        
-        
-        template<typename FROM>
-        struct time_cast_t<FROM,tml::chrono::seconds> : public tml::function<tml::chrono::second<( FROM::value * typename FROM::time_ratio::value ) / 1>> {};
-        
-        template<typename FROM>
-        struct time_cast_t<FROM,tml::chrono::minutes> : public tml::function<tml::chrono::minute<( FROM::value * typename FROM::time_ratio::value ) / 60>> {};
-        
-        template<typename FROM>
-        struct time_cast_t<FROM,tml::chrono::hours>   : public tml::function<tml::chrono::hour<( FROM::value * typename FROM::time_ratio::value ) / 3600>> {};
+                
+        TURBO_DEFINE_FUNCTION( duration_cast , 
+                               ( typename DURATION , typename DEST_RATIO = tml::chrono::ratio<1> )
+                               ( DURATION,DEST_RATIO ) ,
+                               ( tml::chrono::duration<typename DURATION::ticks,decltype( typename DURATION::ratio() / DEST_RATIO() )> )
+                             );
         
         
         
         
-        TURBO_DEFINE_FUNCTION( time_value , (typename... DATA) , (DATA...) );
         
-        template<typename HOUR , typename MINUTE , typename SECOND>
-        struct time_value_t<HOUR,MINUTE,SECOND>
-        {
-            using hour_value   = HOUR;
-            using minute_value = MINUTE;
-            using second_value = SECOND;
-            
-            using hour_count    = tml::chrono::time_cast<hour_value,minute_value,second_value,tml::chrono::hours>;
-            using minute_count  = tml::chrono::time_cast<hour_value,minute_value,second_value,tml::chrono::minutes>;
-            using seconds_count = tml::chrono::time_cast<hour_value,minute_value,second_value,tml::chrono::seconds>;
-        };
+        using nanoseconds  = tml::chrono::ratio<1,1000000000>;
+        using microseconds = tml::chrono::ratio<1,1000000>;
+        using miliseconds  = tml::chrono::ratio<1,1000>;
+        using seconds      = tml::chrono::ratio<1>;
+        using minutes      = tml::chrono::ratio<60>;
+        using hours        = tml::chrono::ratio<3600>;
+        using days         = tml::chrono::ratio<24*3600>;
+        using weeks        = tml::chrono::ratio<7*24*3600>;
         
-        template<typename HOUR , typename MINUTE , typename SECOND>
-        struct time_point : tml::chrono::time_value<HOUR,MINUTE,SECOND>
-        {};
         
-        using now = tml::chrono::time_point<__TIME__[0]*10+__TIME__[1] , __TIME__[3]*10+__TIME__[4],__TIME__[6]*10+__TIME__[7]>; //Esperemos que tarde menos de un segundo en procesarlo...
+        template<typename LHS_TICKS , typename LHS_RATIO , typename RHS_TICKS , typename RHS_RATIO>
+        struct add_t<tml::chrono::duration<LHS_TICKS,LHS_RATIO>,
+                     tml::chrono::duration<RHS_TICKS,RHS_RATIO>>
+                : public tml::function<tml::duration<
         
-        template<typename TICKS>
-        struct duration : public tml::chrono::time_value<TICKS>
-        {
-        };
+        
+        
         
         
     }
     
-    template<typename HOUR_BEGIN , typename MINUTE_BEGIN , typename SECOND_BEGIN ,
-             typename HOUR_END   , typename MINUTE_END   , typename SECOND_END>
-    struct sub_t<tml::chrono::time_point<HOUR_END,MINUTE_END,SECOND_END> , 
-                 tml::chrono::time_point<HOUR_BEGIN,MINUTE_BEGIN,SECOND_BEGIN>> : public tml::function<tml::chrono::duration<tml::chrono::time_cast<decltype(HOUR_END()   - HOUR_BEGIN()  ),
-                                                                                                                                                    decltype(MINUTE_END() - MINUTE_BEGIN()),
-                                                                                                                                                    decltype(SECOND_END() - SECOND_BEGIN()),
-                                                                                                                                                    tml::chrono::ticks
-                                                                                                                                                   >>> {};
+    
+    template<typename LHS_TICKS , typename LHS_RATIO , typename RHS_TICKS , typename RHS_RATIO>
+    struct add_t<tml::chrono::duration<LHS_TICKS,LHS_RATIO>,
+                 tml::chrono::duration<RHS_TICKS,RHS_RATIO>>
+                : public tml::function<tml::duration<tml::chrono::duration_cast<
 }
 
 #endif	/* TIME_HPP */
