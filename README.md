@@ -511,3 +511,7 @@ Turbo explodes C++11 generalized constant expressions to manipulate raw strings 
     }
 
 > hello world!
+
+### Future features:
+I'm currently working in a compile-time time manipulation library (`tml::chrono` namespace), based on the Standard `std::chrono` library.  
+Also I'm working on compile-time random number generation facilities, using the features of `tml::chrono` as seed.
