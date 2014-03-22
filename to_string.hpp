@@ -119,6 +119,12 @@ namespace tml
     {
         return tml::to_string_t<T>();
     }
+    
+    template<typename T>
+    std::string to_string( const T& )
+    {
+        return tml::to_string<T>();
+    }
 }
 
 #endif	/* TO_STRING_HPP */
