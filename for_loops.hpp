@@ -20,8 +20,6 @@
 
 #pragma once
 
-#include "boolean_predicates.hpp"
-
 
 #include "list.hpp"
 #include "core.hpp"

@@ -21,7 +21,7 @@
 #ifndef EXPRESSIONS_HPP
 #define	EXPRESSIONS_HPP
 
-#include "traits.hpp"
+#include "concepts.hpp"
 #include "arithmetic_functions.hpp"
 
 #include <type_traits> //std::enable_if
