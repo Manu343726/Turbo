@@ -18,59 +18,27 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
-#ifndef BASIC_TYPES_HPP
-#define	BASIC_TYPES_HPP
+#ifndef BIND_HPP
+#define	BIND_HPP
 
-#include "value_t.hpp"
-
-namespace make_type_macro
+namespace tml
 {
-    #define MAKE_TYPE(name , type) template<type VALUE>                   \
-                                   using name = value_t<type,VALUE>; \
-                                   using name##_type = type
-}
-
-namespace tb
-{
-    
-    template<typename T>
-    struct type_t
+    template<template<typename...> FUNCTION , typename... BINDED_ARGS>
+    struct bind
     {
-        using type = T;
+        template<typename... ARGS>
+        using result = typename FUNCTION<BINDED_ARGS...,ARGS...>::result;
     };
     
-    
-    template<typename T , typename U>
-    struct pair
+    namespace placeholders
     {
-        using first  = T;
-        using second = U;
-    };
-    
-    MAKE_TYPE(ucharacter         , unsigned char);
-    MAKE_TYPE(character          , char);
-    MAKE_TYPE(uinteger           , unsigned int);
-    MAKE_TYPE(integer            , int);
-    MAKE_TYPE(ulong_integer      , unsigned long int);
-    MAKE_TYPE(long_integer       , long int);
-    MAKE_TYPE(ulong_long_integer , unsigned long long int);
-    MAKE_TYPE(long_long_integer  , long long int);
-    MAKE_TYPE(boolean            , bool);
-    MAKE_TYPE(size_t             , std::size_t);
-  
-    
-    using false_type = tb::boolean<false>;
-    using true_type  = tb::boolean<true>;
-    
-    template<typename T>
-    struct equal_t<tb::no_type,T> : public tb::function<tb::false_type> {};
-    
-    template<typename T>
-    struct equal_t<T,tb::no_type> : public tb::function<tb::false_type> {};
-    
-    template<>
-    struct equal_t<tb::no_type,tb::no_type> : public tb::function<tb::true_type> {};
+        template<typename INDEX>
+        struct placeholder : public INDEX {};
+        
+        
+        
+    }
 }
 
-#endif	/* BASIC_TRAITS_HPP */
+#endif	/* BIND_HPP */
 

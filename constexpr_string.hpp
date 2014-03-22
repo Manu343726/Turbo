@@ -18,20 +18,36 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
-#ifndef BOOLEAN_PREDICATES_HPP
-#define	BOOLEAN_PREDICATES_HPP
+#ifndef CONSTEXPR_STRING_HPP
+#define	CONSTEXPR_STRING_HPP
 
-#include "basic_types.hpp"
+#include "string.hpp"
 
-
-namespace tb
+namespace tml
 {
-    template<typename T>
-    using true_predicate = tb::true_type;
-    
-    template<typename T>
-    using false_predicate = tb::false_type;
+    struct const_string
+    {
+        const char* string;
+        const std::size_t length;
+        
+        template<typename INDEX>
+        struct kernel
+        {
+            using result = tml::character<string[INDEX::value]>;
+        };
+        
+        using string_type = tml::for_each<tml::make_size_t_forward_iterator<0> ,
+                                          tml::make_size_t_forward_iterator<length>,
+                                          kernel
+                                         >;
+        
+        template<std::size_t N>
+        constexpr const_string( const char (&str)[N] ) : 
+            string{ str } ,
+            length{ N }
+        {}
+    };
 }
 
-#endif	/* BOOLEAN_PREDICATES_HPP */
+#endif	/* CONSTEXPR_STRING_HPP */
 

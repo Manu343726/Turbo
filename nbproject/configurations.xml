@@ -20,6 +20,7 @@
       <itemPath>chrono.hpp</itemPath>
       <itemPath>color.hpp</itemPath>
       <itemPath>complex.hpp</itemPath>
+      <itemPath>constexpr_string.hpp</itemPath>
       <itemPath>core.hpp</itemPath>
       <itemPath>fixed_point.hpp</itemPath>
       <itemPath>for_loops.hpp</itemPath>
@@ -98,6 +99,8 @@
       <item path="color.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="complex.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="constexpr_string.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="core.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -192,6 +195,8 @@
       <item path="color.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="complex.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="constexpr_string.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="core.hpp" ex="false" tool="3" flavor2="0">
       </item>

@@ -32,11 +32,34 @@
 
 namespace tml
 {
-#define TURBO_STRING_VARIABLE( name , string )                                                          \
-    template<typename INDEX>                                                                            \
-    using turbo_string_transform_function_##name = tml::function<tml::character<string[INDEX::value]>>; \
+    
+    template<const char* str>
+    struct string_holder
+    {
+        const char* string = str;
+    };
+    
+    template<typename STRING_HOLDER>
+    struct string_builder
+    {
+        template<std::size_t N>
+        using integer_sequence = tml::for_each<tml::make_size_t_forward_iterator<0> , tml::make_size_t_forward_iterator<N> , tml::function >;
+            
+        template<typename INDEX>
+        using kernel = tml::function<tml::character<STRING_HOLDER{}.str[INDEX::value]>>;
+        
+        using result = tml::for_each<tml::make_size_t_forward_iterator<0>,tml::make_size_t_forward_iterator<4>,kernel>;
+    };
+    
+    
+    
+#define TURBO_STRING( string )                                                          \
+    []() \
+    { \
+        struct string_holder{ const char* str = string; }; \
                                                                                                         \
-    using name = tml::for_each<tml::make_size_t_forward_iterator<0>,tml::make_size_t_forward_iterator<sizeof(string)>,turbo_string_transform_function_##name>
+        return typename tml::string_builder<string_holder>::result{}; \
+    }()
 
 
     TURBO_DEFINE_FUNCTION( compact_string  , (typename STRING) , (STRING) );
@@ -51,18 +74,12 @@ namespace tml
     
     
     template<typename... INDICES , std::size_t N>
-    constexpr auto compute_string( tml::list<INDICES...> , std::array<char,N> string )
+    constexpr auto compute_string( tml::list<INDICES...> , const char (&string)[N] )
     {
-        return tml::list<tml::character<string[INDICES::value]>...>{}; 
+        constexpr const char str[N] = { string };
+        
+        return tml::list<tml::character<str[INDICES::value]>...>{}; 
     }
-    
-    template<std::size_t N>
-    constexpr auto compute_string( const char (&string)[N] ) 
-    {
-        return compute_string( integer_sequence<N>{} , string );    
-    }
-    
-#define TURBO_STRING( string ) decltype( tml::compute_string( string ) )
     
     
     template<tml::character_type... CHARS>

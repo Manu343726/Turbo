@@ -19,17 +19,19 @@
 ******************************************************************************/
 
 #include "core.hpp"
-//#include "string.hpp"
+#include "string.hpp"
 #include "to_string.hpp"
 #include "random.hpp"
 
 #include <iostream>
 
+template<char... CHARS>
+tml::list<tml::character<CHARS>...> operator"" _tml () { return tml::list<tml::character<CHARS>...>{}; }
 
-using numbers = tml::generate_n_random<tml::default_random_seed,tml::size_t<10>>;
+auto str = 123456789_tml;
 
 int main()
 {
-    std::cout << tml::to_string<numbers>() << std::endl;
+    std::cout << tml::to_string<decltype(str)>() << std::endl;
 }
 
