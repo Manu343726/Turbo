@@ -18,25 +18,30 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
-#include "variable_templates.hpp"
+#ifndef VARIABLE_TEMPLATES_HPP
+#define	VARIABLE_TEMPLATES_HPP
 
-#include <iostream>
+/* C++11-compliant pseudo C++1y variable templates
+ * 
+ * Please note that this "tools" only work with default constructible types, and its implementation
+ * relies on Undefined Behaviour. You have been advised.  
+ */
 
+#define TURBO_INDEXED_VARIABLE( type , name ) \
+    template<int id>                          \
+    type&  name()                             \
+    {                                         \
+        static type _variable_ = type{};      \
+        return _variable_;                    \
+    }
+        
+#define TURBO_MUTABLE_VARIABLE( name ) \
+    template<typename T>               \
+    T&  name()                         \
+    {                                  \
+        static T _variable_ = T{};     \
+        return _variable_;             \
+    }
 
-TURBO_INDEXED_VARIABLE( int , a );
-TURBO_MUTABLE_VARIABLE( b );
-
-int main()
-{
-    a<0>() = 10;
-    a<3>() = 13;
-    
-    b<char>()  = 'a';
-    b<float>() = 1.0f;
-    
-    std::cout << a<0>() << std::endl;
-    std::cout << a<3>() << std::endl;
-    std::cout << b<char>() << std::endl;
-    std::cout << b<float>() << std::endl;
-}
+#endif	/* VARIABLE_TEMPLATES_HPP */
 
