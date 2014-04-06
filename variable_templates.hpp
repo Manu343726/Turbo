@@ -21,11 +21,7 @@
 #ifndef VARIABLE_TEMPLATES_HPP
 #define	VARIABLE_TEMPLATES_HPP
 
-/* C++11-compliant pseudo C++1y variable templates
- * 
- * Please note that this "tools" only work with default constructible types, and its implementation
- * relies on Undefined Behaviour. You have been advised.  
- */
+/* C++11-compliant pseudo C++1y variable templates */
 
 #define TURBO_INDEXED_VARIABLE( type , name ) \
     template<int id>                          \
