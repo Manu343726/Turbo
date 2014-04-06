@@ -3,6 +3,8 @@ Turbo
 
 *C++11 metaprogramming library*
 
+*The library is currently being refactored in depth. To see the working version of the library, check the `master` branch.*
+
 ## What is Turbo?
 
 Turbo is a library dessigned to provide compile-time utilities through [template metaprogramming](http://en.wikipedia.org/wiki/Template_metaprogramming).
