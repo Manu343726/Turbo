@@ -64,7 +64,7 @@ namespace tml
          *  - ARGS...: evaluate could be used as a high-order metafunction to evaluate a given
          *             function entity with the specified parameters. This variadic pack is that
          *             set of parameters. The result of the evaluation is the result of evaluating
-         *             the function entity E with the specified ARGS... arguments.
+         *             the functional expresion E with the specified ARGS... arguments.
          *             Note that in this case the argumments are evaluated too (Just for the case they are
          *             functional expressions).
          * 
@@ -102,15 +102,25 @@ namespace tml
          * 
          * The result is the result of evaluating the function with that parameters.
          */
-        template<template<typename...> class F , typename... PLACEHOLDERS , typename FIRST_ARG , typename... ARGS>
-        struct evaluate_impl<true,F<PLACEHOLDERS...> , FIRST_ARG,ARGS...> : public F<FIRST_ARG,ARGS...>
+        template<bool is_function , template<typename...> class F , typename... PLACEHOLDERS , typename... ARGS>
+        struct evaluate_impl<is_function,F<PLACEHOLDERS...> , ARGS...> : public F<ARGS...>
         {
-          static_assert( sizeof...(PLACEHOLDERS) == (1 + sizeof...(ARGS)) , "Incorrect number of parameters to call the function." );  
+            //static_assert( sizeof...(ARGS) == 5 , "ERROR" );
+            //static_assert( sizeof...(PLACEHOLDERS) == (0 + sizeof...(ARGS)) , "Wrong number of function call parameters." );  
         };
     }
     
     
-    //Canonical function entity:
+    /*
+     * This is a helper metafunction to represent a metafunction in the way the library
+     * expects it.
+     * 
+     * It just takes a value and stores it in a 'result' member.
+     * 
+     * Its usefull when declaring user-defined metafunctions and making them working with the rest
+     * of the library. Inheriting from this helper is a simple whay to ensure any metafunctions
+     * has the correct interface.
+     */
     template<typename RESULT>
     struct function
     {
@@ -118,7 +128,28 @@ namespace tml
     };
     
     
-    //Metafunction to evaluate expressions:
+    /*
+     * Metafunction to evaluate expressions.
+     * 
+     * The purpose of this metafunction is to evaluate homogeneously any kind of expression.
+     * Also, this could be used as a high-order metafunction to call an specified functional
+     * expression with a custom set of parameters.
+     * 
+     * Note that the parameters of the expression will be ignored during evaluation. 
+     * If your intention is to pass the expression to a high order metafunction,
+     * you have to fill that parameters even if they will not be used during evaluation.
+     * The set of placeholders defined in "placeholders.hpp" could be used for that purpose.
+     * 
+     * The metafunction has the following parameters:
+     *  - E: The expression to be evaluated.
+     * 
+     *  - ARGS...: evaluate could be used as a high-order metafunction to evaluate a given
+     *             function entity with the specified parameters. This variadic pack is that
+     *             set of parameters. The result of the evaluation is the result of evaluating
+     *             the functional expresion E with the specified ARGS... arguments.
+     *             Note that in this case the argumments are evaluated too (Just for the case they are
+     *             functional expressions).
+     */
     template<typename EXPRESSION , typename... ARGS>
     using eval = typename impl::evaluate_impl<impl::is_function<EXPRESSION>::result, EXPRESSION , ARGS...>::result;
     

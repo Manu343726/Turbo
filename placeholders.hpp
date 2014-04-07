@@ -18,28 +18,36 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
-#include "functional.hpp"
-#include "placeholders.hpp"
+#ifndef PLACEHOLDERS_HPP
+#define	PLACEHOLDERS_HPP
 
-#include <type_traits>
-
-using namespace tml::placeholders;
-
-template<typename... ARGS>
-struct f
+namespace tml
 {
-    using result = decltype(nullptr);
-};
-
-template<typename ARG , typename... ARGS> using first_of = ARG;
-
-using char_alias = tml::eval<char>; //the result must be a char alias
-//using first = tml::eval<first_of<_1,_2,_3,_4,_5> , bool,int,double,char,float>;
-using function_call = tml::eval<first_of<_1,_2,_3,_4>,bool,bool>; //the result must be a char alias
-
-
-int main()
-{
-    
+    /*
+     * Set of placeholders which could be used in function-parameters binding expressions.
+     * 
+     * See tml::evaluate documentation in 'functional.hpp' for more information.
+     */
+    namespace placeholders
+    {
+        struct _1{};
+        struct _2{};
+        struct _3{};
+        struct _4{};
+        struct _5{};
+        struct _6{};
+        struct _7{};
+        struct _8{};
+        struct _9{};
+        struct _10{};
+        struct _11{};
+        struct _12{};
+        struct _13{};
+        struct _14{};
+        struct _15{};
+        struct _16{};
+    }
 }
+
+#endif	/* PLACEHOLDERS_HPP */
 

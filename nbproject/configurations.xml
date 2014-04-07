@@ -5,6 +5,8 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>functional.hpp</itemPath>
+      <itemPath>let_expressions.hpp</itemPath>
+      <itemPath>placeholders.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -57,7 +59,11 @@
       </compileType>
       <item path="functional.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="let_expressions.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="placeholders.hpp" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -83,7 +89,11 @@
       </compileType>
       <item path="functional.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="let_expressions.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="placeholders.hpp" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>
