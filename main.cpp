@@ -34,9 +34,7 @@ struct f
 template<typename ARG , typename... ARGS> using first_of = ARG;
 
 using char_alias = tml::eval<char>; //the result must be a char alias
-//using first = tml::eval<first_of<_1,_2,_3,_4,_5> , bool,int,double,char,float>;
-using function_call = tml::eval<first_of<_1,_2,_3,_4>,bool,bool>; //the result must be a char alias
-
+using first = tml::eval<f<_1,_2,_3,_4,_5> , bool,int,double,char,float>;
 
 int main()
 {
