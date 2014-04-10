@@ -20,8 +20,11 @@
 
 #include "functional.hpp"
 #include "placeholders.hpp"
+#include "let_expressions.hpp"
 
 #include <type_traits>
+#include <typeinfo>
+#include <iostream>
 
 using namespace tml::placeholders;
 
@@ -36,8 +39,16 @@ template<typename ARG , typename... ARGS> using first_of = ARG;
 using char_alias = tml::eval<char>; //the result must be a char alias
 using first = tml::eval<f<_1,_2,_3,_4,_5> , bool,int,double,char,float>;
 
+
+//tml::let ussage example:
+struct X {}; //Variable
+
+using let = tml::let<X,int,f<X,X,X>>;
+
+using result = tml::eval<let>;
+
 int main()
 {
-    
+    std::cout << typeid( let ).name();
 }
 

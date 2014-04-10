@@ -55,14 +55,77 @@ namespace tml
          *    just forwards the parameters to the low-level phase. 
          */
         
+        
+        /*
+         * Forward declaration of the high-level phase.
+         */
+        template<typename NAME , typename VALUE , typename EXPRESSION>
+        struct let_impl_high;
+        
+        /*
+         * Forward declaration of the low-level phase.
+         */
+        template<typename NAME , typename VALUE , typename EXPRESSION>
+        struct let_impl_low;
+        
+        
+        /* Low level phase: */
+        
+        /*
+         * General case of the low-level phase: The expression is not a functional expression,
+         * so there are no variables to bind a value with.
+         * The result is the expression itself.
+         */
+        template<typename NAME , typename VALUE , typename EXPRESSION>
+        struct let_impl_low : public tml::function<EXPRESSION> 
+        {};
+        
+        /*
+         * Low-level phase. The expression passed is a functional expression. 
+         * We apply let reursively on the parameter of the expression (Could be a functional
+         * expression too). 
+         */
+        template<typename NAME , typename VALUE , template<typename> class EXPRESSION , typename PARAMETER>
+        struct let_impl_low<NAME,VALUE,EXPRESSION<PARAMETER>> :
+        public tml::function<EXPRESSION<typename let_impl_high<NAME,VALUE,PARAMETER>::result>> 
+        {};
+        
+        
+        /* High level phase: */
+        
         /*
          * General case of the high-level phase: Just parameter forwarding to the 
          * second phase.
          */
         template<typename NAME , typename VALUE , typename EXPRESSION>
-        struct let_impl_high;
+        struct let_impl_high : let_impl_low<NAME,VALUE,EXPRESSION> 
+        {};
+        
+        
+        /*
+         * The variable to be binded and the expression are the same: Apply the
+         * substitution of the value:
+         */
+        template<typename NAME , typename VALUE>
+        struct let_impl_high<NAME,VALUE,NAME> : public tml::function<VALUE> 
+        {};
         
     }
+    
+    /*
+     * Haskell-like let expression
+     * 
+     * Binds a value to a named variable in the specified expression.
+     * This metafunction has the following three parameters:
+     *  - NAME: The name (variable) to bind the value with.
+     *  - VALUE: The value to be binded.
+     *  - EXPRESSION: The expression where the substitution will be applied.
+     * 
+     * The result of this metafunction is a copy of the passed expression where 
+     * the ocurences of the named variable have been substituted with the value.
+     */
+    template<typename NAME , typename VALUE , typename EXPRESSION>
+    using let = tml::eval<impl::let_impl_high<NAME,VALUE,EXPRESSION>>;
 }
 
 #endif	/* LET_HPP */
