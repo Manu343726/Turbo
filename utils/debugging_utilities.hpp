@@ -18,34 +18,10 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
-#include "functional.hpp"
-#include "placeholders.hpp"
-#include "let_expressions.hpp"
+#ifndef DEBUGGING_UTILITIES_HPP
+#define	DEBUGGING_UTILITIES_HPP
 
-#include "impl/demangle.hpp"
+#include "utils/assert.hpp"
 
-#include <type_traits>
-#include <typeinfo>
-#include <iostream>
-
-using namespace tml::placeholders;
-
-template<typename ARGS>
-struct f
-{
-    using result = decltype(nullptr);
-};
-
-
-//tml::let ussage example:
-struct X {}; //Variable
-
-using let = tml::let<X,int,f<X>>;
-
-using result = tml::eval<let>;
-
-int main()
-{
-    std::cout << tml::impl::demangle( typeid( let ).name() ) << std::endl;
-}
+#endif	/* DEBUGGING_UTILITIES_HPP */
 

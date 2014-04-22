@@ -72,15 +72,6 @@ namespace tml
         /* Low level phase: */
         
         /*
-         * General case of the low-level phase: The expression is not a functional expression,
-         * so there are no variables to bind a value with.
-         * The result is the expression itself.
-         */
-        template<typename NAME , typename VALUE , typename EXPRESSION>
-        struct let_impl_low : public tml::function<EXPRESSION> 
-        {};
-        
-        /*
          * Low-level phase. The expression passed is a functional expression. 
          * We apply let reursively on the parameter of the expression (Could be a functional
          * expression too). 
@@ -89,6 +80,18 @@ namespace tml
         struct let_impl_low<NAME,VALUE,EXPRESSION<PARAMETER>> :
         public tml::function<EXPRESSION<typename let_impl_high<NAME,VALUE,PARAMETER>::result>> 
         {};
+        
+        /*
+         * General case of the low-level phase: The expression is not a functional expression,
+         * so there are no variables to bind a value with.
+         * The result is the expression itself.
+         */
+        template<typename NAME , typename VALUE , typename EXPRESSION>
+        struct let_impl_low : public tml::function<EXPRESSION> 
+        {
+            /* Debug trace (DISABLED) */
+            //static_assert( sizeof(VALUE) != sizeof(VALUE) , "LOW_PHASE: Simple expression case instanced" );
+        };
         
         
         /* High level phase: */
@@ -99,7 +102,10 @@ namespace tml
          */
         template<typename NAME , typename VALUE , typename EXPRESSION>
         struct let_impl_high : let_impl_low<NAME,VALUE,EXPRESSION> 
-        {};
+        {
+            /* Debug trace (DISABLED) */
+            //static_assert( sizeof(NAME) != sizeof(NAME) , "HIGH_PHASE: LOW_PHASE call" );
+        };
         
         
         /*
@@ -108,7 +114,10 @@ namespace tml
          */
         template<typename NAME , typename VALUE>
         struct let_impl_high<NAME,VALUE,NAME> : public tml::function<VALUE> 
-        {};
+        {
+            /* Debug trace (DISABLED) */
+            //static_assert( sizeof(NAME) != sizeof(NAME) , "HIGH_PHASE: Variable --> Name binding specialization instanced" );
+        };
         
     }
     
