@@ -44,6 +44,13 @@ namespace tml
             static constexpr bool result = decltype( test<T>( nullptr ) )::value;
         };
         
+        
+        template<typename T>
+        struct is_template : public std::false_type {};
+        
+        template<template<typename...> class T , typename... Ts>
+        struct is_template<T<Ts...>> : public std::true_type {};
+        
         /*
          * Here we implement the user-side tml::eval<> metafunction. 
          * 
@@ -82,16 +89,19 @@ namespace tml
         {
             using result = E;
         };
-
+        
         /*
          * This specialization matches the case when the expression passed is a function.
          * The result of the evalutation is just forwarded to the implementation, to reduce
          * template instantation stack usage (Reduce template instantation depth).
          * 
          * So the implementation just inherit the function to get its result.
+         * 
+         * The parameters are evaluated too (Could be functional expressions) to evaluate the entire
+         * expression recursively.
          */
-        template<typename F>
-        struct evaluate_impl<true,F> : public F 
+        template<bool is_function , template<typename...> class F , typename... ARGS>
+        struct evaluate_impl<is_function,F<ARGS...>> : public F<typename evaluate_impl<impl::is_function<ARGS>::result , ARGS>::result...> 
         {};
 
         /*
@@ -121,7 +131,7 @@ namespace tml
      * It just takes a value and stores it in a 'result' member.
      * 
      * Its usefull when declaring user-defined metafunctions and making them working with the rest
-     * of the library. Inheriting from this helper is a simple whay to ensure any metafunctions
+     * of the library. Inheriting from this helper is a simple whay to ensure any metafunction
      * has the correct interface.
      */
     template<typename RESULT>

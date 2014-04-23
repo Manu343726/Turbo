@@ -14,6 +14,7 @@
         <itemPath>utils/debugging_utilities.hpp</itemPath>
       </logicalFolder>
       <itemPath>functional.hpp</itemPath>
+      <itemPath>lambda.hpp</itemPath>
       <itemPath>let_expressions.hpp</itemPath>
       <itemPath>placeholders.hpp</itemPath>
     </logicalFolder>
@@ -74,6 +75,8 @@
       </item>
       <item path="impl/demangle.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="lambda.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="let_expressions.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
@@ -113,6 +116,8 @@
       <item path="impl/CPP_META_MACROS.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="impl/demangle.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="lambda.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="let_expressions.hpp" ex="false" tool="3" flavor2="0">
       </item>

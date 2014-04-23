@@ -38,6 +38,7 @@ namespace tml
          *    NAME: The variable (name) the value will be binded with in the expression.
          *    VALUE: The value to be binded.
          *    EXPRESSION: The functional expression which used the NAME variable.
+         *                This expression could have any number of parameters.
          * 
          * The implementation is divided in two phases: High-level and low-level:
          *  - The high-level phase is in charge of taking the let parameters
@@ -73,13 +74,15 @@ namespace tml
         
         /*
          * Low-level phase. The expression passed is a functional expression. 
-         * We apply let reursively on the parameter of the expression (Could be a functional
-         * expression too). 
+         * We apply let reursively on the parameters of the expression (Could be functional
+         * expressions too). 
          */
         template<typename NAME , typename VALUE , template<typename...> class EXPRESSION , typename... PARAMETERS>
         struct let_impl_low<NAME,VALUE,EXPRESSION<PARAMETERS...>> :
         public tml::function<EXPRESSION<typename let_impl_high<NAME,VALUE,PARAMETERS>::result...>> 
-        {};
+        {
+            //static_assert( sizeof(NAME) != sizeof(NAME) , "Instanced" );
+        };
         
         /*
          * General case of the low-level phase: The expression is not a functional expression,
@@ -116,7 +119,7 @@ namespace tml
         struct let_impl_high<NAME,VALUE,NAME> : public tml::function<VALUE> 
         {
             /* Debug trace (DISABLED) */
-            //static_assert( sizeof(NAME) != sizeof(NAME) , "HIGH_PHASE: Variable --> Name binding specialization instanced" );
+            //static_assert( sizeof(NAME) != sizeof(NAME) , "HIGH_PHASE: Variable --> Name binding specialization instanced" );    
         };
         
     }
@@ -132,9 +135,20 @@ namespace tml
      * 
      * The result of this metafunction is a copy of the passed expression where 
      * the ocurences of the named variable have been substituted with the value.
+     * 
+     * NOTE: Explicit "typename ::result" construct is used instead of tml::eval
+     *       here because the evaluation process chacks for function signature
+     *       (See 'tml::impl::is_function' trait in "functional.hpp"), which instanttiates
+     *       the expression. The problem is because the use of variables and/or placeholders
+     *       could lead to instantation errors in metafunctions which expect some properties
+     *       (Being a function, for example) on its parameters. Of course variables and 
+     *       and placeholders doesn't has that properties (Are just empty types), so when such
+     *       expressions are instantiated with placeholders the instantation fails.
+     *       Thats the reason to avoid tml::let here, a context (tml::let) where the usage of
+     *       placeholders and variables is common.
      */
     template<typename NAME , typename VALUE , typename EXPRESSION>
-    using let = tml::eval<impl::let_impl_high<NAME,VALUE,EXPRESSION>>;
+    using let = typename impl::let_impl_high<NAME,VALUE,EXPRESSION>::result;
     
     
     
