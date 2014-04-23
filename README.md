@@ -3,15 +3,97 @@ Turbo
 
 *C++11 metaprogramming library*
 
-*The library is currently being refactored in depth. To see the working version of the library, check the `master` branch.*
-
 ## What is Turbo?
 
 Turbo is a library dessigned to provide compile-time utilities through [template metaprogramming](http://en.wikipedia.org/wiki/Template_metaprogramming).
 
 ## Features
 
+---
+At this time (April 2014) the library is beging completely rewritten from scratch.  
+The initial implementation of the library suffers for some scalability issues due to problems (Bad dessign decissions?) on the base dessign and modules of the library.
+
+To solve that problems, the library was completly redesigned, focusing the implementation on high-order metaprogramming facilities to make developing new features easy and reduce (Avoid, if possible=) coupling on different features of the library.
+
+The reimplementation of the library is being developed at the [`reboot` branch](https://github.com/Manu343726/Turbo/tree/reboot). Its (currently) focused in a simple set of high-order features:
+
+### Uniform expression evaluation facilities
+The goal is to create a way to evaluate any kind of expression the library could work with.  
+By convention, this library works with types only. There are no templates with value parameters, basic values are provided through boxing using wrappers like `std::integral_constant`. *Note that this is not required inside the implementation itself*.  
+So an expression could be:
+  1. A simple value (Like `int`).
+  2. A *parametrized-expression*: A parametrized expression is just an expression composed from a set of components. Because this is a template metaprogramming library, the way to build expressions is through templates. So a parametrized expressions refers to any kind of template.
+  3. A *functional expression*: This is a type of parametrized expression dessigned to return a value from a set of parameters. That is, a function.
+  This library assumes that any expression with a `result` type member is a function. 
+
+     //A simple expression
+     using e1 = int; //e1 is a simple expression
+     
+     //A functional expression
+     using e2 = tml::function<int>; //e2 is a functional expression
+     
+     //A more complex expression (A functional expression)
+     using e3 = tml::transform<tml::list<int,float,double>,f<_1,_2>>;
+
+To evaluate an expression, one should evaluate the entire set of parameters of a parametrized expression, and return the result if the expression is a functional expression. Thats what `tml::eval` is dessigned for:
+
+    //Just a simple identity metafunction:
+    template<typename T>
+    struct identity
+    {
+      using result = T;
+    }
+    
+    using expression = identity<int>;
+    using result = tml::eval<identity>; //Compute the result of evaluating the expression.
+    using result = tml::eval<identity<identity<int>>>; //result is int
+
+Also, `tml::eval` could be used to take an expression and evaluate it with a new set of argumments. Following with the example above:
+
+    using binded = tml::eval<expression,identity<float>>; //We evaluate expression with identity<float> instead of identity<int>
+
+Or one could fill the expression with placeholders and evaluate the expression later when the argumments are aviable (Lazy evaluation):
+
+    using expression = f<_1,_2,_3>; //_1,_2, and _3 are placeholders
+    ...
+    using result = tml::eval<expression,float,int,double>;
+
+### Haskell-like let expressions
+
+`tml::eval` allows you to evaluate an exsisting expression with other argumments, but it hasn't enought power to be usable in all situations.
+For example, `tml::eval` only binds parameters of the main scope, so an expression with nested parametrized expressions can only be reevaluated specified the most enclosing parameter (See the tml::eval binding examples above).
+
+Turbo probides `tml::let`, a high-order metafunction similar to haskell's `let`
+Its purpose is to subsitute a value on an expression, given an specifiec variable to bind the value with:
+
+    struct X{}; //A "variable"
+    
+    using expression = tml::let<X,int,tml::function<X>>; // expression is "tml::function<int>"
+
+The power of let comes from its ability to parse the entire expression recursively, subsituting all ocurrences of the variable with the specified value:
+
+    using expression = tml::let<X,float,f<X,int,tml::function<g<X,X>>>>; //Expression is f<float,int,tml::function<g<float,float>>>
+
+Finally, Turbo extends that concept providing the `tml::multi_let` template,
+a template dessigned as a let of multiple variables:
+
+    using expression = tml::multi_let<X,Y,Z, //variables
+                                      int,char,double, //values
+                                      f<X,g<Y,Z>> //expression
+                                     >;
+
+`tml::multi_let` works currifying the multiple variable let into a chain of `tml::let` nested `tml::let` expressions. 
+
+### Lambda expressions:
+
+The ability of substituting a value in an expression provided by `tml::let` makes possible to create lambda expressions without any special effort. Turbo provides the `tml::lambda` template:
+
+    //Gets a list with the sizes of the specified types
+    using result = tml::transform<tml::lambda<_1,tml::size_of<_1>>,float,int,double>;
+
 Turbo provides a set of features to simplify type manipulation and compile-time computations:
+
+---
 
 ### Portable `to_string()` function to print type names at runtime:  
 
@@ -46,13 +128,13 @@ The function `mpl::to_string()` is specialized to provide a natural and readable
     
     int main()
     {
-    	using bool_value = mpl::boolean<true>;
-    	using char_value = mpl::character<'a'>;
-    	using integer_value = mpl::integer<10>;
-    	
-    	std::cout << mpl::to_string<bool_value>() << " ";
-    	std::cout << mpl::to_string<char_value>() << " ";
-    	std::cout << mpl::to_string<integer_value>();
+      using bool_value = mpl::boolean<true>;
+      using char_value = mpl::character<'a'>;
+      using integer_value = mpl::integer<10>;
+      
+      std::cout << mpl::to_string<bool_value>() << " ";
+      std::cout << mpl::to_string<char_value>() << " ";
+      std::cout << mpl::to_string<integer_value>();
     }
 
 Output:
@@ -66,10 +148,10 @@ The library provides a set of default metafunctions to perform **arithmetic, bit
     
     int main()
     {
-    	using a = mpl::uinteger<1>;
-    	using b = mpl::integer<2>;
-    	
-    	using c = mpl::add<a,b>; //c is mpl::integer<3>
+      using a = mpl::uinteger<1>;
+      using b = mpl::integer<2>;
+      
+      using c = mpl::add<a,b>; //c is mpl::integer<3>
     }
 
 #### Expression templates: Operators overloading for a simple and more readable expression syntax
@@ -82,14 +164,14 @@ Turbo overloads the most common operators to implement expression templates and 
     
     int main()
     {
-    	using x = mpl::integer<1>;
-    	using y = mpl::integer<2>;
-    	using z = mpl::integer<3>;
-    	
-    	//The following expression is equivalent to
-    	//mpl::add<mpl::add<mpl::mul<x,x>,mpl::mul<y,y>>,mpl::mul<z,z>>;:
+      using x = mpl::integer<1>;
+      using y = mpl::integer<2>;
+      using z = mpl::integer<3>;
+      
+      //The following expression is equivalent to
+      //mpl::add<mpl::add<mpl::mul<x,x>,mpl::mul<y,y>>,mpl::mul<z,z>>;:
     
-    	using square_length = decltype( x()*x() + y()*y() + z()*z() );
+      using square_length = decltype( x()*x() + y()*y() + z()*z() );
     }
 
 *NOTE: This is an example of the computation of the length of a 3d vector at compile-time. The example computes the square-length of the vector, because the `square_root` function still is not implemented.*
@@ -106,7 +188,7 @@ Turbo implements variadic-template based typelists through the `mpl::list` class
     
     int main()
     {
-    	std::cout << mpl::to_string<list>() << std::endl;
+      std::cout << mpl::to_string<list>() << std::endl;
     }
 > [bool,char,int,float,double]
 
@@ -127,11 +209,11 @@ The library provides a set of list operations aviable for typelists: Splitting, 
     
     int main()
     {
-    	std::cout << mpl::to_string<list>() << std::endl;
-    	std::cout << mpl::to_string<a>() << std::endl;
-    	std::cout << mpl::to_string<b>() << std::endl;
-    	std::cout << mpl::to_string<c>() << std::endl;
-    	
+      std::cout << mpl::to_string<list>() << std::endl;
+      std::cout << mpl::to_string<a>() << std::endl;
+      std::cout << mpl::to_string<b>() << std::endl;
+      std::cout << mpl::to_string<c>() << std::endl;
+      
     }
 > [bool,char,int,float,double]
 > [bool,char,int]
@@ -153,7 +235,7 @@ Using the list operations showed above **Turbo implements a sorting metafunction
     
     int main()
     {
-    	std::cout << mpl::to_string<sorted_list>() << std::endl;
+      std::cout << mpl::to_string<sorted_list>() << std::endl;
     }
  >  [double,int,float,char]
  
@@ -189,46 +271,46 @@ The library provides a set of metafunctions to work with iterators:
  - **Functions to manipulate iterators**: `mpl::next` , `mpl::previous`[DEPRECATED].
 All of the metafunctions above can be specialized to implement user-defined iterators. In fact the library provides specializations to work with typelists and integral numbers. For example:
 
-	    #include "iterators.hpp"
-    	#include "numeric_iterators.hpp"
-    	#include "list.hpp"
-    	#include "basic_types.hpp"
+      #include "iterators.hpp"
+      #include "numeric_iterators.hpp"
+      #include "list.hpp"
+      #include "basic_types.hpp"
     
-    	using list  = mpl::list<bool,char,int,float>;
-    	using begin = mpl::begin<list>;
-    	using end   = mpl::end<list>;
+      using list  = mpl::list<bool,char,int,float>;
+      using begin = mpl::begin<list>;
+      using end   = mpl::end<list>;
     
-    	/* A metafunction to print values of a typelist: */
+      /* A metafunction to print values of a typelist: */
     
-    	teplate<typename BEGIN , typename END>
-    	struct print_list
-    	{
-    		static void execute()
-    		{
-    	    	std::cout << mpl::to_string<typename BEGIN::value>() << std::endl;
-    	    
-    	    	print_list<mpl::next<BEGIN>,END>::execute();
-    		}
-    	};
+      teplate<typename BEGIN , typename END>
+      struct print_list
+      {
+        static void execute()
+        {
+            std::cout << mpl::to_string<typename BEGIN::value>() << std::endl;
+          
+            print_list<mpl::next<BEGIN>,END>::execute();
+        }
+      };
     
-    	template<typename END>
-    	struct print_list<END,END>
-    	{
-    		static void execute() {}
-    	};
+      template<typename END>
+      struct print_list<END,END>
+      {
+        static void execute() {}
+      };
     
-    	/* Possible usage: */
+      /* Possible usage: */
     
-    	using printer = print_list<mpl::begin<list> , mpl::end<list>>;
-    	using partial_printer = print_list<decltype( mpl::begin<list>() + mpl::size_t<2>() )  , mpl::end<list>>;
+      using printer = print_list<mpl::begin<list> , mpl::end<list>>;
+      using partial_printer = print_list<decltype( mpl::begin<list>() + mpl::size_t<2>() )  , mpl::end<list>>;
     
     
-    	int main()
-    	{
-    		printer::execute();
-    		std::cout << std::endl;
-    		partial_printer::execute();
-    	}
+      int main()
+      {
+        printer::execute();
+        std::cout << std::endl;
+        partial_printer::execute();
+      }
 > bool
 > char
 > int
@@ -261,23 +343,23 @@ That loops works through iterators: What the loops do is to execute the specifie
 #### `mpl::for_each`
 This loop is dessigned to apply the specified kernel to every type from a set of types, and return a typelist filled with the set of applications.  Its equivalent "runtime" code is: 
  
-	template<typename iterator_type , typename result_type>
-	std::vector<result_type> for_each(iterator_type begin , iterator_type end , result_type(*)(typename iterator_type::value_type) kernel)
-	{
-		std::vector<result_type> output;
-		
-		for( auto& it = begin ; it != end ; ++it)
-			output.push_back( kernel(*it) );
-		
-		return output;	
-	}
+  template<typename iterator_type , typename result_type>
+  std::vector<result_type> for_each(iterator_type begin , iterator_type end , result_type(*)(typename iterator_type::value_type) kernel)
+  {
+    std::vector<result_type> output;
+    
+    for( auto& it = begin ; it != end ; ++it)
+      output.push_back( kernel(*it) );
+    
+    return output;  
+  }
  
 A kernel is a metafunction of the form:
     
      template<typename CURRENT>
      struct kernel
      {
-     	using result = /* Operation involving CURRENT */
+      using result = /* Operation involving CURRENT */
      };
 In other words, a one parameter function.
 
@@ -292,14 +374,14 @@ For example:
     template<typename T>
     struct compute_sizeof
     {
-    	using result = mpl::size_t<sizeof(T)>;
+      using result = mpl::size_t<sizeof(T)>;
     };
     
     using result = mpl::for_each<begin,end,compute_sizeof>;
     
     int main()
     {
-    	std::cout << mpl::to_string<result>() << std::endl;
+      std::cout << mpl::to_string<result>() << std::endl;
     }
  Output:
  > [1,1,4,4,8]
@@ -326,51 +408,51 @@ Now the output is:
 
 `mpl::for_loop` is dessigned to **execute iterative computations**, in other words, does a loop over a range, and the kernel does computations over that range, storing the result and using the previous value of the result. This could be viewed as a for loop with an aux varialbe which stores the result of the computation, and the body of that loop (The kernel acts as the body of the loop). For example:
 
-	int result;
-	
-	for(auto& it = begin ; it != end ; ++it)
-	{                  
-		result = *it * result;
-	}                  
+  int result;
+  
+  for(auto& it = begin ; it != end ; ++it)
+  {                  
+    result = *it * result;
+  }                  
 
 So the kernel has two parameters: **The current value of the iterator and the previous value of the result**:
 
-	template<typename CURRENT , typename PREVIOUS_RESULT>
-	struct kernel
-	{
-		using result = /* ... */
-	};
+  template<typename CURRENT , typename PREVIOUS_RESULT>
+  struct kernel
+  {
+    using result = /* ... */
+  };
 The loop passes the `result` of the current kernel application to the next iteration. So **the loop needs the initial value of the "aux variable"**. `mpl::for_loop` is defined as follows:
 
-	template<typename BEGIN , typename END , typename INITIAL_VALUE , template<typename,typename> class KERNEL>
-	using for_loop = /*...*/
+  template<typename BEGIN , typename END , typename INITIAL_VALUE , template<typename,typename> class KERNEL>
+  using for_loop = /*...*/
 
 In addition, a kernel of a for loop must define a public boolean constant that specifies if the loop should be aborted. In other words, **the user could specify a break condition for the loop through the kernel**:
 
-	template<typename CURRENT , typename PREVIOUS_RESULT>
-	struct kernel
-	{
-		using result = /* ... */
-		static const bool abort = /* ... */
-	};
+  template<typename CURRENT , typename PREVIOUS_RESULT>
+  struct kernel
+  {
+    using result = /* ... */
+    static const bool abort = /* ... */
+  };
 
 An example of the use of `mpl::for_loop` could be the computation of the summation of a range of numbers:
 
-	using begin = mpl::make_uinteger_forward_iterator<0>;
-	using end   = mpl::make_uinteger_forward_iterator<10>;
-	
-	template<typename CURRENT_VALUE , typename PREVIOUS_RESULT>
-	struct kernel : public mpl::no_abort_kernel //This defines the abort flag as false
-	{
-		using result = mpl::add<PREVIOUS_RESULT,CURRENT_VALUE>;
-	};
-	
-	using result = mpl::for_loop<begin,end,mpl::uinteger<0>,kernel>;
-	
-	int main()
-	{
-		std::cout << mpl::to_string<result>() << std::cout;
-	}
+  using begin = mpl::make_uinteger_forward_iterator<0>;
+  using end   = mpl::make_uinteger_forward_iterator<10>;
+  
+  template<typename CURRENT_VALUE , typename PREVIOUS_RESULT>
+  struct kernel : public mpl::no_abort_kernel //This defines the abort flag as false
+  {
+    using result = mpl::add<PREVIOUS_RESULT,CURRENT_VALUE>;
+  };
+  
+  using result = mpl::for_loop<begin,end,mpl::uinteger<0>,kernel>;
+  
+  int main()
+  {
+    std::cout << mpl::to_string<result>() << std::cout;
+  }
 Output:
 > 45
 
@@ -405,8 +487,8 @@ To deal with that problem, the library provides the alias `mpl::decimal`, which 
      
      int main()
      {
-     	std::cout << "Radious: " << mpl::to_string<radious>() << std::endl;
-     	std::cout << "Circle length: " << mpl::to_string<circle_length>() << std::endl;
+      std::cout << "Radious: " << mpl::to_string<radious>() << std::endl;
+      std::cout << "Circle length: " << mpl::to_string<circle_length>() << std::endl;
      }
 > Radious: 10  
 Circle length: 62,831853
@@ -424,13 +506,13 @@ In addition to the arithmetic operations shared with the integral values, Turbo 
     
     int main()
     {
-    	std::cout << "sin(0º) = "  << mpl::to_string<math::sin<deg_0>>() << std::endl;
-    	std::cout << "sin(45º) = " << mpl::to_string<math::sin<deg_45>>() << std::endl;
-    	std::cout << "sin(90º) = " << mpl::to_string<math::sin<deg_90>>() << std::endl;
-    	
-    	std::cout << "cos(0º) = "  << mpl::to_string<math::cos<deg_0>>() << std::endl;
-    	std::cout << "cos(45º) = " << mpl::to_string<math::cos<deg_45>>() << std::endl;
-    	std::cout << "cos(90º) = " << mpl::to_string<math::cos<deg_90>>() << std::endl;
+      std::cout << "sin(0º) = "  << mpl::to_string<math::sin<deg_0>>() << std::endl;
+      std::cout << "sin(45º) = " << mpl::to_string<math::sin<deg_45>>() << std::endl;
+      std::cout << "sin(90º) = " << mpl::to_string<math::sin<deg_90>>() << std::endl;
+      
+      std::cout << "cos(0º) = "  << mpl::to_string<math::cos<deg_0>>() << std::endl;
+      std::cout << "cos(45º) = " << mpl::to_string<math::cos<deg_45>>() << std::endl;
+      std::cout << "cos(90º) = " << mpl::to_string<math::cos<deg_90>>() << std::endl;
     }
 > sin(0º) = 0  
 sin(45º) = 0,707107   
@@ -446,29 +528,29 @@ As the example shows, the implementation has little precision errors (`cos(90º)
 #### Square-root
 The library [implements a square root function](https://github.com/Manu343726/Turbo/blob/dynamic_fixed_point/sqrt.hpp), `math::sqrt`, computing the value through the Newton's method to aproximate function roots:
 
-	using two = mpl::decimal<2>;
-	using result = math::sqrt<two>;
-	
-	int main()
-	{
-		std::cout << mpl::to_string<result>() << std::endl;
-	}
+  using two = mpl::decimal<2>;
+  using result = math::sqrt<two>;
+  
+  int main()
+  {
+    std::cout << mpl::to_string<result>() << std::endl;
+  }
 Output:
 > 1,4142
 
 ### Compile-time matrix algebra
 Turbo implements 3x3 and 4x4 matrices to provide **compile-time matrix algebra**.  It supports matrix addition, substraction, and multiplication. For example:
 
-	#include "matrix3x3.hpp"
-	
-	using unity = math::unity3x3<mpl::decimal>
-	using a = decltype( (unity() * unity()) * mpl::decimal<4>() );
-	using b = decltype( a() + a() );
-	
-	int main()
-	{
-		std::cout << mpl::to_string<b>() << std::endl;
-	}
+  #include "matrix3x3.hpp"
+  
+  using unity = math::unity3x3<mpl::decimal>
+  using a = decltype( (unity() * unity()) * mpl::decimal<4>() );
+  using b = decltype( a() + a() );
+  
+  int main()
+  {
+    std::cout << mpl::to_string<b>() << std::endl;
+  }
 > | 8 0 0 |  
 | 0 8 0 |  
 | 0 0 8 |
@@ -476,23 +558,23 @@ Turbo implements 3x3 and 4x4 matrices to provide **compile-time matrix algebra**
 ### Compile-time 2d/3d transformations
 In adition to matrices, Turbo implements 2d/3d/4d vectors and provides **transformation matrices** such as rotations, scales, translations, etc. For example:
 
-	#include "matrix4x4.hpp"
-	#include "vector.hpp"
-	
-	using v1 = math::vec3<mpl::decimal<1> , mpl::decimal<1> , mpl::decimal<1>>;
-	using translation = mpl::vector<mpl::decimal<1> , mpl::decimal<0> , mpl::decimal<0>>;
-	using angle = decltype(math::pi() / mpl::decimal<2>());
-	using transformation = decltype( math::translate<translation>() * mpl::rotate<angle,math::x_axis>() ); 
-	using v2 = decltype( transformation() * v1() );
-	
-	int main()
-	{
-		std::cout << mpl::to_string<v1>() << std::endl;
-		std::cout << mpl::to_string<v2>() << std::endl;
-	}
+  #include "matrix4x4.hpp"
+  #include "vector.hpp"
+  
+  using v1 = math::vec3<mpl::decimal<1> , mpl::decimal<1> , mpl::decimal<1>>;
+  using translation = mpl::vector<mpl::decimal<1> , mpl::decimal<0> , mpl::decimal<0>>;
+  using angle = decltype(math::pi() / mpl::decimal<2>());
+  using transformation = decltype( math::translate<translation>() * mpl::rotate<angle,math::x_axis>() ); 
+  using v2 = decltype( transformation() * v1() );
+  
+  int main()
+  {
+    std::cout << mpl::to_string<v1>() << std::endl;
+    std::cout << mpl::to_string<v2>() << std::endl;
+  }
 > (1,1,1)  
 (2,1,-1)
-	
+  
 
 ### Compile-time string manipulation
 Turbo explodes C++11 generalized constant expressions to manipulate raw strings and create types (metavariables) which the library can work with using template metaprogramming. For example:
