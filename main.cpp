@@ -30,7 +30,7 @@
 
 using namespace tml::placeholders;
 
-template<typename ARGS>
+template<typename A, typename B, typename C>
 struct f
 {
     using result = decltype(nullptr);
@@ -39,8 +39,13 @@ struct f
 
 //tml::let ussage example:
 struct X {}; //Variable
+struct Y {}; //Variable
+struct Z {}; //Variable
 
-using let = tml::let<X,int,f<X>>;
+using let = tml::multi_let<X,Y,Z,
+                           float,int,double,
+                           f<X,Y,Z>
+                          >;
 
 using result = tml::eval<let>;
 
