@@ -103,7 +103,10 @@ namespace tml
          * The result is the result of evaluating the function with that parameters.
          */
         template<bool is_function , template<typename...> class F , typename... PLACEHOLDERS , typename ARG , typename... ARGS>
-        struct evaluate_impl<is_function,F<PLACEHOLDERS...> , ARG , ARGS...> : public F<ARG,ARGS...>
+        struct evaluate_impl<is_function,F<PLACEHOLDERS...> , ARG , ARGS...> : 
+        public F<typename evaluate_impl<impl::is_function<ARG>::result , ARG>::result,
+                 typename evaluate_impl<impl::is_function<ARGS>::result , ARGS>::result...
+                >
         {
             //static_assert( sizeof...(ARGS) == 5 , "ERROR" );
             //static_assert( sizeof...(PLACEHOLDERS) == (0 + sizeof...(ARGS)) , "Wrong number of function call parameters." );  

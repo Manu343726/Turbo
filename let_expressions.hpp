@@ -76,9 +76,9 @@ namespace tml
          * We apply let reursively on the parameter of the expression (Could be a functional
          * expression too). 
          */
-        template<typename NAME , typename VALUE , template<typename> class EXPRESSION , typename PARAMETER>
-        struct let_impl_low<NAME,VALUE,EXPRESSION<PARAMETER>> :
-        public tml::function<EXPRESSION<typename let_impl_high<NAME,VALUE,PARAMETER>::result>> 
+        template<typename NAME , typename VALUE , template<typename...> class EXPRESSION , typename... PARAMETERS>
+        struct let_impl_low<NAME,VALUE,EXPRESSION<PARAMETERS...>> :
+        public tml::function<EXPRESSION<typename let_impl_high<NAME,VALUE,PARAMETERS>::result...>> 
         {};
         
         /*

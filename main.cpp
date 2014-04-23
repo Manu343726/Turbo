@@ -42,10 +42,7 @@ struct X {}; //Variable
 struct Y {}; //Variable
 struct Z {}; //Variable
 
-using let = tml::multi_let<X,Y,Z,
-                           float,int,double,
-                           f<X,Y,Z>
-                          >;
+using let = tml::let<X,int,f<X,float,X>>;
 
 using result = tml::eval<let>;
 
