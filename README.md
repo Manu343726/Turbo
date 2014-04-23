@@ -9,7 +9,91 @@ Turbo is a library dessigned to provide compile-time utilities through [template
 
 ## Features
 
+---
+At this time (April 2014) the library is beging completely rewritten from scratch.  
+The initial implementation of the library suffers for some scalability issues due to problems (Bad dessign decissions?) on the base dessign and modules of the library.
+
+To solve that problems, the library was completly redesigned, focusing the implementation on high-order metaprogramming facilities to make developing new features easy and reduce (Avoid, if possible=) coupling on different features of the library.
+
+The reimplementation of the library is being developed at the [`reboot` branch](https://github.com/Manu343726/Turbo/tree/reboot). Its (currently) focused in a simple set of high-order features:
+
+### Uniform expression evaluation facilities
+The goal is to create a way to evaluate any kind of expression the library could work with.  
+By convention, this library works with types only. There are no templates with value parameters, basic values are provided through boxing using wrappers like `std::integral_constant`. *Note that this is not required inside the implementation itself*.  
+So an expression could be:
+  1. A simple value (Like `int`).
+  2. A *parametrized-expression*: A parametrized expression is just an expression composed from a set of components. Because this is a template metaprogramming library, the way to build expressions is through templates. So a parametrized expressions refers to any kind of template.
+  3. A *functional expression*: This is a type of parametrized expression dessigned to return a value from a set of parameters. That is, a function.
+  This library assumes that any expression with a `result` type member is a function. 
+
+     //A simple expression
+     using e1 = int; //e1 is a simple expression
+     
+     //A functional expression
+     using e2 = tml::function<int>; //e2 is a functional expression
+     
+     //A more complex expression (A functional expression)
+     using e3 = tml::transform<tml::list<int,float,double>,f<_1,_2>>;
+
+To evaluate an expression, one should evaluate the entire set of parameters of a parametrized expression, and return the result if the expression is a functional expression. Thats what `tml::eval` is dessigned for:
+
+    //Just a simple identity metafunction:
+    template<typename T>
+    struct identity
+    {
+      using result = T;
+    }
+    
+    using expression = identity<int>;
+    using result = tml::eval<identity>; //Compute the result of evaluating the expression.
+    using result = tml::eval<identity<identity<int>>>; //result is int
+
+Also, `tml::eval` could be used to take an expression and evaluate it with a new set of argumments. Following with the example above:
+
+    using binded = tml::eval<expression,identity<float>>; //We evaluate expression with identity<float> instead of identity<int>
+
+Or one could fill the expression with placeholders and evaluate the expression later when the argumments are aviable (Lazy evaluation):
+
+    using expression = f<_1,_2,_3>; //_1,_2, and _3 are placeholders
+    ...
+    using result = tml::eval<expression,float,int,double>;
+
+### Haskell-like let expressions
+
+`tml::eval` allows you to evaluate an exsisting expression with other argumments, but it hasn't enought power to be usable in all situations.
+For example, `tml::eval` only binds parameters of the main scope, so an expression with nested parametrized expressions can only be reevaluated specified the most enclosing parameter (See the tml::eval binding examples above).
+
+Turbo probides `tml::let`, a high-order metafunction similar to haskell's `let`
+Its purpose is to subsitute a value on an expression, given an specifiec variable to bind the value with:
+
+    struct X{}; //A "variable"
+    
+    using expression = tml::let<X,int,tml::function<X>>; // expression is "tml::function<int>"
+
+The power of let comes from its ability to parse the entire expression recursively, subsituting all ocurrences of the variable with the specified value:
+
+    using expression = tml::let<X,float,f<X,int,tml::function<g<X,X>>>>; //Expression is f<float,int,tml::function<g<float,float>>>
+
+Finally, Turbo extends that concept providing the `tml::multi_let` template,
+a template dessigned as a let of multiple variables:
+
+    using expression = tml::multi_let<X,Y,Z, //variables
+                                      int,char,double, //values
+                                      f<X,g<Y,Z>> //expression
+                                     >;
+
+`tml::multi_let` works currifying the multiple variable let into a chain of `tml::let` nested `tml::let` expressions. 
+
+### Lambda expressions:
+
+The ability of substituting a value in an expression provided by `tml::let` makes possible to create lambda expressions without any special effort. Turbo provides the `tml::lambda` template:
+
+    //Gets a list with the sizes of the specified types
+    using result = tml::transform<tml::lambda<_1,tml::size_of<_1>>,float,int,double>;
+
 Turbo provides a set of features to simplify type manipulation and compile-time computations:
+
+---
 
 ### Portable `to_string()` function to print type names at runtime:  
 
