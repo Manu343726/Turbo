@@ -144,10 +144,16 @@ namespace complex_lambda_example
     
     using let = tml::let<_1,long long int,square<size_of<_1>>>;
     
+    using multi_let = tml::multi_let<X,Y,Z,
+                                     int,int,int,
+                                     f<X,Y,Z>
+                                    >;
+    
 int main()
 {
     
     std::cout << tml::impl::demangle( typeid( let ).name() ) << std::endl;
+    std::cout << tml::impl::demangle( typeid( multi_let ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( lambda_result ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( example_call_1 ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( example_call_2 ).name() ) << std::endl;

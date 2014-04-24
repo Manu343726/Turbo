@@ -188,7 +188,7 @@ namespace tml
         struct pop_back<list<PROCESSED...>,list<HEAD,TAIL...>,false> : public pop_back<list<PROCESSED...,HEAD>,list<TAIL...>,sizeof...(TAIL) <= 1> {};
         
         template<typename... PROCESSED , typename HEAD>
-        struct pop_back<list<PROCESSED...>,list<HEAD>,true> : public tml::function<HEAD> {};
+        struct pop_back<list<PROCESSED...>,list<HEAD>,true> : public tml::function<list<PROCESSED...>> {};
         
         /*
          * Returns the last element of a list
@@ -258,8 +258,8 @@ namespace tml
              * Which means the processed params list and the non_processed params list has the same length 
              * in the next call.
              */
-            template<typename... LEFT_LIST , typename HEAD , typename... TAIL , bool middle>
-            struct split_in_middle<list<LEFT_LIST...> , list<HEAD,TAIL...> , middle>
+            template<typename... LEFT_LIST , typename HEAD , typename... TAIL>
+            struct split_in_middle<list<LEFT_LIST...> , list<HEAD,TAIL...> , false>
             {
                 using next_call = split_in_middle<list<LEFT_LIST...,HEAD>,list<TAIL...>,( sizeof...(LEFT_LIST) + 1 ) == sizeof...(TAIL)>;
                 
@@ -267,10 +267,20 @@ namespace tml
                 using values = typename next_call::values;
             };
             
+            /*
+             * Base case:
+             */
+            template<typename... LEFT_LIST , typename... RIGHT_LIST>
+            struct split_in_middle<list<LEFT_LIST...>,list<RIGHT_LIST...>,true>
+            {
+                using variables = list<LEFT_LIST...>;
+                using values = list<RIGHT_LIST...>;
+            };
+            
             using args_without_expression = typename pop_back<list<>,ARGS>::result;
             
-            using variables = typename split_in_middle<args_without_expression,list<>,false>::variables;
-            using values    = typename split_in_middle<args_without_expression,list<>,false>::values;
+            using variables = typename split_in_middle<list<>,args_without_expression,false>::variables;
+            using values    = typename split_in_middle<list<>,args_without_expression,false>::values;
             
             
             /*
