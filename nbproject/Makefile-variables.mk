@@ -15,13 +15,13 @@ CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux-x86/package
 CND_PACKAGE_NAME_Debug=turbo.tar
 CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/turbo.tar
 # Release configuration
-CND_PLATFORM_Release=GNU-Linux-x86
-CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux-x86
+CND_PLATFORM_Release=MinGW-Windows
+CND_ARTIFACT_DIR_Release=dist/Release/MinGW-Windows
 CND_ARTIFACT_NAME_Release=turbo
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/turbo
-CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux-x86/package
+CND_ARTIFACT_PATH_Release=dist/Release/MinGW-Windows/turbo
+CND_PACKAGE_DIR_Release=dist/Release/MinGW-Windows/package
 CND_PACKAGE_NAME_Release=turbo.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/turbo.tar
+CND_PACKAGE_PATH_Release=dist/Release/MinGW-Windows/package/turbo.tar
 #
 # include compiler specific variables
 #

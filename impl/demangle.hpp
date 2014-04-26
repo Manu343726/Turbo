@@ -25,6 +25,7 @@
 #include <sstream>
 #include <typeinfo>
 #include <iterator>
+#include <cstdlib>
 
 /*
  * This header provides the tml::impl::demangle() function, a portable 
@@ -73,8 +74,8 @@ namespace impl{
 
         std::string result{ demangled_name };
 
-        free( demangled_name ); //VERY IMPORTANT! The result of __cxa_demangle() was malloc()ed, should be released
-                                //using free(). See __cxa_demangle() documentation.
+        std::free( demangled_name ); //VERY IMPORTANT! The result of __cxa_demangle() was malloc()ed, should be released
+                                     //using free(). See __cxa_demangle() documentation.
                                 
         return result;
     }
