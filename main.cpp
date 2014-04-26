@@ -148,13 +148,16 @@ namespace complex_lambda_example
                                      int,int,int,
                                      f<X,Y,Z>
                                     >;
-    
+    using multi_lambda = tml::multi_lambda<_1,_2,_3 , f<_1,_2,_3>>;
+    using multi_lambda_result = tml::eval<multi_lambda,int,int,int>;
+                                           
 int main()
 {
     
     std::cout << tml::impl::demangle( typeid( let ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( multi_let ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( lambda_result ).name() ) << std::endl;
+    std::cout << tml::impl::demangle( typeid( multi_lambda_result ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( example_call_1 ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( example_call_2 ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( example_call_3 ).name() ) << std::endl;

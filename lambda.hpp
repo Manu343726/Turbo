@@ -75,7 +75,82 @@ namespace tml
         struct evaluate_impl<is_function,lambda<X,BODY>,ARG> : 
             public tml::function<typename lambda<X,BODY>::result<tml::eval<ARG>>> 
         {};
+        
+
+        /*
+         * Represents a multiple-variable lambda expression.
+         * 
+         * A lambda expression is just a template that holds a set of variables and a functional
+         * expression (The lambda body) where the variable is used. 
+         * The lambda expression is dessigned to act as a functional expression to be evaluated lazily,
+         * when the values of the parameters are specified. Thats why the 'result'  member of function entities
+         * is parametrized.
+         * 
+         * Because the 'result' member doesn't work like in other function entities (In other function entities returns
+         * the result, in a lambda computes the result), a lambda cannot be considered a classic function entity.
+         * The implementation trait 'tml::impl::is_function' and the 'tml::eval' implementation are overrided to
+         * cover this special behaviour of lambda expressions. 
+         */
+        template<typename BODY , typename... VARIABLES>
+        struct multi_lambda
+        {
+            template<typename... ARGS>
+            using result = tml::eval<tml::multi_let<VARIABLES...,
+                                                    ARGS...,
+                                                    BODY
+                                                   >>;
+        };
+        
+   
+        
+        /*
+         * Variadic packs must be placed at the end of the set of template argumments,
+         * but tml::multi_lambda takes variables first and the lambda body later.
+         * 
+         * This templates places the body parameter to the begin of the tml::impl::multi_lambda 
+         * template to allow that template read the pack of variables.
+         */
+        template<typename ARGS>
+        struct lambda_builder;
+        
+        template<typename... ARGS>
+        struct lambda_builder<tml::impl::list<ARGS...>>
+        {
+            static_assert( sizeof...(ARGS) != sizeof...(ARGS) , "Builder instanced" );
+        };
+        
+        template<typename... VARIABLES , typename BODY>
+        struct lambda_builder<tml::impl::list<VARIABLES...,BODY>> : public tml::function<multi_lambda<BODY,VARIABLES...>>
+        {};
+        
+        /*
+         * A lambda expression is not considered a function entity (See documentation above)
+         */
+        template<typename... VARIABLES , typename BODY>
+        struct is_function<multi_lambda<BODY,VARIABLES...>>
+        {
+            static constexpr bool result = false;
+        };
+        
+        /*
+         * tml::let is overrided to compute the result of the lambda when the lambda itselft is evaluated.
+         * Of course a lambda have to be evaluated with its calling parameter, like:
+         * 
+         *     using result = tml::eval<lambda,params>;
+         * 
+         * so tml::eval acts as a calling high-level metafunction (See the tml::eval documentation) always when a 
+         * lambda is passed.
+         */
+        template<typename... VARIABLES , typename BODY , typename... ARGS , bool is_function>
+        struct evaluate_impl<is_function,multi_lambda<BODY,VARIABLES...>,ARGS...> : 
+            public tml::function<typename multi_lambda<BODY,VARIABLES...>::template result<tml::eval<ARGS>...>>
+        {
+            static_assert( sizeof(BODY) != sizeof(BODY) , "Instanced" );
+        };
     }
+    
+    template<typename... ARGS>
+    using multi_lambda = typename tml::impl::lambda_builder<tml::impl::list<ARGS...>>::result;
 }
 
 #endif	/* LAMBDA_HPP */
