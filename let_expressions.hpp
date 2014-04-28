@@ -19,7 +19,7 @@
 ******************************************************************************/
 
 #ifndef LET_HPP
-#define	LET_HPP
+#define LET_HPP
 
 /*
  * Haskell-like let expressions.
@@ -202,6 +202,13 @@ namespace tml
         template<typename HEAD>
         struct back<list<HEAD>> : public tml::function<HEAD> {};
         
+        template<typename LIST , typename T>
+        struct push_back;
+        
+        template<typename... Ts , typename T>
+        struct push_back<tml::impl::list<Ts...>,T> : public tml::function<tml::impl::list<Ts...,T>>
+        {};
+        
             
         /*
          * Evaluate a multiple-variable let expression and returns the currified unary let equivalent expression.
@@ -344,5 +351,4 @@ namespace tml
     using multi_let = typename impl::multi_let_currifier<impl::list<ARGS...>>::result;
 }
 
-#endif	/* LET_HPP */
-
+#endif  /* LET_HPP */

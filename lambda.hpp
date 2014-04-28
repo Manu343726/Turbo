@@ -113,10 +113,22 @@ namespace tml
         template<typename ARGS>
         struct lambda_builder;
         
+        template<typename ARGS>
+        struct lambda_builder_2;
+        
+        template<typename... ARGS>
+        struct lambda_builder_2<tml::impl::list<ARGS...>> : public tml::function<multi_lambda<ARGS...>>
+        {};
+        
         template<typename... ARGS>
         struct lambda_builder<tml::impl::list<ARGS...>>
         {
-            static_assert( sizeof...(ARGS) != sizeof...(ARGS) , "Builder instanced" );
+            //static_assert( sizeof...(ARGS) != sizeof...(ARGS) , "Builder instanced" );
+        
+            using body = typename tml::impl::back<tml::impl::list<ARGS...>>::result;
+            using vars = typename tml::impl::pop_back<tml::impl::list<>,tml::impl::list<ARGS...>,false>::result;
+            
+            using result = typename lambda_builder_2<typename tml::impl::push_back<vars,body>::result>::result;
         };
         
         template<typename... VARIABLES , typename BODY>
@@ -145,7 +157,7 @@ namespace tml
         struct evaluate_impl<is_function,multi_lambda<BODY,VARIABLES...>,ARGS...> : 
             public tml::function<typename multi_lambda<BODY,VARIABLES...>::template result<tml::eval<ARGS>...>>
         {
-            static_assert( sizeof(BODY) != sizeof(BODY) , "Instanced" );
+            //static_assert( sizeof(BODY) != sizeof(BODY) , "Instanced" );
         };
     }
     
@@ -154,4 +166,12 @@ namespace tml
 }
 
 #endif	/* LAMBDA_HPP */
+
+
+
+
+
+
+
+
 
