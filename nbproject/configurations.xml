@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="94">
+<configurationDescriptor version="90">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
@@ -15,6 +15,7 @@
       </logicalFolder>
       <itemPath>functional.hpp</itemPath>
       <itemPath>lambda.hpp</itemPath>
+      <itemPath>lazy.hpp</itemPath>
       <itemPath>let_expressions.hpp</itemPath>
       <itemPath>placeholders.hpp</itemPath>
     </logicalFolder>
@@ -77,6 +78,8 @@
       </item>
       <item path="lambda.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="lazy.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="let_expressions.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
@@ -118,6 +121,8 @@
       <item path="impl/demangle.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="lambda.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="lazy.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="let_expressions.hpp" ex="false" tool="3" flavor2="0">
       </item>

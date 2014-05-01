@@ -24,6 +24,7 @@
 #include "lambda.hpp"
 
 #include "impl/demangle.hpp"
+#include "lazy.hpp"
 
 #include <type_traits>
 #include <typeinfo>
@@ -144,20 +145,42 @@ namespace complex_lambda_example
     
     using let = tml::let<_1,long long int,square<size_of<_1>>>;
     
-    using multi_let = tml::multi_let<X,Y,Z,
+    using multi_let = tml::multi_let<_1,_2,_3,
                                      int,int,int,
-                                     f<X,Y,Z>
+                                     f<_1,_2,_3>
                                     >;
+    
+    template<typename... ARGS>
+    using multi_let_result = tml::eval<tml::multi_let<_1,_2,_3,
+                                                      ARGS...,
+                                                      f<_1,_2,_3>
+                                                     >
+                                      >;
+    
     using multi_lambda = tml::multi_lambda<_1,_2,_3 , f<_1,_2,_3>>;
-    using multi_lambda_result = tml::eval<multi_lambda,int,int,int>;
+    //using multi_lambda_result = tml::eval<multi_lambda,int,int,int>;
+    
+    
+    template<typename F , typename... ARGS>
+    using map = tml::impl::list<tml::eval<F,ARGS>...>;
+    
+    template<typename V>
+    using increment = tml::function<std::integral_constant<int,V::value + 1>>;
+    
+    using result = map<tml::lazy<increment> , std::integral_constant<int,0>,
+                                              std::integral_constant<int,1>,
+                                              std::integral_constant<int,2>,
+                                              std::integral_constant<int,3>
+                      >;
                                            
 int main()
 {
     
     std::cout << tml::impl::demangle( typeid( let ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( multi_let ).name() ) << std::endl;
+    std::cout << tml::impl::demangle( typeid( multi_let_result<int,int,int> ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( lambda_result ).name() ) << std::endl;
-    std::cout << tml::impl::demangle( typeid( multi_lambda_result ).name() ) << std::endl;
+    std::cout << tml::impl::demangle( typeid( result ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( example_call_1 ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( example_call_2 ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( example_call_3 ).name() ) << std::endl;
