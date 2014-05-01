@@ -71,8 +71,8 @@ namespace tml
          * so tml::eval acts as a calling high-level metafunction (See the tml::eval documentation) always when a 
          * lambda is passed.
          */
-        template<typename X , typename BODY , typename ARG , bool is_function>
-        struct evaluate_impl<is_function,lambda<X,BODY>,ARG> : 
+        template<typename X , typename BODY , typename ARG>
+        struct evaluate_impl<lambda<X,BODY>,ARG> : 
             public tml::function<typename lambda<X,BODY>::result<tml::eval<ARG>>> 
         {};
         
@@ -144,7 +144,7 @@ namespace tml
         {
             static constexpr bool result = false;
             
-            static_assert( sizeof(BODY) != sizeof(BODY) , "Instanced" );
+            //static_assert( sizeof(BODY) != sizeof(BODY) , "Instanced" );
         };
         
         /*
@@ -157,7 +157,7 @@ namespace tml
          * lambda is passed.
          */
         template<typename... VARIABLES , typename BODY , typename... ARGS>
-        struct evaluate_impl<true,multi_lambda<BODY,VARIABLES...>,ARGS...> : 
+        struct evaluate_impl<multi_lambda<BODY,VARIABLES...>,ARGS...> : 
             public tml::function<typename multi_lambda<BODY,VARIABLES...>::template result<tml::eval<ARGS>...>>
         {
             //static_assert( sizeof(BODY) != sizeof(BODY) , "Instanced" );

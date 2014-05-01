@@ -138,7 +138,7 @@ namespace complex_lambda_example
     {};
     
     using example_call_1 = transform<add_pointer<_1>   ,float,int,double>;
-    using example_call_2 = transform<add_lvalue_ref<_1>,float,int,double>;
+    using example_call_2 = transform<tml::lazy<add_lvalue_ref>,float,int,double>;
     using example_call_3 = transform<tml::lambda<_1,f<tml::function<_1>,tml::function<add_pointer<_1>>,char>> ,char,float,int,double>;
 
     static_assert( tml::impl::is_function<add_pointer<_1>>::result , "ERROR" );

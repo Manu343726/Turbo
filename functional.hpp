@@ -77,7 +77,7 @@ namespace tml
          * 
          *  Of course this metafunction is a function too, so it stores the result of the evaluation in a 'result' member type.
          */
-        template<bool IS_FUNCTION , typename E , typename... ARGS>
+        template<typename E , typename... ARGS>
         struct evaluate_impl;
 
         /* This is the most simple case: There are no evaluation parameters (So the expression could be any
@@ -85,7 +85,7 @@ namespace tml
          * The result of evaluatiing such expression is the expression itself.
          */
         template<typename E>
-        struct evaluate_impl<false,E>
+        struct evaluate_impl<E>
         {
             using result = E;
         };
@@ -100,8 +100,8 @@ namespace tml
          * The parameters are evaluated too (Could be functional expressions) to evaluate the entire
          * expression recursively.
          */
-        template<bool is_function , template<typename...> class F , typename... ARGS>
-        struct evaluate_impl<is_function,F<ARGS...>> : public F<typename evaluate_impl<impl::is_function<ARGS>::result , ARGS>::result...> 
+        template<template<typename...> class F , typename... ARGS>
+        struct evaluate_impl<F<ARGS...>> : public F<typename evaluate_impl<ARGS>::result...> 
         {};
 
         /*
@@ -112,10 +112,10 @@ namespace tml
          * 
          * The result is the result of evaluating the function with that parameters.
          */
-        template<bool is_function , template<typename...> class F , typename... PLACEHOLDERS , typename ARG , typename... ARGS>
-        struct evaluate_impl<is_function,F<PLACEHOLDERS...> , ARG , ARGS...> : 
-        public F<typename evaluate_impl<impl::is_function<ARG>::result , ARG>::result,
-                 typename evaluate_impl<impl::is_function<ARGS>::result , ARGS>::result...
+        template<template<typename...> class F , typename... PLACEHOLDERS , typename ARG , typename... ARGS>
+        struct evaluate_impl<F<PLACEHOLDERS...> , ARG , ARGS...> : 
+        public F<typename evaluate_impl<ARG>::result,
+                 typename evaluate_impl<ARGS>::result...
                 >
         {
             //static_assert( sizeof...(ARGS) == 5 , "ERROR" );
@@ -164,7 +164,7 @@ namespace tml
      *             functional expressions).
      */
     template<typename EXPRESSION , typename... ARGS>
-    using eval = typename impl::evaluate_impl<impl::is_function<EXPRESSION>::result, EXPRESSION , ARGS...>::result;
+    using eval = typename impl::evaluate_impl<EXPRESSION , ARGS...>::result;
     
 }
 

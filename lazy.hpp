@@ -64,8 +64,8 @@ namespace tml
      */
     namespace impl
     {
-        template<template<typename...> class F , typename ARG , typename... ARGS , bool is_function>
-        struct evaluate_impl<is_function,tml::lazy<F>,ARG,ARGS...> : 
+        template<template<typename...> class F , typename ARG , typename... ARGS>
+        struct evaluate_impl<tml::lazy<F>,ARG,ARGS...> : 
         public tml::function<tml::eval<tml::lazy_instance<tml::lazy<F>,ARG,ARGS...>>>
         {};
     }
