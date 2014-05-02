@@ -107,6 +107,45 @@ namespace tml
         {
             using result = tml::list<PASSED...>;
         };
+        
+        
+        /*
+         * Folding functions.
+         * 
+         * Fold functions are functions that process a data structure and build a return value.
+         */
+        
+        template<typename... ARGS>
+        struct foldr;
+        template<typename... ARGS>
+        struct foldl;
+        
+        
+        template<typename F , typename STATE , typename HEAD , typename... TAIL>
+        struct foldr<F,STATE,tml::list<HEAD,TAIL...>>
+        {
+            using result = tml::eval<F,HEAD,foldr<F,STATE,tml::list<TAIL...>>>;
+        };
+        
+        template<typename F , typename STATE>
+        struct foldr<F,STATE,tml::empty_list>
+        {
+            using result = STATE;
+        };
+        
+        
+        
+        template<typename F , typename STATE , typename HEAD , typename... TAIL>
+        struct foldl<F,STATE,tml::list<HEAD,TAIL...>>
+        {
+            using result = typename foldl<F,tml::eval<F,STATE,HEAD>,tml::list<TAIL...>>::result;
+        };
+        
+        template<typename F , typename STATE>
+        struct foldl<F,STATE,tml::empty_list>
+        {
+            using result = STATE;
+        };
     }
     
     
@@ -167,6 +206,16 @@ namespace tml
     //C++ STLish name:
     template<typename... ARGS>
     using copy_if = tml::filter<ARGS...>;
+    
+    
+    
+    template<typename... ARGS>
+    using foldl = typename tml::impl::foldl<ARGS...>::result;
+    
+    template<typename... ARGS>
+    using foldr = typename tml::impl::foldr<ARGS...>::result;
+    
+    
 }
 
 #endif	/* ALGORITHM_HPP */

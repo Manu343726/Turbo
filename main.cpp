@@ -175,6 +175,9 @@ namespace complex_lambda_example
                                                              std::integral_constant<int,3>
                                                             >
                            >;
+    
+    
+    using s = tml::foldl<tml::multi_lambda<_1,_2,
                                            
 int main()
 {
@@ -189,6 +192,5 @@ int main()
     std::cout << tml::impl::demangle( typeid( example_call_1 ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( example_call_2 ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( example_call_3 ).name() ) << std::endl;
-    
 }
 
