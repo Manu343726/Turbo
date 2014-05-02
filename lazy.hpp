@@ -21,7 +21,7 @@
 #ifndef LAZY_HPP
 #define	LAZY_HPP
 
-#include "functional.hpp"
+#include "eval.hpp"
 
 namespace tml
 {

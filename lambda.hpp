@@ -21,7 +21,7 @@
 #ifndef LAMBDA_HPP
 #define	LAMBDA_HPP
 
-#include "functional.hpp"
+#include "eval.hpp"
 #include "let_expressions.hpp"
 
 namespace tml
@@ -110,6 +110,9 @@ namespace tml
          * 
          * This templates places the body parameter to the begin of the tml::impl::multi_lambda 
          * template to allow that template read the pack of variables.
+         * 
+         * An extra step (Performed by 'lambda_builder_2' is needed to fill a list with the parameters
+         * of the builder. Using a list is the only way to match the parameters through partial specialization.
          */
         template<typename ARGS>
         struct lambda_builder;
@@ -149,9 +152,9 @@ namespace tml
         
         /*
          * tml::let is overrided to compute the result of the lambda when the lambda itselft is evaluated.
-         * Of course a lambda have to be evaluated with its calling parameter, like:
+         * Of course a lambda have to be evaluated with its calling parameters, like:
          * 
-         *     using result = tml::eval<lambda,params>;
+         *     using result = tml::eval<lambda,params...>;
          * 
          * so tml::eval acts as a calling high-level metafunction (See the tml::eval documentation) always when a 
          * lambda is passed.

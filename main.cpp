@@ -18,13 +18,15 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
-#include "functional.hpp"
+#include "eval.hpp"
 #include "placeholders.hpp"
 #include "let_expressions.hpp"
 #include "lambda.hpp"
 
 #include "impl/demangle.hpp"
 #include "lazy.hpp"
+
+#include "basic_types.hpp"
 
 #include <type_traits>
 #include <typeinfo>
@@ -48,7 +50,8 @@ using lambda = tml::lambda<_1,f<_1,f<_1,_1,char>,_1>>;
 using lambda_result = tml::eval<lambda,bool>;
 
 
-
+using i = tml::Int<0>;
+using j = Int<0>;
 
 namespace complex_lambda_example
 {

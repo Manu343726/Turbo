@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="90">
+<configurationDescriptor version="94">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
@@ -13,7 +13,9 @@
         <itemPath>debugging_utilities.hpp</itemPath>
         <itemPath>utils/debugging_utilities.hpp</itemPath>
       </logicalFolder>
-      <itemPath>functional.hpp</itemPath>
+      <itemPath>basic_types.hpp</itemPath>
+      <itemPath>eval.hpp</itemPath>
+      <itemPath>function.hpp</itemPath>
       <itemPath>lambda.hpp</itemPath>
       <itemPath>lazy.hpp</itemPath>
       <itemPath>let_expressions.hpp</itemPath>
@@ -68,9 +70,13 @@
           <standard>8</standard>
         </ccTool>
       </compileType>
+      <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="debugging_utilities.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="functional.hpp" ex="false" tool="3" flavor2="0">
+      <item path="eval.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="function.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="impl/CPP_META_MACROS.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -112,9 +118,13 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="debugging_utilities.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="functional.hpp" ex="false" tool="3" flavor2="0">
+      <item path="eval.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="function.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="impl/CPP_META_MACROS.hpp" ex="false" tool="3" flavor2="0">
       </item>

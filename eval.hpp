@@ -22,35 +22,12 @@
 #define	FUNCTIONAL_HPP
 
 #include <type_traits>
+#include "function.hpp"
 
 namespace tml
 {
     namespace impl
     {
-        /*
-         * The library assumes that any type with a 'result' member type is a function
-         * (A function which result is stored in that 'result' member).
-         * 
-         * This is an internal (not dessigned to be used by the user) type trait to 
-         * check the existence of that member type, that is, to check if a type is
-         * a function.
-         */
-        template<typename T>
-        struct is_function
-        {
-            template<typename U> static std::true_type test( typename U::result* );
-            template<typename U> static std::false_type test( ... );
-            
-            static constexpr bool result = decltype( test<T>( nullptr ) )::value;
-        };
-        
-        
-        template<typename T>
-        struct is_template : public std::false_type {};
-        
-        template<template<typename...> class T , typename... Ts>
-        struct is_template<T<Ts...>> : public std::true_type {};
-        
         /*
          * Here we implement the user-side tml::eval<> metafunction. 
          * 
@@ -118,28 +95,9 @@ namespace tml
                  typename evaluate_impl<ARGS>::result...
                 >
         {
-            //static_assert( sizeof...(ARGS) == 5 , "ERROR" );
-            //static_assert( sizeof...(PLACEHOLDERS) == (0 + sizeof...(ARGS)) , "Wrong number of function call parameters." );  
+            static_assert( sizeof...(PLACEHOLDERS) == (1 + sizeof...(ARGS)) , "Wrong number of function call parameters." );  
         };
     }
-    
-    
-    /*
-     * This is a helper metafunction to represent a metafunction in the way the library
-     * expects it.
-     * 
-     * It just takes a value and stores it in a 'result' member.
-     * 
-     * Its usefull when declaring user-defined metafunctions and making them working with the rest
-     * of the library. Inheriting from this helper is a simple whay to ensure any metafunction
-     * has the correct interface.
-     */
-    template<typename RESULT>
-    struct function
-    {
-        using result = RESULT;
-    };
-    
     
     /*
      * Metafunction to evaluate expressions.
