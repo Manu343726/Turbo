@@ -13,12 +13,15 @@
         <itemPath>debugging_utilities.hpp</itemPath>
         <itemPath>utils/debugging_utilities.hpp</itemPath>
       </logicalFolder>
+      <itemPath>algorithm.hpp</itemPath>
       <itemPath>basic_types.hpp</itemPath>
+      <itemPath>control_structures.hpp</itemPath>
       <itemPath>eval.hpp</itemPath>
       <itemPath>function.hpp</itemPath>
       <itemPath>lambda.hpp</itemPath>
       <itemPath>lazy.hpp</itemPath>
       <itemPath>let_expressions.hpp</itemPath>
+      <itemPath>list.hpp</itemPath>
       <itemPath>placeholders.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -70,7 +73,11 @@
           <standard>8</standard>
         </ccTool>
       </compileType>
+      <item path="algorithm.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="control_structures.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="debugging_utilities.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -87,6 +94,8 @@
       <item path="lazy.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="let_expressions.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="list.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -118,7 +127,11 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="algorithm.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="control_structures.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="debugging_utilities.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -135,6 +148,8 @@
       <item path="lazy.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="let_expressions.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="list.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>

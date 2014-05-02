@@ -27,6 +27,7 @@
 #include "lazy.hpp"
 
 #include "basic_types.hpp"
+#include "algorithm.hpp"
 
 #include <type_traits>
 #include <typeinfo>
@@ -37,9 +38,12 @@ using namespace tml::placeholders;
 template<typename... ARGS>
 struct f
 {
-    using result = tml::impl::list<ARGS...>;
+    using result = tml::list<ARGS...>;
 };
 
+template<typename T>
+struct size_of : public tml::function<tml::size_tt<sizeof(T)>>
+{};
 
 //tml::let ussage example:
 struct X {}; //Variable
@@ -50,8 +54,17 @@ using lambda = tml::lambda<_1,f<_1,f<_1,_1,char>,_1>>;
 using lambda_result = tml::eval<lambda,bool>;
 
 
+template<typename T , typename U>
+struct equal : public tml::function<typename std::is_same<T,U>::type>
+{};
+
+
 using i = tml::Int<0>;
 using j = Int<0>;
+
+using r1 = tml::map<tml::lambda<_1,size_of<_1>>,tml::list<char,bool,int>>;
+using r2 = tml::map<tml::lambda<_1,tml::make_list<_1,size_of<_1>>>,tml::list<char,bool,int>>;
+using r3 = tml::filter<tml::lambda<_1,equal<_1,int>>,tml::list<char,float,int>>;
 
 namespace complex_lambda_example
 {
@@ -101,11 +114,7 @@ namespace complex_lambda_example
     
     //using example_call_1 = max<bigger<_1,_2>,int,float,char,double>;
     //using example_call_2 = max<less<_1,_2>,int,float,char,double>;
-}
 
-    /* Simple example: TMP equivalent of std::transform */
-    template<typename T , typename... ARGS>
-    using transform = tml::impl::list<tml::eval<T,ARGS>...>;
     
     /*
      * A transform function is just a function which takes one element and returns a
@@ -117,18 +126,12 @@ namespace complex_lambda_example
     {};
     
     template<typename T>
-    struct add_lvalue_ref : public tml::function<T&>
+    struct add_const_lvalue_ref : public tml::function<const T&>
     {};
     
     template<typename T>
     struct add_const : public tml::function<const T>
     {};
-    
-    template<typename T>
-    struct size_of : public tml::function<std::integral_constant<std::size_t,sizeof(T)>>
-    {
-    
-    };
     
     template<typename T , typename...>
     struct identity : public tml::function<T>
@@ -140,11 +143,9 @@ namespace complex_lambda_example
     struct square : public tml::function<T>
     {};
     
-    using example_call_1 = transform<add_pointer<_1>   ,float,int,double>;
-    using example_call_2 = transform<tml::lazy<add_lvalue_ref>,float,int,double>;
-    using example_call_3 = transform<tml::lambda<_1,f<tml::function<_1>,tml::function<add_pointer<_1>>,char>> ,char,float,int,double>;
-
-    static_assert( tml::impl::is_function<add_pointer<_1>>::result , "ERROR" );
+    using example_call_1 = tml::transform<add_pointer<_1>   ,tml::list<float,int,double>>;
+    using example_call_2 = tml::transform<tml::lazy<add_const_lvalue_ref>,tml::list<float,int,double>>;
+    using example_call_3 = tml::transform<tml::lambda<_1,f<tml::function<_1>,tml::function<add_pointer<_1>>,char>> ,tml::list<char,float,int,double>>;
     
     using let = tml::let<_1,long long int,square<size_of<_1>>>;
     
@@ -164,21 +165,22 @@ namespace complex_lambda_example
     //using multi_lambda_result = tml::eval<multi_lambda,int,int,int>;
     
     
-    template<typename F , typename... ARGS>
-    using map = tml::impl::list<tml::eval<F,ARGS>...>;
     
     template<typename V>
     using increment = tml::function<std::integral_constant<int,V::value + 1>>;
     
-    using result = map<tml::lazy<increment> , std::integral_constant<int,0>,
-                                              std::integral_constant<int,1>,
-                                              std::integral_constant<int,2>,
-                                              std::integral_constant<int,3>
-                      >;
+    using result = tml::map<tml::lazy<increment> , tml::list<std::integral_constant<int,0>,
+                                                             std::integral_constant<int,1>,
+                                                             std::integral_constant<int,2>,
+                                                             std::integral_constant<int,3>
+                                                            >
+                           >;
                                            
 int main()
 {
-    
+    std::cout << tml::impl::demangle( typeid( r1 ).name() ) << std::endl;
+    std::cout << tml::impl::demangle( typeid( r2 ).name() ) << std::endl;
+    std::cout << tml::impl::demangle( typeid( r3 ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( let ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( multi_let ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( multi_let_result<int,int,int> ).name() ) << std::endl;

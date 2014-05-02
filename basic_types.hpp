@@ -83,6 +83,12 @@ namespace tml
     using true_type = std::true_type;
     using false_type = std::false_type;
     
+    /*
+     * Turbo std::size_t boxing wrapper
+     */
+    template<std::size_t V>
+    using size_tt = tml::integral_constant<std::size_t,V>;
+    
 
     /*
      * Basic types are declared in this custom namespace "basic_types_declarations".

@@ -110,6 +110,8 @@ namespace tml
      * If your intention is to pass the expression to a high order metafunction,
      * you have to fill that parameters even if they will not be used during evaluation.
      * The set of placeholders defined in "placeholders.hpp" could be used for that purpose.
+     * Also the template wrapper 'tml::lazy' defined in "lazy.hpp" could be used to pass a template
+     * without parameters and pass that parameters later when the evaluation is done.
      * 
      * The metafunction has the following parameters:
      *  - E: The expression to be evaluated.
