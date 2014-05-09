@@ -22,10 +22,8 @@
 #define	FUNCTIONAL_HPP
 
 #include <type_traits>
-#include "function.hpp"
 #include "list.hpp"
 #include "enable_if.hpp"
-#include "lambda.hpp"
 
 namespace tml
 {

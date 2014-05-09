@@ -45,31 +45,31 @@ namespace tml
      * Declares a list of characters
      */
     template<char... Vs>
-    using character_list = tml::integral_sequence<char,Vs...>;
+    using character_list = tml::integral_list<char,Vs...>;
     
     /*
      * Declares a list of integers
      */
     template<int... Vs>
-    using integer_list = tml::integral_sequence<int,Vs...>;
+    using integer_list = tml::integral_list<int,Vs...>;
     
     /*
      * Declares a list of booleans
      */
     template<bool... Vs>
-    using boolean_list = tml::integral_sequence<bool,Vs...>;
+    using boolean_list = tml::integral_list<bool,Vs...>;
     
     /*
      * Declares a list of unsigned characters
      */
     template<unsigned char... Vs>
-    using unsigned_character_list = tml::integral_sequence<unsigned char,Vs...>;
+    using unsigned_character_list = tml::integral_list<unsigned char,Vs...>;
     
     /*
      * Declares a list of unsigned integers
      */
     template<unsigned int... Vs>
-    using unsigned_integer_list = tml::integral_sequence<unsigned int,Vs...>;
+    using unsigned_integer_list = tml::integral_list<unsigned int,Vs...>;
 }
 
 #endif	/* BASIC_LISTS_HPP */
