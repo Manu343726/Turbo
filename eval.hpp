@@ -23,9 +23,23 @@
 
 #include <type_traits>
 #include "function.hpp"
+#include "list.hpp"
+#include "enable_if.hpp"
+#include "lambda.hpp"
 
 namespace tml
 {
+    
+    /*
+     * This metafunction says if one type of expression has overrided the default
+     * behaviour of tml::eval. Every user-defined type which wants to override 
+     * tml::eval should be registered specializing this metafunction inheriting
+     * from tml::true_type.
+     */
+    template<typename E>
+    struct overrides_eval : public tml::false_type
+    {};
+    
     namespace impl
     {
         /*
@@ -45,24 +59,26 @@ namespace tml
          * 
          *  - E: The expression to be evaluated.
          * 
-         *  - ARGS...: evaluate could be used as a high-order metafunction to evaluate a given
+         *  - ARGS: evaluate could be used as a high-order metafunction to evaluate a given
          *             function entity with the specified parameters. This variadic pack is that
          *             set of parameters. The result of the evaluation is the result of evaluating
          *             the functional expresion E with the specified ARGS... arguments.
          *             Note that in this case the argumments are evaluated too (Just for the case they are
          *             functional expressions).
          * 
+         *  - SFINAE_FALG: Parameter used to enable/disable certain specializations.
+         * 
          *  Of course this metafunction is a function too, so it stores the result of the evaluation in a 'result' member type.
          */
-        template<typename E , typename... ARGS>
-        struct evaluate_impl;
+        template<typename E , typename ARGS , typename SFINAE_FLAG = void>
+        struct eval;
 
         /* This is the most simple case: There are no evaluation parameters (So the expression could be any
          * kind of expression, not just a function) BUT the flag says the expression is not a function.
          * The result of evaluatiing such expression is the expression itself.
          */
         template<typename E>
-        struct evaluate_impl<E>
+        struct eval<E,tml::empty_list,TURBO_DISABLE_IF(tml::overrides_eval<E>)>
         {
             using result = E;
         };
@@ -78,7 +94,10 @@ namespace tml
          * expression recursively.
          */
         template<template<typename...> class F , typename... ARGS>
-        struct evaluate_impl<F<ARGS...>> : public F<typename evaluate_impl<ARGS>::result...> 
+        struct eval<F<ARGS...>,tml::empty_list,
+                    TURBO_DISABLE_IF(tml::overrides_eval<F<ARGS...>>)
+                   > : 
+                   public F<typename eval<ARGS,tml::empty_list>::result...> 
         {};
 
         /*
@@ -90,10 +109,12 @@ namespace tml
          * The result is the result of evaluating the function with that parameters.
          */
         template<template<typename...> class F , typename... PLACEHOLDERS , typename ARG , typename... ARGS>
-        struct evaluate_impl<F<PLACEHOLDERS...> , ARG , ARGS...> : 
-        public F<typename evaluate_impl<ARG>::result,
-                 typename evaluate_impl<ARGS>::result...
-                >
+        struct eval<F<PLACEHOLDERS...> , tml::list<ARG,ARGS...>,
+                    TURBO_DISABLE_IF(tml::overrides_eval<F<PLACEHOLDERS...>>)
+                   > : 
+                   public F<typename eval<ARG,tml::empty_list>::result,
+                            typename eval<ARGS,tml::empty_list>::result...
+                           >
         {
             static_assert( sizeof...(PLACEHOLDERS) == (1 + sizeof...(ARGS)) , "Wrong number of function call parameters." );  
         };
@@ -124,7 +145,7 @@ namespace tml
      *             functional expressions).
      */
     template<typename EXPRESSION , typename... ARGS>
-    using eval = typename impl::evaluate_impl<EXPRESSION , ARGS...>::result;
+    using eval = typename impl::eval<EXPRESSION , tml::list<ARGS...>>::result;
     
 }
 

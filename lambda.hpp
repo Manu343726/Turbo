@@ -51,6 +51,13 @@ namespace tml
         using result = tml::eval<tml::let<X,ARG,BODY>>;
     };
     
+    /*
+     * A lambda overrides tml::eval:
+     */
+    template<typename X , typename BODY>
+    struct overrides_eval<tml::lambda<X,BODY>> : public tml::true_type
+    {};
+    
     namespace impl
     {
         /*
@@ -72,7 +79,7 @@ namespace tml
          * lambda is passed.
          */
         template<typename X , typename BODY , typename ARG>
-        struct evaluate_impl<lambda<X,BODY>,ARG> : 
+        struct eval<lambda<X,BODY>,tml::list<ARG>> : 
             public tml::function<typename lambda<X,BODY>::result<tml::eval<ARG>>> 
         {};
         
@@ -160,12 +167,19 @@ namespace tml
          * lambda is passed.
          */
         template<typename... VARIABLES , typename BODY , typename... ARGS>
-        struct evaluate_impl<multi_lambda<BODY,VARIABLES...>,ARGS...> : 
+        struct eval<multi_lambda<BODY,VARIABLES...>,tml::list<ARGS...>> : 
             public tml::function<typename multi_lambda<BODY,VARIABLES...>::template result<tml::eval<ARGS>...>>
         {
             //static_assert( sizeof(BODY) != sizeof(BODY) , "Instanced" );
         };
     }
+    
+    /*
+     * A multiple-variable lambda overrides tml::eval:
+     */
+    template<typename... VARIABLES , typename BODY>
+    struct overrides_eval<tml::impl::multi_lambda<BODY,VARIABLES...>> : public tml::true_type
+    {};
     
     template<typename... ARGS>
     using multi_lambda = typename tml::impl::lambda_builder<tml::impl::list<ARGS...>>::result;

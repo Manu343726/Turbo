@@ -62,10 +62,15 @@ namespace tml
      * tml::eval is overrided to take care of wrapped templates. A wrapped template should be evaluated with a set of parameters.
      * That parameters are used to instantiate the template and evaluate the resulting instance later.
      */
+    
+    template<template<typename...> class F>
+    struct overrides_eval<tml::lazy<F>> : public tml::true_type
+    {};
+    
     namespace impl
     {
         template<template<typename...> class F , typename ARG , typename... ARGS>
-        struct evaluate_impl<tml::lazy<F>,ARG,ARGS...> : 
+        struct eval<tml::lazy<F>,tml::list<ARG,ARGS...>> : 
         public tml::function<tml::eval<tml::lazy_instance<tml::lazy<F>,ARG,ARGS...>>>
         {};
     }

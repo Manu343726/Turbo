@@ -10,8 +10,8 @@
       </logicalFolder>
       <logicalFolder name="utils" displayName="utils" projectFiles="true">
         <itemPath>utils/assert.hpp</itemPath>
-        <itemPath>debugging_utilities.hpp</itemPath>
         <itemPath>utils/debugging_utilities.hpp</itemPath>
+        <itemPath>enable_if.hpp</itemPath>
       </logicalFolder>
       <itemPath>algorithm.hpp</itemPath>
       <itemPath>basic_types.hpp</itemPath>
@@ -80,7 +80,7 @@
       </item>
       <item path="control_structures.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="debugging_utilities.hpp" ex="false" tool="3" flavor2="0">
+      <item path="enable_if.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="eval.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -136,7 +136,7 @@
       </item>
       <item path="control_structures.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="debugging_utilities.hpp" ex="false" tool="3" flavor2="0">
+      <item path="enable_if.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="eval.hpp" ex="false" tool="3" flavor2="0">
       </item>
