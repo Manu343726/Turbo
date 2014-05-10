@@ -19,8 +19,16 @@
 ******************************************************************************/
 
 #include "variable_templates.hpp"
+#include "sort.hpp"
+#include "list.hpp"
+#include "string.hpp"
 
 #include <iostream>
+
+
+
+using input = tml::for_each<tml::make_integer_forward_iterator<0>,tml::make_integer_forward_iterator<50>,tml::function>;
+using output = tml::sort<input,tml::bigger_than>;
 
 
 TURBO_INDEXED_VARIABLE( int , a );
@@ -38,5 +46,8 @@ int main()
     std::cout << a<3>() << std::endl;
     std::cout << b<char>() << std::endl;
     std::cout << b<float>() << std::endl;
+    
+    std::cout << tml::to_string<input>() << std::endl;
+    std::cout << tml::to_string<output>() << std::endl;
 }
 
