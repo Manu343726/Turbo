@@ -32,7 +32,35 @@
  * C++14 support (Which has a standard [[deprecated(message)]] attribute), else a compiler-specific version is used.
  */
 
-#if defined( __cplusplus ) && __cplusplus > 
+#include "basic_types.hpp"
+#include "impl/CPP_META_MACROS.hpp"
+
+#define CPP11_TAG 201103
+#define CPP_ENABLED defined( __cplusplus )
+#define CPP11_ENABLED CPP && __cplusplus == CPP11_TAG
+#define CPP1Y_ENABLED CPP && __cplusplus > CPP11_TAG
+
+#if CPP1Y_ENABLED
+#define DEPRECATED_ATTRIBUTE(x,message) [[deprecated(message)]] x
+#elif __GCC__
+
+#elif __llvm__ 
+#define DEPRECATED_ATTRIBUTE(x,message) x __attribute__((deprecated(message)))
+#else
+#error "Unsupported compiler"
+#endif
+
+#define TURBO_WARNING( condition , message )                \
+    struct UNIQUE_IDENTIFIER_LINE( turbo_static_warning )   \
+    {                                                       \
+        UNIQUE_IDENTIFIER_LINE( turbo_static_warning )()    \
+        {                                                   \
+            warning_call( STRIP_PARENS condition {} );      \
+        }                                                   \
+                                                                                \
+        DEPRECATED_ATTRIBUTE( void warning_call( tml::false_type ) , "[[STATIC_WARNING]] " message " [[STATIC_WARNING]]" ){} \
+        void warning_call( tml::true_type ){}                                  \
+    }                                        
 
 #endif	/* WARNING_HPP */
 

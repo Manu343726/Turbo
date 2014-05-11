@@ -91,5 +91,32 @@
 #define SELECT_ARG_7( _1 , _2 , _3 , _4 , _5 , _6 , _7 , ... ) _7
 #define SELECT_ARG_8( _1 , _2 , _3 , _4 , _5 , _6 , _7 , _8 , ... ) _8
 
+
+
+/*
+ * This simple macro concatenates two tokens:
+ */
+#define CAT_TOKENS_IMPL(x,y) x ## y
+#define CAT_TOKENS(x,y) CAT_TOKENS_IMPL(x,y)
+
+
+/*
+ * This simple macro expands a macro parameter
+ */
+#define EXPAND_MACRO(x) x
+
+
+/*
+ * This macro generates an unique identifier based on the line which the macro is expanded:
+ */
+#define UNIQUE_IDENTIFIER_LINE( id ) CAT_TOKENS( id , __LINE__ )
+
+/*
+ * This macro generates an unique identifier based on the internal preprocessor counter:
+ */
+#define UNIQUE_IDENTIFIER_COUNTER( id ) CAT_TOKENS( id , __COUNTER__ )
+
+
+
 #endif	/* CPP_META_MACROS_HPP */
 
