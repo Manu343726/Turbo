@@ -80,7 +80,7 @@ namespace tml
          */
         template<typename X , typename BODY , typename ARG>
         struct eval<lambda<X,BODY>,tml::list<ARG>> : 
-            public tml::function<typename lambda<X,BODY>::result<tml::eval<ARG>>> 
+            public tml::function<typename lambda<X,BODY>::template result<tml::eval<ARG>>> 
         {};
         
 

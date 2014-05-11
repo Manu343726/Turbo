@@ -21,19 +21,14 @@
 #include "eval.hpp"
 #include "placeholders.hpp"
 #include "let_expressions.hpp"
+
+#include "lazy.hpp"
 #include "lambda.hpp"
 
-#include "impl/demangle.hpp"
-#include "lazy.hpp"
+#include "integral_lists.hpp"
 
 #include "basic_types.hpp"
-#include "algorithm.hpp"
-#include "integral_lists.hpp"
 #include "utils/assert.hpp"
-
-#include <type_traits>
-#include <typeinfo>
-#include <iostream>
 
 using namespace tml::placeholders;
 
@@ -43,40 +38,13 @@ struct f
     using result = tml::list<ARGS...>;
 };
 
-namespace test
-{
-    template<typename BODY , typename... VARIABLES>
-    struct lambda
-    {
-        template<typename... ARGS>
-        using let = tml::multi_let<VARIABLES...,ARGS...,BODY>;
-        template<typename... ARGS>
-        using result = tml::eval<let<ARGS...>>;
-    };
-}
-
-namespace tml
-{
-    template<typename BODY , typename... VARIABLES>
-    struct overrides_eval<test::lambda<BODY,VARIABLES...>> : public tml::true_type
-    {};
-    
-    namespace impl
-    {
-        template<typename BODY , typename... VARIABLES , typename... ARGS>
-        struct eval<test::lambda<BODY,VARIABLES...>,tml::list<ARGS...>>
-        {
-            using result = typename test::lambda<BODY,VARIABLES...>::template result<ARGS...>;
-        };
-    }
-}
 
 using t1 = tml::eval<Int<0>>;
 using t2 = tml::eval<f<_1,_2,_3>,Int<1>,Int<2>,Int<3>>;
 using t3 = tml::eval<tml::lazy<f>,Int<1>,Int<2>,Int<3>>; 
 using t4 = tml::eval<tml::lambda<_1,f<_1,Int<2>,Int<3>>>,Int<1>>;
-using t5 = tml::eval<tml::multi_let<_1,_2,Int<1>,Int<2>,f<_1,_2,Int<3>>>>;
-using t6 = tml::eval<test::lambda<f<_1,_2,_3>,_1,_2,_3>,Int<1>,Int<2>,Int<3>>;
+using t5 = tml::eval<tml::multi_let<_1,_2,_3,Int<1>,Int<2>,Int<3>,f<_1,_2,_3>>>;
+using t6 = tml::eval<tml::multi_lambda<f<_1,_2,_3>,_1,_2,_3>,Int<1>,Int<2>,Int<3>>;
 
 
 
