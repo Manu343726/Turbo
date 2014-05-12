@@ -21,13 +21,13 @@
 #include "variable_templates.hpp"
 #include "sort.hpp"
 #include "list.hpp"
-#include "string.hpp"
+#include "numeric_iterators.hpp"
 
 #include <iostream>
 
 
 
-using input = tml::for_each<tml::make_integer_forward_iterator<0>,tml::make_integer_forward_iterator<50>,tml::function>;
+using input = tml::for_each<tml::make_integer_forward_iterator<0>,tml::make_integer_forward_iterator<10>,tml::function>;
 using output = tml::sort<input,tml::bigger_than>;
 
 
