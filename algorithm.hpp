@@ -26,6 +26,7 @@
 #include "eval.hpp"
 #include "control_structures.hpp"
 #include "lambda.hpp"
+#include "function_alias_decl.hpp"
 
 
 /*
@@ -168,14 +169,8 @@ namespace tml
      * 
      * The result is a tml::list filled with the sequence of applications.
      */
-    
-    //Functional name:
-    template<typename... ARGS>
-    using map = typename tml::impl::map<ARGS...>::result;
-    
-    //C++ STLish name:
-    template<typename... ARGS>
-    using transform = tml::map<ARGS...>;
+    TURBO_DEFINE_FUNCTION_TALIAS( map ); //Functional (Haskell-like) name
+    TURBO_DEFINE_FUNCTION_TALIAS_CUSTOMNAME( map , transform ); //C++ (STL-like) name
     
     
     
@@ -199,14 +194,8 @@ namespace tml
      * 
      * The result is a tml::list filled with the sequence of elements which passed the filter F.
      */
-    
-    //Functional name:
-    template<typename... ARGS>
-    using filter = typename tml::impl::filter<ARGS...,tml::empty_list>::result;
-    
-    //C++ STLish name:
-    template<typename... ARGS>
-    using copy_if = tml::filter<ARGS...>;
+    TURBO_DEFINE_FUNCTION_TALIAS( filter ); //Functional (Haskell-like) name
+    TURBO_DEFINE_FUNCTION_TALIAS_CUSTOMNAME( filter , copy_if ); //C++ (STL-like) name
     
     
     
@@ -217,6 +206,9 @@ namespace tml
     using foldr = typename tml::impl::foldr<ARGS...>::result;
     
     
+    
+    template<typename F , typename SEQ>
+    using any_of = tml::foldr<tml::multi_lambda<_1,_2 , tml::logical_or<_1,tml::eval<F,_2>>>,tml::false_type>;
 }
 
 #endif	/* ALGORITHM_HPP */

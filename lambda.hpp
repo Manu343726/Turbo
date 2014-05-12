@@ -142,10 +142,6 @@ namespace tml
             using result = typename lambda_builder_2<typename tml::impl::push_back<vars,body>::result>::result;
         };
         
-        template<typename... VARIABLES , typename BODY>
-        struct lambda_builder<tml::impl::list<VARIABLES...,BODY>> : public tml::function<multi_lambda<BODY,VARIABLES...>>
-        {};
-        
         /*
          * A lambda expression is not considered a function entity (See documentation above)
          */

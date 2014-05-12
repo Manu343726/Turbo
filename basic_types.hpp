@@ -87,7 +87,7 @@ namespace tml
      * Turbo std::size_t boxing wrapper
      */
     template<std::size_t V>
-    using size_tt = tml::integral_constant<std::size_t,V>;
+    using size_t = tml::integral_constant<std::size_t,V>;
     
 
     /*
