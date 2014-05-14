@@ -14,5 +14,22 @@
 #define TURBO_ENABLE_FUNCTION_IF(...) typename = TURBO_ENABLE_IF(__VA_ARGS__)
 #define TURBO_DISABLE_FUNCTION_IF(...) typename = TURBO_DISABLE_IF(__VA_ARGS__)
 
+namespace tml
+{
+    /*
+     * This is the return type of any expression doing SFINAE.
+     * By default this type is a void alias, because void is the default return
+     * type of std::enable_if.
+     */
+    using sfinae_return = void;
+
+    /*
+     * The purpose of this list is to hold multiple SFINAE entities (enable_ifs)
+     * on a single template parameter.
+     */
+    template<typename... ARGS>
+    using sfinae_list = tml::sfinae_return;
+}
+
 #endif	/* ENABLE_IF_HPP */
 

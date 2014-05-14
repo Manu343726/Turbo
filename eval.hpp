@@ -24,6 +24,7 @@
 #include <type_traits>
 #include "list.hpp"
 #include "enable_if.hpp"
+#include "function.hpp"
 
 namespace tml
 {
@@ -64,11 +65,11 @@ namespace tml
          *             Note that in this case the argumments are evaluated too (Just for the case they are
          *             functional expressions).
          * 
-         *  - SFINAE_FALG: Parameter used to enable/disable certain specializations.
+         *  - SFINAE_FALGS: Parameters used to enable/disable certain specializations.
          * 
          *  Of course this metafunction is a function too, so it stores the result of the evaluation in a 'result' member type.
          */
-        template<typename E , typename ARGS , typename SFINAE_FLAG = void>
+        template<typename E , typename ARGS , typename SFINAE_FLAGS = tml::sfinae_return>
         struct eval;
 
         /* This is the most simple case: There are no evaluation parameters (So the expression could be any
@@ -76,7 +77,12 @@ namespace tml
          * The result of evaluatiing such expression is the expression itself.
          */
         template<typename E>
-        struct eval<E,tml::empty_list,TURBO_DISABLE_IF(tml::overrides_eval<E>)>
+        struct eval<E,tml::empty_list,
+                    tml::sfinae_list<
+                                     TURBO_DISABLE_IF(tml::overrides_eval<E>),
+                                     TURBO_DISABLE_IF(tml::is_function<E>)
+                                    >
+                   >
         {
             using result = E;
         };
@@ -93,7 +99,10 @@ namespace tml
          */
         template<template<typename...> class F , typename... ARGS>
         struct eval<F<ARGS...>,tml::empty_list,
-                    TURBO_DISABLE_IF(tml::overrides_eval<F<ARGS...>>)
+                    tml::sfinae_list<
+                                     TURBO_DISABLE_IF(tml::overrides_eval<F<ARGS...>>),
+                                     TURBO_ENABLE_IF(tml::is_function<F<ARGS...>>)
+                                    >
                    > : 
                    public F<typename eval<ARGS,tml::empty_list>::result...> 
         {};
@@ -108,7 +117,10 @@ namespace tml
          */
         template<template<typename...> class F , typename... PLACEHOLDERS , typename ARG , typename... ARGS>
         struct eval<F<PLACEHOLDERS...> , tml::list<ARG,ARGS...>,
-                    TURBO_DISABLE_IF(tml::overrides_eval<F<PLACEHOLDERS...>>)
+                    tml::sfinae_list<
+                                     TURBO_DISABLE_IF(tml::overrides_eval<F<PLACEHOLDERS...>>),
+                                     TURBO_ENABLE_IF(tml::is_function<F<PLACEHOLDERS...>>)
+                                    >
                    > : 
                    public F<typename eval<ARG,tml::empty_list>::result,
                             typename eval<ARGS,tml::empty_list>::result...

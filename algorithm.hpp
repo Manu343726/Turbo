@@ -207,8 +207,7 @@ namespace tml
     
     
     
-    template<typename F , typename SEQ>
-    using any_of = tml::foldr<tml::multi_lambda<_1,_2 , tml::logical_or<_1,tml::eval<F,_2>>>,tml::false_type>;
+    
 }
 
 #endif	/* ALGORITHM_HPP */
