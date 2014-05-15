@@ -49,11 +49,13 @@ using t6 = tml::eval<tml::multi_lambda<f<_1,_2,_3>,_1,_2,_3>,Int<1>,Int<2>,Int<3
 
 constexpr bool a = tml::is_function<Int<0>>::value;
 
+TURBO_WARNING((tml::false_type) , "oops" );
 
-TURBO_ASSERT((std::is_same<tml::sfinae_list<
-                                            TURBO_DISABLE_IF(tml::is_function<Int<0>>) ,
-                                            TURBO_DISABLE_IF(tml::overrides_eval<Int<0>>)
-                                           >,tml::sfinae_return>));
+
+TURBO_ASSERT((std::is_same<TURBO_SFINAE(
+                                        DISABLE_IF(tml::is_function<Int<0>>) ,
+                                        DISABLE_IF(tml::overrides_eval<Int<0>>)
+                                       ),tml::sfinae_return>));
 
 TURBO_ASSERT((std::is_same<t1,tml::integer<0>>));
 TURBO_ASSERT((std::is_same<t2,tml::integer_list<1,2,3>>));
@@ -69,7 +71,10 @@ struct logical_or : public tml::function<tml::boolean<LHS::value || RHS::value>>
 template<typename F , typename SEQ>
 using any_of = tml::foldr<tml::multi_lambda<_1,_2 , logical_or<_1,tml::eval<F,_2>>>,tml::false_type,SEQ>;
 
-using r = tml::eval<_1>;
+
+TURBO_ASSERT((tml::overrides_eval<_1>));
+
+//using r = tml::eval<_1>;
 
 //using a1 = any_of<tml::lambda<_1 , _1>,tml::boolean_list<false,false,true,false,false>>;
 

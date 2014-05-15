@@ -18,8 +18,8 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
-#ifndef FUNCTIONAL_HPP
-#define	FUNCTIONAL_HPP
+#ifndef EVAL_HPP
+#define	EVAL_HPP
 
 #include <type_traits>
 #include "list.hpp"
@@ -78,10 +78,10 @@ namespace tml
          */
         template<typename E>
         struct eval<E,tml::empty_list,
-                    tml::sfinae_list<
-                                     TURBO_DISABLE_IF(tml::overrides_eval<E>),
-                                     TURBO_DISABLE_IF(tml::is_function<E>)
-                                    >
+                    TURBO_SFINAE(
+                                 DISABLE_IF(tml::overrides_eval<E>),
+                                 DISABLE_IF(tml::is_function<E>)
+                                )
                    >
         {
             using result = E;
@@ -99,10 +99,10 @@ namespace tml
          */
         template<template<typename...> class F , typename... ARGS>
         struct eval<F<ARGS...>,tml::empty_list,
-                    tml::sfinae_list<
-                                     TURBO_DISABLE_IF(tml::overrides_eval<F<ARGS...>>),
-                                     TURBO_ENABLE_IF(tml::is_function<F<ARGS...>>)
-                                    >
+                    TURBO_SFINAE(
+                                 DISABLE_IF(tml::overrides_eval<F<ARGS...>>),
+                                 ENABLE_IF(tml::is_function<F<ARGS...>>)
+                                )
                    > : 
                    public F<typename eval<ARGS,tml::empty_list>::result...> 
         {};
@@ -117,10 +117,10 @@ namespace tml
          */
         template<template<typename...> class F , typename... PLACEHOLDERS , typename ARG , typename... ARGS>
         struct eval<F<PLACEHOLDERS...> , tml::list<ARG,ARGS...>,
-                    tml::sfinae_list<
-                                     TURBO_DISABLE_IF(tml::overrides_eval<F<PLACEHOLDERS...>>),
-                                     TURBO_ENABLE_IF(tml::is_function<F<PLACEHOLDERS...>>)
-                                    >
+                    TURBO_SFINAE(
+                                 DISABLE_IF(tml::overrides_eval<F<PLACEHOLDERS...>>),
+                                 ENABLE_IF(tml::is_function<F<PLACEHOLDERS...>>)
+                                )
                    > : 
                    public F<typename eval<ARG,tml::empty_list>::result,
                             typename eval<ARGS,tml::empty_list>::result...
@@ -159,5 +159,5 @@ namespace tml
     
 }
 
-#endif	/* FUNCTIONAL_HPP */
+#endif	/* EVAL_HPP */
 
