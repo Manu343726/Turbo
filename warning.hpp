@@ -42,8 +42,6 @@
 
 #if CPP1Y_ENABLED
 #define DEPRECATED_ATTRIBUTE(x,message) [[deprecated(message)]] x
-#elif __GNUC__
-
 #elif __llvm__ 
 #define DEPRECATED_ATTRIBUTE(x,message) x __attribute__((deprecated(message)))
 #else
