@@ -58,7 +58,7 @@ namespace impl{
     }
 #endif
 
-#if defined ( __GNUC__ ) //GCC tml::impl::demangle() version
+#if defined ( __GNUC__ ) && !defined(__llvm__) //GCC tml::impl::demangle() version
 
     #include <cxxabi.h>
 

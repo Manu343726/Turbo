@@ -21,6 +21,11 @@
 #ifndef LET_HPP
 #define LET_HPP
 
+#include "eval.hpp"
+#include "warning.hpp"
+#include "utils/assert.hpp"
+
+
 /*
  * Haskell-like let expressions.
  * 
@@ -85,6 +90,27 @@ namespace tml
         };
         
         /*
+         * Special case for lambda bodies expressions.
+         * 
+         * Lambda bodies with evaluating expressions such as 'tml::eval<F,_1>' doesn't work because the placeholder is substituted after the 
+         * expression evaluation.
+         * 
+         * The library provides the template tml::delayed_eval<F,ARGS...> for that purpose: It holds a functional expression reevaluation
+         * with parameters that may be placeholders. When doing let on such template, tml::let substitutes the letted placeholders with its
+         * values, and the tml::delayed_eval template with tml::eval.
+         * 
+         * For that purpose, the low_level phase of tml::let is overrided.
+         */
+        template<typename NAME , typename VALUE , 
+                 template<typename...> class F , typename... FARGS , typename... ARGS
+                >
+        struct let_impl_low<NAME,VALUE,tml::delayed_eval<F<FARGS...>,ARGS...>> 
+            : tml::function<tml::eval<F<typename let_impl_high<NAME,VALUE,ARGS>::result...>>>
+        {
+            //static_assert( sizeof(NAME) != sizeof(NAME) , "Let of delayed_eval" );
+        };
+        
+        /*
          * General case of the low-level phase: The expression is not a functional expression,
          * so there are no variables to bind a value with.
          * The result is the expression itself.
@@ -121,7 +147,6 @@ namespace tml
             /* Debug trace (DISABLED) */
             //static_assert( sizeof(NAME) != sizeof(NAME) , "HIGH_PHASE: Variable --> Name binding specialization instanced" );    
         };
-        
     }
     
     /*

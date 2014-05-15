@@ -31,8 +31,11 @@
 #include "basic_types.hpp"
 #include "utils/assert.hpp"
 #include "warning.hpp"
+#include "impl/demangle.hpp"
 
 using namespace tml::placeholders;
+
+#ifdef RUN_UNIT_TESTS
 
 template<typename... ARGS>
 struct f
@@ -49,8 +52,6 @@ using t6 = tml::eval<tml::multi_lambda<f<_1,_2,_3>,_1,_2,_3>,Int<1>,Int<2>,Int<3
 
 constexpr bool a = tml::is_function<Int<0>>::value;
 
-TURBO_WARNING((tml::false_type) , "oops" );
-
 
 TURBO_ASSERT((std::is_same<TURBO_SFINAE(
                                         DISABLE_IF(tml::is_function<Int<0>>) ,
@@ -64,22 +65,30 @@ TURBO_ASSERT((std::is_same<t4,tml::integer_list<1,2,3>>));
 TURBO_ASSERT((std::is_same<t5,tml::integer_list<1,2,3>>));
 TURBO_ASSERT((std::is_same<t6,tml::integer_list<1,2,3>>));
 
+#endif /* RUN_UNIT_TESTS */
+
 template<typename LHS , typename RHS>
 struct logical_or : public tml::function<tml::boolean<LHS::value || RHS::value>>
 {};
 
 template<typename F , typename SEQ>
-using any_of = tml::foldr<tml::multi_lambda<_1,_2 , logical_or<_1,tml::eval<F,_2>>>,tml::false_type,SEQ>;
+using any_of = tml::foldr<tml::multi_lambda<_1,_2 , logical_or<_1,tml::delayed_eval<F,_2>>>,tml::false_type,SEQ>;
+
+using res = tml::eval<tml::lambda<_1, 
+                                  tml::delayed_eval<logical_or<_2,_2>,tml::false_type,_1>
+                                 >,
+                      tml::true_type
+                     >;
+
+using res2 = tml::eval<tml::multi_lambda<_1,_2 , logical_or<_1,tml::delayed_eval<tml::lambda<_3,_3>,_2>>> , tml::true_type , tml::true_type>;
 
 
-TURBO_ASSERT((tml::overrides_eval<_1>));
+TURBO_ASSERT((res));
 
-//using r = tml::eval<_1>;
+using r = tml::eval<_1>;
 
-//using a1 = any_of<tml::lambda<_1 , _1>,tml::boolean_list<false,false,true,false,false>>;
+using a1 = any_of<tml::lambda<_1 , _1>,tml::boolean_list<true>>;
 
-
-//TURBO_ASSERT((std::is_same<a1,tml::true_type>));
-
+TURBO_ASSERT((std::is_same<res2,tml::true_type>));
 
 int main(){}

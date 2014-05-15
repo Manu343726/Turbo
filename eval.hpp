@@ -22,6 +22,7 @@
 #define	EVAL_HPP
 
 #include <type_traits>
+
 #include "list.hpp"
 #include "enable_if.hpp"
 #include "function.hpp"
@@ -157,6 +158,24 @@ namespace tml
     template<typename EXPRESSION , typename... ARGS>
     using eval = typename impl::eval<EXPRESSION , tml::list<ARGS...>>::result;
     
+    
+    
+    /*
+     * Provides delayed evaluation of an expression until its placeholders are substituted by its values.
+     * Is a special case for lambda bodies expressions.
+     * 
+     * Lambda bodies with evaluating expressions such as 'tml::eval<F,_1>' doesn't work because the placeholder is substituted after the 
+     * expression evaluation.
+     * 
+     * The library provides the template tml::delayed_eval<F,ARGS...> for that purpose: It holds a functional expression reevaluation
+     * with parameters that may be placeholders. When doing let on such template, tml::let substitutes the letted placeholders with its
+     * values, and the tml::delayed_eval template with tml::eval.
+     * 
+     * NOTE: See the documentation of the specialization of tml::let in "let_expressions.hpp" for more info.
+     */
+    template<typename F , typename... ARGS>
+    struct delayed_eval
+    {};
 }
 
 #endif	/* EVAL_HPP */
