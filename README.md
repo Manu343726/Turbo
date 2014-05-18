@@ -168,21 +168,21 @@ The features explained above have some implementation issues (Working on...):
 
     1. **Simple values**: The result of evaluating a value is the value itself
         
-        using result = tml::eval<tml::Int<0>>; //result is Int<0>
-        using result = tml::eval<int>; //result is int
+            using result = tml::eval<tml::Int<0>>; //result is Int<0>
+            using result = tml::eval<int>; //result is int
     
     2. **Parametrized expressions**: Parametrized expressions are not functions, but their parameters could be anything, so they must be evaluated
 
-        using vector = tml::eval<std::vector<tml::function<int>>>; // vector is std::vector<int>
+            using vector = tml::eval<std::vector<tml::function<int>>>; // vector is std::vector<int>
 
     3. **Functional expressions**: Same as parametrized expressions, but they have a result which should be computed (Extracted)
 
-        using myint = tml::eval<tml::function<int>>; //myint is int
+            using myint = tml::eval<tml::function<int>>; //myint is int
 
     4. **Functional expressions with binded argumments**: `tml::eval` could be used to reevaluate an existing (Instanced) functional expression
        with a new set of parameters
 
-        using result = tml::eval<tml::function<int>,double>; //result is double
+            using result = tml::eval<tml::function<int>,double>; //result is double
 
    In addition to this generic cases, the user could explicitly specialize the implementation of `tml::eval` (The internal template `tml::impl::eval`)
    to make `tml::eval` work in a custom and specific way. For example:
@@ -255,8 +255,8 @@ The features explained above have some implementation issues (Working on...):
    Even if `tml::eval` is specialized to take care of placeholders, there are cases when expressions depending on `tml::eval` evaluation are not correctly evaluated because 
    they have placeholders. Consider this example:
 
-       template<typename F , typename SEQ>
-       using any_of = tml::foldr<tml::multi_lambda<_1,_2 , logical_or<_1,tml::delayed_eval<F,_2>>>,tml::false_type,SEQ>;
+        template<typename F , typename SEQ>
+        using any_of = tml::foldr<tml::multi_lambda<_1,_2 , logical_or<_1,tml::delayed_eval<F,_2>>>,tml::false_type,SEQ>;
 
    This sentence defines a metafunction `any_of`, which returns true if almost one element of a sequence evaluates to true certain predicate.
    Its implemented using a metafunction provided by the Turbo "algorithm.hpp" header, a Haskell-like `foldr` metafunction (Similar to `std::accumulate()`).
