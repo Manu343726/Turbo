@@ -102,12 +102,12 @@ namespace tml
          * For that purpose, the low_level phase of tml::let is overrided.
          */
         template<typename NAME , typename VALUE , 
-                 template<typename...> class F , typename... FARGS , typename... ARGS
+                 typename F , typename... ARGS
                 >
-        struct let_impl_low<NAME,VALUE,tml::delayed_eval<F<FARGS...>,ARGS...>> 
-            : tml::function<tml::eval<F<typename let_impl_high<NAME,VALUE,ARGS>::result...>>>
+        struct let_impl_low<NAME,VALUE,tml::delayed_eval<F,ARGS...>> 
+            : tml::function<tml::eval<typename let_impl_high<NAME,VALUE,F>::result , typename let_impl_high<NAME,VALUE,ARGS>::result...>>
         {
-            //static_assert( sizeof(NAME) != sizeof(NAME) , "Let of delayed_eval" );
+            TURBO_UNCONDITIONAL_WARNING( NAME , "Let of delayed_eval" );
         };
         
         /*

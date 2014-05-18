@@ -27,6 +27,8 @@
       <itemPath>list.hpp</itemPath>
       <itemPath>placeholders.hpp</itemPath>
       <itemPath>tagging.hpp</itemPath>
+      <itemPath>unconditional_false.hpp</itemPath>
+      <itemPath>warning.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -113,9 +115,13 @@
       </item>
       <item path="tagging.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="unconditional_false.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="utils/assert.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="utils/debugging_utilities.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="warning.hpp" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -175,9 +181,13 @@
       </item>
       <item path="tagging.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="unconditional_false.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="utils/assert.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="utils/debugging_utilities.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="warning.hpp" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

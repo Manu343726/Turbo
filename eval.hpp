@@ -135,10 +135,10 @@ namespace tml
      * Metafunction to evaluate expressions.
      * 
      * The purpose of this metafunction is to evaluate homogeneously any kind of expression.
-     * Also, this could be used as a high-order metafunction to call an specified functional
+     * Also, this could be used as a high-order metafunction to reevaluate an specified functional
      * expression with a custom set of parameters.
      * 
-     * Note that the parameters of the expression will be ignored during evaluation. 
+     * Note that the parameters of the expression will be ignored during reevaluation. 
      * If your intention is to pass the expression to a high order metafunction,
      * you have to fill that parameters even if they will not be used during evaluation.
      * The set of placeholders defined in "placeholders.hpp" could be used for that purpose.
@@ -148,7 +148,7 @@ namespace tml
      * The metafunction has the following parameters:
      *  - E: The expression to be evaluated.
      * 
-     *  - ARGS...: evaluate could be used as a high-order metafunction to evaluate a given
+     *  - ARGS...: evaluate could be used as a high-order metafunction to reevaluate a given
      *             function entity with the specified parameters. This variadic pack is that
      *             set of parameters. The result of the evaluation is the result of evaluating
      *             the functional expresion E with the specified ARGS... arguments.
@@ -176,6 +176,12 @@ namespace tml
     template<typename F , typename... ARGS>
     struct delayed_eval
     {};
+    
+    /*
+     * Simple shorthand alias:
+     */
+    template<typename... ARGS>
+    using deval = tml::delayed_eval<ARGS...>;
 }
 
 #endif	/* EVAL_HPP */

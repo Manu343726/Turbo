@@ -21,6 +21,7 @@
 #ifndef BASIC_TYPES_HPP
 #define	BASIC_TYPES_HPP
 
+#include <type_traits>
 
 /*
  * This header defines the basic types of the library.

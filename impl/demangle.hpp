@@ -58,8 +58,9 @@ namespace impl{
     }
 #endif
 
-#if defined ( __GNUC__ ) && !defined(__llvm__) //GCC tml::impl::demangle() version
+#if defined ( __GNUC__ ) //GCC tml::impl::demangle() version
 
+    typedef unsigned long int size_t;
     #include <cxxabi.h>
 
     //GCC demangling implementation

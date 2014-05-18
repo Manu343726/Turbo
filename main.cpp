@@ -33,6 +33,8 @@
 #include "warning.hpp"
 #include "impl/demangle.hpp"
 
+#include <iostream>
+
 using namespace tml::placeholders;
 
 #ifdef RUN_UNIT_TESTS
@@ -67,6 +69,8 @@ TURBO_ASSERT((std::is_same<t6,tml::integer_list<1,2,3>>));
 
 #endif /* RUN_UNIT_TESTS */
 
+using r = tml::eval<tml::lambda<_1,tml::delayed_eval<tml::function<tml::lazy<tml::function>>,_1>>,int>;
+
 template<typename LHS , typename RHS>
 struct logical_or : public tml::function<tml::boolean<LHS::value || RHS::value>>
 {};
@@ -80,15 +84,20 @@ using res = tml::eval<tml::lambda<_1,
                       tml::true_type
                      >;
 
-using res2 = tml::eval<tml::multi_lambda<_1,_2 , logical_or<_1,tml::delayed_eval<tml::lambda<_3,_3>,_2>>> , tml::true_type , tml::true_type>;
+using res2 = tml::eval<tml::multi_lambda<_1 , 
+                                         tml::delayed_eval<logical_or<_3,_3>,
+                                                           _1,tml::false_type
+                                                          >
+                                        > , 
+                       tml::true_type
+                      >;
 
+using res3 = tml::eval<tml::multi_let<_1,tml::Int<0> , tml::delayed_eval<tml::lazy<tml::function>,_1>>>;
 
-TURBO_ASSERT((res));
-
-using r = tml::eval<_1>;
-
-using a1 = any_of<tml::lambda<_1 , _1>,tml::boolean_list<true>>;
-
-TURBO_ASSERT((std::is_same<res2,tml::true_type>));
-
-int main(){}
+int main()
+{
+    std::cout << tml::impl::demangle( typeid( r ).name() ) << std::endl;
+    std::cout << tml::impl::demangle( typeid( res ).name() ) << std::endl;
+    std::cout << tml::impl::demangle( typeid( res2 ).name() ) << std::endl;
+    std::cout << tml::impl::demangle( typeid( res3 ).name() ) << std::endl;
+}

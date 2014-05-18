@@ -24,9 +24,11 @@
 /*
  * Portable static_warning utility.
  * 
- * The macro TURBO_STATIC_WARNING() works exactly as TURBO_STATIC_ASSERT(), but it emmits compilation warnings
+ * The macro TURBO_WARNING() works exactly as TURBO_STATIC_ASSERT(), but it emmits compilation warnings
  * instead of aborting compilation when the condition is false. Like assert, warning expects a boolean value type
  * as parameter.
+ * Also the macro TURBO_UNCONDITIONAL_WARNING() throws a compile-time warning always, without condition.
+ * It could be useful when debugging templates to build instantation traces.
  * 
  * The implementation works enabling the deprecated attribute if the condition is false. The implementation checks for
  * C++14 support (Which has a standard [[deprecated(message)]] attribute), else a compiler-specific version is used.
@@ -34,6 +36,7 @@
 
 #include "basic_types.hpp"
 #include "impl/CPP_META_MACROS.hpp"
+#include "unconditional_false.hpp"
 
 #define CPP11_TAG 201103
 #define CPP_ENABLED defined( __cplusplus )
@@ -58,7 +61,10 @@
                                                                                 \
         DEPRECATED_ATTRIBUTE( void warning_call( tml::false_type ) , "[[STATIC_WARNING]] " message " [[STATIC_WARNING]]" ){} \
         void warning_call( tml::true_type ){}                                  \
-    }                                        
+    }   
+
+
+#define TURBO_UNCONDITIONAL_WARNING( template_arg , message ) TURBO_WARNING( (tml::unconditional_false<template_arg>) , message );
 
 #endif	/* WARNING_HPP */
 
