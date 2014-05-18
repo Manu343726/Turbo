@@ -9,11 +9,10 @@ Turbo is a library dessigned to provide compile-time utilities through [template
 
 ## Features
 
----
-At this time (April 2014) the library is beging completely rewritten from scratch.  
-The initial implementation of the library suffers for some scalability issues due to problems (Bad dessign decissions?) on the base dessign and modules of the library.
+At this time (April 2014) the library is being completely rewritten from scratch.  
+The initial implementation suffers from some scalability issues due to problems (Bad design decissions?) on the base design and modules of the library.
 
-To solve that problems, the library was completly redesigned, focusing the implementation on high-order metaprogramming facilities to make developing new features easy and reduce (Avoid, if possible=) coupling on different features of the library.
+To solve that problems, the library was completly redesigned, focusing the implementation on high-order metaprogramming facilities to make developing new features easy, and reduce (Avoid, if possible=) coupling on different features of the library.
 
 The reimplementation of the library is being developed at the [`reboot` branch](https://github.com/Manu343726/Turbo/tree/reboot). Its (currently) focused in a simple set of high-order features:
 
@@ -33,7 +32,7 @@ So an expression could be:
      using e2 = tml::function<int>; //e2 is a functional expression
      
      //A more complex expression (A functional expression)
-     using e3 = tml::transform<tml::list<int,float,double>,f<_1,_2>>;
+     using e3 = tml::transform<tml::list<int,float,double>,tml::size_of<_1>>;
 
 To evaluate an expression, one should evaluate the entire set of parameters of a parametrized expression, and return the result if the expression is a functional expression. Thats what `tml::eval` is dessigned for:
 
@@ -45,12 +44,12 @@ To evaluate an expression, one should evaluate the entire set of parameters of a
     }
     
     using expression = identity<int>;
-    using result = tml::eval<identity>; //Compute the result of evaluating the expression.
+    using result = tml::eval<expression>; //Compute the result of evaluating the expression.
     using result = tml::eval<identity<identity<int>>>; //result is int
 
 Also, `tml::eval` could be used to take an expression and evaluate it with a new set of argumments. Following with the example above:
 
-    using binded = tml::eval<expression,identity<float>>; //We evaluate expression with identity<float> instead of identity<int>
+    using binded = tml::eval<identity<int>,float>; //We evaluate identity<> with float instead of int as parameter
 
 Or one could fill the expression with placeholders and evaluate the expression later when the argumments are aviable (Lazy evaluation):
 
@@ -58,10 +57,26 @@ Or one could fill the expression with placeholders and evaluate the expression l
     ...
     using result = tml::eval<expression,float,int,double>;
 
+Because the library wrks with types only, lambda evaluation of metafunctions should be done filling the metafunction with 
+placeholders to properly instantiate it (See the example above).  
+Turbo provides the `tml::lazy` template, dessigned to take a template parameter storing it, making possible to instantiate the
+template later:
+
+    using t = tml::lazy<tml::function>; //t stores a tml::function metafunction
+    using instance = tml::lazy_instance<t,int>; //instance is tml::function<int>
+
+Also `tml::lazy` could be used to do lazy evaluation of metafunctions. For example:
+
+    using t = tml::lazy<tml::function>;
+    using result = tml::eval<t,int>; //Result is int (The result of evaluating tml::function<int>)
+
+
+For more information see the documentation inside `eval.hpp`.
+
 ### Haskell-like let expressions
 
 `tml::eval` allows you to evaluate an exsisting expression with other argumments, but it hasn't enought power to be usable in all situations.
-For example, `tml::eval` only binds parameters of the main scope, so an expression with nested parametrized expressions can only be reevaluated specified the most enclosing parameter (See the tml::eval binding examples above).
+For example, `tml::eval` only binds parameters of the main scope, so an expression with nested parametrized expressions can only be reevaluated specifying the most enclosing parameter (See the tml::eval binding examples above).
 
 Turbo probides `tml::let`, a high-order metafunction similar to haskell's `let`
 Its purpose is to subsitute a value on an expression, given an specifiec variable to bind the value with:
@@ -82,18 +97,100 @@ a template dessigned as a let of multiple variables:
                                       f<X,g<Y,Z>> //expression
                                      >;
 
-`tml::multi_let` works currifying the multiple variable let into a chain of `tml::let` nested `tml::let` expressions. 
+`tml::multi_let` works currifying the multiple variable let into a chain of nested `tml::let` expressions. 
 
 ### Lambda expressions:
 
 The ability of substituting a value in an expression provided by `tml::let` makes possible to create lambda expressions without any special effort. Turbo provides the `tml::lambda` template:
 
     //Gets a list with the sizes of the specified types
-    using result = tml::transform<tml::lambda<_1,tml::size_of<_1>>,float,int,double>;
+    using result = tml::transform<tml::lambda<_1,tml::size_of<_1>>,tml::list<float,int,double>>;
+
+Multiple-variable lambda expressions are provided too:
+
+    //Returns true if at least one element of the SEQUENCE evaluates the predicate P to true
+    template<typename P , typename SEQUENCE>
+    using any_of = tml::foldr<tml::multi_lambda<_1,_2 , tml::logical_or<_1,tml::eval<P,_2>>>,SEQUENCE>;
+
+### TMP-aware static asserting:
+
+The standard `static_assert()` expects a boolean value as asserting condition. In mostly situations (Even using the Standard Library metaprogramming facilities only) that condition comes in the form of a boolean type (Like `std::integral_constant<bool,true>`).   
+Turbo implements the macro `TURBO_ASSERT()` which is dessigned to work with such types without needing to extract the value via the `::value` member:
+
+    TURBO_ASSERT( (std::is_integral<int>) , "What happened????" );
+
+### Compilation-time static warning:
+
+The only standard way to throw warnings during compilation is the `#warning` macro. But this warnings are checked during preprocessing time, and what a C++ (meta)programmer needs is a way to generate warnings depending in compile-time values
+and/or templates.
+
+Turbo implements a `STATIC_WARNING()` macro, which generates a warning at template instantation phase. This feature is based 
+in a `deprecated` attribute trick, which will be standard in C++14. At this time, Turbo uses compiler-specific attributes.
+
+### Uniform multiple-SFINAE facilities:
+
+The Standard template to do SFINAE, `std::enable_if`, disables the instantation of a template if a certain boolean condition is
+not guaranteed. As in the `static_assert()` case explained above, `std::enable_if` expects a boolean value as condition. Also,
+the member type `::type` of `std::enable_if` should be explicitly referenced via the common and cumbersome `typename ::type` construction.
+
+Turbo provides the macros `TURBO_ENABLE_IF()` and `TURBO_DISABLE_IF()`, which makes SFINAE clean and easy. For example:
+
+    template<typename T , typename SFINAE_FLAG = tml::sfinae_result>
+    struct f;
+
+    template<typename T>
+    struct f<T , TURBO_ENABLE_IF( std::is_floating_point<T> )>
+    {};
+
+There are cases where a template should be enabled/disabled depending in many conditions. This could be achieved passing 
+a complex boolean expression to `std::enable_if` (Or `TURBO_ENABLE/DISABLE_IF()`).   
+Instead Turbo implements a so-called *sfinae container*, that is, a template dessigned to store multiple SFINAE entities like `std::enable_if` and behave itself as a big `enable_if`. That template is enabled (ie declares a `::type` member) if and only
+if all the SFINAE entities passed are enabled.  
+
+Also Turbo provies some macros, `TURBO_SFINAE()`, `ENABLE_IF()`, and `DISABLE_IF()` to build such sfinae containers easily. The combination of these features makes possible to write multiple-condition SFINAE expressions in a clear and concise syntax:
+
+    //Following with the f example above, now we define another f specialization:
+
+    template<typename T>
+    struct f<T , TURBO_SFINAE( DISABLE_IF( std::is_floating_point<T> ),
+                               ENABLE_IF( std::is_default_constructible<T> ) )>
+    {
+
+    };
+
+
+## Known issues:
+
+The features explained above have some implementation issues (Working on...):
+
+ - **`tml::multi_lambda` evaluation doesn't work on GCC**: The multiple-variable lambda template is defined as follows:
+         
+         template<typename... VARIABLES , typename BODY>
+         struct multi_lambda
+         {
+             template<typename... ARGS>
+             using result = tml::eval<tml::multi_let<VARIABLES...,
+                                                     ARGS...,
+                                                     BODY
+                                                    >
+                                     >;
+         };
+
+   For some reason the evaluation of that lambda does not work on GCC. After some discussions and tests I'm sure this code is perfectly valid, seems like this is a GCC bug.
+   This project was reconfigured to use the LLVM/CLang toolchain, where this code works perfectly.
+
+ - **The `TURBO_ASSERT()` macro overloading doesn't work on LLVM/CLang**: `TURBO_ASSERT()` is a macro "overloaded", making possible to pass one or two parameters depending on the use case.  
+   The macro overloading is an old trick to define macros with different number of parameters, but with the same name.
+   `TURBO_ASSERT()` was implemented and tested using GCC 4.8.2, but the overloading doesn't work properly on LLVM/CLang toolchain for some 
+   reason.
+
+  - **Some compiler configuration issues**: LLVM/CLang works building a GCC-like forntend, and for some reason they define the 
+  `__GNUC__` macro in addition to the `__llvm__`.
+
+
+## README content of the original library implementation:
 
 Turbo provides a set of features to simplify type manipulation and compile-time computations:
-
----
 
 ### Portable `to_string()` function to print type names at runtime:  
 
