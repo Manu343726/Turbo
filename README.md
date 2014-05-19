@@ -41,7 +41,7 @@ To evaluate an expression, one should evaluate the entire set of parameters of a
     struct identity
     {
       using result = T;
-    }
+    };
     
     using expression = identity<int>;
     using result = tml::eval<expression>; //Compute the result of evaluating the expression.
@@ -57,7 +57,7 @@ Or one could fill the expression with placeholders and evaluate the expression l
     ...
     using result = tml::eval<expression,float,int,double>;
 
-Because the library wrks with types only, lambda evaluation of metafunctions should be done filling the metafunction with 
+Because the library wrks with types only, lazy evaluation of metafunctions should be done filling the metafunction with 
 placeholders to properly instantiate it (See the example above).  
 Turbo provides the `tml::lazy` template, dessigned to take a template parameter storing it, making possible to instantiate the
 template later:
@@ -121,7 +121,7 @@ Turbo implements the macro `TURBO_ASSERT()` which is dessigned to work with such
 
 ### Compilation-time static warning:
 
-The only standard way to throw warnings during compilation is the `#warning` macro. But this warnings are checked during preprocessing time, and what a C++ (meta)programmer needs is a way to generate warnings depending in compile-time values
+The only standard way to throw warnings during compilation is the `#warning` macro. But this warnings are checked during preprocessing time, and what a C++ (meta)programmer needs is a way to generate warnings depending on compile-time values
 and/or templates.
 
 Turbo implements a `STATIC_WARNING()` macro, which generates a warning at template instantation phase. This feature is based 
