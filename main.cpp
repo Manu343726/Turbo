@@ -69,35 +69,33 @@ TURBO_ASSERT((std::is_same<t6,tml::integer_list<1,2,3>>));
 
 #endif /* RUN_UNIT_TESTS */
 
-using r = tml::eval<tml::lambda<_1,tml::delayed_eval<tml::function<tml::lazy<tml::function>>,_1>>,int>;
+using res2 = tml::eval<tml::multi_lambda<_1 , 
+                                         tml::delayed_eval<tml::lazy<tml::function>,_1>
+                                        > , 
+                       Int<0>
+                      >;
+
+using res3 = tml::eval<tml::multi_let<_1,tml::Int<0> , tml::delayed_eval<tml::lazy<tml::function>,_1>>>;
+
 
 template<typename LHS , typename RHS>
 struct logical_or : public tml::function<tml::boolean<LHS::value || RHS::value>>
 {};
 
 template<typename F , typename SEQ>
-using any_of = tml::foldr<tml::multi_lambda<_1,_2 , logical_or<_1,tml::delayed_eval<F,_2>>>,tml::false_type,SEQ>;
+using any_of = tml::foldl<tml::multi_lambda<_1,_2 , logical_or<_1,tml::delayed_eval<F,_2>>>,tml::false_type,SEQ>;
 
-using res = tml::eval<tml::lambda<_1, 
-                                  tml::delayed_eval<logical_or<_2,_2>,tml::false_type,_1>
-                                 >,
-                      tml::true_type
-                     >;
+template<typename N>
+struct odd : public tml::function<tml::boolean<(N::value % 2) == 0>>
+{};
 
-using res2 = tml::eval<tml::multi_lambda<_1 , 
-                                         tml::delayed_eval<logical_or<_3,_3>,
-                                                           _1,tml::false_type
-                                                          >
-                                        > , 
-                       tml::true_type
-                      >;
-
-using res3 = tml::eval<tml::multi_let<_1,tml::Int<0> , tml::delayed_eval<tml::lazy<tml::function>,_1>>>;
+using map_test = tml::transform<tml::lazy<odd>,tml::list<Int<0>,Int<2>,Int<4>>>;
+using any_of_test = any_of<tml::lazy<odd>,tml::list<Int<0>,Int<2>,Int<4>>>;
 
 int main()
 {
-    std::cout << tml::impl::demangle( typeid( r ).name() ) << std::endl;
-    std::cout << tml::impl::demangle( typeid( res ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( res2 ).name() ) << std::endl;
     std::cout << tml::impl::demangle( typeid( res3 ).name() ) << std::endl;
+    std::cout << tml::impl::demangle( typeid( map_test ).name() ) << std::endl;
+    std::cout << tml::impl::demangle( typeid( any_of_test ).name() ) << std::endl;
 }

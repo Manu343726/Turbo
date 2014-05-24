@@ -23,6 +23,7 @@
 
 #include "eval.hpp"
 #include "let_expressions.hpp"
+#include "list_algorithms.hpp"
 
 namespace tml
 {
@@ -128,18 +129,20 @@ namespace tml
         struct lambda_builder_2;
         
         template<typename... ARGS>
-        struct lambda_builder_2<tml::impl::list<ARGS...>> : public tml::function<multi_lambda<ARGS...>>
+        struct lambda_builder_2<tml::list<ARGS...>> : public tml::function<multi_lambda<ARGS...>>
         {};
         
         template<typename... ARGS>
-        struct lambda_builder<tml::impl::list<ARGS...>>
+        struct lambda_builder<tml::list<ARGS...>>
         {
             //static_assert( sizeof...(ARGS) != sizeof...(ARGS) , "Builder instanced" );
         
-            using body = typename tml::impl::back<tml::impl::list<ARGS...>>::result;
-            using vars = typename tml::impl::pop_back<tml::impl::list<>,tml::impl::list<ARGS...>,false>::result;
+            using body = tml::lists::back<tml::list<ARGS...>>;
+            using vars = tml::lists::pop_back<tml::list<ARGS...>>;
             
-            using result = typename lambda_builder_2<typename tml::impl::push_back<vars,body>::result>::result;
+            TURBO_ASSERT(( std::is_same<tml::lists::push_back<vars,body> , tml::list<ARGS...>> ));
+            
+            using result = typename lambda_builder_2<tml::lists::push_front<vars,body>>::result;
         };
         
         /*
@@ -178,7 +181,7 @@ namespace tml
     {};
     
     template<typename... ARGS>
-    using multi_lambda = typename tml::impl::lambda_builder<tml::impl::list<ARGS...>>::result;
+    using multi_lambda = typename tml::impl::lambda_builder<tml::list<ARGS...>>::result;
 }
 
 #endif	/* LAMBDA_HPP */

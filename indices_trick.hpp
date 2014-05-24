@@ -46,15 +46,15 @@ namespace tml
              * Recursive case
              */
             template<std::size_t LENGTH , typename... INDICES>
-            struct sequence_generator<tml::size_tt<LENGTH>,tml::list<INDICES...>> :
-                public sequence_generator<tml::size_tt<LENGTH-1>,tml::list<tml::size_tt<LENGTH>,INDICES...>>
+            struct sequence_generator<tml::size_t<LENGTH>,tml::list<INDICES...>> :
+                public sequence_generator<tml::size_t<LENGTH-1>,tml::list<tml::size_t<LENGTH>,INDICES...>>
             {};
             
             /*
              * Base case:
              */
             template<typename... INDICES>
-            struct sequence_generator<tml::size_tt<0>,tml::list<INDICES...>> : public tml::function<tml::list<tml::size_tt<0>,INDICES...>>
+            struct sequence_generator<tml::size_t<0>,tml::list<INDICES...>> : public tml::function<tml::list<tml::size_t<0>,INDICES...>>
             {};
         }
         

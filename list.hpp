@@ -21,8 +21,10 @@
 #ifndef LIST_HPP
 #define	LIST_HPP
 
+#include "basic_types.hpp"
 #include "function.hpp"
 
+#include <cstddef>
 
 namespace tml
 {
@@ -34,7 +36,9 @@ namespace tml
      */
     template<typename... Ts>
     struct list
-    {};
+    {
+        static constexpr const std::size_t length = sizeof...(Ts);
+    };
     
     /*
      * Convenient alias for empty lists.

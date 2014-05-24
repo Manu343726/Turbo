@@ -126,7 +126,7 @@ namespace tml
         template<typename F , typename STATE , typename HEAD , typename... TAIL>
         struct foldr<F,STATE,tml::list<HEAD,TAIL...>>
         {
-            using result = tml::eval<F,HEAD,foldr<F,STATE,tml::list<TAIL...>>>;
+            using result = tml::eval<F,HEAD,typename foldr<F,STATE,tml::list<TAIL...>>::result>;
         };
         
         template<typename F , typename STATE>

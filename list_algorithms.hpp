@@ -59,33 +59,77 @@ namespace tml
             template<typename LIST , typename INDEX>
             struct get;
             
-            template<typename... Ts , typename INDEX>
             
             
+            /* Front operations */
+            
+            /*
+             * Gets the first element of a list.
+             * 
+             * The complexity of this operation is O(1)
+             */
+            template<typename LIST>
+            struct front;
+
+            template<typename HEAD , typename... TAIL>
+            struct front<tml::list<HEAD,TAIL...>> : public tml::function<HEAD>
+            {};
+
+            /*
+             * Extracts the first element of a list.
+             * 
+             * The complexity of this operation is O(1)
+             */
+            template<typename LIST>
+            struct pop_front;
+
+            template<typename HEAD , typename... TAIL>
+            struct pop_front<tml::list<HEAD,TAIL...>> : public tml::function<tml::list<TAIL...>>
+            {};
+
+            /*
+             * Inserts an element at the front of a list.
+             * 
+             * The complexity of this operation is O(1)
+             */
+            template<typename LIST , typename T>
+            struct push_front;
+
+            template<typename... Ts , typename T>
+            struct push_front<tml::list<Ts...>,T> : public tml::function<tml::list<T,Ts...>>
+            {};
+            
+            
+            
+            /* Back operations */
             
             /*
              * Gets the last element of a list.
              * 
-             * The complexity of this operation is O(1) (Works through pattern matching)
+             * The complexity of this operation is O(n)
              */
-            template<typename LIST>
+            template<typename LIST , bool end = false>
             struct back;
 
-            template<typename... Ts , typename BACK>
-            struct back<tml::list<Ts...,BACK>> : public tml::function<BACK>
-            {};
+            template<typename HEAD , typename... TAIL>
+            struct back<tml::list<HEAD,TAIL...>,false> : public back<tml::list<TAIL...>,sizeof...(TAIL) <= 1> {};
+
+            template<typename HEAD>
+            struct back<tml::list<HEAD>,true> : public tml::function<HEAD> {};
 
             /*
              * Extracts the last element of a list.
              * 
-             * The complexity of this operation is O(1) (Works through pattern matching)
+             * The complexity of this operation is O(n)
              */
-            template<typename LIST>
+            template<typename PROCESSED , typename LIST , bool end = false>
             struct pop_back;
 
-            template<typename... Ts , typename BACK>
-            struct pop_back<tml::list<Ts...,BACK>> : public tml::function<tml::list<Ts...>>
-            {};
+            template<typename... PROCESSED , typename HEAD , typename... TAIL>
+            struct pop_back<tml::list<PROCESSED...>,tml::list<HEAD,TAIL...>,false> : public pop_back<tml::list<PROCESSED...,HEAD>,tml::list<TAIL...>,sizeof...(TAIL) <= 1> {};
+
+            template<typename... PROCESSED , typename HEAD>
+            struct pop_back<tml::list<PROCESSED...>,tml::list<HEAD>,true> : public tml::function<tml::list<PROCESSED...>> {};
 
             /*
              * Inserts an element at the end of a list.
@@ -103,14 +147,25 @@ namespace tml
         template<typename L1 , typename L2>
         using concat = typename tml::lists::impl::concat<L1,L2>::result;
         
+        
         template<typename LIST>
-        using back = typename tml::lists::impl::pop_back<LIST>::result;
+        using back = typename tml::lists::impl::back<LIST,false>::result;
 
         template<typename LIST>
-        using pop_back = typename tml::lists::impl::pop_back<LIST>::result;
+        using pop_back = typename tml::lists::impl::pop_back<tml::empty_list,LIST,false>::result;
 
         template<typename LIST , typename T>
         using push_back = typename tml::lists::impl::push_back<LIST,T>::result;
+        
+        
+        template<typename LIST>
+        using front = typename tml::lists::impl::front<LIST>::result;
+
+        template<typename LIST>
+        using pop_front = typename tml::lists::impl::pop_front<LIST>::result;
+
+        template<typename LIST , typename T>
+        using push_front = typename tml::lists::impl::push_front<LIST,T>::result;
     }
 }
 

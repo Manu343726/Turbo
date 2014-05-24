@@ -24,6 +24,8 @@
 #include "eval.hpp"
 #include "warning.hpp"
 #include "utils/assert.hpp"
+#include "list.hpp"
+#include "list_algorithms.hpp"
 
 
 /*
@@ -179,62 +181,7 @@ namespace tml
     
     
     namespace impl
-    {
-        /*
-         * IMPLEMENTATION NOTE: The following metaprogram is written through add-hoc typelists and list operaions
-         * due to the current lack of this features on the library reboot.
-         * This implementation will be (Should be?) reimplemented in the future using library standard features.
-         */
-        
-        /* typelist to store argumment packs */
-        template<typename... Ts>
-        struct list 
-        {
-            static constexpr std::size_t length = sizeof...(Ts);
-        };
-        
-        
-        /*
-         * The following two metafunction for retreveing and erasing the last element of a typelist could 
-         * be easily implemented using pattern matching (Partical template specialization).
-         * However seems like there is a bug on my current compiler (GCC4.8.2), which rejects it.
-         * Just for case, the master version of this library has a pattern-matching-based equivalent
-         * of the pop_back metafunction which worked well.
-         */
-
-        /*
-         * This metafunctions returns a pop-backed version of an specified typelist.
-         * In other words, erases the last elements from the list and returns the new list.
-         */
-        template<typename PROCESSED , typename LIST , bool end = false>
-        struct pop_back;
-
-        template<typename... PROCESSED , typename HEAD , typename... TAIL>
-        struct pop_back<list<PROCESSED...>,list<HEAD,TAIL...>,false> : public pop_back<list<PROCESSED...,HEAD>,list<TAIL...>,sizeof...(TAIL) <= 1> {};
-        
-        template<typename... PROCESSED , typename HEAD>
-        struct pop_back<list<PROCESSED...>,list<HEAD>,true> : public tml::function<list<PROCESSED...>> {};
-        
-        /*
-         * Returns the last element of a list
-         */
-        template<typename LIST>
-        struct back;
-
-        template<typename... Ts , typename HEAD>
-        struct back<list<HEAD,Ts...>> : public back<list<Ts...>> {};
-        
-        template<typename HEAD>
-        struct back<list<HEAD>> : public tml::function<HEAD> {};
-        
-        template<typename LIST , typename T>
-        struct push_back;
-        
-        template<typename... Ts , typename T>
-        struct push_back<tml::impl::list<Ts...>,T> : public tml::function<tml::impl::list<Ts...,T>>
-        {};
-        
-            
+    {            
         /*
          * Evaluate a multiple-variable let expression and returns the currified unary let equivalent expression.
          * 
@@ -270,7 +217,7 @@ namespace tml
             static_assert( ( ARGS::length - 1 ) > 0 , "A let expression should have at least one variable-value pair to bind." );
             static_assert( ( ARGS::length - 1 ) % 2 == 0 , "The set of variables and values should be odd (One value per variable)" );
             
-            using target = typename back<ARGS>::result; //Target expression (See parsing description above)
+            using target = tml::lists::back<ARGS>; //Target expression (See parsing description above)
             
             /* Just a type with no meaning used as sentinel in some contexts */
             struct nil {};
@@ -291,9 +238,9 @@ namespace tml
              * in the next call.
              */
             template<typename... LEFT_LIST , typename HEAD , typename... TAIL>
-            struct split_in_middle<list<LEFT_LIST...> , list<HEAD,TAIL...> , false>
+            struct split_in_middle<tml::list<LEFT_LIST...> , tml::list<HEAD,TAIL...> , false>
             {
-                using next_call = split_in_middle<list<LEFT_LIST...,HEAD>,list<TAIL...>,( sizeof...(LEFT_LIST) + 1 ) == sizeof...(TAIL)>;
+                using next_call = split_in_middle<tml::list<LEFT_LIST...,HEAD>,tml::list<TAIL...>,( sizeof...(LEFT_LIST) + 1 ) == sizeof...(TAIL)>;
                 
                 using variables = typename next_call::variables;
                 using values = typename next_call::values;
@@ -303,16 +250,16 @@ namespace tml
              * Base case:
              */
             template<typename... LEFT_LIST , typename... RIGHT_LIST>
-            struct split_in_middle<list<LEFT_LIST...>,list<RIGHT_LIST...>,true>
+            struct split_in_middle<tml::list<LEFT_LIST...>,tml::list<RIGHT_LIST...>,true>
             {
                 using variables = list<LEFT_LIST...>;
                 using values = list<RIGHT_LIST...>;
             };
             
-            using args_without_expression = typename pop_back<list<>,ARGS>::result;
+            using args_without_expression = tml::lists::pop_back<ARGS>;
             
-            using variables = typename split_in_middle<list<>,args_without_expression,false>::variables;
-            using values    = typename split_in_middle<list<>,args_without_expression,false>::values;
+            using variables = typename split_in_middle<tml::empty_list,args_without_expression,false>::variables;
+            using values    = typename split_in_middle<tml::empty_list,args_without_expression,false>::values;
             
             
             /*
@@ -373,7 +320,7 @@ namespace tml
      * the ocurences of the named variable have been substituted with the value.
      */
     template<typename... ARGS>
-    using multi_let = typename impl::multi_let_currifier<impl::list<ARGS...>>::result;
+    using multi_let = typename impl::multi_let_currifier<tml::list<ARGS...>>::result;
 }
 
 #endif  /* LET_HPP */
