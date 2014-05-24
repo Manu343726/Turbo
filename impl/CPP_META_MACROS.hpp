@@ -84,7 +84,7 @@
 
 #define SELECT_ARG_1( _1 , ... ) _1
 #define SELECT_ARG_2( _1 , _2 , ... ) _2
-#define SELECT_ARG_3( _1 , _2 , _3 ... ) _3
+#define SELECT_ARG_3( _1 , _2 , _3 , ... ) _3
 #define SELECT_ARG_4( _1 , _2 , _3 , _4 , ... ) _4
 #define SELECT_ARG_5( _1 , _2 , _3 , _4 , _5 , ... ) _5
 #define SELECT_ARG_6( _1 , _2 , _3 , _4 , _5 , _6 , ... ) _6
