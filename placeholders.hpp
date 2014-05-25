@@ -25,6 +25,9 @@
 #include "eval.hpp"
 #include "function.hpp"
 #include "warning.hpp"
+#include "to_string.hpp"
+
+#include <string>
 
 namespace tml
 {
@@ -68,6 +71,18 @@ namespace tml
         template<std::size_t I , typename... ARGS>
         struct eval<tml::placeholder<I>,tml::list<ARGS...>> : public tml::function<tml::placeholder<I>>
         {};
+        
+        /*
+         * to_string override for placeholders
+         */
+        template<std::size_t INDEX>
+        struct to_string<tml::placeholder<INDEX>>
+        {
+            operator std::string() const
+            {
+                return "_" + std::to_string( INDEX );
+            }
+        };
     }
         
     /*

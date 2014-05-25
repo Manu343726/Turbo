@@ -230,7 +230,7 @@ namespace tml
      * Iterators-based sequence:
      * =========================
      *  - F: The composition function. It should be a binary function enity, where the 
-     *       first argumment is the current value (state) of the computation, and the seconds
+     *       first (left) argumment is the current value (state) of the computation, and the second
      *       is the current element of the sequence.
      *  - STATE: Initial state of the computation.
      *  - BEGIN: An iterator pointing to the beginning of the input sequence.
@@ -260,7 +260,7 @@ namespace tml
      * Iterators-based sequence:
      * =========================
      *  - F: The composition function. It should be a binary function enity, where the 
-     *       first argumment is the current value (state) of the computation, and the seconds
+     *       second (right) argumment is the current value (state) of the computation, and the first
      *       is the current element of the sequence.
      *  - STATE: Initial state of the computation.
      *  - BEGIN: An iterator pointing to the beginning of the input sequence.
@@ -277,16 +277,12 @@ namespace tml
      * 
      * List-based sequence:
      * ====================
-     *  - F: The composition function. It should be a binary function enity, where the 
-     *       second (right) argumment is the current value (state) of the computation, and the first
-     *       is the current element of the sequence.
+     *  - P: The boolean predicate. It should be a unary boolean function enity.
      *  - SEQ: The sequence, represented as a tml::list.
      * 
      * Iterators-based sequence:
      * =========================
-     *  - F: The composition function. It should be a binary function enity, where the 
-     *       first argumment is the current value (state) of the computation, and the seconds
-     *       is the current element of the sequence.
+     *  - P: The boolean predicate. It should be a unary boolean function enity.
      *  - BEGIN: An iterator pointing to the beginning of the input sequence.
      *  - END: An iterator pointing to the end of the input sequence. Note sequences represented
      *    as pairs of iterators are sequences of the interval [BEGIN,END).
@@ -296,6 +292,30 @@ namespace tml
     
     template<typename P , typename... SEQ>
     using any_of = tml::any<P,SEQ...>; //C++ (STL-ish) name
+    
+    /*
+     * Returns true if all elements of a sequence has some property represented by a 
+     * boolean predicate P
+     * 
+     * The argumments of the function could be:
+     * 
+     * List-based sequence:
+     * ====================
+     *  - P: The boolean predicate. It should be a unary boolean function enity.
+     *  - SEQ: The sequence, represented as a tml::list.
+     * 
+     * Iterators-based sequence:
+     * =========================
+     *  - P: The boolean predicate. It should be a unary boolean function enity.
+     *  - BEGIN: An iterator pointing to the beginning of the input sequence.
+     *  - END: An iterator pointing to the end of the input sequence. Note sequences represented
+     *    as pairs of iterators are sequences of the interval [BEGIN,END).
+     */
+    template<typename P , typename... SEQ>
+    using all = tml::foldl<tml::multi_lambda<_1,_2 , tml::logical_and<_1,tml::deval<P,_2>>> , tml::true_type , SEQ...>; //Functional (Haskell-like) name)
+    
+    template<typename P , typename... SEQ>
+    using all_of = tml::all<P,SEQ...>; //C++ (STL-ish) name
 }
 
 #endif	/* ALGORITHM_HPP */

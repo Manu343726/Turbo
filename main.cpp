@@ -73,11 +73,13 @@ template<typename N>
 struct odd : public tml::function<tml::boolean<(N::value % 2) == 0>>
 {};
 
-using map_test = tml::transform<tml::lazy<odd>,tml::list<Int<0>,Int<2>,Int<4>>>;
-using any_of_test = tml::any<tml::lazy<odd>,tml::list<Int<0>,Int<2>,Int<4>>>;
+using map_test    = tml::map<tml::lazy<odd>,tml::integer_list<0,1,2,3,4,5>>;
+using any_of_test = tml::any<tml::lazy<odd>,tml::integer_list<0,1,2,3,4,5>>;
+using all_of_test = tml::all<tml::lazy<odd>,tml::integer_list<0,1,2,3,4,5>>;
 
 int main()
 {
     std::cout << tml::to_string<map_test>() << std::endl;
     std::cout << tml::to_string<any_of_test>() << std::endl;
+    std::cout << tml::to_string<all_of_test>() << std::endl;
 }
