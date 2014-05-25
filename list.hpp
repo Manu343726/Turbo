@@ -23,8 +23,13 @@
 
 #include "basic_types.hpp"
 #include "function.hpp"
+#include "to_string.hpp"
 
 #include <cstddef>
+#include <string>
+#include <sstream>
+#include <algorithm>
+#include <tuple>
 
 namespace tml
 {
@@ -59,6 +64,48 @@ namespace tml
     template<typename... Ts>
     struct make_list : public tml::function<tml::list<Ts...>>
     {};
+    
+    /*
+     * tml::to_string override for lists
+     */
+    namespace impl
+    {
+        template<typename... Ts>
+        struct to_string<tml::list<Ts...>>
+        {
+            template<typename... Us>
+            struct foo
+            {};
+            
+            friend std::ostream& operator<<( std::ostream& os , foo<> )
+            {
+                return os;
+            }
+            
+            template<typename HEAD , typename... TAIL>
+            friend std::ostream& operator<<( std::ostream& os  , foo<HEAD,TAIL...> )
+            {
+                if( sizeof...(TAIL) > 0 )
+                    return os << tml::to_string<HEAD>() << "," << foo<TAIL...>{};
+                else
+                    return os << tml::to_string<HEAD>();
+            }
+            
+            
+            operator std::string() const
+            {
+                std::stringstream result;
+                
+                result << "[";
+                
+                result << foo<Ts...>{};
+                
+                result << "]";
+                
+                return result.str();
+            }
+        };
+    }
 }
 
 #endif	/* LIST_HPP */

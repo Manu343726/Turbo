@@ -27,6 +27,9 @@
 #include "control_structures.hpp"
 #include "lambda.hpp"
 #include "function_alias_decl.hpp"
+#include "placeholders.hpp"
+
+using namespace tml::placeholders;
 
 
 /*
@@ -63,11 +66,12 @@ namespace tml
         
         /*
          * List-based sequence map function.
+         * 
+         * O(1) complexity
          */
         template<typename T , typename... SEQUENCE>
         struct map<T,tml::list<SEQUENCE...>> : public tml::function<tml::list<tml::eval<T,SEQUENCE>...>>
         {};
-        
         
         
         /*
@@ -122,7 +126,11 @@ namespace tml
         template<typename... ARGS>
         struct foldl;
         
-        
+        /*
+         * List-based foldr metafunction
+         * 
+         * O(n) complexity
+         */
         template<typename F , typename STATE , typename HEAD , typename... TAIL>
         struct foldr<F,STATE,tml::list<HEAD,TAIL...>>
         {
@@ -136,7 +144,11 @@ namespace tml
         };
         
         
-        
+        /*
+         * List-based foldl metafunction
+         * 
+         * O(n) complexity
+         */
         template<typename F , typename STATE , typename HEAD , typename... TAIL>
         struct foldl<F,STATE,tml::list<HEAD,TAIL...>>
         {
@@ -198,16 +210,92 @@ namespace tml
     TURBO_DEFINE_FUNCTION_TALIAS_CUSTOMNAME( filter , copy_if ); //C++ (STL-like) name
     
     
+    /*
+     * Haskell-like foldl metafunction.
+     * 
+     * Processes an input sequence generating a result value through recursive
+     * applications of a given composition function F. foldl applies the recursion
+     * on the left side of the composition operation.
+     * 
+     * The argumments of the function could be:
+     * 
+     * List-based sequence:
+     * ====================
+     *  - F: The composition function. It should be a binary function enity, where the 
+     *       first (left) argumment is the current value (state) of the computation, and the second
+     *       is the current element of the sequence.
+     *  - STATE: Initial state of the computation.
+     *  - SEQ: The sequence, represented as a tml::list.
+     * 
+     * Iterators-based sequence:
+     * =========================
+     *  - F: The composition function. It should be a binary function enity, where the 
+     *       first argumment is the current value (state) of the computation, and the seconds
+     *       is the current element of the sequence.
+     *  - STATE: Initial state of the computation.
+     *  - BEGIN: An iterator pointing to the beginning of the input sequence.
+     *  - END: An iterator pointing to the end of the input sequence. Note sequences represented
+     *    as pairs of iterators are sequences of the interval [BEGIN,END).
+     */
+    TURBO_DEFINE_FUNCTION_TALIAS( foldl ); //Functional (Haskell-like) name
     
-    template<typename... ARGS>
-    using foldl = typename tml::impl::foldl<ARGS...>::result;
     
-    template<typename... ARGS>
-    using foldr = typename tml::impl::foldr<ARGS...>::result;
+    /*
+     * Haskell-like foldr metafunction.
+     * 
+     * Processes an input sequence generating a result value through recursive
+     * applications of a given composition function F. foldr applies the recursion
+     * on the right side of the composition operation.
+     * 
+     * The argumments of the function could be:
+     * 
+     * List-based sequence:
+     * ====================
+     *  - F: The composition function. It should be a binary function enity, where the 
+     *       second (right) argumment is the current value (state) of the computation, and the first
+     *       is the current element of the sequence.
+     *  - STATE: Initial state of the computation.
+     *  - SEQ: The sequence, represented as a tml::list.
+     * 
+     * Iterators-based sequence:
+     * =========================
+     *  - F: The composition function. It should be a binary function enity, where the 
+     *       first argumment is the current value (state) of the computation, and the seconds
+     *       is the current element of the sequence.
+     *  - STATE: Initial state of the computation.
+     *  - BEGIN: An iterator pointing to the beginning of the input sequence.
+     *  - END: An iterator pointing to the end of the input sequence. Note sequences represented
+     *    as pairs of iterators are sequences of the interval [BEGIN,END).
+     */
+    TURBO_DEFINE_FUNCTION_TALIAS( foldr ); //Functional (Haskell-like) name
     
+    /*
+     * Returns true if any element of a sequence has some property represented by a 
+     * boolean predicate P
+     * 
+     * The argumments of the function could be:
+     * 
+     * List-based sequence:
+     * ====================
+     *  - F: The composition function. It should be a binary function enity, where the 
+     *       second (right) argumment is the current value (state) of the computation, and the first
+     *       is the current element of the sequence.
+     *  - SEQ: The sequence, represented as a tml::list.
+     * 
+     * Iterators-based sequence:
+     * =========================
+     *  - F: The composition function. It should be a binary function enity, where the 
+     *       first argumment is the current value (state) of the computation, and the seconds
+     *       is the current element of the sequence.
+     *  - BEGIN: An iterator pointing to the beginning of the input sequence.
+     *  - END: An iterator pointing to the end of the input sequence. Note sequences represented
+     *    as pairs of iterators are sequences of the interval [BEGIN,END).
+     */
+    template<typename P , typename... SEQ>
+    using any = tml::foldl<tml::multi_lambda<_1,_2 , tml::logical_or<_1,tml::deval<P,_2>>> , tml::false_type , SEQ...>; //Functional (Haskell-like) name)
     
-    
-    
+    template<typename P , typename... SEQ>
+    using any_of = tml::any<P,SEQ...>; //C++ (STL-ish) name
 }
 
 #endif	/* ALGORITHM_HPP */

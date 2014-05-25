@@ -25,8 +25,8 @@
 
 
 /*
- * This header declares the set of basic algebra operations, their implementation templates
- * in tml::impl namespace, and the user-side template_aliases.
+ * This header declares the set of basic algebra metafunctions. Like other functions, one sould evaluate
+ * them to retrieve the result.
  * 
  * Also this header defines a set operators overloading which implement that algebra operations.
  * That operators implement expression templates which compute the desired algebra operation.
@@ -36,39 +36,73 @@
 
 namespace tml
 {
-    namespace impl
+    /* Basic algebraic operations */
+        
+    /*
+     * Performs the addition of two values
+     */
+    template<typename LHS , typename RHS>
+    struct add
     {
-        /* Basic algebraic operations */
-        
-        /*
-         * Performs the addition of two values
-         */
-        template<typename LHS , typename RHS>
-        struct add;
-        
-        /*
-         * Performs the substraction of two values
-         */
-        template<typename LHS , typename RHS>
-        struct sub;
-        
-        /*
-         * Performs the multiplication of two values
-         */
-        template<typename LHS , typename RHS>
-        struct mul;
-        
-        /*
-         * Performs the division of two values
-         */
-        template<typename LHS , typename RHS>
-        struct div;
-    }
+        static_assert( sizeof(LHS) != sizeof(LHS) , "You should implement add for your custom datatypes" );
+    };
+
+    /*
+     * Performs the substraction of two values
+     */
+    template<typename LHS , typename RHS>
+    struct sub
+    {
+        static_assert( sizeof(LHS) != sizeof(LHS) , "You should implement sub for your custom datatypes" );
+    };
+
+    /*
+     * Performs the multiplication of two values
+     */
+    template<typename LHS , typename RHS>
+    struct mul
+    {
+        static_assert( sizeof(LHS) != sizeof(LHS) , "You should implement mul for your custom datatypes" );
+    };
+
+    /*
+     * Performs the division of two values
+     */
+    template<typename LHS , typename RHS>
+    struct div
+    {
+        static_assert( sizeof(LHS) != sizeof(LHS) , "You should implement div for your custom datatypes" );
+    };
     
-    TURBO_DEFINE_FUNCTION_TALIAS( add );
-    TURBO_DEFINE_FUNCTION_TALIAS( sub );
-    TURBO_DEFINE_FUNCTION_TALIAS( mul );
-    TURBO_DEFINE_FUNCTION_TALIAS( div );
+    
+    /* Basic logical functions */
+    
+    /*
+     * Performs the addition of two values
+     */
+    template<typename LHS , typename RHS>
+    struct logical_or
+    {
+        static_assert( sizeof(LHS) != sizeof(LHS) , "You should implement logical_or for your custom datatypes" );
+    };
+
+    /*
+     * Performs the substraction of two values
+     */
+    template<typename LHS , typename RHS>
+    struct logical_and
+    {
+        static_assert( sizeof(LHS) != sizeof(LHS) , "You should implement logical_and for your custom datatypes" );
+    };
+
+    /*
+     * Performs the multiplication of two values
+     */
+    template<typename OP>
+    struct logical_not
+    {
+        static_assert( sizeof(OP) != sizeof(OP) , "You should implement logical_not for your custom datatypes" );
+    };
 }
 
 #endif	/* ALGREGRA_HPP */

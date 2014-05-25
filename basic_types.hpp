@@ -22,6 +22,12 @@
 #define	BASIC_TYPES_HPP
 
 #include <type_traits>
+#include <string>
+#include <sstream>
+
+#include "algebra.hpp"
+#include "function.hpp"
+#include "to_string.hpp"
 
 /*
  * This header defines the basic types of the library.
@@ -68,6 +74,8 @@
  *        using c = tml::char_<'a'>;  // int c = 'a'
  * 
  *    WARNING: CURRENTLY NOT IMPLEMENTED
+ * 
+ * Also this header includes "algebra.hpp" and implements algebraic and logical operations for basic types.
  */
 
 namespace tml
@@ -77,6 +85,37 @@ namespace tml
      */
     template<typename T , T V>
     using integral_constant = std::integral_constant<T,V>;
+    
+    namespace impl
+    {
+        /*
+         * to_string override for basic types:
+         */
+        template<typename T , T V>
+        struct to_string<tml::integral_constant<T,V>>
+        {
+            operator std::string() const
+            {
+                return std::to_string( V );
+            }
+        };
+        
+        /*
+         * Specialization for booleans
+         */
+        template<bool V>
+        struct to_string<tml::integral_constant<bool,V>>
+        {
+            operator std::string() const
+            {
+                std::stringstream ss;
+                
+                ss << std::boolalpha << V;
+                
+                return ss.str();
+            }
+        };
+    }
 
     /*
      * Boolean constants defined exactly as in the satndard library
@@ -176,6 +215,54 @@ namespace tml
 }
 
 using namespace tml::basic_types_declarations;
+
+
+/* Algebra for basic types implementation */
+
+namespace tml
+{
+    template<typename TLHS , TLHS VLHS , 
+             typename TRHS , TRHS VRHS>
+    struct add<tml::integral_constant<TLHS,VLHS> , tml::integral_constant<TRHS,VRHS>> :
+        public tml::function<tml::integral_constant<decltype(VLHS + VRHS),VLHS + VRHS>>
+    {};
+    
+    template<typename TLHS , TLHS VLHS , 
+             typename TRHS , TRHS VRHS>
+    struct sub<tml::integral_constant<TLHS,VLHS> , tml::integral_constant<TRHS,VRHS>> :
+        public tml::function<tml::integral_constant<decltype(VLHS - VRHS),VLHS - VRHS>>
+    {};
+    
+    template<typename TLHS , TLHS VLHS , 
+             typename TRHS , TRHS VRHS>
+    struct mul<tml::integral_constant<TLHS,VLHS> , tml::integral_constant<TRHS,VRHS>> :
+        public tml::function<tml::integral_constant<decltype(VLHS * VRHS),VLHS * VRHS>>
+    {};
+    
+    template<typename TLHS , TLHS VLHS , 
+             typename TRHS , TRHS VRHS>
+    struct div<tml::integral_constant<TLHS,VLHS> , tml::integral_constant<TRHS,VRHS>> :
+        public tml::function<tml::integral_constant<decltype(VLHS / VRHS),VLHS / VRHS>>
+    {};
+    
+    
+    template<bool VLHS , 
+             bool VRHS>
+    struct logical_or<tml::boolean<VLHS> , tml::boolean<VRHS>> :
+        public tml::function<tml::boolean<VLHS || VRHS>>
+    {};
+    
+    template<bool VLHS , 
+             bool VRHS>
+    struct logical_and<tml::boolean<VLHS> , tml::boolean<VRHS>> :
+        public tml::function<tml::boolean<VLHS && VRHS>>
+    {};
+    
+    template<bool OP>
+    struct logical_not<tml::boolean<OP>> :
+        public tml::function<tml::boolean<!OP>>
+    {};
+}
 
 #endif	/* BASIC_TYPES_HPP */
 

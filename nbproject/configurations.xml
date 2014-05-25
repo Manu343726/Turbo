@@ -13,9 +13,10 @@
         <itemPath>utils/assert.hpp</itemPath>
         <itemPath>utils/debugging_utilities.hpp</itemPath>
         <itemPath>enable_if.hpp</itemPath>
+        <itemPath>to_string.hpp</itemPath>
       </logicalFolder>
+      <itemPath>algebra.hpp</itemPath>
       <itemPath>algorithm.hpp</itemPath>
-      <itemPath>algregra.hpp</itemPath>
       <itemPath>basic_types.hpp</itemPath>
       <itemPath>control_structures.hpp</itemPath>
       <itemPath>eval.hpp</itemPath>
@@ -80,9 +81,9 @@
           <standard>8</standard>
         </ccTool>
       </compileType>
-      <item path="algorithm.hpp" ex="false" tool="3" flavor2="0">
+      <item path="algebra.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="algregra.hpp" ex="false" tool="3" flavor2="0">
+      <item path="algorithm.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -117,6 +118,8 @@
       <item path="placeholders.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tagging.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="unconditional_false.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -148,9 +151,9 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="algorithm.hpp" ex="false" tool="3" flavor2="0">
+      <item path="algebra.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="algregra.hpp" ex="false" tool="3" flavor2="0">
+      <item path="algorithm.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -185,6 +188,8 @@
       <item path="placeholders.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tagging.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="unconditional_false.hpp" ex="false" tool="3" flavor2="0">
       </item>

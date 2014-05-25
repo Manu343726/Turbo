@@ -21,7 +21,7 @@
 #ifndef FUNCTION_HPP
 #define	FUNCTION_HPP
 
-#include "basic_types.hpp"
+#include <type_traits>
 
 namespace tml
 {
@@ -51,7 +51,7 @@ namespace tml
      * (Has a 'result' member type)
      */
     template<typename E>
-    using is_function = tml::boolean<tml::impl::is_function<E>::result>;
+    using is_function = std::integral_constant<bool,tml::impl::is_function<E>::result>;
     
     /*
      * This is a helper metafunction to represent a metafunction in the way the library
