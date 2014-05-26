@@ -28,6 +28,7 @@
 #include "lambda.hpp"
 #include "function_alias_decl.hpp"
 #include "placeholders.hpp"
+#include "iterator.hpp"
 
 using namespace tml::placeholders;
 
@@ -114,6 +115,36 @@ namespace tml
             using result = tml::list<PASSED...>;
         };
         
+        /*
+         * List-based sequence filter implementation (Recursive case)
+         * 
+         * NOTE: PASSED is the sequence of elements of the original sequence which have currently passed the filter.
+         * This sequence is passed to the next calls to be filled.
+         */
+        template<typename F , typename... PASSED ,  typename BEGIN , typename END>
+        struct filter<F,tml::list<HEAD,TAIL...>,tml::list<PASSED...>>
+        {
+            using passed = tml::conditional<tml::eval<F,tml::iterator::deref<BEGIN>>,
+                                            tml::list<PASSED...,tml::iterator::deref<BEGIN>>,
+                                            tml::list<PASSED...>
+                                           >;
+            
+            using result = typename filter<F,tml::iterator::next<BEGIN>,END,passed>::result;
+        };
+        
+        /*
+         * List-based sequence filter implementation (Base case)
+         * 
+         * NOTE: PASSED is the sequence of elements of the original sequence which have currently passed the filter.
+         * In the base case, this sequence is the final result of the function (There are no more elements of the input 
+         * sequence to check).
+         */
+        template<typename F , typename END , typename... PASSED>
+        struct filter<F,END,END,tml::list<PASSED...>>
+        {
+            using result = tml::list<PASSED...>;
+        };
+        
         
         /*
          * Folding functions.
@@ -157,6 +188,45 @@ namespace tml
         
         template<typename F , typename STATE>
         struct foldl<F,STATE,tml::empty_list>
+        {
+            using result = STATE;
+        };
+        
+        /*
+         * Iterator-based foldr metafunction
+         * 
+         * O(n) complexity
+         */
+        template<typename F , typename STATE , typename BEGIN , typename END>
+        struct foldr<F,STATE,BEGIN,END>
+        {
+            using result = tml::eval<F,tml::iterator::deref<BEGIN>,
+                                       typename foldr<F,STATE,tml::iterator::next<BEGIN>,END>::result
+                                    >;
+        };
+        
+        template<typename F , typename STATE , typename END>
+        struct foldr<F,STATE,END,END>
+        {
+            using result = STATE;
+        };
+        
+        /*
+         * Iterator-based foldl metafunction
+         * 
+         * O(n) complexity
+         */
+        template<typename F , typename STATE , typename BEGIN , typename END>
+        struct foldl<F,STATE,BEGIN,END>
+        {
+            using result = typename foldl<F,tml::eval<F,STATE,tml::iterator::deref<BEGIN>>,
+                                          tml::iterator::next<BEGIN>,
+                                          END
+                                         >::result;
+        };
+        
+        template<typename F , typename STATE , typename END>
+        struct foldl<F,STATE,END,END>
         {
             using result = STATE;
         };
