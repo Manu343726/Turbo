@@ -22,6 +22,7 @@
       <itemPath>eval.hpp</itemPath>
       <itemPath>function.hpp</itemPath>
       <itemPath>integral_lists.hpp</itemPath>
+      <itemPath>iterator.hpp</itemPath>
       <itemPath>lambda.hpp</itemPath>
       <itemPath>lazy.hpp</itemPath>
       <itemPath>let_expressions.hpp</itemPath>
@@ -103,6 +104,8 @@
       </item>
       <item path="integral_lists.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="iterator.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="lambda.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="lazy.hpp" ex="false" tool="3" flavor2="0">
@@ -172,6 +175,8 @@
       <item path="impl/demangle.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="integral_lists.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="iterator.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="lambda.hpp" ex="false" tool="3" flavor2="0">
       </item>

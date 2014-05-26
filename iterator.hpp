@@ -40,6 +40,30 @@ namespace tml
 {
     namespace iterator
     {
+        /*
+         * Iterators represent sequences on the interval [begin,end),
+         * that is, the end iterator points to a "past to end" element
+         * of the sequence. 
+         * 
+         *         begin                       end
+         *           |     -------------->      |
+         *           v       forward_it         v
+         *         +---+------------------+---+  
+         *         |   |                  |   |
+         *         +---+------------------+---+
+         *       ^        backward_it       ^
+         *       |     <---------------     |
+         *     rend                      rbegin
+         * 
+         * This 'sequence_end_element' tag is used to
+         * represent this value (The element which the end iterator points
+         * to).
+         */
+        struct sequence_end_element{};
+        
+        /*
+         * Tags for iterator categories (Forward or backward iterators)
+         */
         struct forward_iterator_tag{};
         struct reverse_iterator_tag{};
         
@@ -68,6 +92,30 @@ namespace tml
              */
             template<typename I>
             struct next;
+            
+            /*
+             * Returns a forward iterator pointing to the first element of a sequence.
+             */
+            template<typename SEQ>
+            struct begin;
+            
+            /*
+             * Returns a forward iterator pointing to the end of a sequence.
+             */
+            template<typename SEQ>
+            struct end;
+            
+            /*
+             * Returns a backward iterator pointing to the last element of a sequence.
+             */
+            template<typename SEQ>
+            struct rbegin;
+            
+            /*
+             * Returns a backward iterator pointing to the past-last element of a sequence.
+             */
+            template<typename SEQ>
+            struct rend;
         }
         
         /*
@@ -80,6 +128,18 @@ namespace tml
 
             template<typename I>
             using next = tml::iterator::impl::next<I>;
+            
+            template<typename SEQ>
+            using begin = tml::iterator::impl::begin<SEQ>;
+            
+            template<typename SEQ>
+            using end = tml::iterator::impl::end<SEQ>;
+            
+            template<typename SEQ>
+            using rbegin = tml::iterator::impl::rbegin<SEQ>;
+            
+            template<typename SEQ>
+            using rend = tml::iterator::impl::rend<SEQ>;
         }
 
         /*
@@ -93,6 +153,30 @@ namespace tml
          */
         template<typename I>
         using next = typename tml::iterator::impl::next<I>::result;
+        
+        /*
+         * Returns a forward iterator pointing to the first element of a sequence.
+         */
+        template<typename SEQ>
+        using begin = typename tml::iterator::impl::begin<SEQ>::result;
+
+        /*
+         * Returns a forward iterator pointing to the end of a sequence.
+         */
+        template<typename SEQ>
+        using end = typename tml::iterator::impl::end<SEQ>::result;
+
+        /*
+         * Returns a backward iterator pointing to the last element of a sequence.
+         */
+        template<typename SEQ>
+        using rbegin = typename tml::iterator::impl::rbegin<SEQ>::result;
+
+        /*
+         * Returns a backward iterator pointing to the past-last element of a sequence.
+         */
+        template<typename SEQ>
+        using rend = typename tml::iterator::impl::rend<SEQ>::result;
     }
 }
 
