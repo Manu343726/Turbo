@@ -262,6 +262,18 @@ namespace tml
     struct logical_not<tml::boolean<OP>> :
         public tml::function<tml::boolean<!OP>>
     {};
+    
+    template<typename TLHS , TLHS VLHS , 
+             typename TRHS , TRHS VRHS>
+    struct equal<tml::integral_constant<TLHS,VLHS> , tml::integral_constant<TRHS,VRHS>> :
+        public tml::function<tml::tml::boolean<VLHS == VRHS>>
+    {};
+    
+    template<typename TLHS , TLHS VLHS , 
+             typename TRHS , TRHS VRHS>
+    struct less_than<tml::integral_constant<TLHS,VLHS> , tml::integral_constant<TRHS,VRHS>> :
+        public tml::function<tml::tml::boolean<(VLHS < VRHS)>>
+    {};
 }
 
 #endif	/* BASIC_TYPES_HPP */

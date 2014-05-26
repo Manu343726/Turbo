@@ -36,8 +36,10 @@ namespace tml
             struct deref;
             
             /*
-             * 
+             * Obtains the iterator pointing to the next element of the sequence.
              */
+            template<typename I>
+            struct next;
         }
     }
 }

@@ -103,6 +103,72 @@ namespace tml
     {
         static_assert( sizeof(OP) != sizeof(OP) , "You should implement logical_not for your custom datatypes" );
     };
+    
+    
+    /* Comparison functions */
+    
+    /*
+     * Checks if two values are equal.
+     * 
+     * Returns tml::true_type if the values are equal, returns tml::false_type otherwise.
+     */
+    template<typename LHS , typename RHS>
+    struct equal
+    {
+        static_assert( sizeof(LHS) != sizeof(LHS) , "You should implement equal for your custom datatypes");
+    };
+    
+    /*
+     * Checks if two values are not equal.
+     * 
+     * Returns tml::true_type if the values are not equal, returns tml::false_type otherwise.
+     */
+    template<typename LHS , typename RHS>
+    struct not_equal : public tml::logical_not<typename tml::equal<LHS,RHS>::result>
+    {};
+    
+    /*
+     * Checks if a value is lesser than other.
+     * 
+     * Returns tml::true_type if the first (left) argumment is lesser than the other, 
+     * returns tml::false_type otherwise.
+     */
+    template<typename LHS , typename RHS>
+    struct less_than
+    {
+        static_assert( sizeof(LHS) != sizeof(LHS) , "You should implement less_than for your custom datatypes");
+    };
+    
+    /*
+     * Checks if a value is less or equal than other.
+     * 
+     * Returns tml::true_type if the first (left) value is less or equal than the other, 
+     * returns tml::false_type otherwise.
+     */
+    template<typename LHS , typename RHS>
+    struct less_or_equal : public tml::logical_or<typename tml::less_than<LHS,RHS>::result,
+                                                  typename tml::equal<LHS,RHS>::result>
+    {};
+    
+    /*
+     * Checks if a value is bigger than other.
+     * 
+     * Returns tml::true_type if the first (left) argumment is bigger than the other,
+     * returns tml::false_type otherwise.
+     */
+    template<typename LHS , typename RHS>
+    struct bigger_than : public tml::less_than<RHS,LHS>
+    {};
+    
+    /*
+     * Checks if one value is bigger or equal than the other.
+     * 
+     * Returns tml::true_type if the first (left) argumment is bigger or equal than the other,
+     * returns tml::false_type otherwise.
+     */
+    template<typename LHS , typename RHS>
+    struct bigger_or_equal : public tml::less_or_equal<RHS,LHS>
+    {};
 }
 
 #endif	/* ALGREGRA_HPP */
