@@ -122,7 +122,7 @@ namespace tml
          * This sequence is passed to the next calls to be filled.
          */
         template<typename F , typename... PASSED ,  typename BEGIN , typename END>
-        struct filter<F,tml::list<HEAD,TAIL...>,tml::list<PASSED...>>
+        struct filter<F,BEGIN,END,tml::list<PASSED...>>
         {
             using passed = tml::conditional<tml::eval<F,tml::iterator::deref<BEGIN>>,
                                             tml::list<PASSED...,tml::iterator::deref<BEGIN>>,

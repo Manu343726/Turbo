@@ -24,6 +24,7 @@
 #include "basic_types.hpp"
 #include "function.hpp"
 #include "to_string.hpp"
+#include "iterator.hpp"
 
 #include <cstddef>
 #include <string>
@@ -105,6 +106,59 @@ namespace tml
                 return result.str();
             }
         };
+        
+        /*
+         * Forward iterator type for lists
+         */
+        template<typename... Ts>
+        struct list_forward_iterator
+        {};
+    }
+    
+    
+    /*
+     * Operations for list iterators
+     */
+    namespace iterator
+    {
+        namespace impl
+        {
+            /*
+             * Forward iterators work storing the sequence following the current
+             * element (The current element included). Also a 'sequence_end_element'
+             * is inserted at the end of this sequence to represent the past than end
+             * element.
+             * 
+             * Note that begin and end of an empty list point to the past than end element
+             */
+            
+            template<typename HEAD , typename... TAIL>
+            struct deref<tml::impl::list_forward_iterator<HEAD,TAIL...>> : public tml::function<HEAD>
+            {};
+            
+            template<typename... Ts>
+            struct begin<tml::list<Ts...>> :
+                public tml::function<tml::impl::list_forward_iterator<Ts...,tml::iterator::sequence_end_element>>
+            {};
+            
+            template<typename... Ts>
+            struct end<tml::list<Ts...>> :
+                public tml::function<tml::impl::list_forward_iterator<tml::iterator::sequence_end_element>>
+            {};
+            
+            template<typename HEAD , typename... TAIL>
+            struct next<tml::impl::list_forward_iterator<HEAD,TAIL...>> :
+                public tml::function<tml::impl::list_forward_iterator<TAIL...>>
+            {};
+            
+            /*
+             * The next iterator of the end iterator is the end iterator itself:
+             */
+            template<>
+            struct next<tml::impl::list_forward_iterator<tml::iterator::sequence_end_element>> :
+                public tml::function<tml::impl::list_forward_iterator<tml::iterator::sequence_end_element>>
+            {};
+        }
     }
 }
 
