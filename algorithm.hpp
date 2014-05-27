@@ -71,9 +71,31 @@ namespace tml
          * O(1) complexity
          */
         template<typename T , typename... SEQUENCE>
-        struct map<T,tml::list<SEQUENCE...>> : public tml::function<tml::list<tml::eval<T,SEQUENCE>...>>
+        struct map<T,tml::list<SEQUENCE...>,tml::empty_list> : public tml::function<tml::list<tml::eval<T,SEQUENCE>...>>
         {};
+               
+        /*
+         * Iterators-based sequece map function
+         * 
+         * NOTE: PASSED is the sequence of elements of the original sequence which have currently passed the filter.
+         * This sequence is passed to the next calls to be filled.
+         * 
+         * O(n) complexity
+         */
+        template<typename T , typename... PROCESSED ,  typename BEGIN , typename END>
+        struct map<T,BEGIN,END,tml::list<PROCESSED...>>
+        {
+            using result = typename map<T,tml::iterator::next<BEGIN>,
+                                          END,
+                                          tml::list<PROCESSED...,tml::eval<T,tml::iterator::deref<BEGIN>>>
+                                       >::result;
+        };
         
+        template<typename T , typename... PROCESSED , typename END>
+        struct map<T,END,END,tml::list<PROCESSED...>>
+        {
+            using result = tml::list<PROCESSED...>;
+        };
         
         /*
          * Filters a specified sequence, returning a sequence formed with the elements
@@ -92,7 +114,7 @@ namespace tml
          * This sequence is passed to the next calls to be filled.
          */
         template<typename F , typename... PASSED ,  typename HEAD , typename... TAIL>
-        struct filter<F,tml::list<HEAD,TAIL...>,tml::list<PASSED...>>
+        struct filter<F,tml::list<HEAD,TAIL...>,tml::list<PASSED...>,tml::empty_list>
         {
             using passed = tml::conditional<tml::eval<F,HEAD>,
                                             tml::list<PASSED...,HEAD>,
@@ -110,7 +132,7 @@ namespace tml
          * sequence to check).
          */
         template<typename F , typename... PASSED>
-        struct filter<F,tml::empty_list,tml::list<PASSED...>>
+        struct filter<F,tml::empty_list,tml::list<PASSED...>,tml::empty_list>
         {
             using result = tml::list<PASSED...>;
         };
@@ -251,8 +273,11 @@ namespace tml
      * 
      * The result is a tml::list filled with the sequence of applications.
      */
-    TURBO_DEFINE_FUNCTION_TALIAS( map ); //Functional (Haskell-like) name
-    TURBO_DEFINE_FUNCTION_TALIAS_CUSTOMNAME( map , transform ); //C++ (STL-like) name
+    template<typename T , typename... SEQ>
+    using map = typename tml::impl::map<T,SEQ...,tml::empty_list>::result; //Functional (Haskell-like) name
+    
+    template<typename T , typename... SEQ>
+    using transform = tml::map<T,SEQ...>;//C++ (STL-like) name
     
     
     
@@ -276,8 +301,11 @@ namespace tml
      * 
      * The result is a tml::list filled with the sequence of elements which passed the filter F.
      */
-    TURBO_DEFINE_FUNCTION_TALIAS( filter ); //Functional (Haskell-like) name
-    TURBO_DEFINE_FUNCTION_TALIAS_CUSTOMNAME( filter , copy_if ); //C++ (STL-like) name
+    template<typename F , typename... SEQ>
+    using filter = typename tml::impl::filter<F,SEQ...,tml::empty_list>::result; //Functional (Haskell-like) name
+    
+    template<typename F , typename... SEQ>
+    using copy_if = tml::filter<F,SEQ...>;//C++ (STL-like) name
     
     
     /*

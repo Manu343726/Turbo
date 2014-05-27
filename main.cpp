@@ -75,7 +75,7 @@ struct odd : public tml::function<tml::boolean<(N::value % 2) == 0>>
 
 using numbers = tml::integer_list<0,1,2,3,4,5>;
 
-using map_test    = tml::map<tml::lazy<odd>,tml::integer_list<0,1,2,3,4,5>>;
+using map_test    = tml::map<tml::lazy<odd>,tml::iterator::begin<numbers> , tml::iterator::end<numbers>>;
 using any_of_test = tml::any<tml::lazy<odd>,tml::iterator::begin<numbers> , tml::iterator::end<numbers>>;
 using all_of_test = tml::all<tml::lazy<odd>,tml::integer_list<0,1,2,3,4,5>>;
 
