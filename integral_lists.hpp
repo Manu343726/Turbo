@@ -23,6 +23,7 @@
 
 #include "list.hpp"
 #include "basic_types.hpp"
+#include "integral_iterators.hpp"
 
 /*
  * This header defines aliases for lists of basic types, and lists of elements of an arbitrary type.
@@ -70,6 +71,71 @@ namespace tml
      */
     template<unsigned int... Vs>
     using unsigned_integer_list = tml::integral_list<unsigned int,Vs...>;
+    
+    
+    /*
+     * Makes a range of an arbitrary integral type T on the interval [begin,end)
+     */
+    template<typename T , T begin , T end>
+    using integral_range = tml::transform<tml::integral_forward_iterators::make<tml::integral_constant<T,begin>>,
+                                          tml::integral_forward_iterators::make<tml::integral_constant<T,end>>
+                                         >;
+    
+    /*
+     * Makes a range of integers on the interval [begin,end)
+     */
+    template<std::size_t begin , std::size_t end>
+    using size_t_range = tml::integral_range<std::size_t,begin,end>;
+    
+    /*
+     * Makes a range of chars on the interval [begin,end)
+     */
+    template<char begin , int char>
+    using character_range = tml::integral_range<char,begin,end>;
+    
+    /*
+     * Makes a range of unsigned chars on the interval [begin,end)
+     */
+    template<unsigned char begin , unsigned char end>
+    using unsigned_character_range = tml::integral_range<unsigned char,begin,end>;
+    
+    /*
+     * Makes a range of integers on the interval [begin,end)
+     */
+    template<int begin , int end>
+    using integer_range = tml::integral_range<int,begin,end>;
+    
+    /*
+     * Makes a range of long integers on the interval [begin,end)
+     */
+    template<long int begin , long int end>
+    using long_integer_range = tml::integral_range<long int,begin,end>;
+    
+    /*
+     * Makes a range of long long integers on the interval [begin,end)
+     */
+    template<long long int begin , long long int end>
+    using long_long_integer_range = tml::integral_range<long long int,begin,end>;
+    
+    /*
+     * Makes a range of unsigned integers on the interval [begin,end)
+     */
+    template<unsigned int begin , unsigned int end>
+    using unsigned_integer_range = tml::integral_range<unsigned int,begin,end>;
+    
+    /*
+     * Makes a range of unsigned long integers on the interval [begin,end)
+     */
+    template<unsigned long int begin , unsigned long int end>
+    using unsigned_long_integer_range = tml::integral_range<unsigned long int,begin,end>;
+    
+    /*
+     * Makes a range of unsigned long long integers on the interval [begin,end)
+     */
+    template<unsigned long long int begin , unsigned long long int end>
+    using unsigned_long_long_integer_range = tml::integral_range<unsigned long long int,begin,end>;
+    
+    
 }
 
 #endif	/* BASIC_LISTS_HPP */

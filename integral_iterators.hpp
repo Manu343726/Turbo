@@ -46,6 +46,9 @@ namespace tml
         template<typename N>
         using make = typename tml::integral_forward_iterators::impl::iterator_builder<N>::result;
         
+        template<std::size_t N>
+        using make_size_t = tml::integral_forward_iterators::make<tml::size_t<N>>;
+        
         template<unsigned char N>
         using make_unsigned_char = tml::integral_forward_iterators::make<tml::UnsignedChar<N>>;
         
@@ -94,6 +97,9 @@ namespace tml
         
         template<typename N>
         using make = typename tml::integral_backward_iterators::impl::iterator_builder<N>::result;
+        
+        template<std::size_t N>
+        using make_size_t = tml::integral_backward_iterators::make<tml::size_t<N>>;
         
         template<unsigned char N>
         using make_unsigned_char = tml::integral_backward_iterators::make<tml::UnsignedChar<N>>;
