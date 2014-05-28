@@ -115,6 +115,22 @@ namespace tml
                 return ss.str();
             }
         };
+        
+        /*
+         * Specialization for chars
+         */
+        template<char V>
+        struct to_string<tml::integral_constant<char,V>>
+        {
+            operator std::string() const
+            {
+                std::stringstream ss;
+                
+                ss << V;
+                
+                return ss.str();
+            }
+        };
     }
 
     /*
