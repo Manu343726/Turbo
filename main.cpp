@@ -32,6 +32,7 @@
 #include "utils/assert.hpp"
 #include "warning.hpp"
 #include "impl/demangle.hpp"
+#include "integral_iterators.hpp"
 
 #include <iostream>
 
@@ -75,13 +76,19 @@ struct odd : public tml::function<tml::boolean<(N::value % 2) == 0>>
 
 using numbers = tml::integer_list<0,1,2,3,4,5>;
 
-using map_test    = tml::map<tml::lazy<odd>,tml::iterator::begin<numbers> , tml::iterator::end<numbers>>;
-using any_of_test = tml::any<tml::lazy<odd>,tml::iterator::begin<numbers> , tml::iterator::end<numbers>>;
+using begin = tml::integral_forward_iterators::make_int<0>;
+using end   = tml::integral_forward_iterators::make_int<100>;
+using numbers2 = tml::transform<tml::lazy<tml::function>,begin,end>;
+
+using map_test    = tml::map<tml::lazy<odd>,numbers2>;
+using any_of_test = tml::any<tml::lazy<odd>,tml::iterator::begin<numbers2> , tml::iterator::end<numbers2>>;
 using all_of_test = tml::all<tml::lazy<odd>,tml::integer_list<0,1,2,3,4,5>>;
 
 int main()
 {
+    std::cout << tml::to_string<numbers>() << std::endl;
     std::cout << tml::to_string<map_test>() << std::endl;
     std::cout << tml::to_string<any_of_test>() << std::endl;
     std::cout << tml::to_string<all_of_test>() << std::endl;
+    std::cout << tml::to_string<numbers2>() << std::endl;
 }
