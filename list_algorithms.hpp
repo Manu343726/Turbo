@@ -22,7 +22,6 @@
 #define	LIST_ALGORITHMS_HPP
 
 #include "list.hpp"
-#include "indices_trick.hpp"
 #include "function.hpp"
 
 

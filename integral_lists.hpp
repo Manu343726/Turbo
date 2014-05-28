@@ -24,6 +24,8 @@
 #include "list.hpp"
 #include "basic_types.hpp"
 #include "integral_iterators.hpp"
+#include "algorithm.hpp"
+#include "lazy.hpp"
 
 /*
  * This header defines aliases for lists of basic types, and lists of elements of an arbitrary type.
@@ -77,7 +79,8 @@ namespace tml
      * Makes a range of an arbitrary integral type T on the interval [begin,end)
      */
     template<typename T , T begin , T end>
-    using integral_range = tml::transform<tml::integral_forward_iterators::make<tml::integral_constant<T,begin>>,
+    using integral_range = tml::transform<tml::lazy<tml::function>,
+                                          tml::integral_forward_iterators::make<tml::integral_constant<T,begin>>,
                                           tml::integral_forward_iterators::make<tml::integral_constant<T,end>>
                                          >;
     
@@ -90,7 +93,7 @@ namespace tml
     /*
      * Makes a range of chars on the interval [begin,end)
      */
-    template<char begin , int char>
+    template<char begin , char end>
     using character_range = tml::integral_range<char,begin,end>;
     
     /*
