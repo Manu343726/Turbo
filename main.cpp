@@ -25,9 +25,11 @@
 
 #include <iostream>
 
+#ifndef RANGE_END
+#define RANGE_END 10
+#endif
 
-
-using input = tml::for_each<tml::make_integer_forward_iterator<0>,tml::make_integer_forward_iterator<10>,tml::function>;
+using input = tml::for_each<tml::make_integer_forward_iterator<0>,tml::make_integer_forward_iterator<RANGE_END>,tml::function>;
 using output = tml::sort<input,tml::bigger_than>;
 
 
