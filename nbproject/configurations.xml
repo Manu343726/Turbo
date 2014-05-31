@@ -14,12 +14,14 @@
         <itemPath>utils/debugging_utilities.hpp</itemPath>
         <itemPath>enable_if.hpp</itemPath>
         <itemPath>to_string.hpp</itemPath>
+        <itemPath>utility.hpp</itemPath>
       </logicalFolder>
       <itemPath>algebra.hpp</itemPath>
       <itemPath>algorithm.hpp</itemPath>
       <itemPath>basic_types.hpp</itemPath>
       <itemPath>control_structures.hpp</itemPath>
       <itemPath>eval.hpp</itemPath>
+      <itemPath>fixed_point.hpp</itemPath>
       <itemPath>function.hpp</itemPath>
       <itemPath>integral_iterators.hpp</itemPath>
       <itemPath>integral_lists.hpp</itemPath>
@@ -95,6 +97,8 @@
       </item>
       <item path="eval.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="fixed_point.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="function.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="function_alias_decl.hpp" ex="false" tool="3" flavor2="0">
@@ -128,6 +132,8 @@
       <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="unconditional_false.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="utility.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="utils/assert.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -169,6 +175,8 @@
       </item>
       <item path="eval.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="fixed_point.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="function.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="function_alias_decl.hpp" ex="false" tool="3" flavor2="0">
@@ -202,6 +210,8 @@
       <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="unconditional_false.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="utility.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="utils/assert.hpp" ex="false" tool="3" flavor2="0">
       </item>
