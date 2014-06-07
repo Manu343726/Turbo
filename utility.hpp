@@ -11,7 +11,7 @@
 #include "basic_types.hpp"
 #include "function.hpp"
 
-#include <cstdint>
+#include <climits>
 
 /*
  * The namespace tml::util contains a set sparse metaprogramming utilities.
@@ -28,7 +28,7 @@ namespace tml
             {};
             
             template<typename T>
-            struct sizeof_bits : public tml::function<tml::size_t<sizeof(T) * CHAR_BITS>>
+            struct sizeof_bits : public tml::function<tml::size_t<sizeof(T) * CHAR_BIT>>
             {};
         }
         
