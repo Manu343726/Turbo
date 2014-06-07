@@ -42,6 +42,37 @@ namespace tml
      */
     template<typename CONDITION , typename TRUE , typename FALSE>
     using conditional = typename std::conditional<tml::eval<CONDITION>::value , TRUE , FALSE>::type;
+    
+    namespace impl
+    {
+        /*
+         * std::conditional equivalent for let expressions contexts
+         */
+        template<typename CONDITION , typename TRUE , typename FALSE>
+        struct dconditional : public tml::function<TRUE>
+        {};
+
+        template<typename TRUE , typename FALSE>
+        struct dconditional<tml::false_type,TRUE,FALSE> : public tml::function<FALSE>
+        {};
+    }
+    
+    /*
+     * Select one type or other based on a boolean condition on let expression contexts.
+     * The evaluation of the condition is delayed until variable substitution.
+     * 
+     * Its the equivalent of the if control structure
+     * 
+     * The parameters are:
+     *  - CONDITION: A boolean expression representing the condition of the if.
+     *  - TRUE: Type which will be selected if the evaluation of the condition returns true.
+     *  - FALSE: Type which will be selected if the evaluation of the condition returns false.
+     * 
+     * Note that this is a function, not an alias directly, so it should be evaluated to get the 
+     * result.
+     */
+    template<typename CONDITION , typename TRUE , typename FALSE>
+    using dconditional = tml::impl::dconditional<tml::deval<CONDITION> , TRUE , FALSE>; 
 }
 
 #endif	/* CONTROL_STRUCTURES_HPP */
