@@ -26,6 +26,7 @@
 #include "function.hpp"
 #include "warning.hpp"
 #include "to_string.hpp"
+#include "chameleon.hpp"
 
 #include <string>
 
@@ -35,22 +36,13 @@ namespace tml
     
     /*
      * This template is used to identify a placeholder.
-     * The result of evaluating a placeholder, and an expression containing placeholders
-     * is tml::placeholders::placeholder_val
+     * A placeholder should behave like values and functions to work inside
+     * some evaluation contexts, so they use chameleons to mimic that primitives
+     * (See documentation at "chameleon.hpp" for more details)
      */
     template<std::size_t INDEX>
-    struct placeholder
-    {
-        /* 
-         * Several memers are defined to make the instantation of functions using placeholders
-         * work in almost all cases.
-         * 
-         * The most common cases in the Turbo library where members of tyes are accessed are basic 
-         * values (Their 'value' static member constant) and functions (Their 'result' member type).
-         */
-        using result = tml::placeholder_val;
-        static constexpr const std::size_t value = -1;
-    };
+    struct placeholder : public tml::value_chameleon , public tml::function_chameleon
+    {};
     
     /*
      * Placeholders don't represent values, but they should be correctly evaluable,
@@ -92,6 +84,7 @@ namespace tml
      */
     namespace placeholders
     {   
+        using _  = tml::placeholder<std::numeric_limits<std::size_t>::max()>;
         using _1 = tml::placeholder<1>;
         using _2 = tml::placeholder<2>;
         using _3 = tml::placeholder<3>;
