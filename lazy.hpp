@@ -71,7 +71,7 @@ namespace tml
     {
         template<template<typename...> class F , typename ARG , typename... ARGS>
         struct eval<tml::lazy<F>,tml::list<ARG,ARGS...>> : 
-        public tml::function<tml::eval<tml::lazy_instance<tml::lazy<F>,ARG,ARGS...>>>
+            public tml::function<tml::eval<tml::lazy_instance<tml::lazy<F>,ARG,ARGS...>>>
         {};
     }
 }
