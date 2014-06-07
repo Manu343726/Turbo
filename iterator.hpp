@@ -124,7 +124,7 @@ namespace tml
         namespace func
         {
             template<typename I>
-            using deref = tml::iterator::impl::next<I>;
+            using deref = tml::iterator::impl::deref<I>;
 
             template<typename I>
             using next = tml::iterator::impl::next<I>;
