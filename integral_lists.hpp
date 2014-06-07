@@ -74,6 +74,12 @@ namespace tml
     template<unsigned int... Vs>
     using unsigned_integer_list = tml::integral_list<unsigned int,Vs...>;
     
+    /*
+     * Declares a list of std::size_ts
+     */
+    template<std::size_t... Vs>
+    using size_t_list = tml::integral_list<std::size_t,Vs...>;
+    
     
     /*
      * Makes a range of an arbitrary integral type T on the interval [begin,end)
