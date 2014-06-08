@@ -42,19 +42,75 @@ namespace tml
      * This allows the user to pass templates through metafunctions without instantiating them, making the use of placeholders not
      * necessary. Also lazy template instantation could be used to leave complex template instantations (Instantations which could take a long 
      * time/effort) until the point of its ussage.
+     * 
+     * Also tml::lazy allows to specify the instantation parameter at the declaration point, but note that the template will be instanced only
+     * if required explicitly by the user using tml::lazy_instance. For example:
+     * 
+     *     using lazy = tml::lazy<std::vector,int>; //Here std::vector<int> is not instanced at all.
+     *     
+     *     using vector = tml::lazy_instance<lazy>; //Here we explicitly instance the wrapped template, std::vector<int> in this example.
+     * 
+     * This could be usefull to store potentially ill-formed template instantations. For example:
+     * 
+     *     template<typename T>
+     *     struct foo;
+     * 
+     *     template<>
+     *     struct foo<char>{};
+     * 
+     *     using ok = tml::lazy_instance<tml::conditional<tml::true_type,
+     *                                                    tml::lazy<foo,char>,
+     *                                                    tml::lazy<foo,bool>
+     *                                                   >
+     *                                  >;
+     * 
+     * In the above example, the ill-formed 'foo<bool>' will never be instantiated, because the conditional selects the first branch.
+     *                                                    
      */
-    template<template<typename...> class F>
-    struct lazy 
+    template<template<typename...> class F , typename... ARGS>
+    struct lazy
+    {}; 
+    
+    /*
+     * The metafunction lazy_instance takes a wrapped template L and a set of template parameters,
+     * and returns the corresponding template instance.
+     * 
+     * This metafunction is specialized to take care of the two usage cases of tml::lazy:
+     *  - Template parameters specified at instantation-point: The template is instanced 
+     *    with the parameters passed to the 'lazy_instance' metafunction.
+     * 
+     *  - Template parameters specified at declaration point: The parameters passed to
+     *    'lazy_instance' are ignored, the specified at declaration-point are used instead.
+     */
+    namespace impl
     {
-        template<typename... ARGS>
-        using instance = F<ARGS...>;
-    };
+        template<typename L , typename... ARGS>
+        struct lazy_instance;
+        
+        template<template<typename...> class F , typename... ARGS>
+        struct lazy_instance<tml::lazy<F>,ARGS...> : public tml::function<F<ARGS...>>
+        {};
+        
+        template<template<typename...> class F , typename ARG , typename... ARGS , typename... IARGS>
+        struct lazy_instance<tml::lazy<F,ARG,ARGS...>,IARGS...> : public tml::function<F<ARG,ARGS...>>
+        {};
+    }
+    
+    /*
+     * The lazy_instance evaluator is provided as a functor too, to be usable on expressions.
+     */
+    namespace func
+    {
+        template<typename L , typename... ARGS>
+        using lazy_instance = tml::impl::lazy_instance<L,ARGS...>;
+    }
+    
     
     /*
      * Instantiates a template wrapped by L using the specified template argumments.
      */
     template<typename L , typename... ARGS>
-    using lazy_instance = typename L::template instance<ARGS...>;
+    using lazy_instance = typename tml::impl::lazy_instance<L,ARGS...>::result;
     
     
     
@@ -63,8 +119,8 @@ namespace tml
      * That parameters are used to instantiate the template and evaluate the resulting instance later.
      */
     
-    template<template<typename...> class F>
-    struct overrides_eval<tml::lazy<F>> : public tml::true_type
+    template<template<typename...> class F , typename... ARGS>
+    struct overrides_eval<tml::lazy<F,ARGS...>> : public tml::true_type
     {};
     
     namespace impl
@@ -72,6 +128,16 @@ namespace tml
         template<template<typename...> class F , typename ARG , typename... ARGS>
         struct eval<tml::lazy<F>,tml::list<ARG,ARGS...>> : 
             public tml::function<tml::eval<tml::lazy_instance<tml::lazy<F>,ARG,ARGS...>>>
+        {};
+        
+        /*
+         * Note that in the case of template parameters specified at declaration point 
+         * a set of evaluation parameters is not mandatory to evaluate the wrapped template,
+         * because (Exactly as in tml::lazy_instance) the evaluation parameters are ignored.
+         */
+        template<template<typename...> class F , typename ARG , typename... ARGS , typename... EARGS>
+        struct eval<tml::lazy<F,ARG,ARGS...>,tml::list<EARGS...>> : 
+            public tml::function<tml::eval<tml::lazy_instance<tml::lazy<F,ARG,ARGS...>>>>
         {};
     }
 }

@@ -39,6 +39,7 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include <type_traits>
 
 using namespace tml::placeholders;
 
@@ -105,6 +106,25 @@ template<typename T>
 using this_is_how_you_should_do_polymorphism = std::vector<std::unique_ptr<tml::stl::eval<std::remove_pointer<T>>>>;
 
 TURBO_ASSERT(( std::is_same<std::vector<int>,this_is_not_java_vector<int*>> ));
+
+
+
+template<typename T>
+struct quux;
+
+template<>
+struct quux<char>
+{};
+
+
+//Conditional selection of potentially ill-formed types! Thanks to Turbo tml::lazy its easy:
+using ok = tml::lazy_instance<tml::conditional<tml::false_type,
+                                               tml::lazy<quux,char>,
+                                               tml::lazy<quux,bool>
+                                              >
+                             >;
+
+TURBO_ASSERT(( std::is_same<ok,quux<bool>> ));
 
 int main()
 {
