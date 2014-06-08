@@ -139,6 +139,9 @@ using bcall = tml::eval<b,char,char,int>; //Equivalent to tml::eval<third_arg<in
 
 TURBO_ASSERT(( std::is_same<bcall,char> ));
 
+
+TURBO_WARNING((tml::false_type) , "Hey Travis, I'm here!" );
+
 int main()
 {
     std::cout << tml::to_string<numbers>() << std::endl;
