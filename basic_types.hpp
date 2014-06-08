@@ -28,6 +28,7 @@
 #include "algebra.hpp"
 #include "function.hpp"
 #include "to_string.hpp"
+#include "to_runtime.hpp"
 
 /*
  * This header defines the basic types of the library.
@@ -129,6 +130,23 @@ namespace tml
                 ss << V;
                 
                 return ss.str();
+            }
+        };
+        
+        /*
+         * to_runtime() override for basic types
+         */
+        
+        template<typename T , T V>
+        struct runtime_representation<tml::integral_constant<T,V>> : public tml::function<T>
+        {};
+        
+        template<typename T , T V>
+        struct to_runtime<tml::integral_constant<T,V>>
+        {
+            static constexpr T execute()
+            {
+                return V;
             }
         };
     }

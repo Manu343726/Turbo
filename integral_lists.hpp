@@ -26,6 +26,9 @@
 #include "integral_iterators.hpp"
 #include "algorithm.hpp"
 #include "lazy.hpp"
+#include "to_runtime.hpp"
+
+#include <array>
 
 /*
  * This header defines aliases for lists of basic types, and lists of elements of an arbitrary type.
@@ -144,7 +147,26 @@ namespace tml
     template<unsigned long long int begin , unsigned long long int end>
     using unsigned_long_long_integer_range = tml::integral_range<unsigned long long int,begin,end>;
     
-    
+    /*
+     * to_runtime() specialization for homogeneous basic type lists
+     */
+    namespace impl
+    {
+        template<typename T , T... Vs>
+        struct runtime_representation<tml::integral_list<T,Vs...>> : public tml::function<std::array<T,sizeof...(Vs)>>
+        {};
+        
+        template<typename T , T... Vs>
+        struct to_runtime<tml::integral_list<T,Vs...>>
+        {
+            static const std::array<T,sizeof...(Vs)>& execute()
+            {
+                static const std::array<T,sizeof...(Vs)> array = { Vs... };
+                
+                return array;
+            }
+        };
+    }
 }
 
 #endif	/* BASIC_LISTS_HPP */

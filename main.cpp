@@ -36,6 +36,7 @@
 #include "fixed_point.hpp"
 #include "stl_adapters.hpp"
 #include "bind.hpp"
+#include "to_runtime.hpp"
 
 #include <iostream>
 #include <vector>
@@ -133,8 +134,8 @@ struct third_arg : public tml::function<C>
 {};
 
 
-using b = tml::bind<third_arg,_1,bool,_2>;
-using bcall = tml::eval<b,int,char>; //Equivalent to tml::eval<third_arg<int,bool,char>>
+using b = tml::bind<third_arg,_3,_2,_1>;
+using bcall = tml::eval<b,char,char,int>; //Equivalent to tml::eval<third_arg<int,bool,char>>
 
 TURBO_ASSERT(( std::is_same<bcall,char> ));
 
@@ -152,4 +153,14 @@ int main()
     std::cout << tml::to_string<w>() << std::endl;
     
     std::cout << tml::to_string<bcall>() << std::endl;
+    
+    for( auto v : tml::to_runtime<numbers>() )
+    {
+        std::cout << v << std::endl;
+    }
+    
+    std::cout << "(" << std::boolalpha
+              << std::get<0>( tml::to_runtime<tml::list<tml::Char<'a'>,tml::Bool<true>,tml::Int<0>>>() ) << "," 
+              << std::get<1>( tml::to_runtime<tml::list<tml::Char<'a'>,tml::Bool<true>,tml::Int<0>>>() ) << "," 
+              << std::get<2>( tml::to_runtime<tml::list<tml::Char<'a'>,tml::Bool<true>,tml::Int<0>>>() ) << ")" << std::endl;
 }
