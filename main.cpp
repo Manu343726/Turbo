@@ -134,7 +134,7 @@ struct third_arg : public tml::function<C>
 {};
 
 
-using b = tml::bind<third_arg,_3,_2,_1>;
+using b = tml::bind<third_arg , _3,_2,_1>;
 using bcall = tml::eval<b,char,char,int>; //Equivalent to tml::eval<third_arg<int,bool,char>>
 
 TURBO_ASSERT(( std::is_same<bcall,char> ));
