@@ -32,6 +32,7 @@
       <itemPath>let_expressions.hpp</itemPath>
       <itemPath>list.hpp</itemPath>
       <itemPath>list_algorithms.hpp</itemPath>
+      <itemPath>placeholder_lists.hpp</itemPath>
       <itemPath>placeholders.hpp</itemPath>
       <itemPath>stl_adapters.hpp</itemPath>
       <itemPath>tagging.hpp</itemPath>
@@ -130,6 +131,8 @@
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="placeholder_lists.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="placeholders.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="stl_adapters.hpp" ex="false" tool="3" flavor2="0">
@@ -211,6 +214,8 @@
       <item path="list_algorithms.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="placeholder_lists.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="placeholders.hpp" ex="false" tool="3" flavor2="0">
       </item>
