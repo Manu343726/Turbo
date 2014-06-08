@@ -38,5 +38,4 @@ install:
 
 # command to run tests
 script: 
-  - cmake ./
-  - make
+  - clang++ main.cpp -std=c++11 -Wall -pedantic
