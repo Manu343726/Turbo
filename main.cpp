@@ -35,6 +35,7 @@
 #include "integral_iterators.hpp"
 #include "fixed_point.hpp"
 #include "stl_adapters.hpp"
+#include "bind.hpp"
 
 #include <iostream>
 #include <vector>
@@ -126,6 +127,17 @@ using ok = tml::lazy_instance<tml::conditional<tml::false_type,
 
 TURBO_ASSERT(( std::is_same<ok,quux<bool>> ));
 
+
+template<typename A , typename B , typename C>
+struct third_arg : public tml::function<C>
+{};
+
+
+using b = tml::bind<third_arg,_1,bool,_2>;
+using bcall = tml::eval<b,int,char>; //Equivalent to tml::eval<third_arg<int,bool,char>>
+
+TURBO_ASSERT(( std::is_same<bcall,char> ));
+
 int main()
 {
     std::cout << tml::to_string<numbers>() << std::endl;
@@ -138,4 +150,6 @@ int main()
     std::cout << tml::to_string<y>() << std::endl;
     std::cout << tml::to_string<z>() << std::endl;
     std::cout << tml::to_string<w>() << std::endl;
+    
+    std::cout << tml::to_string<bcall>() << std::endl;
 }

@@ -48,6 +48,7 @@ namespace tml
             struct concat<tml::list<Ts...>,tml::list<Us...>> : public tml::function<tml::list<Ts...,Us...>>
             {};
             
+            
             /*
              * Gets the element at the specified position of a list.
              * 
@@ -58,7 +59,19 @@ namespace tml
             template<typename LIST , typename INDEX>
             struct get;
             
+            template<typename HEAD , typename... TAIL , std::size_t INDEX>
+            struct get<tml::list<HEAD,TAIL...>,tml::size_t<INDEX>> : public tml::lists::impl::get<tml::list<TAIL...>,tml::size_t<INDEX-1>>
+            {};
             
+            template<typename HEAD , typename... TAIL>
+            struct get<tml::list<HEAD,TAIL...>,tml::size_t<0>> : public tml::function<HEAD>
+            {};
+            
+            template<typename... ARGS , std::size_t INDEX>
+            struct get<tml::list<ARGS...>,tml::size_t<INDEX>>
+            {
+                static_assert( sizeof...(ARGS) != 0 , "Index out of bounds" );
+            };
             
             /* Front operations */
             
@@ -143,8 +156,17 @@ namespace tml
             {};
         }
         
+        namespace func
+        {
+            template<typename LIST , typename INDEX>
+            using get = tml::lists::impl::get<LIST,INDEX>;
+        }
+        
         template<typename L1 , typename L2>
         using concat = typename tml::lists::impl::concat<L1,L2>::result;
+        
+        template<typename LIST , typename INDEX>
+        using get = typename tml::lists::impl::get<LIST,INDEX>::result;
         
         
         template<typename LIST>

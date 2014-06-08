@@ -19,6 +19,7 @@
       <itemPath>algebra.hpp</itemPath>
       <itemPath>algorithm.hpp</itemPath>
       <itemPath>basic_types.hpp</itemPath>
+      <itemPath>bind.hpp</itemPath>
       <itemPath>chameleon.hpp</itemPath>
       <itemPath>control_structures.hpp</itemPath>
       <itemPath>eval.hpp</itemPath>
@@ -94,6 +95,8 @@
       <item path="algorithm.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="bind.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="chameleon.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -178,6 +181,8 @@
       <item path="algorithm.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="bind.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="chameleon.hpp" ex="false" tool="3" flavor2="0">
       </item>
