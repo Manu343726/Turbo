@@ -19,6 +19,8 @@
       <itemPath>algebra.hpp</itemPath>
       <itemPath>algorithm.hpp</itemPath>
       <itemPath>basic_types.hpp</itemPath>
+      <itemPath>bind.hpp</itemPath>
+      <itemPath>chameleon.hpp</itemPath>
       <itemPath>control_structures.hpp</itemPath>
       <itemPath>eval.hpp</itemPath>
       <itemPath>fixed_point.hpp</itemPath>
@@ -31,8 +33,11 @@
       <itemPath>let_expressions.hpp</itemPath>
       <itemPath>list.hpp</itemPath>
       <itemPath>list_algorithms.hpp</itemPath>
+      <itemPath>placeholder_lists.hpp</itemPath>
       <itemPath>placeholders.hpp</itemPath>
+      <itemPath>stl_adapters.hpp</itemPath>
       <itemPath>tagging.hpp</itemPath>
+      <itemPath>to_runtime.hpp</itemPath>
       <itemPath>unconditional_false.hpp</itemPath>
       <itemPath>warning.hpp</itemPath>
     </logicalFolder>
@@ -83,6 +88,7 @@
       <compileType>
         <ccTool>
           <standard>8</standard>
+          <commandLine>-stdlib=libc++ -lc++abi</commandLine>
         </ccTool>
       </compileType>
       <item path="algebra.hpp" ex="false" tool="3" flavor2="0">
@@ -90,6 +96,10 @@
       <item path="algorithm.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="bind.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="chameleon.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="control_structures.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -125,9 +135,15 @@
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="placeholder_lists.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="placeholders.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="stl_adapters.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="tagging.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="to_runtime.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -169,6 +185,10 @@
       </item>
       <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="bind.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="chameleon.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="control_structures.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="enable_if.hpp" ex="false" tool="3" flavor2="0">
@@ -203,9 +223,15 @@
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="placeholder_lists.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="placeholders.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="stl_adapters.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="tagging.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="to_runtime.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
       </item>

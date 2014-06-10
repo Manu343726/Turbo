@@ -26,6 +26,7 @@
 #include "list.hpp"
 #include "enable_if.hpp"
 #include "function.hpp"
+#include "chameleon.hpp"
 
 namespace tml
 {
@@ -75,7 +76,7 @@ namespace tml
 
         /* This is the most simple case: There are no evaluation parameters (So the expression could be any
          * kind of expression, not just a function) BUT the flag says the expression is not a function.
-         * The result of evaluatiing such expression is the expression itself.
+         * The result of evaluating such expression is the expression itself.
          */
         template<typename E>
         struct eval<E,tml::empty_list,
@@ -107,6 +108,23 @@ namespace tml
                    > : 
                    public F<typename eval<ARGS,tml::empty_list>::result...> 
         {};
+        
+        /*
+         * This specialization matches the case when the expression passed is a parametrized
+         * expression (But not a function).
+         * 
+         * The parameters are evaluated too (Could be functional/parametrized expressions too) to evaluate the entire
+         * expression recursively.
+         */
+        template<template<typename...> class E , typename... ARGS>
+        struct eval<E<ARGS...>,tml::empty_list,
+                    TURBO_SFINAE(
+                                 DISABLE_IF(tml::overrides_eval<E<ARGS...>>),
+                                 DISABLE_IF(tml::is_function<E<ARGS...>>)
+                                )
+                   > : 
+                   public tml::function<E<typename eval<ARGS,tml::empty_list>::result...>> 
+        {};
 
         /*
          * This is the case when the expression passed is a function, and a set of parameters (At least one) is 
@@ -127,7 +145,28 @@ namespace tml
                             typename eval<ARGS,tml::empty_list>::result...
                            >
         {
-            static_assert( sizeof...(PLACEHOLDERS) == (1 + sizeof...(ARGS)) , "Wrong number of function call parameters." );  
+            //static_assert( sizeof...(PLACEHOLDERS) == (1 + sizeof...(ARGS)) , "Wrong number of function call parameters." );  
+        };
+        
+        /*
+         * This is the case when the expression passed is a parametrized expression (And not a function),
+         * and a set of parameters (At least one) is passed to evaluate the expression with. 
+         * 
+         * Note that the parameters of the function call are evaluated too.
+         */
+        template<template<typename...> class E , typename... PLACEHOLDERS , typename ARG , typename... ARGS>
+        struct eval<E<PLACEHOLDERS...> , tml::list<ARG,ARGS...>,
+                    TURBO_SFINAE(
+                                 DISABLE_IF(tml::overrides_eval<E<PLACEHOLDERS...>>),
+                                 DISABLE_IF(tml::is_function<E<PLACEHOLDERS...>>)
+                                )
+                   > : 
+                   public tml::function<E<typename eval<ARG,tml::empty_list>::result,
+                                          typename eval<ARGS,tml::empty_list>::result...
+                                         >
+                                       >
+        {
+            //static_assert( sizeof...(PLACEHOLDERS) == (1 + sizeof...(ARGS)) , "Wrong number of function call parameters." );  
         };
     }
     
@@ -174,7 +213,7 @@ namespace tml
      * NOTE: See the documentation of the specialization of tml::let in "let_expressions.hpp" for more info.
      */
     template<typename F , typename... ARGS>
-    struct delayed_eval
+    struct delayed_eval : public value_chameleon
     {};
     
     /*

@@ -26,6 +26,7 @@
 #include "function.hpp"
 #include "warning.hpp"
 #include "to_string.hpp"
+#include "chameleon.hpp"
 
 #include <string>
 
@@ -35,22 +36,37 @@ namespace tml
     
     /*
      * This template is used to identify a placeholder.
-     * The result of evaluating a placeholder, and an expression containing placeholders
-     * is tml::placeholders::placeholder_val
+     * A placeholder should behave like values and functions to work inside
+     * some evaluation contexts, so they use chameleons to mimic that primitives
+     * (See documentation at "chameleon.hpp" for more details)
      */
     template<std::size_t INDEX>
-    struct placeholder
+    struct placeholder : public tml::value_chameleon , public tml::function_chameleon
     {
-        /* 
-         * Several memers are defined to make the instantation of functions using placeholders
-         * work in almost all cases.
-         * 
-         * The most common cases in the Turbo library where members of tyes are accessed are basic 
-         * values (Their 'value' static member constant) and functions (Their 'result' member type).
-         */
-        using result = tml::placeholder_val;
-        static constexpr const std::size_t value = -1;
     };
+    
+    /*
+     * This type trait checks if a type T is a placeholder:
+     */
+    template<typename T>
+    struct is_placeholder : public tml::function<tml::false_type>
+    {};
+    
+    template<std::size_t INDEX>
+    struct is_placeholder<tml::placeholder<INDEX>> : public tml::function<tml::true_type>
+    {};
+    
+    /*
+     * Gets the index of a placeholder.
+     */
+    template<typename P>
+    struct placeholder_index;
+    
+    template<std::size_t INDEX>
+    struct placeholder_index<tml::placeholder<INDEX>> : public tml::function<tml::size_t<INDEX>>
+    {};
+    
+    
     
     /*
      * Placeholders don't represent values, but they should be correctly evaluable,
@@ -92,22 +108,23 @@ namespace tml
      */
     namespace placeholders
     {   
-        using _1 = tml::placeholder<1>;
-        using _2 = tml::placeholder<2>;
-        using _3 = tml::placeholder<3>;
-        using _4 = tml::placeholder<4>;
-        using _5 = tml::placeholder<5>;
-        using _6 = tml::placeholder<6>;
-        using _7 = tml::placeholder<7>;
-        using _8 = tml::placeholder<8>;
-        using _9 = tml::placeholder<9>;
-        using _10 = tml::placeholder<10>;
-        using _11 = tml::placeholder<11>;
-        using _12 = tml::placeholder<12>;
-        using _13 = tml::placeholder<13>;
-        using _14 = tml::placeholder<14>;
-        using _15 = tml::placeholder<15>;
-        using _16 = tml::placeholder<16>;
+        using _  = tml::placeholder<std::numeric_limits<std::size_t>::max()>;
+        using _1 = tml::placeholder<0>;
+        using _2 = tml::placeholder<1>;
+        using _3 = tml::placeholder<2>;
+        using _4 = tml::placeholder<3>;
+        using _5 = tml::placeholder<4>;
+        using _6 = tml::placeholder<5>;
+        using _7 = tml::placeholder<6>;
+        using _8 = tml::placeholder<7>;
+        using _9 = tml::placeholder<8>;
+        using _10 = tml::placeholder<9>;
+        using _11 = tml::placeholder<10>;
+        using _12 = tml::placeholder<11>;
+        using _13 = tml::placeholder<12>;
+        using _14 = tml::placeholder<13>;
+        using _15 = tml::placeholder<14>;
+        using _16 = tml::placeholder<15>;
     }
 }
 

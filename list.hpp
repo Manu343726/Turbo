@@ -104,6 +104,25 @@ namespace tml
                 result << "]";
                 
                 return result.str();
+            }  
+        };
+        
+        /*
+         * tml::to_runtime() override for heterogeneous lists
+         */
+        template<typename... Ts>
+        struct runtime_representation<tml::list<Ts...>> : 
+            public tml::function<std::tuple<tml::runtime_representation<Ts>...>>
+        {};
+
+        template<typename... Ts>
+        struct to_runtime<tml::list<Ts...>>
+        {
+            static const tml::runtime_representation<tml::list<Ts...>>& execute()
+            {
+                static const auto& tuple = std::make_tuple( tml::to_runtime<Ts>()... );
+                
+                return tuple;
             }
         };
         
