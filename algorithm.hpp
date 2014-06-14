@@ -386,7 +386,7 @@ namespace tml
      *    as pairs of iterators are sequences of the interval [BEGIN,END).
      */
     template<typename P , typename... SEQ>
-    using any = tml::foldl<tml::multi_lambda<_1,_2 , tml::logical_or<_1,tml::deval<P,_2>>> , tml::false_type , SEQ...>; //Functional (Haskell-like) name)
+    using any = tml::foldl<tml::lambda<_1,_2 , tml::logical_or<_1,tml::deval<P,_2>>> , tml::false_type , SEQ...>; //Functional (Haskell-like) name)
     
     template<typename P , typename... SEQ>
     using any_of = tml::any<P,SEQ...>; //C++ (STL-ish) name
@@ -410,7 +410,7 @@ namespace tml
      *    as pairs of iterators are sequences of the interval [BEGIN,END).
      */
     template<typename P , typename... SEQ>
-    using all = tml::foldl<tml::multi_lambda<_1,_2 , tml::logical_and<_1,tml::deval<P,_2>>> , tml::true_type , SEQ...>; //Functional (Haskell-like) name)
+    using all = tml::foldl<tml::lambda<_1,_2 , tml::logical_and<_1,tml::deval<P,_2>>> , tml::true_type , SEQ...>; //Functional (Haskell-like) name)
     
     template<typename P , typename... SEQ>
     using all_of = tml::all<P,SEQ...>; //C++ (STL-ish) name

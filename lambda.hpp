@@ -27,51 +27,54 @@
 
 namespace tml
 {
-    /*
-     * Represents a lambda expression.
-     * 
-     * A lambda expression is just a template that holds a variable and a functional
-     * expression (The lambda body) where the variable is used. 
-     * The lambda expression is dessigned to act as a functional expression to be evaluated lazily,
-     * when the value of the parameter is specified. Thats why the 'result'  member of function entities
-     * is parametrized.
-     * 
-     * Because the 'result' member doesn't work like in other function entities (In other function entities returns
-     * the result, in a lambda computes the result), a lambda cannot be considered a classic function entity.
-     * The implementation trait 'tml::impl::is_function' and the 'tml::eval' implementation are overrided to
-     * cover this special behaviour of lambda expressions. 
-     */
-    template<typename X , typename BODY>
-    struct lambda
+    namespace impl
     {
         /*
-         * Lambda body evaluation: Substitute the variable of the lambda in the body with
-         * the argumment passed to the lambda and evaluate the resulting expression.
+         * Represents an unary (One argumment) lambda expression.
+         * 
+         * A lambda expression is just a template that holds a variable and a functional
+         * expression (The lambda body) where the variable is used. 
+         * The lambda expression is dessigned to act as a functional expression to be evaluated lazily,
+         * when the value of the parameter is specified. Thats why the 'result'  member of function entities
+         * is parametrized.
+         * 
+         * Because the 'result' member doesn't work like in other function entities (In other function entities returns
+         * the result, in a lambda computes the result), a lambda cannot be considered a classic function entity.
+         * The implementation trait 'tml::impl::is_function' and the 'tml::eval' implementation are overrided to
+         * cover this special behaviour of lambda expressions. 
          */
-        template<typename ARG>
-        using result = tml::eval<tml::let<X,ARG,BODY>>;
-    };
+        template<typename X , typename BODY>
+        struct lambda
+        {
+            /*
+             * Lambda body evaluation: Substitute the variable of the lambda in the body with
+             * the argumment passed to the lambda and evaluate the resulting expression.
+             */
+            template<typename ARG>
+            using result = tml::eval<tml::let<X,ARG,BODY>>;
+        };
+    }
     
     /*
-     * A lambda overrides tml::eval:
+     * An unary lambda overrides tml::eval:
      */
     template<typename X , typename BODY>
-    struct overrides_eval<tml::lambda<X,BODY>> : public tml::true_type
+    struct overrides_eval<tml::impl::lambda<X,BODY>> : public tml::true_type
     {};
     
     namespace impl
     {
         /*
-         * A lambda expression is not considered a function entity (See documentation above)
+         * A unary lambda expression is not considered a function entity (See documentation above)
          */
         template<typename X , typename BODY>
-        struct is_function<lambda<X,BODY>>
+        struct is_function<tml::impl::lambda<X,BODY>>
         {
             static constexpr bool result = false;
         };
         
         /*
-         * tml::let is overrided to compute the result of the lambda when the lambda itselft is evaluated.
+         * tml::eval is overrided to compute the result of the lambda when the lambda itselft is evaluated.
          * Of course a lambda have to be evaluated with its calling parameter, like:
          * 
          *     using result = tml::eval<lambda,param>;
@@ -80,8 +83,8 @@ namespace tml
          * lambda is passed.
          */
         template<typename X , typename BODY , typename ARG>
-        struct eval<lambda<X,BODY>,tml::list<ARG>> : 
-            public tml::function<typename lambda<X,BODY>::template result<tml::eval<ARG>>> 
+        struct eval<tml::impl::lambda<X,BODY>,tml::list<ARG>> : 
+        public tml::function<typename tml::impl::lambda<X,BODY>::template result<tml::eval<ARG>>> 
         {};
         
 
@@ -121,6 +124,9 @@ namespace tml
          * 
          * An extra step (Performed by 'lambda_builder_2' is needed to fill a list with the parameters
          * of the builder. Using a list is the only way to match the parameters through partial specialization.
+         * 
+         * tml::impl::lambda_builder is specialized to return an unary lambda if ony one variable is passed to the lambda builder.
+         * Unary lambdas are preferred because they not currify their let expression, which is a complex process.
          */
         template<typename ARGS>
         struct lambda_builder;
@@ -144,6 +150,10 @@ namespace tml
             
             using result = typename lambda_builder_2<tml::lists::push_front<vars,body>>::result;
         };
+        
+        template<typename X , typename BODY>
+        struct lambda_builder<tml::list<X,BODY>> : public tml::function<tml::impl::lambda<X,BODY>>
+        {};
         
         /*
          * A lambda expression is not considered a function entity (See documentation above)
@@ -181,7 +191,7 @@ namespace tml
     {};
     
     template<typename... ARGS>
-    using multi_lambda = typename tml::impl::lambda_builder<tml::list<ARGS...>>::result;
+    using lambda = typename tml::impl::lambda_builder<tml::list<ARGS...>>::result;
 }
 
 #endif	/* LAMBDA_HPP */

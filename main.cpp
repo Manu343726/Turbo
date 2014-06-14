@@ -60,7 +60,7 @@ using t2 = tml::eval<f<_1,_2,_3>,Int<1>,Int<2>,Int<3>>;
 using t3 = tml::eval<tml::lazy<f>,Int<1>,Int<2>,Int<3>>; 
 using t4 = tml::eval<tml::lambda<_1,f<_1,Int<2>,Int<3>>>,Int<1>>;
 using t5 = tml::eval<tml::multi_let<_1,_2,_3,Int<1>,Int<2>,Int<3>,f<_1,_2,_3>>>;
-using t6 = tml::eval<tml::multi_lambda<_1,_2,_3 , f<_1,_2,_3>>,Int<1>,Int<2>,Int<3>>;
+using t6 = tml::eval<tml::lambda<_1,_2,_3 , f<_1,_2,_3>>,Int<1>,Int<2>,Int<3>>;
 
 constexpr bool a = tml::is_function<Int<0>>::value;
 
