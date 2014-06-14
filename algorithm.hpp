@@ -38,7 +38,6 @@ using namespace tml::placeholders;
  * 
  * Algorithms which work with sequences are dessigned to work with sequences
  * represented by lists (tml::list) and pairs of iterators.
- * NOTE: Iterators are not currently supported
  * 
  * The library provides the same functionality via two naming conventions:
  *  - Functional naming convention: Algorithms have common names used in functional 
@@ -138,7 +137,7 @@ namespace tml
         };
         
         /*
-         * List-based sequence filter implementation (Recursive case)
+         * Iterator-based sequence filter implementation (Recursive case)
          * 
          * NOTE: PASSED is the sequence of elements of the original sequence which have currently passed the filter.
          * This sequence is passed to the next calls to be filled.
@@ -155,7 +154,7 @@ namespace tml
         };
         
         /*
-         * List-based sequence filter implementation (Base case)
+         * Iterator-based sequence filter implementation (Base case)
          * 
          * NOTE: PASSED is the sequence of elements of the original sequence which have currently passed the filter.
          * In the base case, this sequence is the final result of the function (There are no more elements of the input 
@@ -289,12 +288,12 @@ namespace tml
      * 
      * List-based sequence:
      * ====================
-     *  - F: The filter function. It should be a unary boolean function entity.
+     *  - F: The filter function. It should be an unary boolean function entity.
      *  - SEQ: The sequence, represented as a tml::list.
      * 
      * Iterators-based sequence:
      * =========================
-     *  - F: The filter function. It should be a unary boolean function entity.
+     *  - F: The filter function. It should be an unary boolean function entity.
      *  - BEGIN: An iterator pointing to the beginning of the input sequence.
      *  - END: An iterator pointing to the end of the input sequence. Note sequences represented
      *    as pairs of iterators are sequences of the interval [BEGIN,END).

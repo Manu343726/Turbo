@@ -23,12 +23,12 @@
 
 /*
  * The function tml::to_runtime<T>() returns a value equivalent to
- * a passed compile-time metavalue. 
- * This function has the purpose to serve as bridge between a compile-time metaprograms
+ * a passed compile-time metavalue T. 
+ * This function has the purpose of serve as bridge between a compile-time metaprograms
  * and the C++ program expecting the results of that compile-time computation.
  * 
  * tml::to_runtime() calls the static member function execute() of tml::impl::to_runtime<T>.
- * User defined types should specialize that template providing an static member function
+ * User defined types should specialize that template providing a static member function
  * execute() with no parameters. 
  * 
  * The metafunction tml::runtime_representation specifies the type of the runtime representation
