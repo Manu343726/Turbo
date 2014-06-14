@@ -1,4 +1,4 @@
-Turbo
+Turbo [![Build Status](https://travis-ci.org/wasabiz/picrin.png)](https://travis-ci.org/Manu343726/Turbo.svg?branch=reboot)
 =====
 
 *C++11 metaprogramming library*
