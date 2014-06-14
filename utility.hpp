@@ -30,6 +30,10 @@ namespace tml
             template<typename T>
             struct sizeof_bits : public tml::function<tml::size_t<sizeof(T) * CHAR_BIT>>
             {};
+            
+            template<typename T>
+            struct size_of : public tml::function<tml::size_t<sizeof(T)>>
+            {};
         }
         
         /*
@@ -43,6 +47,12 @@ namespace tml
          */
         template<typename T>
         using sizeof_bits = typename tml::util::func::sizeof_bits<T>::result;
+        
+        /*
+         * Computes the size in bytes of a certain type T
+         */
+        template<typename T>
+        using size_of = typename tml::util::func::size_of<T>::result;
     }
 }
 
