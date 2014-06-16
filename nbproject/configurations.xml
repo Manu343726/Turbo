@@ -22,6 +22,7 @@
       <itemPath>bind.hpp</itemPath>
       <itemPath>chameleon.hpp</itemPath>
       <itemPath>control_structures.hpp</itemPath>
+      <itemPath>curry.hpp</itemPath>
       <itemPath>eval.hpp</itemPath>
       <itemPath>fixed_point.hpp</itemPath>
       <itemPath>function.hpp</itemPath>
@@ -38,6 +39,7 @@
       <itemPath>stl_adapters.hpp</itemPath>
       <itemPath>tagging.hpp</itemPath>
       <itemPath>to_runtime.hpp</itemPath>
+      <itemPath>type_traits.hpp</itemPath>
       <itemPath>unconditional_false.hpp</itemPath>
       <itemPath>warning.hpp</itemPath>
     </logicalFolder>
@@ -103,6 +105,8 @@
       </item>
       <item path="control_structures.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="curry.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="enable_if.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="eval.hpp" ex="false" tool="3" flavor2="0">
@@ -146,6 +150,8 @@
       <item path="to_runtime.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="type_traits.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="unconditional_false.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -191,6 +197,8 @@
       </item>
       <item path="control_structures.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="curry.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="enable_if.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="eval.hpp" ex="false" tool="3" flavor2="0">
@@ -234,6 +242,8 @@
       <item path="to_runtime.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="type_traits.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="unconditional_false.hpp" ex="false" tool="3" flavor2="0">
       </item>

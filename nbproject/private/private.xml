@@ -7,26 +7,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/chameleon.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/main.cpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/control_structures.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/stl_adapters.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/warning.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/integral_iterators.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/impl/CPP_META_MACROS.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/placeholders.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/algorithm.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/tagging.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/lambda.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/algebra.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/integral_lists.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/eval.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/iterator.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/list_algorithms.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/impl/demangle.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/fixed_point.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/lazy.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/utility.hpp</file>
+            <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/fixed_point.hpp</file>
+            <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/to_string.hpp</file>
+            <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/basic_types.hpp</file>
+            <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/list_algorithms.hpp</file>
+            <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/main.cpp</file>
+            <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/algorithm.hpp</file>
+            <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/integral_lists.hpp</file>
+            <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/integral_iterators.hpp</file>
+            <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/utility.hpp</file>
         </group>
     </open-files>
 </project-private>

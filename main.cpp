@@ -38,6 +38,7 @@
 #include "bind.hpp"
 #include "to_runtime.hpp"
 #include "curry.hpp"
+#include "type_traits.hpp"
 
 #include <iostream>
 #include <vector>
@@ -176,4 +177,9 @@ int main()
               << std::get<2>( tml::to_runtime<tml::list<tml::Char<'a'>,tml::Bool<true>,tml::Int<0>>>() ) << ")" << std::endl;
     
     std::cout << tml::to_string<resu>() << std::endl;
+    
+    auto f = [](int , int){};
+    
+    std::cout << tml::to_runtime<tml::is_valid_call<decltype(f),char>>() << std::endl;
+    std::cout << tml::to_runtime<tml::is_valid_call<decltype(f),int,int>>() << std::endl;
 }
