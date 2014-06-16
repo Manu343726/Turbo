@@ -37,6 +37,7 @@
 #include "stl_adapters.hpp"
 #include "bind.hpp"
 #include "to_runtime.hpp"
+#include "curry.hpp"
 
 #include <iostream>
 #include <vector>
@@ -142,6 +143,13 @@ TURBO_ASSERT(( std::is_same<bcall,char> ));
 
 TURBO_WARNING((tml::false_type) , "Hey Travis, I'm here!" );
 
+template<typename... ARGS>
+struct fooquux : public tml::function<tml::util::pack_length<ARGS...>>
+{};
+
+using u = tml::uncurry<fooquux>;
+using resu = tml::eval<u,tml::list<int,float,char>>;
+
 int main()
 {
     std::cout << tml::to_string<numbers>() << std::endl;
@@ -166,4 +174,6 @@ int main()
               << std::get<0>( tml::to_runtime<tml::list<tml::Char<'a'>,tml::Bool<true>,tml::Int<0>>>() ) << "," 
               << std::get<1>( tml::to_runtime<tml::list<tml::Char<'a'>,tml::Bool<true>,tml::Int<0>>>() ) << "," 
               << std::get<2>( tml::to_runtime<tml::list<tml::Char<'a'>,tml::Bool<true>,tml::Int<0>>>() ) << ")" << std::endl;
+    
+    std::cout << tml::to_string<resu>() << std::endl;
 }
