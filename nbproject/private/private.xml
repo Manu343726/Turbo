@@ -8,14 +8,16 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/fixed_point.hpp</file>
-            <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/to_string.hpp</file>
-            <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/basic_types.hpp</file>
+            <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/curry.hpp</file>
             <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/list_algorithms.hpp</file>
+            <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/utility.hpp</file>
+            <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/type_traits.hpp</file>
+            <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/integral_lists.hpp</file>
+            <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/basic_types.hpp</file>
             <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/main.cpp</file>
             <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/algorithm.hpp</file>
-            <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/integral_lists.hpp</file>
             <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/integral_iterators.hpp</file>
-            <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/utility.hpp</file>
+            <file>file:/home/manu343726/Documentos/Proyectos/C++/Turbo/to_string.hpp</file>
         </group>
     </open-files>
 </project-private>
