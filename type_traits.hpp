@@ -54,10 +54,10 @@ namespace tml
         template<typename T>
         struct is_functor
         {
-            template<typename U> static tml::true_type  f( decltype(T::operator())* );
+            template<typename U> static tml::true_type  f( decltype(&U::operator())* );
             template<typename U> static tml::false_type f( ... );
             
-            using result = decltype( f( nullptr ) );
+            using result = decltype( f<T>( nullptr ) );
         };
         
         
@@ -93,12 +93,12 @@ namespace tml
             template<typename T>
             struct signature_extractor;
             
-            template<typename R , typename... ARGS>
-            struct signature_extractor<R(F::*)(ARGS...)> : public tml::impl::function_signature_holder<R,ARGS...>
+            template<typename C , typename R , typename... ARGS>
+            struct signature_extractor<R(C::*)(ARGS...)> : public tml::impl::function_signature_holder<R,ARGS...>
             {};
             
-            template<typename R , typename... ARGS>
-            struct signature_extractor<R(F::*)(ARGS...) const> : public tml::impl::function_signature_holder<R,ARGS...>
+            template<typename C , typename R , typename... ARGS>
+            struct signature_extractor<R(C::*)(ARGS...) const> : public tml::impl::function_signature_holder<R,ARGS...>
             {};
             
             using return_type = typename signature_extractor<decltype(&F::operator())>::return_type;
