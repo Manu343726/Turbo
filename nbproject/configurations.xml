@@ -36,6 +36,7 @@
       <itemPath>list_algorithms.hpp</itemPath>
       <itemPath>placeholder_lists.hpp</itemPath>
       <itemPath>placeholders.hpp</itemPath>
+      <itemPath>runtime_chameleon.hpp</itemPath>
       <itemPath>std_function.hpp</itemPath>
       <itemPath>stl_adapters.hpp</itemPath>
       <itemPath>tagging.hpp</itemPath>
@@ -144,6 +145,8 @@
       </item>
       <item path="placeholders.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="runtime_chameleon.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="std_function.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="stl_adapters.hpp" ex="false" tool="3" flavor2="0">
@@ -237,6 +240,8 @@
       <item path="placeholder_lists.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="placeholders.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="runtime_chameleon.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="std_function.hpp" ex="false" tool="3" flavor2="0">
       </item>
