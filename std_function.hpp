@@ -54,6 +54,18 @@ namespace tml
      */
     template<typename F>
     using std_function = tml::eval<tml::func::std_function<F>>;
+    
+    namespace runtime
+    {
+        /*
+         * Given a function entity f, returns a std::function object wrapping f.
+         */
+        template<typename F>
+        tml::std_function<F> make_function( F f )
+        {
+            return { f };
+        }
+    }
 }
 
 #endif	/* STD_FUNCTION_HPP */
