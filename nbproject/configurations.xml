@@ -13,6 +13,7 @@
         <itemPath>utils/assert.hpp</itemPath>
         <itemPath>utils/debugging_utilities.hpp</itemPath>
         <itemPath>enable_if.hpp</itemPath>
+        <itemPath>static_if.hpp</itemPath>
         <itemPath>to_string.hpp</itemPath>
         <itemPath>utility.hpp</itemPath>
       </logicalFolder>
@@ -153,6 +154,8 @@
       </item>
       <item path="runtime_chameleon.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="static_if.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="std_function.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="stl_adapters.hpp" ex="false" tool="3" flavor2="0">
@@ -252,6 +255,8 @@
       <item path="placeholders.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="runtime_chameleon.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="static_if.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="std_function.hpp" ex="false" tool="3" flavor2="0">
       </item>

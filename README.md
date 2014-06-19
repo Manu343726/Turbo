@@ -7,6 +7,23 @@ Turbo [![Build Status](https://travis-ci.org/Manu343726/Turbo.svg?branch=reboot)
 
 Turbo is a library dessigned to provide compile-time utilities through [template metaprogramming](http://en.wikipedia.org/wiki/Template_metaprogramming).
 
+One of the key points of C++, and where its expresiveness power comes from, is its ability to define new language constructs and/or customize existing constructs, all leading in a simple and clear syntax (See for example DSELs).
+
+But when leading with the creation and/or manipulation of such constructs, nothing is simple nor clear. Template-meta-programming is powerfull, but suffers from a horrible syntax and the lack of high-level (meta)programming features.  
+Some people claim that tmp seems like a compile-time pure functional language built inside C++ itself. But instead metaprogramming in C++ is more like a functional language with the worst syntax ever made (Despite LISP?).
+
+This library aims to provide high-level constructs to aid with the **manipulation of the C++ type system**, and the creation and execution of **complex computations at compile-time**; all with a clear and uniform syntax.
+Also the library takes advantage of such features and provides some usefull C++ 
+(runtime) utilities, which are easy to implement thanks to Turbo. 
+
+## What about Boost.MPL?
+
+[Boost.MPL](http://www.boost.org/doc/libs/1_55_0/libs/mpl/doc/index.html) is the de facto metaprogramming library for C++. But it suffers from two main problems which, in my oppinion, makes difficult to work with it:
+
+ - **Is Boost**: The Boost libraries are one of the best C++ libraries in the world, but they base the implementation of their features on many many tricks they implemented (See Boost.Preprocessor, for example). The problem with Boost is that making a project depend on the Boost libraries could be a problem, its a huge library. My intention was to rely on standard features only, that is, something which works perfectly providing a C++11 compliant compiler only.
+
+ - **Boost.MPL was designed on the C++98 era**: C++11 is like a reboot of the language, and like in other parts of the language, metaprogramming in C++11 is far easier than in C++98/03. The problem is that MPL was written for/using C++98/03 and its design is based in some cumbersome constructs which have been cleared and/or simplified a lot in C++11. Specifically, template aliases are a huge advantage when doing template-meta-programming, and the Turbo library relies on that in all of its features.
+
 ## Features
 
 At this time (April 2014) the library is being completely rewritten from scratch.  
@@ -110,7 +127,7 @@ Multiple-variable lambda expressions are provided too:
 
     //Returns true if at least one element of the SEQUENCE evaluates the predicate P to true
     template<typename P , typename SEQUENCE>
-    using any_of = tml::foldr<tml::multi_lambda<_1,_2 , tml::logical_or<_1,tml::eval<P,_2>>>,SEQUENCE>;
+    using any_of = tml::foldl<tml::multi_lambda<_1,_2 , tml::logical_or<_1,tml::eval<P,_2>>>,SEQUENCE>;
 
 ### TMP-aware static asserting:
 
@@ -147,23 +164,37 @@ a complex boolean expression to `std::enable_if` (Or `TURBO_ENABLE/DISABLE_IF()`
 Instead Turbo implements a so-called *sfinae container*, that is, a template dessigned to store multiple SFINAE entities like `std::enable_if` and behave itself as a big `enable_if`. That template is enabled (ie declares a `::type` member) if and only
 if all the SFINAE entities passed are enabled.  
 
-Also Turbo provies some macros, `TURBO_SFINAE()`, `ENABLE_IF()`, and `DISABLE_IF()` to build such sfinae containers easily. The combination of these features makes possible to write multiple-condition SFINAE expressions in a clear and concise syntax:
+Also Turbo provies some macros, `TURBO_SFINAE_ALL()` , `TURBO_SFINAE_ANY()`, `ENABLE_IF()`, and `DISABLE_IF()` to build such sfinae containers easily. The combination of these features makes possible to write multiple-condition SFINAE expressions in a clear and concise syntax:
 
     //Following with the f example above, now we define another f specialization:
 
     template<typename T>
-    struct f<T , TURBO_SFINAE( DISABLE_IF( std::is_floating_point<T> ),
-                               ENABLE_IF( std::is_default_constructible<T> ) )>
+    struct f<T , TURBO_SFINAE_ALL( DISABLE_IF( std::is_floating_point<T> ),
+                                   ENABLE_IF( std::is_default_constructible<T>)
+                                 )>
     {
-
+    
     };
 
+
+### Runtime access to compile-time computations via the `tml::to_runtime<T>()` function:
+
+The function `tml::to_runtime<T>()` returns a runtime constant equivalent to the spefied compile-time value `T`. Its dessigned to provide a clear interface between the compile-time and runtime sides of a program. For example:
+
+    //Compute the range of ints [10,20) at compile-time
+    using numbers = tml::integer_range<10,20>;
+    
+    //Print that numbers at runtime:
+    for( int i : tml::to_runtime<numbers>() )
+        std::cout << i << " ";
+
+> 10 11 12 13 14 15 16 17 18 19
 
 ## Known issues:
 
 The features explained above have some implementation issues (Working on...):
 
- - **Template specialization  priority issues. A C++ ISO Standard bug?**: The initial implementation of `tml::eval` consisted on three different
+ - **Template specialization  priority issues. A ISO C++ Standard bug?**: The initial implementation of `tml::eval` consisted on three different
    cases (Partial specializations), one for each kind of expression the library is cappable of evaluate:
 
     1. **Simple values**: The result of evaluating a value is the value itself
@@ -208,8 +239,10 @@ The features explained above have some implementation issues (Working on...):
 
    An ambiguity problem  very similar to [an official ISO C++ issue](http://www.open-std.org/jtc1/sc22/wg21/docs/cwg_active.html#1705) which has no official resolution (At June 2014).
 
+   *The situation was solved using SFINAE and a custom registry metafunction which specifies if a certain kind of expression overrides the default behaviour of `tml::eval`. Note that its only a workaround, the bug on the template specialization rules is still there.*
 
- - **`tml::multi_lambda` evaluation doesn't work on GCC**: The multiple-variable lambda template is defined as follows:
+
+ - **`tml::impl::multi_lambda` evaluation doesn't work on GCC**: The multiple-variable lambda template is defined as follows:
          
          template<typename... VARIABLES , typename BODY>
          struct multi_lambda
@@ -222,28 +255,27 @@ The features explained above have some implementation issues (Working on...):
                                      >;
          };
 
-   Later `tml::multi_lambda` overrides `tml::eval` to call the `::result` template alias properly:
+   Later `tml::impl::multi_lambda` overrides `tml::eval` to call the `::result` template alias properly:
 
          template<typename... VARIABLES , typename BODY>
-         struct overrides_eval<tml::multi_lambda<VARIABLES...,BODY>> : public tml::true_type
+         struct overrides_eval<tml::impl::multi_lambda<VARIABLES...,BODY>> : public tml::true_type
          {};
 
          template<typename... VARIABLES , typename BODY , typename... ARGS>
-         struct eval<tml::multi_lambda<VARIABLES...,BODY>,tml::list<ARGS...>> :
-            public tml::function<typename tml::multi_lambda<VARIABLES...,BODY>::template result<ARGS...>>
+         struct eval<tml::impl::multi_lambda<VARIABLES...,BODY>,tml::list<ARGS...>> :
+            public tml::function<typename tml::impl::multi_lambda<VARIABLES...,BODY>::template result<ARGS...>>
          {};
 
 
-   The evaluation of that lambda does not work on GCC. After some discussions and tests I'm sure this code is valid, seems like a GCC bug.
-   This project was reconfigured to use the LLVM/CLang toolchain, where this code works perfectly.
+   *The evaluation of that lambda does not work on GCC. After some discussions and tests I'm sure this code is valid, seems like a GCC bug.
+   This project was reconfigured to use the LLVM/CLang toolchain, where this code works perfectly.*
 
  - **The `TURBO_ASSERT()` macro overloading doesn't work on LLVM/CLang**: `TURBO_ASSERT()` is a macro "overloaded", making possible to pass one or two parameters depending on the use case.  
    The macro overloading is an old trick to define macros with different number of parameters, but with the same name.
    `TURBO_ASSERT()` was implemented and tested using GCC 4.8.2, but the overloading doesn't work properly on LLVM/CLang toolchain for some 
    reason.
 
- - **Some compiler configuration issues**: LLVM/CLang works building a GCC-like forntend, and for some reason they define the 
-   `__GNUC__` macro in addition to the `__llvm__`.
+   *Currently fixed, was a bug on the `SELECT_ARG_3(...)` macro.*
 
 
  - **Lambda body and placeholders evaluation**:  As explained above in the `Features` entry, Turbo implements lambda expressions as Haskell-like let expressions where the lambda
@@ -268,6 +300,8 @@ The features explained above have some implementation issues (Working on...):
    is substituted by `tml::eval` **after variable substitution**.
 
    This solution successfully solved the problem on unary lambdas, but it doesn't work on multiple-variable lambda expressions, probably because of the curryfication process.
+
+   *Fixed, it was a bug on the currifier*
 
 
 

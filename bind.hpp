@@ -23,6 +23,7 @@
 
 #include "algorithm.hpp"
 #include "placeholders.hpp"
+#include "curry.hpp"
 
 using namespace tml::placeholders;
 
@@ -72,19 +73,9 @@ namespace tml
                                             >;
             
             /*
-             * This template just forwards the parameters to the function (Is neccessary to extract the variadic pack)
-             */
-            template<typename CALL_ARGS>
-            struct call;
-            
-            template<typename... CALL_ARGS>
-            struct call<tml::list<CALL_ARGS...>> : public tml::function<tml::eval<F<CALL_ARGS...>>>
-            {};
-            
-            /*
              * The result is the result of the call
              */
-            using result = typename call<call_args>::result;
+            using result = tml::eval<tml::uncurry<F>,call_args>;
         };
     }
     

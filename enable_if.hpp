@@ -1,9 +1,22 @@
-/* 
- * File:   enable_if.hpp
- * Author: manu343726
- *
- * Created on 8 de mayo de 2014, 14:44
- */
+/******************************************************************************
+* Turbo C++11 metaprogramming Library                                         *
+*                                                                             *
+* Copyright (C) 2013 - 2014, Manuel Sánchez Pérez                             *
+*                                                                             *
+* This file is part of The Turbo Library.                                     *
+*                                                                             *
+* The Turbo Library is free software: you can redistribute it and/or modify   *
+* it under the terms of the GNU Lesser General Public License as published by *
+* the Free Software Foundation, version 2 of the License.                     *
+*                                                                             *
+* The Turbo Library is distributed in the hope that it will be useful,        *
+* but WITHOUT ANY WARRANTY; without even the implied warranty of              * 
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the               *
+* GNU Lesser General Public License for more details.                         *
+*                                                                             *
+* You should have received a copy of the GNU Lesser General Public License    *
+* along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
+******************************************************************************/
 
 #ifndef ENABLE_IF_HPP
 #define	ENABLE_IF_HPP
@@ -76,13 +89,13 @@ namespace tml
 
 /*
  * The following macros define some syntactic sugar for using multiple SFINAE instructions
- * via sfinae_containers. Turbo provides two SFINAE containers:
+ * via sfinae containers. Turbo provides two SFINAE containers:
  * 
  *  - 'tml::impl::sfinae_all': Is enabled when all `std::enable_if`s passed are enabled (Is a logical and).
  *  - 'tml::impl::sfinae_any': Is enabled when at least one `std::enable_if` passed is enabled (Is a logical or).
  * 
  * In other words, the conditions passed as `std::enable_if`s are conditions/properties which have to be true to instantiate
- * the template (Enable it) successfully. 'tml::impl::sfinae_all' enabled the template if all of the passed conditions/properties
+ * the template (Enable it) successfully. 'tml::impl::sfinae_all' enables the template if all of the passed conditions/properties
  * have been met. On the other hand, 'tml::impl::sfinae_any' enables the template if at least one condition/property is met.
  * 
  * The macros TURBO_SFINAE_X() instantiates the underlying SFINAE container directly, so the cumbersome typename ::type

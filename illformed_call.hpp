@@ -36,6 +36,36 @@ namespace tml
 {
     namespace runtime
     {
+        /*
+         * The functor tml::runtime::illformed_call represents a function entity which
+         * supports ill-formed function calls to itself.
+         * 
+         * Suppose we have a function f which takes two ints:
+         * 
+         *     void f( int , int )
+         *     { 
+         *         ... 
+         *     }
+         * 
+         * The call f(1,2) is well-formed (Syntactically/semantically correct), but
+         * the call f("hello") is not.
+         * 
+         * 'illformed_call' supports such ill-formed calls, making them compilable.
+         * That functor wraps a function entity f, and when you call the functor:
+         * 
+         *    ill( "hello" );
+         * 
+         * If the call is well-formed it calls the wrapped function, and if is ill-formed performs
+         * an action specified by the user. For example:
+         * 
+         *     auto f = tml::runtime::make_illformed_call( []( std::vector<int>& v ){ v.push_back( 1 ); } ,
+         *                                                 [](){ throw std::exception{ "Thats not a vector!!!" }; }
+         *                                               );
+         * 
+         *     f();
+         * 
+         * In this example, the call to f throws an exception because the call is ill-formed.
+         */
         template<typename F , typename E>
         struct illformed_call
         {
@@ -54,18 +84,18 @@ namespace tml
             }
 
             template<typename... ARGS , typename FF = F , typename EE = E , 
-                     typename = TURBO_SFINAE( DISABLE_IF( tml::is_valid_call<FF,ARGS...> ),
-                                              DISABLE_IF( std::is_same<void,tml::function_return_type<EE>> )
-                                            )
+                     typename = TURBO_SFINAE_ALL( DISABLE_IF( tml::is_valid_call<FF,ARGS...> ),
+                                                  DISABLE_IF( std::is_same<void,tml::function_return_type<EE>> )
+                                                )
                     >
             tml::function_return_type<E> operator()( ARGS&&... args ) const
             {
                 return _else();
             }
 
-            template<typename... ARGS , typename FF = F , typename = TURBO_SFINAE( DISABLE_IF( tml::is_valid_call<FF,ARGS...> ),
-                                                                                   ENABLE_IF( std::is_same<void,tml::function_return_type<E>> )
-                                                                                 )
+            template<typename... ARGS , typename FF = F , typename = TURBO_SFINAE_ALL( DISABLE_IF( tml::is_valid_call<FF,ARGS...> ),
+                                                                                       ENABLE_IF( std::is_same<void,tml::function_return_type<E>> )
+                                                                                     )
                     >
             void_return operator()( ARGS&&... args ) const
             {

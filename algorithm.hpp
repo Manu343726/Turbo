@@ -391,7 +391,7 @@ namespace tml
     using any_of = tml::any<P,SEQ...>; //C++ (STL-ish) name
     
     /*
-     * Returns true if all elements of a sequence has some property represented by a 
+     * Returns true if all elements of a sequence have some property represented by a 
      * boolean predicate P
      * 
      * The argumments of the function could be:

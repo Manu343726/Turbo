@@ -39,6 +39,8 @@
 #include "to_runtime.hpp"
 #include "curry.hpp"
 #include "type_traits.hpp"
+#include "overloaded_function.hpp"
+#include "static_if.hpp"
 
 #include <iostream>
 #include <vector>
@@ -151,6 +153,16 @@ struct fooquux : public tml::function<tml::util::pack_length<ARGS...>>
 using u = tml::uncurry<fooquux>;
 using resu = tml::eval<u,tml::list<int,float,char>>;
 
+IF( (tml::true_type) THEN
+{
+    
+}
+ELSE
+{
+
+}
+END_IF)
+
 int main()
 {
     std::cout << tml::to_string<numbers>() << std::endl;
@@ -179,7 +191,10 @@ int main()
     std::cout << tml::to_string<resu>() << std::endl;
     
     auto f = [](int , int){};
+    auto g = tml::runtime::make_overloaded_function( [](int){} , [](std::string){} , [](std::ostream&){} );
     
     std::cout << tml::to_runtime<tml::is_valid_call<decltype(f),char>>() << std::endl;
     std::cout << tml::to_runtime<tml::is_valid_call<decltype(f),int,int>>() << std::endl;
+    std::cout << tml::to_runtime<tml::is_valid_call<decltype(g),int>>() << std::endl;
+    std::cout << tml::to_runtime<tml::is_valid_call<decltype(g),std::vector<int>>>() << std::endl;
 }
