@@ -9,7 +9,7 @@ Turbo is a library dessigned to provide compile-time utilities through [template
 
 One of the key points of C++, and where its expresiveness power comes from, is its ability to define new language constructs and/or customize existing constructs, all leading in a simple and clear syntax (See for example DSELs).
 
-But when leading with the creation and/or manipulation of such constructs, nothing is simple nor clear. Template-meta-programming is powerfull, but suffers from a horrible syntax and the lack of high-level (meta)programming features.  
+But when dealing with the creation and/or manipulation of such constructs, nothing is simple nor clear. Template-meta-programming is powerfull, but suffers from a horrible syntax and the lack of high-level (meta)programming features.  
 Some people claim that tmp seems like a compile-time pure functional language built inside C++ itself. But instead metaprogramming in C++ is more like a functional language with the worst syntax ever made (Despite LISP?).
 
 This library aims to provide high-level constructs to aid with the **manipulation of the C++ type system**, and the creation and execution of **complex computations at compile-time**; all with a clear and uniform syntax.
