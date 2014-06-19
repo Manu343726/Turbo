@@ -67,10 +67,10 @@ using t6 = tml::eval<tml::lambda<_1,_2,_3 , f<_1,_2,_3>>,Int<1>,Int<2>,Int<3>>;
 constexpr bool a = tml::is_function<Int<0>>::value;
 
 
-TURBO_ASSERT((std::is_same<TURBO_SFINAE(
-                                        DISABLE_IF(tml::is_function<Int<0>>) ,
-                                        DISABLE_IF(tml::overrides_eval<Int<0>>)
-                                       ),tml::sfinae_return>));
+TURBO_ASSERT((std::is_same<TURBO_SFINAE_ALL(
+                                            DISABLE_IF(tml::is_function<Int<0>>) ,
+                                            DISABLE_IF(tml::overrides_eval<Int<0>>)
+                                           ),tml::sfinae_return>));
 
 TURBO_ASSERT((std::is_same<t1,tml::integer<0>>));
 TURBO_ASSERT((std::is_same<t2,tml::integer_list<1,2,3>>));

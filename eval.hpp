@@ -80,10 +80,10 @@ namespace tml
          */
         template<typename E>
         struct eval<E,tml::empty_list,
-                    TURBO_SFINAE(
-                                 DISABLE_IF(tml::overrides_eval<E>),
-                                 DISABLE_IF(tml::is_function<E>)
-                                )
+                    TURBO_SFINAE_ALL(
+                                     DISABLE_IF(tml::overrides_eval<E>),
+                                     DISABLE_IF(tml::is_function<E>)
+                                    )
                    >
         {
             using result = E;
@@ -101,10 +101,10 @@ namespace tml
          */
         template<template<typename...> class F , typename... ARGS>
         struct eval<F<ARGS...>,tml::empty_list,
-                    TURBO_SFINAE(
-                                 DISABLE_IF(tml::overrides_eval<F<ARGS...>>),
-                                 ENABLE_IF(tml::is_function<F<ARGS...>>)
-                                )
+                    TURBO_SFINAE_ALL(
+                                     DISABLE_IF(tml::overrides_eval<F<ARGS...>>),
+                                     ENABLE_IF(tml::is_function<F<ARGS...>>)
+                                    )
                    > : 
                    public F<typename eval<ARGS,tml::empty_list>::result...> 
         {};
@@ -118,10 +118,10 @@ namespace tml
          */
         template<template<typename...> class E , typename... ARGS>
         struct eval<E<ARGS...>,tml::empty_list,
-                    TURBO_SFINAE(
-                                 DISABLE_IF(tml::overrides_eval<E<ARGS...>>),
-                                 DISABLE_IF(tml::is_function<E<ARGS...>>)
-                                )
+                    TURBO_SFINAE_ALL(
+                                     DISABLE_IF(tml::overrides_eval<E<ARGS...>>),
+                                     DISABLE_IF(tml::is_function<E<ARGS...>>)
+                                    )
                    > : 
                    public tml::function<E<typename eval<ARGS,tml::empty_list>::result...>> 
         {};
@@ -136,10 +136,10 @@ namespace tml
          */
         template<template<typename...> class F , typename... PLACEHOLDERS , typename ARG , typename... ARGS>
         struct eval<F<PLACEHOLDERS...> , tml::list<ARG,ARGS...>,
-                    TURBO_SFINAE(
-                                 DISABLE_IF(tml::overrides_eval<F<PLACEHOLDERS...>>),
-                                 ENABLE_IF(tml::is_function<F<PLACEHOLDERS...>>)
-                                )
+                    TURBO_SFINAE_ALL(
+                                     DISABLE_IF(tml::overrides_eval<F<PLACEHOLDERS...>>),
+                                     ENABLE_IF(tml::is_function<F<PLACEHOLDERS...>>)
+                                    )
                    > : 
                    public F<typename eval<ARG,tml::empty_list>::result,
                             typename eval<ARGS,tml::empty_list>::result...
@@ -156,10 +156,10 @@ namespace tml
          */
         template<template<typename...> class E , typename... PLACEHOLDERS , typename ARG , typename... ARGS>
         struct eval<E<PLACEHOLDERS...> , tml::list<ARG,ARGS...>,
-                    TURBO_SFINAE(
-                                 DISABLE_IF(tml::overrides_eval<E<PLACEHOLDERS...>>),
-                                 DISABLE_IF(tml::is_function<E<PLACEHOLDERS...>>)
-                                )
+                    TURBO_SFINAE_ALL(
+                                     DISABLE_IF(tml::overrides_eval<E<PLACEHOLDERS...>>),
+                                     DISABLE_IF(tml::is_function<E<PLACEHOLDERS...>>)
+                                    )
                    > : 
                    public tml::function<E<typename eval<ARG,tml::empty_list>::result,
                                           typename eval<ARGS,tml::empty_list>::result...
