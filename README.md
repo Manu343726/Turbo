@@ -128,6 +128,41 @@ Multiple-variable lambda expressions are provided too:
     //Returns true if at least one element of the SEQUENCE evaluates the predicate P to true
     template<typename P , typename SEQUENCE>
     using any_of = tml::foldl<tml::multi_lambda<_1,_2 , tml::logical_or<_1,tml::eval<P,_2>>>,SEQUENCE>;
+    
+### High-order algorithms. Lists and iterators:
+
+Turbo implements a set of high-order metafunctions as algorithms provided by the `algorithm.hpp` header.
+Those algorithms mimic the most common functional high-order functions to provide building blocks for the rest
+of the library:
+
+    //Compute the adition of a set of numbers at compile-time
+    template<typename... Ns>
+    using sum = tml::foldl<tml::lambda<_1,_2 , tml::add<_1,_2>>,tml::zero,tml::list<Ns...>>;
+    
+Turbo is a C++ library, but since template-meta-programming seems like a functional language, Turbo takes inspiration from functional languages such as Haskell.  
+For algorithms, C++ uses an iterator approach, when Haskell uses lists instead. Both approaches has advantages and cons,
+so what approach we should use?
+
+Turbo doesn't choose between, instead implements both using exactly the same interface! Turbo algorithms are designed to
+work with sequences, and that sequences could be represented via typelists (`tml::list`) or iterators:
+
+    using numbers = tml::integer_list<1,2,3,4,5>;
+    
+    using squared = tml::map<tml::lambda<_1 , tml::mul<_1,_1>>,numbers>;
+    using squared = tml::map<tml::lambda<_1 , tml::mul<_1,_1>>,tml::begin<numbers>,tml::end<numbers>>;
+
+The library provides the header `iterator.hpp`, which implements metafunctions for iterators manipulation, such as `tml::begin`, `tml::end` , `tml::rbegin`, `tml::next` , `tml::deref` , etc. The header provides the declaration of
+the metafunctions, aliases, and the implementation metafunctions, all ready to be highly customizable by the user. This allows to write iterator-ready custom types specializing a small set of metafunctions only. When its done, everything automagically works!
+
+By default Turbo provides an iterator implementation for typelists (See the example above) and integral values (See the `numeric_iterators.hpp` header):
+
+    //Returns a list filled with the numbers on the interval [begin,end)
+    template<int begin , int end>
+    using integer_range = tml::map<tml::function<_>,
+                                   tml::forward_iterators::make_int<begin>,
+                                   tml::forward_iterators::make_int<end>
+                                  >;
+                                   
 
 ### TMP-aware static asserting:
 
@@ -288,16 +323,19 @@ The features explained above have some implementation issues (Working on...):
    they have placeholders. Consider this example:
 
         template<typename F , typename SEQ>
-        using any_of = tml::foldr<tml::multi_lambda<_1,_2 , logical_or<_1,tml::delayed_eval<F,_2>>>,tml::false_type,SEQ>;
+        using any_of = tml::foldl<tml::lambda<_1,_2 , logical_or<_1,tml::eval<F,_2>>>,tml::false_type,SEQ>;
 
    This sentence defines a metafunction `any_of`, which returns true if almost one element of a sequence evaluates to true certain predicate.
-   Its implemented using a metafunction provided by the Turbo "algorithm.hpp" header, a Haskell-like `foldr` metafunction (Similar to `std::accumulate()`).
-   The combination metafunction passed to `tml::foldr` is written in the form of a binary lambda expression, which computes the logical or between the current state of the 
+   Its implemented using a metafunction provided by the Turbo "algorithm.hpp" header, a Haskell-like `foldl` metafunction (Similar to `std::accumulate()`).
+   The combination metafunction passed to `tml::foldl` is written in the form of a binary lambda expression, which computes the logical or between the current state of the 
    computation and the current element of the sequence. "Readable" functional programming at compile-time in C++. Cool, isn't?
 
    But that doesn't work. Note that the `tml::eval` written inside the lambda body is instanced (Executed) before the substitution of the lambda variables (The placeholders).
-   To deal with that situations, a template `tml::delayed_eval` was designed to hold a `tml::eval`-like expression inside let expressions. During the let execution, `tml::delayed_eval` 
-   is substituted by `tml::eval` **after variable substitution**.
+   To deal with that situations, a template `tml::delayed_eval` (`tml::deval`) was designed to hold a `tml::eval`-like expression inside let expressions. During the let execution, `tml::delayed_eval` 
+   is substituted by `tml::eval` **after variable substitution**. The correct `tml::any` implementation should be:
+   
+         template<typename P , typename SEQUENCE>
+         using any = tml::foldl<P,tml::lambda<_1,_2 , tml::logical_or<_1,tml::deval<P,_2>>>>,tml::false_type,SEQUENCE>;
 
    This solution successfully solved the problem on unary lambdas, but it doesn't work on multiple-variable lambda expressions, probably because of the curryfication process.
 
