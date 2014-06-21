@@ -41,10 +41,12 @@ namespace tml
              * type.
              */
             template<typename T>
-            operator T() const
+            constexpr operator T() const
             {
                 return T{};
             }
+            
+            constexpr chameleon() = default;
             
             /*
              * The chamaleon overloads IO stream operators to be usable in such cotexts.

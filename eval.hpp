@@ -54,10 +54,6 @@ namespace tml
         /*
          * The implementation has three parameters:
          * 
-         *  - IS_FUNCTION: A boolean flag which says if the expression passed is a function.
-         *    Its used to evaluate the expression correctly (Extracting its 'result' member type
-         *    or not).
-         * 
          *  - E: The expression to be evaluated.
          * 
          *  - ARGS: evaluate could be used as a high-order metafunction to evaluate a given
@@ -92,11 +88,11 @@ namespace tml
         /*
          * This specialization matches the case when the expression passed is a function.
          * The result of the evalutation is just forwarded to the implementation, to reduce
-         * template instantation stack usage (Reduce template instantation depth).
+         * template instantation depth.
          * 
          * So the implementation just inherit the function to get its result.
          * 
-         * The parameters are evaluated too (Could be functional expressions) to evaluate the entire
+         * The parameters are evaluated too (Could be functional/parametrized expressions) to evaluate the entire
          * expression recursively.
          */
         template<template<typename...> class F , typename... ARGS>
@@ -187,12 +183,12 @@ namespace tml
      * The metafunction has the following parameters:
      *  - E: The expression to be evaluated.
      * 
-     *  - ARGS...: evaluate could be used as a high-order metafunction to reevaluate a given
+     *  - ARGS...: eval could be used as a high-order metafunction to reevaluate a given
      *             function entity with the specified parameters. This variadic pack is that
      *             set of parameters. The result of the evaluation is the result of evaluating
      *             the functional expresion E with the specified ARGS... arguments.
      *             Note that in this case the argumments are evaluated too (Just for the case they are
-     *             functional expressions).
+     *             functional/parametrized expressions).
      */
     template<typename EXPRESSION , typename... ARGS>
     using eval = typename impl::eval<EXPRESSION , tml::list<ARGS...>>::result;
@@ -213,7 +209,7 @@ namespace tml
      * NOTE: See the documentation of the specialization of tml::let in "let_expressions.hpp" for more info.
      */
     template<typename F , typename... ARGS>
-    struct delayed_eval : public value_chameleon
+    struct delayed_eval : public tml::value_chameleon
     {};
     
     /*

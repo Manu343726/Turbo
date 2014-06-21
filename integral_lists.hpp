@@ -24,7 +24,7 @@
 #include "list.hpp"
 #include "basic_types.hpp"
 #include "integral_iterators.hpp"
-#include "algorithm.hpp"
+#include "high_order_functions.hpp"
 #include "lazy.hpp"
 #include "to_runtime.hpp"
 

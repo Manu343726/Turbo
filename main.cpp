@@ -20,6 +20,7 @@
 
 #include "eval.hpp"
 #include "placeholders.hpp"
+#include "runtime_placeholders.hpp"
 #include "let_expressions.hpp"
 
 #include "lazy.hpp"
@@ -41,6 +42,7 @@
 #include "type_traits.hpp"
 #include "overloaded_function.hpp"
 #include "static_if.hpp"
+#include "decimal.hpp"
 
 #include <iostream>
 #include <vector>
@@ -48,6 +50,7 @@
 #include <type_traits>
 
 using namespace tml::placeholders;
+using namespace tml::runtime::placeholders;
 
 #define RUN_UNIT_TESTS
 
@@ -104,6 +107,7 @@ using x = tml::fsingle<(1 << 7)>; //0.5
 using y = tml::fsingle<(1 << 9)>; //2.0
 using z = tml::eval<tml::div<x,y>>; //0.25?
 using w = tml::eval<tml::mul<z,y>>; //0.5?
+using q = tml::eval<tml::div<y,tml::fsone>>;
 
 template<typename T>
 using this_is_not_java_vector = std::vector<tml::eval<tml::stl::function<std::remove_pointer<T>>>>;
@@ -143,9 +147,6 @@ using bcall = tml::eval<b,char,char,int>; //Equivalent to tml::eval<third_arg<in
 
 TURBO_ASSERT(( std::is_same<bcall,char> ));
 
-
-TURBO_WARNING((tml::false_type) , "Hey Travis, I'm here!" );
-
 template<typename... ARGS>
 struct fooquux : public tml::function<tml::util::pack_length<ARGS...>>
 {};
@@ -162,6 +163,14 @@ ELSE
 
 }
 END_IF)
+
+
+using ten = tml::Int<10>;
+using two = tml::Int<2>;
+using hundred = tml::eval<tml::pow<ten,two>>;
+using v1_100  = tml::eval<tml::div<tml::one<tml::fdouble<__>>,tml::to_fdouble<hundred>>>;
+
+//TURBO_ASSERT((tml::equal<tml::Int<100>,hundred>));
 
 int main()
 {
@@ -197,4 +206,9 @@ int main()
     std::cout << tml::to_runtime<tml::is_valid_call<decltype(f),int,int>>() << std::endl;
     std::cout << tml::to_runtime<tml::is_valid_call<decltype(g),int>>() << std::endl;
     std::cout << tml::to_runtime<tml::is_valid_call<decltype(g),std::vector<int>>>() << std::endl;
+    
+    std::cout << tml::to_string<tml::one<tml::Int<__>>>() << std::endl;
+    
+    std::cout << tml::to_runtime<tml::decimal_fdouble<126,2>>() << std::endl;
+    std::cout << tml::to_runtime<v1_100>() << std::endl;
 }

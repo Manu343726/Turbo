@@ -87,8 +87,41 @@ namespace tml
     template<typename T , T V>
     using integral_constant = std::integral_constant<T,V>;
     
+    /*
+     * Opposite metafunction implementation for integral types
+     */
+    template<typename T , T V>
+    struct opposite<tml::integral_constant<T,V>> : public tml::function<tml::integral_constant<T,-V>>
+    {};
+
+    /*
+     * Abs metafunction implementation for integral types
+     */
+    template<typename T , T V>
+    struct abs<tml::integral_constant<T,V>> : public tml::function<tml::integral_constant<T,((V < 0) ? -V : V)>>
+    {};
+
     namespace impl
     {
+        /*
+         * Algebra primitives zero and one for integral values
+         */
+        template<typename T , T V>
+        struct zero<tml::integral_constant<T,V>> : public tml::function<tml::integral_constant<T,0>>
+        {};
+        
+        template<typename T , T V>
+        struct one<tml::integral_constant<T,V>> : public tml::function<tml::integral_constant<T,1>>
+        {};
+        
+        /*
+         * Sign metafunction implementation for integral types
+         */
+        template<typename T , T V>
+        struct sign<tml::integral_constant<T,V>> : public tml::function<tml::integral_constant<bool,(V >= 0)>>
+        {};
+        
+        
         /*
          * to_string override for basic types:
          */

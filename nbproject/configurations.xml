@@ -24,6 +24,7 @@
       <itemPath>chameleon.hpp</itemPath>
       <itemPath>control_structures.hpp</itemPath>
       <itemPath>curry.hpp</itemPath>
+      <itemPath>decimal.hpp</itemPath>
       <itemPath>eval.hpp</itemPath>
       <itemPath>fixed_point.hpp</itemPath>
       <itemPath>function.hpp</itemPath>
@@ -36,10 +37,12 @@
       <itemPath>let_expressions.hpp</itemPath>
       <itemPath>list.hpp</itemPath>
       <itemPath>list_algorithms.hpp</itemPath>
+      <itemPath>math.hpp</itemPath>
       <itemPath>overloaded_function.hpp</itemPath>
       <itemPath>placeholder_lists.hpp</itemPath>
       <itemPath>placeholders.hpp</itemPath>
       <itemPath>runtime_chameleon.hpp</itemPath>
+      <itemPath>runtime_placeholders.hpp</itemPath>
       <itemPath>std_function.hpp</itemPath>
       <itemPath>stl_adapters.hpp</itemPath>
       <itemPath>tagging.hpp</itemPath>
@@ -95,7 +98,7 @@
       <compileType>
         <ccTool>
           <standard>8</standard>
-          <commandLine>-stdlib=libc++ -lc++abi</commandLine>
+          <commandLine>-stdlib=libc++ -lc++abi -ftemplate-backtrace-limit=0</commandLine>
         </ccTool>
       </compileType>
       <item path="algebra.hpp" ex="false" tool="3" flavor2="0">
@@ -111,6 +114,8 @@
       <item path="control_structures.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="curry.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="decimal.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="enable_if.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -146,6 +151,8 @@
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="math.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="overloaded_function.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="placeholder_lists.hpp" ex="false" tool="3" flavor2="0">
@@ -153,6 +160,8 @@
       <item path="placeholders.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="runtime_chameleon.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="runtime_placeholders.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="static_if.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -192,6 +201,7 @@
         <ccTool>
           <developmentMode>5</developmentMode>
           <standard>8</standard>
+          <commandLine>-stdlib=libc++ -lc++abi -ftemplate-backtrace-limit=0</commandLine>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -213,6 +223,8 @@
       <item path="control_structures.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="curry.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="decimal.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="enable_if.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -248,6 +260,8 @@
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="math.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="overloaded_function.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="placeholder_lists.hpp" ex="false" tool="3" flavor2="0">
@@ -255,6 +269,8 @@
       <item path="placeholders.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="runtime_chameleon.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="runtime_placeholders.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="static_if.hpp" ex="false" tool="3" flavor2="0">
       </item>

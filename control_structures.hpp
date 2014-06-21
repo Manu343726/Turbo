@@ -32,7 +32,7 @@
 namespace tml
 {
     /*
-     * Select one type or other based on a boolean condition.
+     * Selects one type or other based on a boolean condition.
      * Its the equivalent of the if control structure.
      * 
      * The parameters are:
@@ -58,7 +58,7 @@ namespace tml
     }
     
     /*
-     * Select one type or other based on a boolean condition on let expression contexts.
+     * Selects one type or other based on a boolean condition on let expression contexts.
      * The evaluation of the condition is delayed until variable substitution.
      * 
      * Its the equivalent of the if control structure
@@ -73,6 +73,22 @@ namespace tml
      */
     template<typename CONDITION , typename TRUE , typename FALSE>
     using dconditional = tml::impl::dconditional<tml::deval<CONDITION> , TRUE , FALSE>; 
+    
+    
+    /*
+     * Selects one type or other based on a boolean condition, where the passed types
+     * could be lazy instantiated templates.
+     * This allows to select between potentially ill-formed types conditionally.
+     * 
+     * Its the equivalent of the if control structure
+     * 
+     * The parameters are:
+     *  - CONDITION: A boolean expression representing the condition of the if.
+     *  - TRUE: Type which will be selected if the evaluation of the condition returns true.
+     *  - FALSE: Type which will be selected if the evaluation of the condition returns false.
+     */
+    template<typename CONDITION , typename TRUE , typename FALSE>
+    using lconditional = tml::lazy_instance<tml::conditional<CONDITION,TRUE,FALSE>>;
 }
 
 #endif	/* CONTROL_STRUCTURES_HPP */

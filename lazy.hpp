@@ -81,11 +81,15 @@ namespace tml
      * 
      *  - Template parameters specified at declaration point: The parameters passed to
      *    'lazy_instance' are ignored, the specified at declaration-point are used instead.
+     * 
+     * Also the default template works as an identity function, returning the parameter untouched
+     * if its not a tml::lazy instance. This behaviour helps in some contexts.
      */
     namespace impl
     {
         template<typename L , typename... ARGS>
-        struct lazy_instance;
+        struct lazy_instance : public tml::function<L>
+        {};
         
         template<template<typename...> class F , typename... ARGS>
         struct lazy_instance<tml::lazy<F>,ARGS...> : public tml::function<F<ARGS...>>

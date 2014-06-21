@@ -22,6 +22,8 @@
 #define	ALGREGRA_HPP
 
 #include "function_alias_decl.hpp"
+#include "chameleon.hpp"
+#include "function.hpp"
 
 
 /*
@@ -32,47 +34,115 @@
  * That operators implement expression templates which compute the desired algebra operation.
  * The result could be extracted via a decltype() aplication, or the macro ALGEVAL(), which is just
  * a shorthand for decltype.
+ * 
+ * Finally, this header defines some algebra primitives, customizable for different types.
  */
 
 namespace tml
 {
+    /*
+     * Algebra primitives zero and one.
+     * sign metafunction.
+     */
+    namespace impl
+    {
+        template<typename T>
+        struct zero;
+        
+        template<typename T>
+        struct one;
+        
+        template<typename T>
+        struct sign;
+    }
+    
+    namespace func
+    {
+        /*
+         * Returns the zero value of a given numeric type
+         */
+        template<typename T>
+        using zero = tml::impl::zero<T>;
+        
+        /*
+         * Returns the one value of a given numeric type
+         */
+        template<typename T>
+        using one = tml::impl::one<T>;
+        
+        /*
+         * Returns the sign of a given numeric value.
+         * Returns tml::true_type if the value is positive, tml::false_type if its negative.
+         */
+        template<typename T>
+        using sign = tml::impl::sign<T>;
+    }
+    
+    /*
+     * Returns the zero value of a given numeric type
+     */
+    template<typename T>
+    using zero = typename tml::func::zero<T>::result;
+    
+    /*
+     * Returns the one value of a given numeric type
+     */
+    template<typename T>
+    using one = typename tml::func::one<T>::result;
+    
+    /*
+     * Returns the sign of a given numeric value.
+     * Returns tml::true_type if the value is positive, tml::false_type if its negative.
+     */
+    template<typename T>
+    using sign = typename tml::func::sign<T>::result;
+
+    
+    /*
+     * Returns the same numeric value with a opposite sign.
+     */
+    template<typename T>
+    struct opposite : public tml::not_evaluated_function_chameleon
+    {};
+    
+    /*
+     * Returns the absolute value of a given numeric value T.
+     */    
+    template<typename T>
+    struct abs : public tml::not_evaluated_function_chameleon
+    {};
+    
+    
+    
     /* Basic algebraic operations */
         
     /*
      * Performs the addition of two values
      */
     template<typename LHS , typename RHS>
-    struct add
-    {
-        static_assert( sizeof(LHS) != sizeof(LHS) , "You should implement add for your custom datatypes" );
-    };
+    struct add : public tml::not_evaluated_function_chameleon
+    {};
 
     /*
      * Performs the substraction of two values
      */
     template<typename LHS , typename RHS>
-    struct sub
-    {
-        static_assert( sizeof(LHS) != sizeof(LHS) , "You should implement sub for your custom datatypes" );
-    };
+    struct sub : public tml::not_evaluated_function_chameleon
+    {};
 
     /*
      * Performs the multiplication of two values
      */
     template<typename LHS , typename RHS>
-    struct mul
-    {
-        static_assert( sizeof(LHS) != sizeof(LHS) , "You should implement mul for your custom datatypes" );
-    };
+    struct mul : public tml::not_evaluated_function_chameleon
+    {};
 
     /*
      * Performs the division of two values
      */
     template<typename LHS , typename RHS>
-    struct div
-    {
-        static_assert( sizeof(LHS) != sizeof(LHS) , "You should implement div for your custom datatypes" );
-    };
+    struct div : public tml::not_evaluated_function_chameleon
+    {};
     
     
     /* Basic logical functions */
@@ -81,28 +151,22 @@ namespace tml
      * Performs the addition of two values
      */
     template<typename LHS , typename RHS>
-    struct logical_or
-    {
-        static_assert( sizeof(LHS) != sizeof(LHS) , "You should implement logical_or for your custom datatypes" );
-    };
+    struct logical_or : public tml::not_evaluated_function_chameleon
+    {};
 
     /*
      * Performs the substraction of two values
      */
     template<typename LHS , typename RHS>
-    struct logical_and
-    {
-        static_assert( sizeof(LHS) != sizeof(LHS) , "You should implement logical_and for your custom datatypes" );
-    };
+    struct logical_and : public tml::not_evaluated_function_chameleon
+    {};
 
     /*
      * Performs the multiplication of two values
      */
     template<typename OP>
-    struct logical_not
-    {
-        static_assert( sizeof(OP) != sizeof(OP) , "You should implement logical_not for your custom datatypes" );
-    };
+    struct logical_not : public tml::not_evaluated_function_chameleon
+    {};
     
     
     /* Comparison functions */
@@ -113,10 +177,8 @@ namespace tml
      * Returns tml::true_type if the values are equal, returns tml::false_type otherwise.
      */
     template<typename LHS , typename RHS>
-    struct equal
-    {
-        static_assert( sizeof(LHS) != sizeof(LHS) , "You should implement equal for your custom datatypes");
-    };
+    struct equal : public tml::not_evaluated_function_chameleon
+    {};
     
     /*
      * Checks if two values are not equal.
@@ -134,10 +196,8 @@ namespace tml
      * returns tml::false_type otherwise.
      */
     template<typename LHS , typename RHS>
-    struct less_than
-    {
-        static_assert( sizeof(LHS) != sizeof(LHS) , "You should implement less_than for your custom datatypes");
-    };
+    struct less_than : public tml::not_evaluated_function_chameleon
+    {};
     
     /*
      * Checks if a value is less or equal than other.

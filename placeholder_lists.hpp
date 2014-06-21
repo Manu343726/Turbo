@@ -23,7 +23,7 @@
 
 #include "list.hpp"
 #include "placeholders.hpp"
-#include "algorithm.hpp"
+#include "high_order_functions.hpp"
 #include "lazy.hpp"
 #include "integral_iterators.hpp"
 

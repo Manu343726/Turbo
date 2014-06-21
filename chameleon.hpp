@@ -55,6 +55,13 @@ namespace tml
     {
         struct result {};
     };
+    
+    /*
+     * Acts as a function which evaluation should work on contexts expecting values.
+     * Also should behave as a function, because its a function not evaluated yet.
+     */
+    struct not_evaluated_function_chameleon : public tml::value_chameleon , public tml::function_chameleon
+    {};
 }
 
 

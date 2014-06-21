@@ -23,6 +23,7 @@
 
 #include "function.hpp"
 #include "basic_types.hpp"
+#include "fixed_point.hpp"
 #include "lazy.hpp"
 #include "utils/assert.hpp"
 
@@ -48,6 +49,14 @@ namespace tml
         
         template<typename T , T V>
         struct is_integral_constant<tml::integral_constant<T,V>> : public tml::function<tml::true_type>
+        {};
+        
+        template<typename T>
+        struct is_fixed_point : public tml::function<tml::false_type>
+        {};
+        
+        template<typename INTEGER_T , INTEGER_T V>
+        struct is_fixed_point<tml::fixed_point<INTEGER_T,V>> : public tml::function<tml::true_type>
         {};
         
         
@@ -162,6 +171,15 @@ namespace tml
         using is_integral_constant = tml::impl::is_integral_constant<T>;
         
         /*
+         * Checks if a type T is a fixed-point value.
+         * 
+         * Returns tml::true_type if the type T is a fixed-point value. Returns 
+         * tml::false_type otherwise.
+         */
+        template<typename T>
+        using is_fixed_point = tml::impl::is_fixed_point<T>;
+        
+        /*
          * Checks if a type T is a function entity (A function pointer, a functor, 
          * a lambda, etc). 
          * Returns tml::true_type if T is a function entity type. Returns 
@@ -219,6 +237,15 @@ namespace tml
     */
    template<typename T>
    using is_integral_constant = tml::eval<tml::func::is_integral_constant<T>>;
+   
+   /*
+    * Checks if a type T is a fixed-point value.
+    * 
+    * Returns tml::true_type if the type T is a fixed-point value. Returns 
+    * tml::false_type otherwise.
+    */
+   template<typename T>
+   using is_fixed_point = tml::eval<tml::func::is_fixed_point<T>>;
 
    /*
     * Checks if a type T is a function entity (A function pointer, a functor, 

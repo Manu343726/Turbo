@@ -29,6 +29,13 @@
 #include "utility.hpp"
 #include "basic_types.hpp"
 #include "algorithm.hpp"
+#include "lambda.hpp"
+#include "placeholders.hpp"
+#include "runtime_placeholders.hpp"
+#include "to_runtime.hpp"
+
+using namespace tml::placeholders;
+using tml::runtime::placeholders::__;
 
 /*
  * This header defines the template tml::fixed_point, which implements arbitrary-length fixed-point 
@@ -65,7 +72,7 @@ namespace tml
         
         /*
          * The following templates return the position (Index) of the most significant bit (MSB) and less significant bit
-         * (MSB) of the integer and decimal parts of a fixed-point number respectively, given the underlying integer type used.
+         * (LSB) of the integer and decimal parts of a fixed-point number respectively, given the underlying integer type used.
          */
         template<typename INTEGER_T>
         using integer_lsb = tml::impl::decimal_bits<INTEGER_T>;
@@ -98,6 +105,14 @@ namespace tml
     {};
     
     /*
+     * This alias instances a fixed-point value adjusting automatically the number to the underlying
+     * integer. That is, the value passed is not the value of the underlying integer, is an integral value
+     * for the fixed-point number
+     */
+    template<typename INTEGER_T , INTEGER_T V>
+    using adjusted_fixed_point = tml::fixed_point<INTEGER_T , ( V << tml::impl::decimal_bits<INTEGER_T>::value )>;
+    
+    /*
      * Aliases for library-defined single and double precision fixed-point types.
      * 
      * The implementation of fixed-point types is dessigned to work with any underlying integer type, but
@@ -113,6 +128,22 @@ namespace tml
     
     template<tml::impl::double_t N>
     using fdouble = tml::fixed_point<tml::impl::double_t,N>;
+    
+    
+    /*
+     * Opposite metafunction implementation for fixed-point types
+     */
+    template<typename INTEGER_T , INTEGER_T V>
+    struct opposite<tml::fixed_point<INTEGER_T,V>> : public tml::function<tml::fixed_point<INTEGER_T,-V>>
+    {};
+
+    /*
+     * Abs metafunction implementation for fixed-point types
+     */
+    template<typename INTEGER_T , INTEGER_T V>
+    struct abs<tml::fixed_point<INTEGER_T,V>> : public tml::function<tml::fixed_point<INTEGER_T,((V > 0) ? -V : V)>>
+    {};
+    
     
     
     /*
@@ -152,17 +183,157 @@ namespace tml
     namespace impl
     {
         /*
+         * Algebra primitives zero and one for fized-point values
+         */
+        template<typename INTEGER_T , INTEGER_T V>
+        struct zero<tml::fixed_point<INTEGER_T,V>> : public tml::function<tml::fixed_point<INTEGER_T,0>>
+        {};
+        
+        template<typename INTEGER_T , INTEGER_T V>
+        struct one<tml::fixed_point<INTEGER_T,V>> : public tml::function<tml::fixed_point<INTEGER_T,( 1 << tml::impl::decimal_bits<INTEGER_T>::value )>>
+        {};
+        
+        /*
+         * Sign metafunction implementation for fixed-point types
+         */
+        template<typename INTEGER_T , INTEGER_T V>
+        struct sign<tml::fixed_point<INTEGER_T,V>> : public tml::function<tml::Bool<(V >= 0)>>
+        {};
+
+        
+        
+        /*
+         * Runtime representation of fixed-point values
+         */
+        
+        template<typename INTEGER_T , INTEGER_T V>
+        struct runtime_representation<tml::fixed_point<INTEGER_T,V>> : public tml::function<double>
+        {};
+        
+        template<typename INTEGER_T , INTEGER_T V>
+        struct to_runtime<tml::fixed_point<INTEGER_T,V>>
+        {
+            using number = tml::fixed_point<INTEGER_T,V>;
+            
+            static tml::runtime_representation<number> execute()
+            {
+                return V / static_cast<tml::runtime_representation<number>>( 1 << tml::impl::decimal_bits<INTEGER_T>::value );
+            }
+        };
+        
+        
+        /*
          * tml::to_string override
          */
-        template<typename INTEGER_T , INTEGER_T N>
-        struct to_string<tml::fixed_point<INTEGER_T,N>>
+        template<typename INTEGER_T , INTEGER_T V>
+        struct to_string<tml::fixed_point<INTEGER_T,V>>
         {
             operator std::string() const
             {
-                return std::to_string( N / static_cast<double>( 1 << tml::impl::decimal_bits<INTEGER_T>::value ) );
+                return std::to_string( tml::to_runtime<tml::fixed_point<INTEGER_T,V>>() );
             }
         };
+        
+        
+        /*
+         * Casting metafunction from integral to fixed-point values
+         */
+        template<typename T , typename FIXED>
+        struct to_integral;
+        
+        /*
+         * Casting metafunction from fixed-point to integral values
+         */
+        template<typename INTEGER_T , typename INTEGRAL>
+        struct to_fixed;
+        
+        /*
+         * integral -> fixed-point cast.
+         */
+        template<typename INTEGER_T, typename T , T V>
+        struct to_fixed<INTEGER_T,tml::integral_constant<T,V>> : public tml::function<tml::fixed_point<INTEGER_T,(V << tml::impl::decimal_bits<INTEGER_T>::value)>>
+        {};
+        
+        /*
+         * fixed-point -> integral cast.
+         */
+        template<typename T , typename INTEGER_T , INTEGER_T V>
+        struct to_integral<T,tml::fixed_point<INTEGER_T,V>> : public tml::function<tml::integral_constant<T,(V >> tml::impl::decimal_bits<INTEGER_T>::value)>>
+        {};
+        
+        /*
+         * integral -> fixed-point cast (Using value directly instead of type tag).
+         */
+        template<typename INTEGER_T, INTEGER_T W , typename T , T V>
+        struct to_fixed<tml::fixed_point<INTEGER_T,W>,tml::integral_constant<T,V>> : public tml::impl::to_fixed<INTEGER_T,tml::integral_constant<T,V>>
+        {};
+        
+        /*
+         * fixed-point -> integral cast (Using value directly instead of type tag).
+         */
+        template<typename T , T W , typename INTEGER_T , INTEGER_T V>
+        struct to_integral<tml::integral_constant<T,W>,tml::fixed_point<INTEGER_T,V>> : public tml::impl::to_integral<T,tml::fixed_point<INTEGER_T,V>>
+        {};
     }
+    
+    namespace func
+    {
+        /*
+         * Casting metafunction from fixed-point to integral values
+         */
+        template<typename T , typename FIXED>
+        using to_integral = tml::impl::to_integral<T,FIXED>;
+        
+        /*
+         * Casting metafunction from integral to fixed-point values
+         */
+        template<typename INTEGER_T , typename INTEGRAL>
+        using to_fixed = tml::impl::to_fixed<INTEGER_T,INTEGRAL>;
+    }
+    
+    /*
+     * Casting metafunction from fixed-point to integral values
+     */
+    template<typename T , typename FIXED>
+    using to_integral = typename tml::func::to_integral<T,FIXED>::result;
+
+    /*
+     * Casting metafunction from integral to fixed-point values
+     */
+    template<typename INTEGER_T , typename INTEGRAL>
+    using to_fixed = typename tml::func::to_fixed<INTEGER_T,INTEGRAL>::result;
+    
+    /*
+     * Casting metafunction from integral to single-precision fixed-point values
+     */
+    template<typename INTEGRAL>
+    using to_fsingle = tml::to_fixed<tml::impl::single_t,INTEGRAL>;
+    
+    /*
+     * Casting metafunction from integral to double-precision fixed-point values
+     */
+    template<typename INTEGRAL>
+    using to_fdouble = typename tml::to_fixed<tml::impl::double_t,INTEGRAL>;
+    
+    /*
+     * Alias for single-precision fixed-point zero value
+     */
+    using fszero = tml::zero<tml::fsingle<__>>;
+    
+    /*
+     * Alias for single-precision fixed-point one value
+     */
+    using fsone = tml::one<tml::fsingle<__>>;
+    
+    /*
+     * Alias for double-precision fixed-point zero value
+     */
+    using fdzero = tml::zero<tml::fdouble<__>>;
+    
+    /*
+     * Alias for double-precision fixed-point one value
+     */
+    using fdone = tml::one<tml::fdouble<__>>;
 }
 
 #endif	/* FIXED_POINT_HPP */

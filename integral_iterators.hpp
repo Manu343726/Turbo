@@ -22,6 +22,7 @@
 #define	NUMERIC_ITERATORS_HPP
 
 #include "basic_types.hpp"
+#include "iterator.hpp"
 
 
 namespace tml
