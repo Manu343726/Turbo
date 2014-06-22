@@ -229,117 +229,150 @@ The function `tml::to_runtime<T>()` returns a runtime constant equivalent to the
 
 The features explained above have some implementation issues (Working on...):
 
- - **Template specialization  priority issues. A ISO C++ Standard bug?**: The initial implementation of `tml::eval` consisted on three different
-   cases (Partial specializations), one for each kind of expression the library is cappable of evaluate:
+### Template specialization  priority issues. A ISO C++ Standard bug?
 
-    1. **Simple values**: The result of evaluating a value is the value itself
-        
-            using result = tml::eval<tml::Int<0>>; //result is Int<0>
-            using result = tml::eval<int>; //result is int
-    
-    2. **Parametrized expressions**: Parametrized expressions are not functions, but their parameters could be anything, so they must be evaluated
+The initial implementation of `tml::eval` consisted on three different cases (Partial specializations), one for each kind of expression the library is cappable of evaluate:
 
-            using vector = tml::eval<std::vector<tml::function<int>>>; // vector is std::vector<int>
+ 1. **Simple values**: The result of evaluating a value is the value itself
+     
+         using result = tml::eval<tml::Int<0>>; //result is Int<0>
+         using result = tml::eval<int>; //result is int
+ 
+ 2. **Parametrized expressions**: Parametrized expressions are not functions, but their parameters could be anything, so they must be evaluated
 
-    3. **Functional expressions**: Same as parametrized expressions, but they have a result which should be computed (Extracted)
+         using vector = tml::eval<std::vector<tml::function<int>>>; // vector is std::vector<int>
 
-            using myint = tml::eval<tml::function<int>>; //myint is int
+ 3. **Functional expressions**: Same as parametrized expressions, but they have a result which should be computed (Extracted)
 
-    4. **Functional expressions with binded argumments**: `tml::eval` could be used to reevaluate an existing (Instanced) functional expression
-       with a new set of parameters
+         using myint = tml::eval<tml::function<int>>; //myint is int
 
-            using result = tml::eval<tml::function<int>,double>; //result is double
+ 4. **Functional expressions with binded argumments**: `tml::eval` could be used to reevaluate an existing (Instanced) functional expression
+    with a new set of parameters
 
-   In addition to this generic cases, the user could explicitly specialize the implementation of `tml::eval` (The internal template `tml::impl::eval`)
-   to make `tml::eval` work in a custom and specific way. For example:
+         using result = tml::eval<tml::function<int>,double>; //result is double
 
-        struct foo {};
-        
-        //We customize tml::eval saying the result of evaluating 'foo' is 'int'
-        template<>
-        struct eval<foo> : public tml::function<int>
-        {};
+In addition to this generic cases, the user could explicitly specialize the implementation of `tml::eval` (The internal template `tml::impl::eval`)
+to make `tml::eval` work in a custom and specific way. For example:
 
+     struct foo {};
+     
+     //We customize tml::eval saying the result of evaluating 'foo' is 'int'
+     template<>
+     struct eval<foo> : public tml::function<int>
+     {};
+
+
+When the specialized expression is complex (Like a template `template<typename T> struct bar{};`) that specialization has conflicts with the default generic specializations.
+The *common sense* says that our custom specialization should be instanced, because `bar<T>` is more specialized than `F<T>` (The generic functional case).  
+Instead, the generic specialization is instanced or the compilation fails due to ambiguous template specializations (Depending on the compiler).
+
+This situation [was discussed](http://stackoverflow.com/questions/23393962/partial-template-template-based-specialization-vs-explicit-partial-template-spec) for two weeks, and after some effort we conclused this is an issue on the wording of the ISO Standard, specifically:
+
+> If for each type being considered a given template is at least as specialized for all types, and  
+> more specialized for some set of types and the other template is not more specialized for any types, or  
+> {the other template} is not at least as specialized for any types,  
+> then the given template is more specialized than the other template.  
+
+An ambiguity problem  very similar to [an official ISO C++ issue](http://www.open-std.org/jtc1/sc22/wg21/docs/cwg_active.html#1705) which has no official resolution (At June 2014).
+
+*The situation was solved using SFINAE and a custom registry metafunction which specifies if a certain kind of       expression overrides the default behaviour of `tml::eval`. Note that its only a workaround, the bug on the template specialization rules is still there.*
+
+
+
+### `tml::impl::multi_lambda` evaluation doesn't work on GCC
+The multiple-variable lambda template is defined as follows:
+     
+      template<typename... VARIABLES , typename BODY>
+      struct multi_lambda
+      {
+          template<typename... ARGS>
+          using result = tml::eval<tml::multi_let<VARIABLES...,
+                                                  ARGS...,
+                                                  BODY
+                                                 >
+                                  >;
+      };
+
+Later `tml::impl::multi_lambda` overrides `tml::eval` to call the `::result` template alias properly:
+
+      template<typename... VARIABLES , typename BODY>
+      struct overrides_eval<tml::impl::multi_lambda<VARIABLES...,BODY>> : public tml::true_type
+      {};
+ 
+      template<typename... VARIABLES , typename BODY , typename... ARGS>
+      struct eval<tml::impl::multi_lambda<VARIABLES...,BODY>,tml::list<ARGS...>> :
+         public tml::function<typename tml::impl::multi_lambda<VARIABLES...,BODY>::template result<ARGS...>>
+      {};
+
+
+*The evaluation of that lambda does not work on GCC. After some discussions and tests I'm sure this code is valid, seems like a GCC bug.
+This project was reconfigured to use the LLVM/CLang toolchain, where this code works perfectly.*
+
+
+
+### The `TURBO_ASSERT()` macro overloading doesn't work on LLVM/CLang
+`TURBO_ASSERT()` is a macro "overloaded", making possible to pass one or two parameters depending on the use case.  
+The macro overloading is an old trick to define macros with different number of parameters, but with the same name.
+`TURBO_ASSERT()` was implemented and tested using GCC 4.8.2, but the overloading doesn't work properly on LLVM/CLang toolchain for some 
+reason.
+
+*Currently fixed, was a bug on the `SELECT_ARG_3(...)` macro.*
+
+
+### Lambda body and placeholders evaluation
+As explained above in the `Features` entry, Turbo implements lambda expressions as Haskell-like let expressions where the lambda variables are substituted with the value of the parameters at the point of lambda evaluation:
+
+     using l = tml::lambda<_1 , tml::function<_1>>;
+     using result = tml::eval<l,int>; //result is int
+
+Even if `tml::eval` is specialized to take care of placeholders, there are cases when expressions depending on `tml::eval` evaluation are not correctly evaluated because 
+they have placeholders. Consider this example:
+
+     template<typename F , typename SEQ>
+     using any_of = tml::foldl<tml::lambda<_1,_2 , logical_or<_1,tml::eval<F,_2>>>,tml::false_type,SEQ>;
+
+This sentence defines a metafunction `any_of`, which returns true if almost one element of a sequence evaluates to true certain predicate.
+Its implemented using a metafunction provided by the Turbo "algorithm.hpp" header, a Haskell-like `foldl` metafunction (Similar to `std::accumulate()`).
+The combination metafunction passed to `tml::foldl` is written in the form of a binary lambda expression, which computes the logical or between the current state of the 
+computation and the current element of the sequence. "Readable" functional programming at compile-time in C++. Cool, isn't?
+
+But that doesn't work. Note that the `tml::eval` written inside the lambda body is instanced (Executed) before the substitution of the lambda variables (The placeholders).
+To deal with that situations, a template `tml::delayed_eval` (`tml::deval`) was designed to hold a `tml::eval`-like expression inside let expressions. During the let execution, `tml::delayed_eval` 
+is substituted by `tml::eval` **after variable substitution**. The correct `tml::any` implementation should be:
+
+      template<typename P , typename SEQUENCE>
+      using any = tml::foldl<P,tml::lambda<_1,_2 , tml::logical_or<_1,tml::deval<P,_2>>>>,tml::false_type,SEQUENCE>;
+
+This solution successfully solved the problem on unary lambdas, but it doesn't work on multiple-variable lambda expressions, probably because of the curryfication process.
+
+*Fixed, it was a bug on the currifier*
    
-   When the specialized expression is complex (Like a template `template<typename T> struct bar{};`) that specialization has conflicts with the default generic specializations.
-   The *common sense* says that our custom specialization should be instanced, because `bar<T>` is more specialized than `F<T>` (The generic functional case).  
-   Instead, the generic specialization is instanced or the compilation fails due to ambiguous template specializations (Depending on the compiler).
-
-   This situation [was discussed](http://stackoverflow.com/questions/23393962/partial-template-template-based-specialization-vs-explicit-partial-template-spec) for two weeks, and after some effort we conclused this is an issue on the wording of the ISO Standard, specifically:
-
-   > If for each type being considered a given template is at least as specialized for all types, and  
-   > more specialized for some set of types and the other template is not more specialized for any types, or  
-   > {the other template} is not at least as specialized for any types,  
-   > then the given template is more specialized than the other template.  
-
-   An ambiguity problem  very similar to [an official ISO C++ issue](http://www.open-std.org/jtc1/sc22/wg21/docs/cwg_active.html#1705) which has no official resolution (At June 2014).
-
-   *The situation was solved using SFINAE and a custom registry metafunction which specifies if a certain kind of expression overrides the default behaviour of `tml::eval`. Note that its only a workaround, the bug on the template specialization rules is still there.*
 
 
- - **`tml::impl::multi_lambda` evaluation doesn't work on GCC**: The multiple-variable lambda template is defined as follows:
-         
-         template<typename... VARIABLES , typename BODY>
-         struct multi_lambda
-         {
-             template<typename... ARGS>
-             using result = tml::eval<tml::multi_let<VARIABLES...,
-                                                     ARGS...,
-                                                     BODY
-                                                    >
-                                     >;
-         };
+### Design flaws on the expression evaluation system
 
-   Later `tml::impl::multi_lambda` overrides `tml::eval` to call the `::result` template alias properly:
+The Turbo expression evaluation mechanism is based on the processing of
+any valid expression (Simple, parametrized, or functional) transforming the input expression to compute its value.
+Thus the evaluation should be completely separated from the instantation of the original expression. This is why
+some workarounds (Like chameleons) are needed: A non-evaluated part of an expression should be a valid parameter for
+the enclosing expression, until the expression evaluation (After the parameter is evaluated and will be valid).
+This scheme works well with total metafunctions (Metafunctions with a defined result for any input), but not for partial
+metafunctions, like the algebraic operations. Consider this:
 
-         template<typename... VARIABLES , typename BODY>
-         struct overrides_eval<tml::impl::multi_lambda<VARIABLES...,BODY>> : public tml::true_type
-         {};
+    using result = tml::eval<tml::add<tml::div<tml::Int<10>,
+                                               tml::Int<2>
+                                              >,
+                                      tml::Int<1>
+                                     >
+                            >;
 
-         template<typename... VARIABLES , typename BODY , typename... ARGS>
-         struct eval<tml::impl::multi_lambda<VARIABLES...,BODY>,tml::list<ARGS...>> :
-            public tml::function<typename tml::impl::multi_lambda<VARIABLES...,BODY>::template result<ARGS...>>
-         {};
+The algebraic metafunctions tml::add and tml::div are defined (Specialized) for numeric values only, so this expression doesn't even compile (There is no tml::add specialization to add a tml::div instance and a tml::Int). Even if the expression seems to be well-formed (Is (10/2) + 1), is not because the semantic of the expression is not (10/2)+1 until the evaluation. Before is just a template which should be instanced. And there is no specialization.
 
-
-   *The evaluation of that lambda does not work on GCC. After some discussions and tests I'm sure this code is valid, seems like a GCC bug.
-   This project was reconfigured to use the LLVM/CLang toolchain, where this code works perfectly.*
-
- - **The `TURBO_ASSERT()` macro overloading doesn't work on LLVM/CLang**: `TURBO_ASSERT()` is a macro "overloaded", making possible to pass one or two parameters depending on the use case.  
-   The macro overloading is an old trick to define macros with different number of parameters, but with the same name.
-   `TURBO_ASSERT()` was implemented and tested using GCC 4.8.2, but the overloading doesn't work properly on LLVM/CLang toolchain for some 
-   reason.
-
-   *Currently fixed, was a bug on the `SELECT_ARG_3(...)` macro.*
-
-
- - **Lambda body and placeholders evaluation**:  As explained above in the `Features` entry, Turbo implements lambda expressions as Haskell-like let expressions where the lambda
-   variables are substituted with the value of the parameters at the point of lambda evaluation:
-
-        using l = tml::lambda<_1 , tml::function<_1>>;
-        using result = tml::eval<l,int>; //result is int
-
-   Even if `tml::eval` is specialized to take care of placeholders, there are cases when expressions depending on `tml::eval` evaluation are not correctly evaluated because 
-   they have placeholders. Consider this example:
-
-        template<typename F , typename SEQ>
-        using any_of = tml::foldl<tml::lambda<_1,_2 , logical_or<_1,tml::eval<F,_2>>>,tml::false_type,SEQ>;
-
-   This sentence defines a metafunction `any_of`, which returns true if almost one element of a sequence evaluates to true certain predicate.
-   Its implemented using a metafunction provided by the Turbo "algorithm.hpp" header, a Haskell-like `foldl` metafunction (Similar to `std::accumulate()`).
-   The combination metafunction passed to `tml::foldl` is written in the form of a binary lambda expression, which computes the logical or between the current state of the 
-   computation and the current element of the sequence. "Readable" functional programming at compile-time in C++. Cool, isn't?
-
-   But that doesn't work. Note that the `tml::eval` written inside the lambda body is instanced (Executed) before the substitution of the lambda variables (The placeholders).
-   To deal with that situations, a template `tml::delayed_eval` (`tml::deval`) was designed to hold a `tml::eval`-like expression inside let expressions. During the let execution, `tml::delayed_eval` 
-   is substituted by `tml::eval` **after variable substitution**. The correct `tml::any` implementation should be:
-   
-         template<typename P , typename SEQUENCE>
-         using any = tml::foldl<P,tml::lambda<_1,_2 , tml::logical_or<_1,tml::deval<P,_2>>>>,tml::false_type,SEQUENCE>;
-
-   This solution successfully solved the problem on unary lambdas, but it doesn't work on multiple-variable lambda expressions, probably because of the curryfication process.
-
-   *Fixed, it was a bug on the currifier*
+The good solution was to decouple completely the correctness (Is well-formed or not) of an expression from its instantation. Note that Turbo expressions are processed in two phases (First the expression is instantiated, and that instantation should be correct. Later the instanced
+expression is evaluated).
+To solve the problem all Turbo metafunctions are declared as total functions (Even if they are not). The default template of a
+partial metafunction could inherit from the tml::non_evaluated_function_chameleon type to behave like a total function and make
+the instantation (1st phase of expression processing) possible.
 
 
 
