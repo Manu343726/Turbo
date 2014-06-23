@@ -62,13 +62,21 @@ namespace tml
          * The templates 'tml::impl::decimal_bits' and 'tml::impl::integer_bits' compute the size on bits of a
          * fixed-point part given an underlying integer type.
          * 
+         * This is the default config. Turbo uses the macro TURBO_DEBUG_FP_DECIMAL_PART to specify the fraction
+         * of bits which are used for decimals, which of course is 4 by default.
+         * 
          * NOTE: Here I miss C++14 variable templates, but I want to make the library compatible with C++11 at least.
          */
-        template<typename INTEGER_T>
-        using integer_bits = tml::size_t<(tml::util::sizeof_bits<INTEGER_T>::value * 3) / 4>;
+        
+#ifndef TURBO_DEBUG_FP_DECIMAL_PART
+#define TURBO_DEBUG_FP_DECIMAL_PART 4
+#endif /* TURBO_DEBUG_FP_DECIMAL_PART */
         
         template<typename INTEGER_T>
-        using decimal_bits = tml::size_t<tml::util::sizeof_bits<INTEGER_T>::value / 4>;
+        using decimal_bits = tml::size_t<tml::util::sizeof_bits<INTEGER_T>::value / (TURBO_DEBUG_FP_DECIMAL_PART)>;
+        
+        template<typename INTEGER_T>
+        using integer_bits = tml::size_t<(tml::util::sizeof_bits<INTEGER_T>::value - tml::impl::decimal_bits<INTEGER_T>::value)>;
         
         /*
          * The following templates return the position (Index) of the most significant bit (MSB) and less significant bit

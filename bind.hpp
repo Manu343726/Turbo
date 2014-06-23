@@ -81,7 +81,7 @@ namespace tml
     
     /*
      * Like in any other Turbo function entity, the way to evaluate tml::bind is using tml::eval.
-     * tml::bind overrides eval for thast purpose, taking the evaluation parameters and transforming them
+     * tml::bind overrides eval for that purpose, taking the evaluation parameters and transforming them
      * to complete the function call with the binded parameters.
      */
     template<template<typename...> class F , typename... ARGS>

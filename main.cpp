@@ -18,6 +18,9 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
+#define TURBO_DEBUG_FP_DECIMAL_PART 3
+
+
 #include "eval.hpp"
 #include "placeholders.hpp"
 #include "runtime_placeholders.hpp"

@@ -58,7 +58,7 @@ namespace tml
         {};
         
         template<typename B , typename E>
-        struct negative_pow : public tml::function<tml::eval<tml::div<tml::one<B>,positive_pow<B,tml::eval<tml::abs<E>>>>>>
+        struct negative_pow : public tml::function<tml::eval<tml::div<tml::one<B>,positive_pow<B,tml::abs<E>>>>>
         {};
         
         /*
