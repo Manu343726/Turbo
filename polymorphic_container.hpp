@@ -22,6 +22,7 @@
 #include <typeindex>
 #include <unordered_map>
 #include <type_traits>
+#include <memory>
 
 #include "enable_if.hpp"
 
