@@ -47,10 +47,14 @@
 #include "static_if.hpp"
 #include "decimal.hpp"
 
+#include "polymorphic_container.hpp"
+
 #include <iostream>
 #include <vector>
 #include <memory>
 #include <type_traits>
+#include <chrono>
+#include <algorithm>
 
 using namespace tml::placeholders;
 using namespace tml::runtime::placeholders;
@@ -214,4 +218,67 @@ int main()
     
     std::cout << tml::to_runtime<tml::decimal_fdouble<126,2>>() << std::endl;
     std::cout << tml::to_runtime<v1_100>() << std::endl;
+    
+    
+    struct base 
+    { 
+      virtual int f(int x = 0)const=0; 
+    }; 
+
+    struct derived1:base 
+    { 
+      derived1(int n = 0):n(n){} 
+      virtual int f(int x)const{return 126*x*n;} 
+
+      int n; 
+    }; 
+
+    struct derived2:base 
+    { 
+      derived2(int n = 0):n(n){} 
+      virtual int f(int x)const{return x+n;} 
+
+      int unused,n; 
+    }; 
+    
+    for( std::size_t ii = 0 ; ii < 100 ; ++ii )
+    {
+        tml::runtime::poly_container<base> poly;
+        constexpr const std::size_t test_size = 100000;
+
+        for( std::size_t i = 0 ; i < test_size ; ++i )
+            poly.insert( derived1{12} );
+
+        for( std::size_t i = 0 ; i < test_size ; ++i )
+            poly.insert( derived2{22} );
+
+        auto begin = std::chrono::high_resolution_clock::now();
+
+        poly.mutable_for_each( []( base& e )
+        {
+           e.f(55); 
+        });
+
+        auto poly_elapsed = std::chrono::high_resolution_clock::now() - begin;
+
+        std::vector<std::unique_ptr<base>> v;
+
+        for( std::size_t i = 0 ; i < test_size ; ++i )
+            v.emplace_back( new derived1{11} );
+
+        for( std::size_t i = 0 ; i < test_size ; ++i )
+            v.emplace_back( new derived2{22} );
+
+        std::random_shuffle( std::begin( v ) , std::end( v ) );
+
+        begin = std::chrono::high_resolution_clock::now();
+
+        for( auto& e : v )
+            e->f(55);
+
+        auto OO_elapsed = std::chrono::high_resolution_clock::now() - begin;
+
+        std::cout << "Classic std::vector: "          << std::chrono::duration_cast<std::chrono::milliseconds>( OO_elapsed ).count()   << " ms" << std::endl;
+        std::cout << "tml::runtime::poly_container: " << std::chrono::duration_cast<std::chrono::milliseconds>( poly_elapsed ).count() << " ms" << std::endl;
+    }
 }

@@ -41,6 +41,7 @@
       <itemPath>overloaded_function.hpp</itemPath>
       <itemPath>placeholder_lists.hpp</itemPath>
       <itemPath>placeholders.hpp</itemPath>
+      <itemPath>polymorphic_container.hpp</itemPath>
       <itemPath>runtime_chameleon.hpp</itemPath>
       <itemPath>runtime_placeholders.hpp</itemPath>
       <itemPath>std_function.hpp</itemPath>
@@ -159,6 +160,8 @@
       </item>
       <item path="placeholders.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="polymorphic_container.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="runtime_chameleon.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="runtime_placeholders.hpp" ex="false" tool="3" flavor2="0">
@@ -267,6 +270,8 @@
       <item path="placeholder_lists.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="placeholders.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="polymorphic_container.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="runtime_chameleon.hpp" ex="false" tool="3" flavor2="0">
       </item>
