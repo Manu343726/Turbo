@@ -24,6 +24,7 @@
 #include <type_traits>
 
 #include "eval.hpp"
+#include "lazy.hpp"
 
 /*
  * This header declares simple imperative-programming control structures, like ifs, switches, etc
