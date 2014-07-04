@@ -29,6 +29,7 @@
 #include "std_function.hpp"
 #include "algorithm.hpp"
 #include "placeholders.hpp"
+#include "bind.hpp"
 
 using namespace tml::placeholders;
 
