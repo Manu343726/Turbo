@@ -87,6 +87,13 @@ Also `tml::lazy` could be used to do lazy evaluation of metafunctions. For examp
     using t = tml::lazy<tml::function>;
     using result = tml::eval<t,int>; //Result is int (The result of evaluating tml::function<int>)
 
+Finally `tml::eval` abuses of function types and specializes itself to handle function types like
+`F(ARGS...)` as a metafunction call, where `F` is a functional expression:
+
+    using F = tml::lambda<_1 , tml::add<_1,_1>>;
+    using i = tml::Int<1>;
+
+    using r = tml::eval<F(i)>;
 
 For more information see the documentation inside `eval.hpp`.
 

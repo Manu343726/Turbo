@@ -179,6 +179,9 @@ using v1_100  = tml::eval<tml::div<tml::one<tml::fdouble<__>>,tml::to_fdouble<hu
 
 //TURBO_ASSERT((tml::equal<tml::Int<100>,hundred>));
 
+
+using r = tml::eval<L(tml::div)(tml::Int<4>,tml::Int<2>)>;
+
 int main()
 {
     std::cout << tml::to_string<numbers>() << std::endl;

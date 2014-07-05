@@ -71,6 +71,11 @@ namespace tml
     struct lazy
     {}; 
     
+/*
+ * Shorthand
+ */
+#define L(x) tml::lazy<x>
+    
     /*
      * The metafunction lazy_instance takes a wrapped template L and a set of template parameters,
      * and returns the corresponding template instance.

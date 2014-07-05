@@ -164,6 +164,19 @@ namespace tml
         {
             //static_assert( sizeof...(PLACEHOLDERS) == (1 + sizeof...(ARGS)) , "Wrong number of function call parameters." );  
         };
+        
+        /*
+         * Alternative call-like syntax
+         */
+        template<typename F , typename... ARGS>
+        struct eval<F(ARGS...),tml::empty_list,
+                    TURBO_SFINAE_ALL(
+                                     DISABLE_IF( tml::overrides_eval<F(ARGS...)> ),
+                                     ENABLE_IF( tml::is_function<F> )
+                                    )
+                   >:
+                   public tml::impl::eval<F,tml::list<ARGS...>>
+        {};
     }
     
     /*
