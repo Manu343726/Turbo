@@ -92,16 +92,25 @@ namespace tml
      */
     namespace impl
     {
+        /*
+         * A lazy instance of an instanced template is the instance itself.
+         * 
+         *     tml::lazy_instance<int> returns int
+         */
         template<typename L , typename... ARGS>
         struct lazy_instance : public tml::function<L>
         {};
-        
-        template<template<typename...> class F , typename... ARGS>
-        struct lazy_instance<tml::lazy<F>,ARGS...> : public tml::function<F<ARGS...>>
-        {};
-        
-        template<template<typename...> class F , typename ARG , typename... ARGS , typename... IARGS>
-        struct lazy_instance<tml::lazy<F,ARG,ARGS...>,IARGS...> : public tml::function<F<ARG,ARGS...>>
+       
+        /*
+         * A lazy instance of a tml::lazy instance is an instance of the wrapped templates where
+         * the binded parameters come first, and then the passed parameters:
+         * 
+         *     tml::lazy_instance<tml::lazy<foo>,int>     returns foo<int>
+         *     tml::lazy_instance<tml::lazy<foo,int>>     returns foo<int>
+         *     tml::lazy_instance<tml::lazy<foo,int>,int> returns foo<int,int>
+         */
+        template<template<typename...> class F , typename... ARGS , typename... IARGS>
+        struct lazy_instance<tml::lazy<F,ARGS...>,IARGS...> : public tml::function<F<ARGS...,IARGS...>>
         {};
     }
     
@@ -134,19 +143,9 @@ namespace tml
     
     namespace impl
     {
-        template<template<typename...> class F , typename ARG , typename... ARGS>
-        struct eval<tml::lazy<F>,tml::list<ARG,ARGS...>> : 
-            public tml::function<tml::eval<tml::lazy_instance<tml::lazy<F>,ARG,ARGS...>>>
-        {};
-        
-        /*
-         * Note that in the case of template parameters specified at declaration point 
-         * a set of evaluation parameters is not mandatory to evaluate the wrapped template,
-         * because (Exactly as in tml::lazy_instance) the evaluation parameters are ignored.
-         */
-        template<template<typename...> class F , typename ARG , typename... ARGS , typename... EARGS>
-        struct eval<tml::lazy<F,ARG,ARGS...>,tml::list<EARGS...>> : 
-            public tml::function<tml::eval<tml::lazy_instance<tml::lazy<F,ARG,ARGS...>>>>
+        template<template<typename...> class F , typename... B_ARGS , typename... ARGS>
+        struct eval<tml::lazy<F,B_ARGS...>,tml::list<ARGS...>> : 
+            public tml::function<tml::eval<tml::lazy_instance<tml::lazy<F,B_ARGS...>,ARGS...>>>
         {};
     }
 }
