@@ -48,6 +48,7 @@
 #include "decimal.hpp"
 
 #include "polymorphic_container.hpp"
+#include "pipelined_function.hpp"
 
 #include <iostream>
 #include <vector>
@@ -182,6 +183,31 @@ using v1_100  = tml::eval<tml::div<tml::one<tml::fdouble<__>>,tml::to_fdouble<hu
 
 using r = tml::eval<L(tml::div)(tml::Int<4>,tml::Int<2>)>;
 
+
+int fibo( int i )
+{
+    tml::runtime::pipelined_function<int(int)> f;
+    
+    return f.begin([](int ii)
+     {
+         std::cout << "Starting... ( i = " << ii << " )\n";
+     })
+     .body([&](int ii)
+     {
+         if( ii > 1 )
+             return f(ii - 1) + f(ii - 2);
+         else
+             return 0;
+     })
+     .end([](int ii)
+     {
+         std::cout << "End ( i = " << ii << " )\n";
+     })( i );
+}
+
+
+
+
 int main()
 {
     std::cout << tml::to_string<numbers>() << std::endl;
@@ -283,5 +309,9 @@ int main()
 
         std::cout << "Classic std::vector: "          << std::chrono::duration_cast<std::chrono::milliseconds>( OO_elapsed ).count()   << " ms" << std::endl;
         std::cout << "tml::runtime::poly_container: " << std::chrono::duration_cast<std::chrono::milliseconds>( poly_elapsed ).count() << " ms" << std::endl;
+        
+        
     }
+    
+    fibo( 10 );
 }
