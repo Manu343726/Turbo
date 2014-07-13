@@ -115,11 +115,19 @@ namespace tml
         };
         
         template<typename R , typename... ARGS>
+        struct function_signature<R(ARGS...)> : public tml::impl::function_signature_holder<R,ARGS...>
+        {};
+        
+        template<typename R , typename... ARGS>
         struct function_signature<R(*)(ARGS...)> : public tml::impl::function_signature_holder<R,ARGS...>
         {};
         
         template<typename C , typename R , typename... ARGS>
         struct function_signature<R(C::*)(ARGS...)> : public tml::impl::function_signature_holder<R,ARGS...>
+        {};
+        
+        template<typename R , typename... ARGS>
+        struct make_function_signature : public tml::function<R(ARGS...)>
         {};
         
         
@@ -201,6 +209,12 @@ namespace tml
         using function_return_type = tml::function<typename tml::impl::function_signature<F>::return_type>;
         
         /*
+         * Given a return type R and a set of argumments types, returns the corresponding function signature type.
+         */
+        template<typename R , typename... ARGS>
+        using make_function_signature = tml::impl::make_function_signature<R,ARGS...>;
+        
+        /*
          * Given a function entity type, and a set of argumment types, checks if the call to that
          * function with the parameters is well-formed.
          */
@@ -268,6 +282,12 @@ namespace tml
    template<typename F>
    using function_return_type = tml::eval<tml::func::function_return_type<F>>;
 
+   /*
+    * Given a return type R and a set of argumments types, returns the corresponding function signature type.
+    */
+   template<typename R , typename... ARGS>
+   using make_function_signature = tml::eval<tml::func::make_function_signature<R,ARGS...>>;
+   
    /*
     * Given a function entity type, and a set of argumment types, checks if the call to that
     * function with the parameters is well-formed.
