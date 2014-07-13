@@ -24,6 +24,7 @@
 #include "algorithm.hpp"
 #include "placeholders.hpp"
 #include "curry.hpp"
+#include "placeholder_lists.hpp"
 
 using namespace tml::placeholders;
 
@@ -94,6 +95,25 @@ namespace tml
         struct eval<tml::bind<F,ARGS...>,tml::list<CALL_ARGS...>> : public tml::impl::bind_call<tml::bind<F,ARGS...>,CALL_ARGS...>
         {};
     }
+    
+    namespace impl
+    {
+        template<typename F , typename... ARGS>
+        struct partial_eval;
+        
+        template<template<typename...> class F , typename... F_ARGS , typename... ARGS>
+        struct partial_eval<F<F_ARGS...>,ARGS...>
+        {
+            using result = tml::bind<F,ARGS...,tml::placeholders_range<sizeof...(ARGS),sizeof...(F_ARGS)>>;
+        };
+    }
+    
+    /*
+     * Given a parametrized expression F of m argumments, evaluates partially the expression with n argumments,
+     * returning a parametrized expression of m-n argumments. 
+     */
+    template<typename F , typename... ARGS>
+    using peval = typename tml::impl::partial_eval<F,ARGS...>::result;
 }
 
 #endif	/* BIND_HPP */
