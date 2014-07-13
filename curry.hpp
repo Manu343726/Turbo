@@ -63,6 +63,43 @@ namespace tml
         {};
     }
     
+    
+    /*
+     * Given an expression F with one tuple argumment (tml::list<ARGS...>),
+     * tml::curry<F> is a equivalent expression which expects n argumments instead
+     * of a tuple (tml::list) of argumments.
+     */
+    template<typename F>
+    struct ecurry
+    {};
+
+    /*
+     * Given an expression F with n argumments (A variadic-pack ARGS...),
+     * tml::uncurry<F> is a equivalent expression which expects one tuple argumment
+     * instead of n argumments.
+     */
+    template<typename F>
+    struct euncurry
+    {};
+
+    template<typename F>
+    struct overrides_eval<tml::ecurry<F>> : public tml::true_type
+    {};
+    template<typename F>
+    struct overrides_eval<tml::euncurry<F>> : public tml::true_type
+    {};
+    
+    namespace impl
+    {
+        template<typename F , typename... CARGS>
+        struct eval<tml::ecurry<F> , tml::list<CARGS...>> : 
+            public tml::function<tml::eval<F,tml::list<CARGS...>>>
+        {};
+        template<typename F , typename... CARGS>
+        struct eval<tml::euncurry<F> , tml::list<tml::list<CARGS...>>> : 
+            public tml::function<tml::eval<F,CARGS...>>
+        {};
+    }
 }
 
 #endif	/* CURRY_HPP */
