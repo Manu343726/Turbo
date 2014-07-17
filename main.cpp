@@ -273,7 +273,7 @@ int main()
     for( std::size_t ii = 0 ; ii < 100 ; ++ii )
     {
         tml::runtime::poly_container<base> poly;
-        constexpr const std::size_t test_size = 100000;
+        constexpr const std::size_t test_size = 10000000;
 
         for( std::size_t i = 0 ; i < test_size ; ++i )
             poly.insert( derived1{12} );
@@ -283,10 +283,8 @@ int main()
 
         auto begin = std::chrono::high_resolution_clock::now();
 
-        poly.mutable_for_each( []( base& e )
-        {
-           e.f(55); 
-        });
+        for( auto& e : poly )
+            e.f(55);
 
         auto poly_elapsed = std::chrono::high_resolution_clock::now() - begin;
 

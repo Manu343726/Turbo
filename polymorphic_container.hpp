@@ -23,6 +23,7 @@
 #include <unordered_map>
 #include <type_traits>
 #include <memory>
+#include <tuple>
 
 #include "enable_if.hpp"
 
@@ -33,6 +34,8 @@ namespace tml
         template<typename BASE>
         struct poly_container
         {   
+        private:
+            struct iterator;
         public:
             poly_container() = default;
             
@@ -47,80 +50,36 @@ namespace tml
                 segment->insert( elem );
             }
             
-            template<typename F>
-            void for_each( F f ) const
+            iterator begin() const
             {
-                for( const auto& segment : _segments )
-                    segment.second->for_each( f );
+                return { std::begin( _segments ) , 0 };
             }
             
-            template<typename F>
-            void mutable_for_each( F f )
+            iterator end() const
             {
-                for( auto& segment : _segments )
-                    segment.second->mutable_for_each( f );
+                return { std::end( _segments ) , 0 };
             }
             
-            template<typename F , typename FILTER>
-            void for_each_if( F f , FILTER filter ) const
+            iterator begin()
             {
-                for_each( [&]( const BASE& elem )
-                {
-                    if( filter( elem ) ) f( elem );
-                });
+                return { std::begin( _segments ) , 0 };
             }
             
-            template<typename F , typename FILTER>
-            void mutable_for_each_if( F f , FILTER filter )
+            iterator end()
             {
-                mutable_for_each( [&]( BASE& elem )
-                {
-                    if( filter( elem ) ) f( elem );
-                });
+                return { std::end( _segments ) , 0 };
             }
-            
         private:
             struct polycont_segment_base
             {
-            public:
-                template<typename F>
-                void for_each( F f ) const
-                {
-                    const std::size_t elem_size = this->element_size();
-                    const std::size_t size      = this->size();
-
-                    for( auto it  = begin() , 
-                              end = it + size * elem_size;
-                              it != end;
-                              it += elem_size )
-                    {
-                        const auto& elem = *reinterpret_cast<const BASE*>( it );
-                        f( elem );
-                    }
-                }
-                
-                template<typename F>
-                void mutable_for_each( F f )
-                {
-                    const std::size_t elem_size = this->element_size();
-                    const std::size_t size      = this->size();
-
-                    for( auto it  = begin() , 
-                              end = it + size * elem_size;
-                              it != end;
-                              it += elem_size )
-                    {
-                        auto& elem = *reinterpret_cast<BASE*>( it );
-                        f( elem );
-                    }
-                }
-                
                 virtual ~polycont_segment_base() {}
                 
                 virtual std::size_t size() const = 0;
                 virtual std::size_t element_size() const = 0;
-                virtual unsigned char* begin() = 0;
+                
+                virtual unsigned char*       begin() = 0;
                 virtual const unsigned char* begin() const = 0;
+                
                 virtual void insert( const BASE& elem ) = 0;
             };
             
@@ -160,9 +119,84 @@ namespace tml
                 }
             };
             
+            
+            
             using pointer_t   = std::unique_ptr<polycont_segment_base>;
             using key_t       = std::type_index;
             using container_t = std::unordered_map<key_t,pointer_t>;
+            
+            struct iterator
+            {
+                using table_iterator = typename container_t::iterator;
+            
+                iterator( table_iterator it , std::size_t i ) :
+                    _table_iterator{ it },
+                    _element_index{ i }
+                {}
+                
+                const BASE& operator*() const
+                {
+                    return *reinterpret_cast<const BASE*>( segment().begin() + ( segment().element_size() * _element_index ) );
+                }
+                
+                BASE& operator*()
+                {   
+                    return *reinterpret_cast<BASE*>( segment().begin() + ( segment().element_size() * _element_index ) );
+                }
+                
+                iterator& operator++()
+                {
+                    if( _element_index < segment().size() - 1 )
+                    {
+                        _element_index++;
+                    }
+                    else
+                    {
+                        _table_iterator++;
+                        _element_index = 0;
+                    }
+                    
+                    return *this;
+                }
+                
+                iterator& operator++(int)
+                {
+                    iterator tmp{ *this };
+                    
+                    ++(*this);
+                    
+                    return tmp;
+                }
+                
+                friend bool operator==( const iterator& lhs , const iterator& rhs )
+                {
+                    return std::tie( lhs._table_iterator , lhs._element_index ) == std::tie( rhs._table_iterator , rhs._element_index );
+                }
+                
+                friend bool operator!=( const iterator& lhs , const iterator& rhs )
+                {
+                    return !(lhs == rhs);
+                }
+                
+                friend bool operator<( const iterator& lhs , const iterator& rhs )
+                {
+                    return std::tie( lhs._table_iterator , lhs._element_index ) < std::tie( rhs._table_iterator , rhs._element_index );
+                }
+                
+            private:
+                const polycont_segment_base& segment() const
+                {
+                    return *_table_iterator->second;
+                }
+                
+                polycont_segment_base& segment()
+                {
+                    return *_table_iterator->second;
+                }
+                
+                table_iterator _table_iterator;
+                std::size_t    _element_index;
+            };
             
             container_t _segments;
         };
