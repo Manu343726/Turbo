@@ -42,6 +42,8 @@
  * The implementation uses the functional convention by default.
  */
 
+using tml::placeholders::_1;
+using tml::placeholders::_2;
 
 namespace tml
 {
