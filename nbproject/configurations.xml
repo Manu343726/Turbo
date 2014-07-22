@@ -1,48 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="90">
+<configurationDescriptor version="94">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <logicalFolder name="core" displayName="core" projectFiles="true">
-        <itemPath>core/arithmetic_functions.hpp</itemPath>
-        <itemPath>core/assert.hpp</itemPath>
-        <itemPath>core/basic_numeric_arithmetic.hpp</itemPath>
-        <itemPath>core/basic_types.hpp</itemPath>
-        <itemPath>core/boolean_predicates.hpp</itemPath>
-        <itemPath>core/concepts.hpp</itemPath>
-        <itemPath>core/expressions.hpp</itemPath>
-        <itemPath>core/function.hpp</itemPath>
-        <itemPath>traits.hpp</itemPath>
-        <itemPath>core/value_t.hpp</itemPath>
+      <logicalFolder name="impl" displayName="impl" projectFiles="true">
+        <itemPath>impl/CPP_META_MACROS.hpp</itemPath>
+        <itemPath>impl/demangle.hpp</itemPath>
+        <itemPath>function_alias_decl.hpp</itemPath>
       </logicalFolder>
-      <itemPath>analogliterals.hpp</itemPath>
-      <itemPath>chrono.hpp</itemPath>
-      <itemPath>color.hpp</itemPath>
-      <itemPath>complex.hpp</itemPath>
-      <itemPath>constexpr_string.hpp</itemPath>
-      <itemPath>core.hpp</itemPath>
+      <logicalFolder name="utils" displayName="utils" projectFiles="true">
+        <itemPath>utils/assert.hpp</itemPath>
+        <itemPath>utils/debugging_utilities.hpp</itemPath>
+        <itemPath>enable_if.hpp</itemPath>
+        <itemPath>static_if.hpp</itemPath>
+        <itemPath>to_string.hpp</itemPath>
+        <itemPath>utility.hpp</itemPath>
+      </logicalFolder>
+      <itemPath>algebra.hpp</itemPath>
+      <itemPath>algorithm.hpp</itemPath>
+      <itemPath>basic_types.hpp</itemPath>
+      <itemPath>bind.hpp</itemPath>
+      <itemPath>chameleon.hpp</itemPath>
+      <itemPath>control_structures.hpp</itemPath>
+      <itemPath>curry.hpp</itemPath>
+      <itemPath>decimal.hpp</itemPath>
+      <itemPath>eval.hpp</itemPath>
       <itemPath>fixed_point.hpp</itemPath>
-      <itemPath>for_loops.hpp</itemPath>
+      <itemPath>function.hpp</itemPath>
+      <itemPath>illformed_call.hpp</itemPath>
+      <itemPath>integral_iterators.hpp</itemPath>
+      <itemPath>integral_lists.hpp</itemPath>
       <itemPath>iterator.hpp</itemPath>
+      <itemPath>lambda.hpp</itemPath>
+      <itemPath>lazy.hpp</itemPath>
+      <itemPath>let_expressions.hpp</itemPath>
       <itemPath>list.hpp</itemPath>
-      <itemPath>mandelbrot.hpp</itemPath>
-      <itemPath>matrix3x3.hpp</itemPath>
-      <itemPath>matrix4x4.hpp</itemPath>
-      <itemPath>numeric_iterators.hpp</itemPath>
-      <itemPath>random.hpp</itemPath>
-      <itemPath>sort.hpp</itemPath>
-      <itemPath>sqrt.hpp</itemPath>
-      <itemPath>string.hpp</itemPath>
-      <itemPath>tictactoe.hpp</itemPath>
-      <itemPath>to_string.hpp</itemPath>
-      <itemPath>transformations.hpp</itemPath>
-      <itemPath>trigonometry.hpp</itemPath>
-      <itemPath>unordered_map.hpp</itemPath>
-      <itemPath>utility.hpp</itemPath>
-      <itemPath>variable_templates.hpp</itemPath>
-      <itemPath>vector.hpp</itemPath>
-      <itemPath>wrapper.hpp</itemPath>
+      <itemPath>list_algorithms.hpp</itemPath>
+      <itemPath>math.hpp</itemPath>
+      <itemPath>overloaded_function.hpp</itemPath>
+      <itemPath>pipelined_function.hpp</itemPath>
+      <itemPath>placeholder_lists.hpp</itemPath>
+      <itemPath>placeholders.hpp</itemPath>
+      <itemPath>polymorphic_container.hpp</itemPath>
+      <itemPath>raii_actions.hpp</itemPath>
+      <itemPath>runtime_chameleon.hpp</itemPath>
+      <itemPath>runtime_placeholders.hpp</itemPath>
+      <itemPath>std_function.hpp</itemPath>
+      <itemPath>stl_adapters.hpp</itemPath>
+      <itemPath>tagging.hpp</itemPath>
+      <itemPath>to_runtime.hpp</itemPath>
+      <itemPath>type_traits.hpp</itemPath>
+      <itemPath>unconditional_false.hpp</itemPath>
+      <itemPath>warning.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -91,83 +101,100 @@
       <compileType>
         <ccTool>
           <standard>8</standard>
+          <commandLine>-stdlib=libc++ -lc++abi -ftemplate-backtrace-limit=0</commandLine>
         </ccTool>
       </compileType>
-      <item path="analogliterals.hpp" ex="false" tool="3" flavor2="0">
+      <item path="algebra.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="chrono.hpp" ex="false" tool="3" flavor2="0">
+      <item path="algorithm.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="color.hpp" ex="false" tool="3" flavor2="0">
+      <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="complex.hpp" ex="false" tool="3" flavor2="0">
+      <item path="bind.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="constexpr_string.hpp" ex="false" tool="3" flavor2="0">
+      <item path="chameleon.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="core.hpp" ex="false" tool="3" flavor2="0">
+      <item path="control_structures.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="core/arithmetic_functions.hpp" ex="false" tool="3" flavor2="0">
+      <item path="curry.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="core/assert.hpp" ex="false" tool="3" flavor2="0">
+      <item path="decimal.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="core/basic_numeric_arithmetic.hpp" ex="false" tool="3" flavor2="0">
+      <item path="enable_if.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="core/basic_types.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="core/boolean_predicates.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="core/concepts.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="core/expressions.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="core/function.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="core/value_t.hpp" ex="false" tool="3" flavor2="0">
+      <item path="eval.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="fixed_point.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="for_loops.hpp" ex="false" tool="3" flavor2="0">
+      <item path="function.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="function_alias_decl.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="illformed_call.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="impl/CPP_META_MACROS.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="impl/demangle.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="integral_iterators.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="integral_lists.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="iterator.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="lambda.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="lazy.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="let_expressions.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="list.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="list_algorithms.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="mandelbrot.hpp" ex="false" tool="3" flavor2="0">
+      <item path="math.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="matrix3x3.hpp" ex="false" tool="3" flavor2="0">
+      <item path="overloaded_function.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="matrix4x4.hpp" ex="false" tool="3" flavor2="0">
+      <item path="pipelined_function.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="numeric_iterators.hpp" ex="false" tool="3" flavor2="0">
+      <item path="placeholder_lists.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="random.hpp" ex="false" tool="3" flavor2="0">
+      <item path="placeholders.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="sort.hpp" ex="false" tool="3" flavor2="0">
+      <item path="polymorphic_container.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="sqrt.hpp" ex="false" tool="3" flavor2="0">
+      <item path="raii_actions.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="string.hpp" ex="false" tool="3" flavor2="0">
+      <item path="runtime_chameleon.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="tictactoe.hpp" ex="false" tool="3" flavor2="0">
+      <item path="runtime_placeholders.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="static_if.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="std_function.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="stl_adapters.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tagging.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="to_runtime.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="traits.hpp" ex="false" tool="3" flavor2="0">
+      <item path="type_traits.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="transformations.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="trigonometry.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="unordered_map.hpp" ex="false" tool="3" flavor2="0">
+      <item path="unconditional_false.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="utility.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="variable_templates.hpp" ex="false" tool="3" flavor2="0">
+      <item path="utils/assert.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="vector.hpp" ex="false" tool="3" flavor2="0">
+      <item path="utils/debugging_utilities.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="wrapper.hpp" ex="false" tool="3" flavor2="0">
+      <item path="warning.hpp" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -183,6 +210,7 @@
         <ccTool>
           <developmentMode>5</developmentMode>
           <standard>8</standard>
+          <commandLine>-stdlib=libc++ -lc++abi -ftemplate-backtrace-limit=0</commandLine>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -191,81 +219,97 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="analogliterals.hpp" ex="false" tool="3" flavor2="0">
+      <item path="algebra.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="chrono.hpp" ex="false" tool="3" flavor2="0">
+      <item path="algorithm.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="color.hpp" ex="false" tool="3" flavor2="0">
+      <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="complex.hpp" ex="false" tool="3" flavor2="0">
+      <item path="bind.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="constexpr_string.hpp" ex="false" tool="3" flavor2="0">
+      <item path="chameleon.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="core.hpp" ex="false" tool="3" flavor2="0">
+      <item path="control_structures.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="core/arithmetic_functions.hpp" ex="false" tool="3" flavor2="0">
+      <item path="curry.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="core/assert.hpp" ex="false" tool="3" flavor2="0">
+      <item path="decimal.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="core/basic_numeric_arithmetic.hpp" ex="false" tool="3" flavor2="0">
+      <item path="enable_if.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="core/basic_types.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="core/boolean_predicates.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="core/concepts.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="core/expressions.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="core/function.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="core/value_t.hpp" ex="false" tool="3" flavor2="0">
+      <item path="eval.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="fixed_point.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="for_loops.hpp" ex="false" tool="3" flavor2="0">
+      <item path="function.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="function_alias_decl.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="illformed_call.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="impl/CPP_META_MACROS.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="impl/demangle.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="integral_iterators.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="integral_lists.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="iterator.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="lambda.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="lazy.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="let_expressions.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="list.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="list_algorithms.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="mandelbrot.hpp" ex="false" tool="3" flavor2="0">
+      <item path="math.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="matrix3x3.hpp" ex="false" tool="3" flavor2="0">
+      <item path="overloaded_function.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="matrix4x4.hpp" ex="false" tool="3" flavor2="0">
+      <item path="pipelined_function.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="numeric_iterators.hpp" ex="false" tool="3" flavor2="0">
+      <item path="placeholder_lists.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="random.hpp" ex="false" tool="3" flavor2="0">
+      <item path="placeholders.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="sort.hpp" ex="false" tool="3" flavor2="0">
+      <item path="polymorphic_container.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="sqrt.hpp" ex="false" tool="3" flavor2="0">
+      <item path="raii_actions.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="string.hpp" ex="false" tool="3" flavor2="0">
+      <item path="runtime_chameleon.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="tictactoe.hpp" ex="false" tool="3" flavor2="0">
+      <item path="runtime_placeholders.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="static_if.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="std_function.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="stl_adapters.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tagging.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="to_runtime.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="to_string.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="traits.hpp" ex="false" tool="3" flavor2="0">
+      <item path="type_traits.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="transformations.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="trigonometry.hpp" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="unordered_map.hpp" ex="false" tool="3" flavor2="0">
+      <item path="unconditional_false.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="utility.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="variable_templates.hpp" ex="false" tool="3" flavor2="0">
+      <item path="utils/assert.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="vector.hpp" ex="false" tool="3" flavor2="0">
+      <item path="utils/debugging_utilities.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="wrapper.hpp" ex="false" tool="3" flavor2="0">
+      <item path="warning.hpp" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

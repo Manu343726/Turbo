@@ -18,56 +18,57 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
-#ifndef UTILITY_HPP
-#define	UTILITY_HPP
+#ifndef FUNCTION_HPP
+#define	FUNCTION_HPP
 
-#include "basic_types.hpp"
-#include "function.hpp"
-
-#include <climits>
-
-/*
- * The namespace tml::util contains a set sparse metaprogramming utilities.
- */
+#include <type_traits>
 
 namespace tml
 {
-    namespace util
+    namespace impl
     {
-        namespace func
+        /*
+         * The library assumes that any type with a 'result' member type is a function
+         * (A function which result is stored in that 'result' member).
+         * 
+         * This is an internal (not dessigned to be used by the user) type trait to 
+         * check the existence of that member type, that is, to check if a type is
+         * a function.
+         */
+        template<typename T>
+        struct is_function
         {
-            template<typename... Ts>
-            struct pack_length : public tml::function<tml::size_t<sizeof...(Ts)>>
-            {};
+            template<typename U> static std::true_type test( typename U::result* );
+            template<typename U> static std::false_type test( ... );
             
-            template<typename T>
-            struct sizeof_bits : public tml::function<tml::size_t<sizeof(T) * CHAR_BIT>>
-            {};
-            
-            template<typename T>
-            struct size_of : public tml::function<tml::size_t<sizeof(T)>>
-            {};
-        }
-        
-        /*
-         * Computes the length of a variadic pack
-         */
-        template<typename... ARGS>
-        using pack_length = typename tml::util::func::pack_length<ARGS...>::result;
-        
-        /*
-         * Computes the size in bits of a certain type T
-         */
-        template<typename T>
-        using sizeof_bits = typename tml::util::func::sizeof_bits<T>::result;
-        
-        /*
-         * Computes the size in bytes of a certain type T
-         */
-        template<typename T>
-        using size_of = typename tml::util::func::size_of<T>::result;
+            static constexpr bool result = decltype( test<T>( nullptr ) )::value;
+        };
     }
+    
+    /* User-side tml::is_function type-trait 
+     * 
+     * Checks if a given expression is a function according to the conventions of the library
+     * (Has a 'result' member type)
+     */
+    template<typename E>
+    using is_function = std::integral_constant<bool,tml::impl::is_function<E>::result>;
+    
+    /*
+     * This is a helper metafunction to represent a metafunction in the way the library
+     * expects it.
+     * 
+     * It just takes a value and stores it in a 'result' member.
+     * 
+     * Its usefull when declaring user-defined metafunctions and making them working with the rest
+     * of the library. Inheriting from this helper is a simple whay to ensure any metafunction
+     * has the correct interface.
+     */
+    template<typename RESULT>
+    struct function
+    {
+        using result = RESULT;
+    };
 }
 
-#endif	/* UTILITY_HPP */
+#endif	/* FUNCTION_HPP */
 

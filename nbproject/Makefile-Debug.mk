@@ -42,8 +42,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=
-CXXFLAGS=
+CCFLAGS=-stdlib=libc++ -lc++abi -ftemplate-backtrace-limit=0
+CXXFLAGS=-stdlib=libc++ -lc++abi -ftemplate-backtrace-limit=0
 
 # Fortran Compiler Flags
 FFLAGS=
