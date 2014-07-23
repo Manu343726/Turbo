@@ -116,14 +116,14 @@ namespace tml
          * This sequence is passed to the next calls to be filled.
          */
         template<typename F , typename... PASSED ,  typename HEAD , typename... TAIL>
-        struct filter_impl<F,tml::list<HEAD,TAIL...>,tml::list<PASSED...>,tml::empty_list>
+        struct filter_impl<F,tml::list<HEAD,TAIL...>,tml::list<PASSED...>>
         {
             using passed = tml::conditional<tml::eval<F,HEAD>,
                                             tml::list<PASSED...,HEAD>,
                                             tml::list<PASSED...>
                                            >;
             
-            using result = typename filter<F,tml::list<TAIL...>,passed>::result;
+            using result = typename filter_impl<F,tml::list<TAIL...>,passed>::result;
         };
         
         /*
@@ -134,7 +134,7 @@ namespace tml
          * sequence to check).
          */
         template<typename F , typename... PASSED>
-        struct filter_impl<F,tml::empty_list,tml::list<PASSED...>,tml::empty_list>
+        struct filter_impl<F,tml::empty_list,tml::list<PASSED...>>
         {
             using result = tml::list<PASSED...>;
         };
@@ -153,7 +153,7 @@ namespace tml
                                             tml::list<PASSED...>
                                            >;
             
-            using result = typename filter<F,tml::iterator::next<BEGIN>,END,passed>::result;
+            using result = typename filter_impl<F,tml::iterator::next<BEGIN>,END,passed>::result;
         };
         
         /*

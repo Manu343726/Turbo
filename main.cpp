@@ -304,4 +304,9 @@ int main()
     }
     
     fibo( 10 );
+    
+    
+    
+    using filter_lazy = tml::lazy<tml::filter>;
+    using filer_eval = tml::eval<filter_lazy,tml::lambda<_1 , tml::true_type> , numbers>;
 }
