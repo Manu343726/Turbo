@@ -81,10 +81,10 @@ namespace tml
              * The complexity of this operation is O(1)
              */
             template<typename LIST>
-            struct front;
+            struct head;
 
             template<typename HEAD , typename... TAIL>
-            struct front<tml::list<HEAD,TAIL...>> : public tml::function<HEAD>
+            struct head<tml::list<HEAD,TAIL...>> : public tml::function<HEAD>
             {};
 
             /*
@@ -167,7 +167,7 @@ namespace tml
         
         template<typename LIST , typename INDEX>
         using get = typename tml::lists::impl::get<LIST,INDEX>::result;
-        
+
         
         template<typename LIST>
         using back = typename tml::lists::impl::back<LIST,false>::result;
@@ -180,7 +180,13 @@ namespace tml
         
         
         template<typename LIST>
-        using front = typename tml::lists::impl::front<LIST>::result;
+        using head = typename tml::lists::impl::head<LIST>::result;
+        
+        template<typename LIST>
+        using first = tml::lists::head<LIST>;
+        
+        template<typename LIST>
+        using second = tml::lists::get<LIST,tml::size_t<1>>;
 
         template<typename LIST>
         using pop_front = typename tml::lists::impl::pop_front<LIST>::result;

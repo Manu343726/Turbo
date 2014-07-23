@@ -106,6 +106,27 @@ namespace tml
      */
     template<typename T , typename N>
     using repeat = tml::map<tml::lambda<_1 , T>,tml::size_t_range<0,N::value>>;
+    
+    
+    /*
+     * Gievn a range and an unary predicate, returns two lists, one with the values evaluated to true 
+     * and other with the elements evaluated to false.
+     * 
+     * The argumments of the function could be:
+     * 
+     * List-based sequence:
+     * ====================
+     *  - P: The boolean predicate. It should be a unary boolean function enity.
+     *  - SEQ: The sequence, represented as a tml::list.
+     * 
+     * Iterators-based sequence:
+     * =========================
+     *  - P: The boolean predicate. It should be a unary boolean function enity.
+     *  - BEGIN: An iterator pointing to the beginning of the input sequence.
+     *  - END: An iterator pointing to the end of the input sequence. Note sequences represented
+     *    as pairs of iterators are sequences of the interval [BEGIN,END).
+     */
+    
 }
 
 #endif	/* ALGORITHM_HPP */

@@ -18,12 +18,6 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
-<<<<<<< HEAD
-#include "variable_templates.hpp"
-#include "sort.hpp"
-#include "list.hpp"
-#include "numeric_iterators.hpp"
-=======
 #define TURBO_DEBUG_FP_DECIMAL_PART 3
 
 
@@ -44,7 +38,6 @@
 #include "impl/demangle.hpp"
 #include "integral_iterators.hpp"
 #include "fixed_point.hpp"
-#include "stl_adapters.hpp"
 #include "bind.hpp"
 #include "to_runtime.hpp"
 #include "curry.hpp"
@@ -55,27 +48,13 @@
 
 #include "polymorphic_container.hpp"
 #include "pipelined_function.hpp"
->>>>>>> reboot
 
-#include <iostream>
-#include <vector>
-#include <memory>
 #include <type_traits>
-#include <chrono>
-#include <algorithm>
+#include <iostream>
 
-<<<<<<< HEAD
-#ifndef RANGE_END
-#define RANGE_END 10
-#endif
-
-using input = tml::for_each<tml::make_integer_forward_iterator<0>,tml::make_integer_forward_iterator<RANGE_END>,tml::function>;
-using output = tml::sort<input,tml::bigger_than>;
-
-=======
 using namespace tml::placeholders;
 using namespace tml::runtime::placeholders;
->>>>>>> reboot
+
 
 #define RUN_UNIT_TESTS
 
@@ -134,13 +113,9 @@ using z = tml::eval<tml::div<x,y>>; //0.25?
 using w = tml::eval<tml::mul<z,y>>; //0.5?
 using q = tml::eval<tml::div<y,tml::fsone>>;
 
-template<typename T>
-using this_is_not_java_vector = std::vector<tml::eval<tml::stl::function<std::remove_pointer<T>>>>;
+TURBO_ASSERT((tml::is_stl_function<std::remove_pointer<int*>>));
 
-template<typename T>
-using this_is_how_you_should_do_polymorphism = std::vector<std::unique_ptr<tml::stl::eval<std::remove_pointer<T>>>>;
-
-TURBO_ASSERT(( std::is_same<std::vector<int>,this_is_not_java_vector<int*>> ));
+using tt = tml::eval<tml::lazy<std::remove_pointer,int*>>;
 
 
 
@@ -205,15 +180,6 @@ int fibo( int i )
 {
     tml::runtime::pipelined_function<int(int)> f;
     
-<<<<<<< HEAD
-    std::cout << a<0>() << std::endl;
-    std::cout << a<3>() << std::endl;
-    std::cout << b<char>() << std::endl;
-    std::cout << b<float>() << std::endl;
-    
-    std::cout << tml::to_string<input>() << std::endl;
-    std::cout << tml::to_string<output>() << std::endl;
-=======
     return f.begin([](int ii)
      {
          std::cout << "Starting... ( i = " << ii << " )\n";
@@ -229,7 +195,6 @@ int fibo( int i )
      {
          std::cout << "End ( i = " << ii << " )\n";
      })( i );
->>>>>>> reboot
 }
 
 

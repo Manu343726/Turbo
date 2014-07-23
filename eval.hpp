@@ -86,7 +86,7 @@ namespace tml
         };
         
         /*
-         * This specialization matches the case when the expression passed is a function.
+         * This specialization matches the case when the expression passed is a function (In the STL sense, with a 'result' member).
          * The result of the evalutation is just forwarded to the implementation, to reduce
          * template instantation depth.
          * 
@@ -99,10 +99,30 @@ namespace tml
         struct eval<F<ARGS...>,tml::empty_list,
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<F<ARGS...>>),
-                                     ENABLE_IF(tml::is_function<F<ARGS...>>)
+                                     ENABLE_IF(tml::is_turbo_function<F<ARGS...>>)
                                     )
                    > : 
                    public F<typename eval<ARGS,tml::empty_list>::result...> 
+        {};
+        
+        /*
+         * This specialization matches the case when the expression passed is a function (In the STL sense, with a 'type' member).
+         * The result of the evalutation is just forwarded to the implementation, to reduce
+         * template instantation depth.
+         * 
+         * So the implementation just inherit the function to get its result.
+         * 
+         * The parameters are evaluated too (Could be functional/parametrized expressions) to evaluate the entire
+         * expression recursively.
+         */
+        template<template<typename...> class F , typename... ARGS>
+        struct eval<F<ARGS...>,tml::empty_list,
+                    TURBO_SFINAE_ALL(
+                                     DISABLE_IF(tml::overrides_eval<F<ARGS...>>),
+                                     ENABLE_IF(tml::is_stl_function<F<ARGS...>>)
+                                    )
+                   > : 
+                   public tml::function<typename F<typename eval<ARGS,tml::empty_list>::result...>::type> 
         {};
         
         /*

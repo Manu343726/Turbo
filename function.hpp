@@ -28,36 +28,93 @@ namespace tml
     namespace impl
     {
         /*
-         * The library assumes that any type with a 'result' member type is a function
-         * (A function which result is stored in that 'result' member).
+         * The library assumes that any type with 'result' and/or 'type' member types is a function
+         * (A function which result is stored in that 'result'/'type' member).
          * 
-         * This is an internal (not dessigned to be used by the user) type trait to 
+         * This is an internal (not designed to be used by the user) type trait to 
          * check the existence of that member type, that is, to check if a type is
          * a function.
          */
         template<typename T>
-        struct is_function
+        struct is_turbo_function
         {
-            template<typename U> static std::true_type test( typename U::result* );
+            template<typename U> static std::true_type  test( typename U::result* );
             template<typename U> static std::false_type test( ... );
             
             static constexpr bool result = decltype( test<T>( nullptr ) )::value;
+        };
+        
+        /*
+         * The library assumes that any type with 'result' and/or 'type' member types is a function
+         * (A function which result is stored in that 'result'/'type' member).
+         * 
+         * This is an internal (not designed to be used by the user) type trait to 
+         * check the existence of that member type, that is, to check if a type is
+         * a function.
+         */
+        template<typename T>
+        struct is_stl_function
+        {
+            template<typename U> static std::true_type  test( typename U::type* );
+            template<typename U> static std::false_type test( ... );
+            
+            static constexpr bool result = decltype( test<T>( nullptr ) )::value;
+        };
+        
+        /*
+         * The library assumes that any type with 'result' and/or 'type' member types is a function
+         * (A function which result is stored in that 'result'/'type' member).
+         * 
+         * This is an internal (not designed to be used by the user) type trait to 
+         * check the existence of that member type, that is, to check if a type is
+         * a function.
+         */
+        template<typename T>
+        struct is_function 
+        {
+            static constexpr const bool result = tml::impl::is_turbo_function<T>::result || tml::impl::is_stl_function<T>::result;
+        };
+        
+        /*
+         * Be careful! std::integral_constant also contains a member type 'type' 
+         * aliasing the instance itself.
+         */
+        template<typename T, T V>
+        struct is_function<std::integral_constant<T,V>>
+        {
+            static constexpr bool result = false;
         };
     }
     
     /* User-side tml::is_function type-trait 
      * 
      * Checks if a given expression is a function according to the conventions of the library
-     * (Has a 'result' member type)
+     * (Has a 'result'/'type' member type)
      */
     template<typename E>
     using is_function = std::integral_constant<bool,tml::impl::is_function<E>::result>;
+    
+    /* User-side tml::is_turbo_function type-trait 
+     * 
+     * Checks if a given expression is a function according to the Turbo conventions
+     * (Has a 'result' member type)
+     */
+    template<typename E>
+    using is_turbo_function = std::integral_constant<bool,tml::impl::is_turbo_function<E>::result>;
+    
+    /* User-side tml::is_turbo_function type-trait 
+     * 
+     * Checks if a given expression is a function according to the STL conventions
+     * (Has a 'type' member type)
+     */
+    template<typename E>
+    using is_stl_function = std::integral_constant<bool,tml::impl::is_stl_function<E>::result>;
     
     /*
      * This is a helper metafunction to represent a metafunction in the way the library
      * expects it.
      * 
-     * It just takes a value and stores it in a 'result' member.
+     * It just takes a value and stores it in a 'result'/'type' member (i.e. acts as an identity function).
      * 
      * Its usefull when declaring user-defined metafunctions and making them working with the rest
      * of the library. Inheriting from this helper is a simple whay to ensure any metafunction
