@@ -28,6 +28,7 @@
       <itemPath>eval.hpp</itemPath>
       <itemPath>fixed_point.hpp</itemPath>
       <itemPath>function.hpp</itemPath>
+      <itemPath>high_order_functions.hpp</itemPath>
       <itemPath>illformed_call.hpp</itemPath>
       <itemPath>integral_iterators.hpp</itemPath>
       <itemPath>integral_lists.hpp</itemPath>
@@ -128,6 +129,8 @@
       <item path="function.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="function_alias_decl.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="high_order_functions.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="illformed_call.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -241,6 +244,8 @@
       <item path="function.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="function_alias_decl.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="high_order_functions.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="illformed_call.hpp" ex="false" tool="3" flavor2="0">
       </item>

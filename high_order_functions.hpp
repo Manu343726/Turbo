@@ -103,8 +103,11 @@ namespace tml
          * Its complexity is O(n) for both list sequences and iterator sequences.
          */
         template<typename... ARGS>
-        struct filter;
+        struct filter_impl;
         
+        template<typename... ARGS>
+        struct filter : public filter<ARGS...,tml::empty_list>
+        {};
         
         /*
          * List-based sequence filter implementation (Recursive case)
@@ -113,7 +116,7 @@ namespace tml
          * This sequence is passed to the next calls to be filled.
          */
         template<typename F , typename... PASSED ,  typename HEAD , typename... TAIL>
-        struct filter<F,tml::list<HEAD,TAIL...>,tml::list<PASSED...>,tml::empty_list>
+        struct filter_impl<F,tml::list<HEAD,TAIL...>,tml::list<PASSED...>,tml::empty_list>
         {
             using passed = tml::conditional<tml::eval<F,HEAD>,
                                             tml::list<PASSED...,HEAD>,
@@ -131,7 +134,7 @@ namespace tml
          * sequence to check).
          */
         template<typename F , typename... PASSED>
-        struct filter<F,tml::empty_list,tml::list<PASSED...>,tml::empty_list>
+        struct filter_impl<F,tml::empty_list,tml::list<PASSED...>,tml::empty_list>
         {
             using result = tml::list<PASSED...>;
         };
@@ -143,7 +146,7 @@ namespace tml
          * This sequence is passed to the next calls to be filled.
          */
         template<typename F , typename... PASSED ,  typename BEGIN , typename END>
-        struct filter<F,BEGIN,END,tml::list<PASSED...>>
+        struct filter_impl<F,BEGIN,END,tml::list<PASSED...>>
         {
             using passed = tml::conditional<tml::eval<F,tml::iterator::deref<BEGIN>>,
                                             tml::list<PASSED...,tml::iterator::deref<BEGIN>>,
@@ -161,7 +164,7 @@ namespace tml
          * sequence to check).
          */
         template<typename F , typename END , typename... PASSED>
-        struct filter<F,END,END,tml::list<PASSED...>>
+        struct filter_impl<F,END,END,tml::list<PASSED...>>
         {
             using result = tml::list<PASSED...>;
         };
@@ -301,7 +304,7 @@ namespace tml
      * The result is a tml::list filled with the sequence of elements which passed the filter F.
      */
     template<typename F , typename... SEQ>
-    using filter = typename tml::impl::filter<F,SEQ...,tml::empty_list>::result; //Functional (Haskell-like) name
+    using filter = typename tml::impl::filter<F,SEQ...>::result; //Functional (Haskell-like) name
     
     template<typename F , typename... SEQ>
     using copy_if = tml::filter<F,SEQ...>;//C++ (STL-like) name
