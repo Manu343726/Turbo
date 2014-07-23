@@ -106,7 +106,7 @@ namespace tml
         struct filter_impl;
         
         template<typename... ARGS>
-        struct filter : public filter<ARGS...,tml::empty_list>
+        struct filter : public filter_impl<ARGS...,tml::empty_list>
         {};
         
         /*
