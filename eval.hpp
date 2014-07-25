@@ -68,7 +68,8 @@ namespace tml
          *  Of course this metafunction is a function too, so it stores the result of the evaluation in a 'result' member type.
          */
         template<typename E , typename ARGS , typename SFINAE_FLAGS = tml::sfinae_return>
-        struct eval;
+        struct eval : public tml::function<E> //Default case (Just the identity function) for non evaluable expressions
+        {};
 
         /* This is the most simple case: There are no evaluation parameters (So the expression could be any
          * kind of expression, not just a function) BUT the flag says the expression is not a function.
