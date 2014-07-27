@@ -175,6 +175,9 @@ using v1_100  = tml::eval<tml::div<tml::one<tml::fdouble<__>>,tml::to_fdouble<hu
 
 using r = tml::eval<L(tml::div)(tml::Int<4>,tml::Int<2>)>;
 
+struct X {};
+
+using let_result_bind = tml::multi_let<X,tml::Int<0>,tml::bind<fooquux,X>>;
 
 int fibo( int i )
 {
@@ -262,7 +265,7 @@ int main()
       int unused,n; 
     }; 
     
-    for( std::size_t ii = 0 ; ii < 100 ; ++ii )
+    for( std::size_t ii = 0 ; ii < 1 ; ++ii )
     {
         tml::runtime::poly_container<base> poly;
         constexpr const std::size_t test_size = 10000000;
@@ -309,4 +312,6 @@ int main()
     
     using filter_lazy = tml::lazy<tml::filter>;
     using filer_eval = tml::eval<filter_lazy,tml::lambda<_1 , tml::true_type> , numbers>;
+    
+    std::cout << tml::to_string<let_result_bind>() << std::endl;
 }

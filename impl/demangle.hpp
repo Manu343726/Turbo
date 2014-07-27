@@ -36,12 +36,14 @@
  * future.
  */
 
-namespace tml{
-namespace impl{
+
 
 #if defined( _MSC_VER ) //MSVC tml::impl::demangle() version
     #include <Dbghelp.h>
 
+    namespace tml{
+    namespace impl{
+        
     const std::size_t UNDECORATED_NAME_LENGHT = 512; //No creo que haya nombres mucho más largos
 
     //MSVC demangling implementation
@@ -58,10 +60,12 @@ namespace impl{
     }
 #endif
 
-#if defined ( __GNUC__ ) && !defined( __llvm__ ) //GCC tml::impl::demangle() version
+#if defined ( __GNUC__ ) || defined( __llvm__ ) //GCC/LLVM tml::impl::demangle() version
 
-    typedef unsigned long int size_t;
     #include <cxxabi.h>
+
+    namespace tml{
+    namespace impl{
 
     //GCC demangling implementation
     std::string demangle(  const std::string& name )
@@ -75,12 +79,15 @@ namespace impl{
 
         std::string result{ demangled_name };
 
-        std::free( demangled_name ); //VERY IMPORTANT! The result of __cxa_demangle() was malloc()ed, should be released
+        std::free( demangled_name ); //IMPORTANT! The result of __cxa_demangle() was malloc()ed, should be released
                                      //using free(). See __cxa_demangle() documentation.
                                 
         return result;
     }
 #else /* Others (Currently unsupported platforms. The name is returned unchanged) */
+    namespace tml{
+    namespace impl{
+    
     std::string demangle(  const std::string& name )
     { 
         return name;
@@ -90,4 +97,3 @@ namespace impl{
 }} /* close braces of tml::impl namespace */
 
 #endif	/* DEMANGLE_HPP */
-

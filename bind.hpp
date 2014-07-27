@@ -30,23 +30,25 @@ using namespace tml::placeholders;
 
 namespace tml
 {
-    /*
-     * Binds some parameters to a function building a function entity which could be called passing the rest
-     * of parameters to evaluate the function.
-     * It mimics the behaviour of std::bind(), the placeholders behaviour included.
-     */
-    template<template<typename...> class F , typename... ARGS>
-    struct bind
-    {};
+    
     
     
     namespace impl
     {
+        /*
+         * Binds some parameters to a function building a function entity which could be called passing the rest
+         * of parameters to evaluate the function.
+         * It mimics the behaviour of std::bind(), the placeholders behaviour included.
+         */
+        template<typename F , typename... ARGS>
+        struct bind
+        {};
+    
         template<typename B , typename... CALL_ARGS>
         struct bind_call;
         
-        template<template<typename...> class F , typename... ARGS , typename... CARGS>
-        struct bind_call<tml::bind<F,ARGS...>,CARGS...>
+        template<typename F , typename... ARGS , typename... CARGS>
+        struct bind_call<tml::impl::bind<F,ARGS...>,CARGS...>
         {
             /*
              * Binded function argumments are transformed to their values:
@@ -73,12 +75,19 @@ namespace tml
                                              tml::list<ARGS...>
                                             >;
             
+            template<typename... RARGS>
+            struct apply : public tml::function<tml::eval<F,RARGS...>>
+            {};
+            
             /*
              * The result is the result of the call
              */
-            using result = tml::eval<tml::uncurry<F>,call_args>;
+            using result = tml::eval<tml::uncurry<apply>,call_args>;
         };
     }
+    
+    template<template<typename...> class F , typename... ARGS>
+    using bind = tml::impl::bind<tml::lazy<F>,ARGS...>;
     
     /*
      * Like in any other Turbo function entity, the way to evaluate tml::bind is using tml::eval.
