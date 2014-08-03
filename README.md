@@ -39,30 +39,34 @@ By convention, this library works with types only. There are no templates with v
 So an expression could be:
   1. A simple value (Like `int`).
   2. A *parametrized-expression*: A parametrized expression is just an expression composed from a set of components. Because this is a template metaprogramming library, the way to build expressions is through templates. So a parametrized expressions refers to any kind of template.
-  3. A *functional expression*: This is a type of parametrized expression dessigned to return a value from a set of parameters. That is, a function.
-  This library assumes that any expression with a `result` type member is a function. 
+  3. A *functional expression*: This is a type of parametrized expression dessigned to return a value from a set of parameters. That is, a function. This library assumes that any expression with a `result` type member is a function. 
 
-     //A simple expression
-     using e1 = int; //e1 is a simple expression
+
+``` cpp
+//A simple expression
+using e1 = int; //e1 is a simple expression
      
-     //A functional expression
-     using e2 = tml::function<int>; //e2 is a functional expression
-     
-     //A more complex expression (A functional expression)
-     using e3 = tml::transform<tml::list<int,float,double>,tml::size_of<_1>>;
+//A functional expression
+using e2 = tml::function<int>; //e2 is a functional expression
+
+//A more complex expression (A functional expression)
+using e3 = tml::transform<tml::list<int,float,double>,tml::size_of<_1>>;
+```
 
 To evaluate an expression, one should evaluate the entire set of parameters of a parametrized expression, and return the result if the expression is a functional expression. Thats what `tml::eval` is dessigned for:
 
-    //Just a simple identity metafunction:
-    template<typename T>
-    struct identity
-    {
-      using result = T;
-    };
+``` cpp
+//Just a simple identity metafunction:
+template<typename T>
+struct identity
+{
+    using result = T;
+};
     
-    using expression = identity<int>;
-    using result = tml::eval<expression>; //Compute the result of evaluating the expression.
-    using result = tml::eval<identity<identity<int>>>; //result is int
+using expression = identity<int>;
+using result = tml::eval<expression>; //Compute the result of evaluating the expression.
+using result = tml::eval<identity<identity<int>>>; //result is int
+```
 
 Also, `tml::eval` could be used to take an expression and evaluate it with a new set of argumments. Following with the example above:
 
