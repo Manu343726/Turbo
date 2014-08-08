@@ -21,7 +21,7 @@
 #ifndef ENABLE_IF_HPP
 #define	ENABLE_IF_HPP
 
-#include "basic_types.hpp"
+#include "integral.hpp"
 #include "list.hpp"
 
 #include <type_traits>

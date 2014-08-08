@@ -22,7 +22,7 @@
 #define	BASIC_LISTS_HPP
 
 #include "list.hpp"
-#include "basic_types.hpp"
+#include "integral.hpp"
 #include "integral_iterators.hpp"
 #include "high_order_functions.hpp"
 #include "lazy.hpp"

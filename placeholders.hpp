@@ -21,7 +21,7 @@
 #ifndef PLACEHOLDERS_HPP
 #define	PLACEHOLDERS_HPP
 
-#include "basic_types.hpp"
+#include "integral.hpp"
 #include "eval.hpp"
 #include "function.hpp"
 #include "warning.hpp"

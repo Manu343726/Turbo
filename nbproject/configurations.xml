@@ -19,7 +19,6 @@
       </logicalFolder>
       <itemPath>algebra.hpp</itemPath>
       <itemPath>algorithm.hpp</itemPath>
-      <itemPath>basic_types.hpp</itemPath>
       <itemPath>bind.hpp</itemPath>
       <itemPath>chameleon.hpp</itemPath>
       <itemPath>control_structures.hpp</itemPath>
@@ -27,9 +26,11 @@
       <itemPath>decimal.hpp</itemPath>
       <itemPath>eval.hpp</itemPath>
       <itemPath>fixed_point.hpp</itemPath>
+      <itemPath>float.hpp</itemPath>
       <itemPath>function.hpp</itemPath>
       <itemPath>high_order_functions.hpp</itemPath>
       <itemPath>illformed_call.hpp</itemPath>
+      <itemPath>integral.hpp</itemPath>
       <itemPath>integral_iterators.hpp</itemPath>
       <itemPath>integral_lists.hpp</itemPath>
       <itemPath>iterator.hpp</itemPath>
@@ -108,8 +109,6 @@
       </item>
       <item path="algorithm.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="bind.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="chameleon.hpp" ex="false" tool="3" flavor2="0">
@@ -126,6 +125,8 @@
       </item>
       <item path="fixed_point.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="float.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="function.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="function_alias_decl.hpp" ex="false" tool="3" flavor2="0">
@@ -137,6 +138,8 @@
       <item path="impl/CPP_META_MACROS.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="impl/demangle.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="integral.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="integral_iterators.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -223,8 +226,6 @@
       </item>
       <item path="algorithm.hpp" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="basic_types.hpp" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="bind.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="chameleon.hpp" ex="false" tool="3" flavor2="0">
@@ -241,6 +242,8 @@
       </item>
       <item path="fixed_point.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="float.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="function.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="function_alias_decl.hpp" ex="false" tool="3" flavor2="0">
@@ -252,6 +255,8 @@
       <item path="impl/CPP_META_MACROS.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="impl/demangle.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="integral.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="integral_iterators.hpp" ex="false" tool="3" flavor2="0">
       </item>

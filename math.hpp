@@ -23,7 +23,7 @@
 
 #include "algorithm.hpp"
 #include "algebra.hpp"
-#include "basic_types.hpp"
+#include "integral.hpp"
 #include "fixed_point.hpp"
 #include "lazy.hpp"
 #include "type_traits.hpp"

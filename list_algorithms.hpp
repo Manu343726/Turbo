@@ -163,6 +163,18 @@ namespace tml
 
             template<typename LIST , typename T>
             using push_back = tml::lists::impl::push_back<LIST,T>;
+            
+            template<typename LIST , typename T>
+            using push_back = tml::lists::impl::push_back<LIST,T>;
+            
+            template<typename LIST , typename T>
+            using push_front = tml::lists::impl::push_front<LIST,T>;
+            
+            template<typename LIST>
+            using head = tml::lists::impl::head<LIST>;
+            
+            template<typename LIST>
+            using back = tml::lists::impl::back<LIST>;
         }
         
         template<typename L1 , typename L2>
@@ -173,17 +185,20 @@ namespace tml
 
         
         template<typename LIST>
-        using back = typename tml::lists::impl::back<LIST,false>::result;
+        using back = typename tml::lists::func::back<LIST>::result;
 
         template<typename LIST>
         using pop_back = typename tml::lists::impl::pop_back<tml::empty_list,LIST,false>::result;
 
         template<typename LIST , typename T>
-        using push_back = typename tml::lists::impl::push_back<LIST,T>::result;
+        using push_back = typename tml::lists::func::push_back<LIST,T>::result;
+        
+        template<typename LIST , typename T>
+        using push_front = typename tml::lists::func::push_front<LIST,T>::result;
         
         
         template<typename LIST>
-        using head = typename tml::lists::impl::head<LIST>::result;
+        using head = typename tml::lists::func::head<LIST>::result;
         
         template<typename LIST>
         using first = tml::lists::head<LIST>;

@@ -21,7 +21,7 @@
 #ifndef LIST_HPP
 #define	LIST_HPP
 
-#include "basic_types.hpp"
+#include "integral.hpp"
 #include "function.hpp"
 #include "to_string.hpp"
 #include "iterator.hpp"

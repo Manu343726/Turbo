@@ -22,7 +22,7 @@
 #define	TYPE_TRAITS_HPP
 
 #include "function.hpp"
-#include "basic_types.hpp"
+#include "integral.hpp"
 #include "fixed_point.hpp"
 #include "lazy.hpp"
 #include "utils/assert.hpp"

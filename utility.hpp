@@ -21,7 +21,7 @@
 #ifndef UTILITY_HPP
 #define	UTILITY_HPP
 
-#include "basic_types.hpp"
+#include "integral.hpp"
 #include "function.hpp"
 
 #include <climits>

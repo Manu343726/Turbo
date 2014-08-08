@@ -21,7 +21,7 @@
 #ifndef ASSERTING_CONDITIONS_HPP
 #define	ASSERTING_CONDITIONS_HPP
 
-#include "basic_types.hpp"
+#include "integral.hpp"
 
 
 /*

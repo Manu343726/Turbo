@@ -34,7 +34,7 @@
  * C++14 support (Which has a standard [[deprecated(message)]] attribute), else a compiler-specific version is used.
  */
 
-#include "basic_types.hpp"
+#include "integral.hpp"
 #include "impl/CPP_META_MACROS.hpp"
 #include "unconditional_false.hpp"
 

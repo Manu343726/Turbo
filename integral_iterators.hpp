@@ -21,7 +21,7 @@
 #ifndef NUMERIC_ITERATORS_HPP
 #define	NUMERIC_ITERATORS_HPP
 
-#include "basic_types.hpp"
+#include "integral.hpp"
 #include "iterator.hpp"
 
 

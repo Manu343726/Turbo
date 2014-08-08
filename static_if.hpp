@@ -22,7 +22,7 @@
 #define	STATIC_IF_HPP
 
 #include "impl/CPP_META_MACROS.hpp"
-#include "basic_types.hpp"
+#include "integral.hpp"
 #include "lazy.hpp"
 #include "control_structures.hpp"
 

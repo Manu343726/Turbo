@@ -27,7 +27,7 @@
 #include "algebra.hpp"
 #include "function.hpp"
 #include "utility.hpp"
-#include "basic_types.hpp"
+#include "integral.hpp"
 #include "algorithm.hpp"
 #include "lambda.hpp"
 #include "placeholders.hpp"
