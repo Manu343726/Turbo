@@ -61,24 +61,18 @@ using one = tml::one<tml::floating::number<__,__,__>>;
 using one_denorm = tml::floating::shift<one,tml::Int<-31>>;
 using two   = tml::eval<tml::add<one,one>>;
 using three = tml::eval<tml::add<two,one>>;
+using four  = tml::eval<tml::mul<two,two>>;
 
-
+//Generate N powers of two using floating-point at compile-time:
 template<std::size_t N>
-using generate_numbers = tml::foldl<tml::lambda<_1,_2 , tml::lists::func::push_front<_1,tml::add<tml::lists::func::head<_1>,one>>> , tml::list<one> , tml::size_t_range<1,N>>;
+using generate_numbers = tml::foldl<tml::lambda<_1,_2 , tml::lists::func::push_front<_1,tml::add<tml::lists::func::head<_1>,one>>> , tml::list<one> , tml::integral_forward_iterators::make_size_t<0> , tml::integral_forward_iterators::make_size_t<N>>;
 
 
 int main()
 {
+    using numbers = generate_numbers<400>;
     
-    
-    using numbers = generate_numbers<10>;
-    
-    //static_assert( two::mantissa == 0x40000000 , "" );
-    
-    std::cout << "One (denormalized): " << tml::to_string<one_denorm>();
-    std::cout << "One (normalized):   " << tml::to_string<one>();
-    std::cout << "Two (normalized):   " << tml::to_string<two>();
-    std::cout << "Three (normalized): " << tml::to_string<three>();
-    
-    std::cout << "Interval [10 --> 1]: " << tml::to_string<numbers>();
+    for( double n : tml::to_runtime<numbers>() )
+        std::cout << n << std::endl;
+
 }

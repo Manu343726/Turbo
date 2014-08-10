@@ -30,7 +30,8 @@
 #include "to_string.hpp"
 
 #include <cmath>
-
+#include <bitset>
+#include <array>
 
 namespace tml
 {
@@ -102,7 +103,7 @@ namespace tml
             };
             
             template<typename F>
-            struct highest_set_bit<F,0> : public tml::function<tml::size_t<0>>
+            struct highest_set_bit<F,0> : public tml::function<tml::size_t<31>>
             {};
             
             /*
@@ -281,6 +282,26 @@ namespace tml
         using result = tml::floating::normalize<typename adder<denorm_lhs::mantissa,denorm_rhs::mantissa,S_LHS,S_RHS>::result>;
     };
     
+    
+    template<tml::floating::sign_t S_LHS , tml::floating::exponent_t E_LHS , tml::floating::mantissa_t M_LHS ,
+             tml::floating::sign_t S_RHS , tml::floating::exponent_t E_RHS , tml::floating::mantissa_t M_RHS>
+    struct sub<tml::floating::number<S_LHS,E_LHS,M_LHS>,tml::floating::number<S_RHS,E_RHS,M_RHS>> : 
+        public tml::function<typename tml::add<tml::floating::number<S_LHS,E_LHS,M_LHS>,tml::opposite<tml::floating::number<S_RHS,E_RHS,M_RHS>>>>
+    {};
+    
+    
+    template<tml::floating::sign_t S_LHS , tml::floating::exponent_t E_LHS , tml::floating::mantissa_t M_LHS ,
+             tml::floating::sign_t S_RHS , tml::floating::exponent_t E_RHS , tml::floating::mantissa_t M_RHS>
+    struct mul<tml::floating::number<S_LHS,E_LHS,M_LHS>,tml::floating::number<S_RHS,E_RHS,M_RHS>>
+    {
+        static constexpr const std::uint64_t mantissa_full = (std::uint64_t)M_LHS * (std::uint64_t)M_RHS;
+        static constexpr const std::uint32_t mantissa      = mantissa_full >> 32;
+        static constexpr const auto          exponent      = E_LHS+E_RHS + 32;
+        static constexpr const auto          sign          = (tml::floating::sign_t)(!((bool)S_LHS ^ (bool)S_RHS)); 
+        
+        using result = tml::floating::normalize<tml::floating::number<sign,exponent,mantissa>>;
+    };
+    
     /*
      * Runtime and string representations
      */
@@ -293,15 +314,34 @@ namespace tml
         template<tml::floating::sign_t S , tml::floating::exponent_t E , tml::floating::mantissa_t M>
         struct to_runtime<tml::floating::number<S,E,M>>
         {
-            using number    = tml::floating::number<S,E,M>;
-            using runtime_t = tml::runtime_representation<number>;
-            
-            static constexpr runtime_t execute()
+            static constexpr double execute()
             {
-                //TODO: compile-time float instead of std::pow()
-                return static_cast<runtime_t>( M ) * std::pow( 2.0 , E ) * (((bool)S) ? 1 : -1);
+                return ((E >= 0) ? ((double)(1 << E)) : (1.0/(double)(1 << -E))) * (double)M * (((bool)S) ? 1 : -1);
             }
         };
+        
+        
+        /*
+         * to_runtime() specialization for arrays of doubles
+         */
+        
+        template<tml::floating::sign_t... Ss , tml::floating::exponent_t... Es , tml::floating::mantissa_t... Ms>
+        struct runtime_representation<tml::list<tml::floating::number<Ss,Es,Ms>...>> : public tml::function<std::array<double,sizeof...(Ss)>>
+        {};
+        
+        template<tml::floating::sign_t... Ss , tml::floating::exponent_t... Es , tml::floating::mantissa_t... Ms>
+        struct to_runtime<tml::list<tml::floating::number<Ss,Es,Ms>...>>
+        {
+            static constexpr const std::array<double,sizeof...(Ss)> array = { tml::to_runtime<tml::floating::number<Ss,Es,Ms>>()... };
+            
+            static constexpr const std::array<double,sizeof...(Ss)>& execute()
+            {                
+                return array;
+            }
+        };
+        template<tml::floating::sign_t... Ss , tml::floating::exponent_t... Es , tml::floating::mantissa_t... Ms>
+        constexpr const std::array<double,sizeof...(Ss)> to_runtime<tml::list<tml::floating::number<Ss,Es,Ms>...>>::array;
+        
         
         template<tml::floating::sign_t S , tml::floating::exponent_t E , tml::floating::mantissa_t M>
         struct to_string<tml::floating::number<S,E,M>>

@@ -81,7 +81,7 @@ namespace tml
      * Returns the runtime equivalent of a compile-time value.
      */
     template<typename T>
-    auto to_runtime() -> decltype( tml::impl::to_runtime<T>::execute() )
+    constexpr auto to_runtime() -> decltype( tml::impl::to_runtime<T>::execute() )
     {
         return tml::impl::to_runtime<T>::execute();
     }

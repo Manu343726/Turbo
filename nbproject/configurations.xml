@@ -102,7 +102,7 @@
       <compileType>
         <ccTool>
           <standard>8</standard>
-          <commandLine>-stdlib=libc++ -lc++abi -ftemplate-backtrace-limit=0</commandLine>
+          <commandLine>-stdlib=libc++ -lc++abi -ftemplate-backtrace-limit=0 -ftemplate-depth=10000000</commandLine>
         </ccTool>
       </compileType>
       <item path="algebra.hpp" ex="false" tool="3" flavor2="0">
