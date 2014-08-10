@@ -244,13 +244,17 @@ implementation with the following characteristics:
  - 32 bit mantissa with no implicit extra 1 (The mantissa is 32 bits wide, and the precission of the resulting number is 32 bits too. Thats done to simplify debugging).
  - 16 bit exponent.
 
-    using one   = tml::floating::number<tml::floating::sign_t::positive , -31 , 0x80000000>;
-    using two   = tml::eval<tml::add<one,one>>; //two is   [+|-30|0x80000000]
-    using three = tml::eval<tml::add<one,two>>; //three is [+|-30|0xC0000000]
+``` cpp
+using one   = tml::floating::number<tml::floating::sign_t::positive , -31 , 0x80000000>;
+using two   = tml::eval<tml::add<one,one>>; //two is   [+|-30|0x80000000]
+using three = tml::eval<tml::add<one,two>>; //three is [+|-30|0xC0000000]
+```
 
 In the future, several aliases will be provided for float initialization via decimal numbers:
 
-    using pi = tml::floating::decimal<3,141592654>; 
+``` cpp
+using pi = tml::floating::decimal<3,141592654>; 
+```
 
 ## Known issues:
 
