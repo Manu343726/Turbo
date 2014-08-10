@@ -53,7 +53,8 @@ namespace tml
         struct one;
         
         template<typename T>
-        struct sign;
+        struct sign : public tml::not_evaluated_function_chameleon
+        {};
     }
     
     namespace func
@@ -149,6 +150,13 @@ namespace tml
      */
     template<typename N>
     struct reciprocal : public tml::not_evaluated_function_chameleon
+    {};
+    
+    /*
+     * Computes the log10 of a number N
+     */
+    template<typename T>
+    struct log10 : public tml::not_evaluated_function_chameleon
     {};
     
     

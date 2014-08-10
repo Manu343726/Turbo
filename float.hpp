@@ -22,6 +22,7 @@
 #define	FLOAT_HPP
 
 #include "algebra.hpp"
+#include "math.hpp"
 #include "integral.hpp"
 #include "utility.hpp"
 #include "integral_lists.hpp"
@@ -86,7 +87,7 @@ namespace tml
             static constexpr const exponent_t exponent = E;
             static constexpr const mantissa_t mantissa = M;
         };
-        
+    
         
         
         namespace impl
@@ -102,9 +103,23 @@ namespace tml
                                           >;
             };
             
+            /*
+             * Base case
+             */
             template<typename F>
-            struct highest_set_bit<F,0> : public tml::function<tml::size_t<31>>
-            {};
+            struct highest_set_bit<F,0>
+            {
+                using result = tml::size_t<0>;
+            };
+            
+            /*
+             * Spcialization for zero
+             */
+            template<sign_t S , exponent_t E , std::size_t i>
+            struct highest_set_bit<tml::floating::number<S,E,0>,i>
+            {
+                using result = tml::size_t<0>;
+            };
             
             /*
              * Shifts a floating-point mantissa adjusting the exponent accordingly. 
@@ -130,6 +145,9 @@ namespace tml
             {
                 static constexpr const std::size_t hsb      = highest_set_bit<F>::result::value;
                 static constexpr const int         shift    = BIT_INDEX::value - hsb;
+                
+                static_assert( hsb   <= tml::floating::mantissa_msb::value , "HSB Overflow" );
+                static_assert( shift <  (int)tml::floating::mantissa_msb::value , "Overflow" );
                 
                 using result = typename tml::floating::impl::shift<F,tml::Int<shift>>::result;
             };
@@ -324,7 +342,7 @@ namespace tml
     struct reciprocal<tml::floating::number<S,E,M>>
     {
         using N   = tml::floating::number<S,E,M>;
-        using one = tml::one<tml::floating::number<__,__,__>>; //Please Clang memoize this. Thanks
+        using one = tml::one<tml::floating::number<__,__,__>>; //Please Clang, be a good friend and memoize this. Thanks
         using two = tml::floating::number<tml::floating::sign_t::positive,-30,0x80000000>; //And this
         
         /*
@@ -385,6 +403,14 @@ namespace tml
         struct runtime_representation<tml::floating::number<S,E,M>> : public tml::function<double>
         {};
 
+        /*
+         * Note that the result of tml::to_runtime() should be aviable (computed) at compile-time.
+         * In this case, this "to double conversion" should be done at compile-time, to be sure the double values
+         * are aviable at compile time and properly placed on the program binary. Hence the constexpr pow2() function.
+         * 
+         * Having a working floating-point library which does all the computations at compile-time, but needs to do
+         * std::pow(2.0,e) at runtime only to get those results has no sense at all...
+         */
         template<tml::floating::sign_t S , tml::floating::exponent_t E , tml::floating::mantissa_t M>
         struct to_runtime<tml::floating::number<S,E,M>>
         {
@@ -432,7 +458,18 @@ namespace tml
 
             operator std::string()
             {
-                static const std::bitset<32> bits = M;
+                /*
+                 * tml::to_string() prints the internal data of the floating-point number, as:
+                 * 
+                 *     [sign|exponent|mantissa]
+                 * 
+                 * Leading to something like:
+                 * 
+                 *     [+|-21|10000100001000011111010]
+                 * 
+                 * Which helps a lot to debug this thing.
+                 */
+                static const std::bitset<tml::util::sizeof_bits<tml::floating::mantissa_t>::value> bits = M;
                 std::stringstream ss;
 
                 ss << '[' << (((bool)S) ? '+' : '-') << '|' << E << '|' << bits << "]";
@@ -440,6 +477,86 @@ namespace tml
                 return ss.str();
             }
         };
+    }
+    
+    /*
+     * tml::pow (From math.hpp) specialization for floating-point base and integral exponent
+     */
+    template<tml::floating::sign_t S , tml::floating::exponent_t E , tml::floating::mantissa_t M , typename T , T V>
+    struct pow<tml::floating::number<S,E,M>,tml::integral_constant<T,V>>
+    {
+        using base = tml::floating::number<S,E,M>;
+        
+        using result = tml::eval<tml::mul<base,tml::pow<base,tml::integral_constant<T,V-1>>>>;
+    };
+    
+    /*
+     * Base case
+     */
+    template<tml::floating::sign_t S , tml::floating::exponent_t E , tml::floating::mantissa_t M , typename T>
+    struct pow<tml::floating::number<S,E,M>,tml::integral_constant<T,0>>
+    {
+        using result = tml::one<tml::floating::number<__,__,__>>;
+    };
+    
+    
+    
+    namespace floating
+    {
+        namespace impl
+        {
+            template<std::int64_t mantissa , sign_t S = (sign_t)(mantissa >= 0)>
+            struct integer
+            {
+                using m   = tml::floating::number<S,0,static_cast<mantissa_t>((mantissa >= 0) ? mantissa : -mantissa)>;
+                using hsb = tml::floating::highest_set_bit<m>;
+                static constexpr const exponent_t exp = hsb::value - 31;
+                
+                using result = tml::floating::number<S,exp,(m::mantissa << (31 - hsb::value))>; //Note the number is normalized
+            };
+        }
+        
+        /*
+         * An alias suposed to instance integer floating-point values.
+         */
+        template<std::int64_t mantissa , sign_t S = (sign_t)(mantissa >= 0)>
+        using integer = typename tml::floating::impl::integer<mantissa>::result;
+        
+        namespace impl
+        {
+            /*
+             * Given the integral part of a number (NUMBER) and the decimal places of the number (DECIMALS),
+             * the number is computed as:
+             * 
+             *     number = NUMBER + decimal_part
+             * 
+             * Where the decimal part is the value of the decimal values:
+             * 
+             *     decimal_part = DECIMALS / (10^decimal_places_count)
+             * 
+             * Finally the number of decimal places passed is computed (Counted) as log10(DECIMALS) + 1
+             */
+            template<std::int64_t NUMBER , std::uint64_t DECIMALS>
+            struct decimal
+            {   
+                using number = tml::floating::integer<NUMBER>;
+                
+                using decimals_i = tml::integral_constant<std::uint64_t,DECIMALS>;
+                using decimals_f = tml::floating::integer<DECIMALS>;
+                using digits     = tml::eval<tml::add<tml::log10<decimals_i>,tml::one<decimals_i>>>;
+                using divisor    = tml::eval<tml::pow<tml::floating::integer<10>,digits>>;
+                
+                using decimals_value = tml::eval<tml::div<decimals_f,divisor>>;
+                
+                using result = tml::eval<tml::add<number,decimals_value>>;
+            };
+        }
+        
+        /*
+         * An alias suposed to return decimal floating-point values.
+         */
+        template<std::int64_t NUMBER , std::uint64_t DECIMALS>
+        using decimal = typename tml::floating::impl::decimal<NUMBER,DECIMALS>::result;
     }
 }
 

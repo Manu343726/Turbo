@@ -57,12 +57,13 @@ using namespace tml::placeholders;
 using namespace tml::runtime::placeholders;
 
 
-using one = tml::one<tml::floating::number<__,__,__>>;
-using two   = tml::eval<tml::add<one,one>>;
-
+using a = tml::floating::integer<0>;
+using b = tml::floating::decimal<0,5>; 
 
 int main()
 {
-    std::cout << tml::to_string<tml::eval<tml::reciprocal<two>>>() << std::endl;
-    std::cout << tml::to_runtime<tml::eval<tml::reciprocal<two>>>();
+    std::cout << tml::to_string<a>() << std::endl;
+    std::cout << tml::to_runtime<a>() << std::endl;
+    std::cout << tml::to_string<b>() << std::endl;
+    std::cout << tml::to_runtime<b>() << std::endl;
 }

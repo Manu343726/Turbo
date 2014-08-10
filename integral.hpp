@@ -31,12 +31,12 @@
 #include "to_runtime.hpp"
 
 /*
- * This header defines the basic types of the library.
+ * This header defines the basic integral types of the library.
  * 
  * This library works by convention with template type parameters only, so values of basic types (Such as ints, 
  * booleans, chars, etc) are specified through boxing.
  * The implementation is free to use value parameters in certain situations, but the user have never use parameters
- * which are not types.
+ * which are not types (Except in some construction aliases).
  * 
  * NOTE: Template parameters are disallowed too. For that purpose, the library provides wrappers to pass templates through
  * boxing (See tml::lazy in "lazy.hpp").
@@ -100,6 +100,39 @@ namespace tml
     template<typename T , T V>
     struct abs<tml::integral_constant<T,V>> : public tml::function<tml::integral_constant<T,((V < 0) ? -V : V)>>
     {};
+    
+    /*
+     * Log10 of an integral value
+     * Returns only the integral part of the logarithm, but the algorithm is fast and has O(1) complexity.
+     * Calling log10 with a negative value results in undefined behaviour.
+     */
+    template<typename T , T V>
+    struct log10<tml::integral_constant<T,V>>
+    {
+        static constexpr const auto value = (std::uint64_t)V; //Promote to the wider known unsigned type.
+        
+        static constexpr const T log = (0x0000000000000000ULL <= value && value < 0x000000000000000AULL) ? 0 :  //Interval [10^0,10^1)
+                                       (0x000000000000000AULL <= value && value < 0x0000000000000064ULL) ? 1 :  //Interval [10^1,10^2)
+                                       (0x0000000000000064ULL <= value && value < 0x00000000000003E8ULL) ? 2 :  //Interval [10^2,10^3)
+                                       (0x00000000000003E8ULL <= value && value < 0x0000000000002710ULL) ? 3 :  //Interval [10^3,10^4)
+                                       (0x0000000000002710ULL <= value && value < 0x00000000000186A0ULL) ? 4 :  //Interval [10^4,10^5)
+                                       (0x00000000000186A0ULL <= value && value < 0x00000000000F4240ULL) ? 5 :  //Interval [10^5,10^6)
+                                       (0x00000000000F4240ULL <= value && value < 0x0000000000989680ULL) ? 6 :  //Interval [10^6,10^7)
+                                       (0x0000000000989680ULL <= value && value < 0x0000000005F5E100ULL) ? 7 :  //Interval [10^7,10^8)
+                                       (0x0000000005F5E100ULL <= value && value < 0x000000003B9ACA00ULL) ? 8 :  //Interval [10^8,10^9)
+                                       (0x000000003B9ACA00ULL <= value && value < 0x00000002540BE400ULL) ? 9 :  //Interval [10^9,10^10)
+                                       (0x00000002540BE400ULL <= value && value < 0x000000174876E800ULL) ? 10 : //Interval [10^10,10^11)
+                                       (0x000000174876E800ULL <= value && value < 0x000000E8D4A51000ULL) ? 11 : //Interval [10^11,10^12)
+                                       (0x000000E8D4A51000ULL <= value && value < 0x000009184E72A000ULL) ? 12 : //Interval [10^12,10^13)
+                                       (0x000009184E72A000ULL <= value && value < 0x00005AF3107A4000ULL) ? 13 : //Interval [10^13,10^14)
+                                       (0x00005AF3107A4000ULL <= value && value < 0x00038D7EA4C68000ULL) ? 14 : //Interval [10^14,10^15)
+                                       (0x00038D7EA4C68000ULL <= value && value < 0x002386F26FC10000ULL) ? 15 : //Interval [10^15,10^16)
+                                       (0x002386F26FC10000ULL <= value && value < 0x016345785D8A0000ULL) ? 16 : //Interval [10^16,10^17)
+                                       (0x016345785D8A0000ULL <= value && value < 0x0DE0B6B3A7640000ULL) ? 17 : //Interval [10^17,10^18)
+                                                                                                           18;  //Interval [10^18,2^64 - 1)
+        
+        using result = tml::integral_constant<T,log>;
+    };
 
     namespace impl
     {
