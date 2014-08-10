@@ -27,6 +27,7 @@
 #include "enable_if.hpp"
 #include "function.hpp"
 #include "chameleon.hpp"
+#include "warning.hpp"
 
 namespace tml
 {
@@ -102,9 +103,10 @@ namespace tml
                                      DISABLE_IF(tml::overrides_eval<F<ARGS...>>),
                                      ENABLE_IF(tml::is_turbo_function<F<ARGS...>>)
                                     )
-                   > : 
-                   public F<typename eval<ARGS,tml::empty_list>::result...> 
-        {};
+                   > 
+        {
+            using result = typename  F<typename eval<ARGS,tml::empty_list>::result...>::result;
+        };
         
         /*
          * This specialization matches the case when the expression passed is a function (In the STL sense, with a 'type' member).

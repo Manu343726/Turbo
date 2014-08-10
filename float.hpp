@@ -45,12 +45,12 @@ namespace tml
          * - 64 bit unsigned integer mantissa (Always normalized, but no implicit topmost 1).
          * 
          * Not that this impementation doesn't fullfill the IEEE754 ISO Standard, neither for
-         * precission properties nor exception (Overflow/underflow, NaNs, etc) rules.
+         * precision properties nor exception (Overflow/underflow, NaNs, etc) rules.
          * Its only a working floating-point implementation.
          * 
          * Also note that this implementation uses mantissa normalization as expected, but doesn't
-         * provide the implicit extra bit of precission of the topmost always-one bit. The mantissa
-         * uses a 64 bit unsigned integer and the precission provided is 64 bits. Thats done to make 
+         * provide the implicit extra bit of precision of the topmost always-one bit. The mantissa
+         * uses a 64 bit unsigned integer and the precision provided is 64 bits. Thats done to make 
          * the implementation more clear (No implicit things) and avoids some denormalizations needed
          * to perform arithmetic operations.
          */
@@ -115,7 +115,7 @@ namespace tml
             struct shift
             {
                 static constexpr const mantissa_t mantissa = (COUNT::value >= 0) ? (F::mantissa << COUNT::value) :
-                                                                        (F::mantissa >> -COUNT::value);
+                                                                                   (F::mantissa >> -COUNT::value);
                 
                 static constexpr const exponent_t exponent = F::exponent - COUNT::value;
                 
@@ -201,16 +201,24 @@ namespace tml
      * Algebraic functions
      */
     
+    /*
+     * Abs: Just put a positive sign. Easy, right?
+     */
     template<tml::floating::sign_t S , tml::floating::exponent_t E , tml::floating::mantissa_t M>
     struct abs<tml::floating::number<S,E,M>> : public tml::function<tml::floating::number<tml::floating::sign_t::positive,E,M>>
     {};
     
+    /*
+     * Opposite number: Put the opposite sign.
+     */
     template<tml::floating::sign_t S , tml::floating::exponent_t E , tml::floating::mantissa_t M>
     struct opposite<tml::floating::number<S,E,M>> : 
         public tml::function<tml::floating::number<((bool)S) ? tml::floating::sign_t::negative : tml::floating::sign_t::positive,E,M>>
     {};
     
-    
+    /*
+     * Addition floating-point vs floating-point
+     */
     template<tml::floating::sign_t S_LHS , tml::floating::exponent_t E_LHS , tml::floating::mantissa_t M_LHS ,
              tml::floating::sign_t S_RHS , tml::floating::exponent_t E_RHS , tml::floating::mantissa_t M_RHS>
     struct add<tml::floating::number<S_LHS,E_LHS,M_LHS>,tml::floating::number<S_RHS,E_RHS,M_RHS>>
@@ -282,25 +290,91 @@ namespace tml
         using result = tml::floating::normalize<typename adder<denorm_lhs::mantissa,denorm_rhs::mantissa,S_LHS,S_RHS>::result>;
     };
     
-    
+    /*
+     * Substraction floating-point vs floating-point: Add the first with the opposite of the second
+     */
     template<tml::floating::sign_t S_LHS , tml::floating::exponent_t E_LHS , tml::floating::mantissa_t M_LHS ,
              tml::floating::sign_t S_RHS , tml::floating::exponent_t E_RHS , tml::floating::mantissa_t M_RHS>
     struct sub<tml::floating::number<S_LHS,E_LHS,M_LHS>,tml::floating::number<S_RHS,E_RHS,M_RHS>> : 
-        public tml::function<typename tml::add<tml::floating::number<S_LHS,E_LHS,M_LHS>,tml::opposite<tml::floating::number<S_RHS,E_RHS,M_RHS>>>>
+                public tml::function<tml::eval<tml::add<tml::floating::number<S_LHS,E_LHS,M_LHS>,tml::opposite<tml::floating::number<S_RHS,E_RHS,M_RHS>>>>>
     {};
     
     
+    /*
+     * Multiplication floating-point vs floating-point
+     */
     template<tml::floating::sign_t S_LHS , tml::floating::exponent_t E_LHS , tml::floating::mantissa_t M_LHS ,
              tml::floating::sign_t S_RHS , tml::floating::exponent_t E_RHS , tml::floating::mantissa_t M_RHS>
     struct mul<tml::floating::number<S_LHS,E_LHS,M_LHS>,tml::floating::number<S_RHS,E_RHS,M_RHS>>
     {
-        static constexpr const std::uint64_t mantissa_full = (std::uint64_t)M_LHS * (std::uint64_t)M_RHS;
-        static constexpr const std::uint32_t mantissa      = mantissa_full >> 32;
-        static constexpr const auto          exponent      = E_LHS+E_RHS + 32;
+        static constexpr const std::uint64_t mantissa_full = (std::uint64_t)M_LHS * (std::uint64_t)M_RHS; //Full multiply
+        static constexpr const std::uint32_t mantissa      = mantissa_full >> 32;                         //Readjust mantissa to 32 bit precision 
+        static constexpr const auto          exponent      = E_LHS+E_RHS + 32;                            //+32 to compensate bias (Else the exponent would be doubly biased)
         static constexpr const auto          sign          = (tml::floating::sign_t)(!((bool)S_LHS ^ (bool)S_RHS)); 
         
         using result = tml::floating::normalize<tml::floating::number<sign,exponent,mantissa>>;
     };
+    
+    
+    /*
+     * Reciprocal: Compute 1/X, where X is a floating-point number, using a Newton-Raphson 
+     * approximation of 32 / 4 iterations.
+     */
+    template<tml::floating::sign_t S , tml::floating::exponent_t E , tml::floating::mantissa_t M>
+    struct reciprocal<tml::floating::number<S,E,M>>
+    {
+        using N   = tml::floating::number<S,E,M>;
+        using one = tml::one<tml::floating::number<__,__,__>>; //Please Clang memoize this. Thanks
+        using two = tml::floating::number<tml::floating::sign_t::positive,-30,0x80000000>; //And this
+        
+        /*
+         * First compute a 1/X guess, say mantissa integer division between 1 and X:
+         */
+        
+        using guess_divisor = tml::floating::normalize<N,tml::size_t<15>>; //Use a divisor with half precision
+        
+        /*
+         * Note about the exponent: Its the opposite since the number was inversed, and - 31 to prevent double bias
+         */
+        using guess         = tml::floating::number<S, -guess_divisor::exponent - 31 , M / guess_divisor::mantissa>; 
+        
+        
+        /*
+         * Now execute a Newton-Raphson aproximation starting with that guess:
+         * 
+         * f(x)  = 1 / x - N 
+         * f'(x) = -1 / x^2
+         *  
+         *                f(Xn)               1/Xn - N
+         * Xn+1 = Xn - _____________ = Xn - ____________ = 2*Xn - N(Xn)^2 = Xn * (2 - N * Xn)
+         *                f'(Xn)              -1/(Xn)^2
+         *           
+         */
+        
+        /*
+         * Configuration (Number of iterations): Currently a quarter of the mantissa precision. 
+         */
+        using begin = tml::integral_forward_iterators::make_size_t<0>;
+        using end   = tml::integral_forward_iterators::make_size_t<tml::util::sizeof_bits<tml::floating::mantissa_t>::value / 4>;
+        
+        using result = tml::floating::normalize<tml::foldl<tml::lambda<_1,_2 , tml::mul<_1,tml::sub<two,tml::mul<N,_1>>> > , guess , begin , end>>;
+    };
+    
+    
+    
+    /*
+     * Division floating-point vs floating-point: Compute A/B as A * 1/B
+     */
+    template<tml::floating::sign_t S_LHS , tml::floating::exponent_t E_LHS , tml::floating::mantissa_t M_LHS ,
+             tml::floating::sign_t S_RHS , tml::floating::exponent_t E_RHS , tml::floating::mantissa_t M_RHS>
+    struct div<tml::floating::number<S_LHS,E_LHS,M_LHS>,tml::floating::number<S_RHS,E_RHS,M_RHS>>
+    {
+        using result = tml::eval<tml::mul<tml::floating::number<S_LHS,E_LHS,M_LHS>,
+                                          tml::reciprocal<tml::floating::number<S_RHS,E_RHS,M_RHS>>
+                                         >
+                                >;
+    };
+    
     
     /*
      * Runtime and string representations
@@ -314,9 +388,16 @@ namespace tml
         template<tml::floating::sign_t S , tml::floating::exponent_t E , tml::floating::mantissa_t M>
         struct to_runtime<tml::floating::number<S,E,M>>
         {
+            static constexpr double pow2(std::int16_t e)
+            {
+                return e == 0 ? 1. :
+                        e > 0 ? 2. * pow2(std::int16_t(e - 1)) :
+                                0.5 * pow2(std::int16_t(e + 1));
+            }
+            
             static constexpr double execute()
             {
-                return ((E >= 0) ? ((double)(1 << E)) : (1.0/(double)(1 << -E))) * (double)M * (((bool)S) ? 1 : -1);
+                return (((bool)S) ? 1 : -1) * pow2(E) * (double)M;
             }
         };
         
@@ -340,7 +421,7 @@ namespace tml
             }
         };
         template<tml::floating::sign_t... Ss , tml::floating::exponent_t... Es , tml::floating::mantissa_t... Ms>
-        constexpr const std::array<double,sizeof...(Ss)> to_runtime<tml::list<tml::floating::number<Ss,Es,Ms>...>>::array;
+        constexpr const std::array<double,sizeof...(Ss)> to_runtime<tml::list<tml::floating::number<Ss,Es,Ms>...>>::array; //Damn linker...
         
         
         template<tml::floating::sign_t S , tml::floating::exponent_t E , tml::floating::mantissa_t M>
@@ -354,7 +435,7 @@ namespace tml
                 static const std::bitset<32> bits = M;
                 std::stringstream ss;
 
-                ss << '[' << (((bool)S) ? '+' : '-') << '|' << E << '|' << bits << "]\n";
+                ss << '[' << (((bool)S) ? '+' : '-') << '|' << E << '|' << bits << "]";
 
                 return ss.str();
             }

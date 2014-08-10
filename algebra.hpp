@@ -144,6 +144,13 @@ namespace tml
     struct div : public tml::not_evaluated_function_chameleon
     {};
     
+    /*
+     * Computes the reciprocal (1/N) of a given number N
+     */
+    template<typename N>
+    struct reciprocal : public tml::not_evaluated_function_chameleon
+    {};
+    
     
     /* Basic logical functions */
     

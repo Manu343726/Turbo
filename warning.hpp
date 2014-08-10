@@ -51,6 +51,10 @@
 #error "Unsupported compiler"
 #endif
 
+#ifndef STRIP_PARENS
+#define STRIP_PARENS(...) __VA_ARGS__
+#endif
+
 #define TURBO_WARNING( condition , message )                \
     struct UNIQUE_IDENTIFIER_LINE( turbo_static_warning )   \
     {                                                       \
