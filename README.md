@@ -280,14 +280,12 @@ int main()
 
 The library is designed to do all the required computations at compile-time with zero runtime overhead when using the resutls. That means the floating-point values (Actually stored as `double`s on the runtime side) should be completely aviable and known at compile-time.
 
-Given this code, which computes N (10 in the example) consecutive powers of two at compile-time:
+Given this code, which computes N (10 in the example) consecutive floating-point numbers at compile-time:
 
 ```cpp
 template<std::size_t N>
-using generate_numbers = tml::apply_for<tml::lambda<_1,_2 , tml::mul<_1,tml::floating::integer<2>>> , 
-                                        tml::floating::integer<1>,
-                                        tml::size_t<0> , tml::size_t<N>
-                                       >;
+using generate_numbers = tml::foldl<tml::lambda<_1,_2 , tml::lists::func::push_front<_1,tml::add<tml::lists::func::head<_1>,tml::floating::integer<1>>>> , tml::list<tml::floating::integer<0>> , tml::integral_forward_iterators::make_size_t<0> , tml::integral_forward_iterators::make_size_t<N>>;
+
 
 int main()
 {
