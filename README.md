@@ -250,11 +250,33 @@ using two   = tml::eval<tml::add<one,one>>; //two is   [+|-30|0x80000000]
 using three = tml::eval<tml::add<one,two>>; //three is [+|-30|0xC0000000]
 ```
 
-In the future, several aliases will be provided for float initialization via decimal numbers:
+Several metafunction are provided for easy initialization of floating-point values:
 
-``` cpp
-using pi = tml::floating::decimal<3,141592654>; 
+```cpp
+using two      = tml::floating::integer<2>;
+using sqrt_two = tml::eval<tml::sqrt<two>>;
+using pi       = tml::floating::decimal<3,141592654>;
+
+int main()
+{
+    std::cout << tml::to_string<two>() << std::endl
+              << tml::to_runtime<two>() << std::endl;
+              
+    std::cout << tml::to_string<sqrt_two>() << std::endl
+              << tml::to_runtime<sqrt_two>() << std::endl;
+              
+    std::cout << tml::to_string<pi>() << std::endl
+              << tml::to_runtime<pi>() << std::endl;
+}
 ```
+
+> [+|-30|10000000000000000000000000000000]  
+> 2  
+> [+|-31|10110101000001001111001100110110]  
+> 1.41421  
+> [+|-30|11001001000011111101101010100010]  
+> 3.14159  
+
 
 ## Known issues:
 
