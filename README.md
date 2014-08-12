@@ -278,6 +278,47 @@ int main()
 > 3.14159  
 
 
+The library is designed to do all the required computations at compile-time with zero runtime overhead when using the resutls. That means the floating-point values (Actually stored as `double`s on the runtime side) should be completely aviable and known at compile-time.
+
+Given this code, which computes N (10 in the example) consecutive powers of two at compile-time:
+
+```cpp
+template<std::size_t N>
+using generate_numbers = tml::apply_for<tml::lambda<_1,_2 , tml::mul<_1,tml::floating::integer<2>>> , 
+                                        tml::floating::integer<1>,
+                                        tml::size_t<0> , tml::size_t<N>
+                                       >;
+
+int main()
+{
+    using numbers = generate_numbers<10>;
+    
+    for( double n : tml::to_runtime<numbers>() )
+        std::cout << n << std::endl;
+
+}
+```
+Yields to the following code for the `tml::to_runtime()` instance:
+
+```asm
+_ZN3tml4impl10to_runtimeINS_4listIJNS_8floating6numberILNS3_6sign_tE1ELsn28ELj2684354560EEENS4_ILS5_1ELsn28ELj2415919104EEENS4_ILS5_1ELsn28ELj2147483648EEENS4_ILS5_1ELsn29ELj3758096384EEENS4_ILS5_1ELsn29ELj3221225472EEENS4_ILS5_1ELsn29ELj2684354560EEENS4_ILS5_1ELsn29ELj2147483648EEENS4_ILS5_1ELsn30ELj3221225472EEENS4_ILS5_1ELsn30ELj2147483648EEENS4_ILS5_1ELsn31ELj2147483648EEENS4_ILS5_1ELsn31ELj0EEEEEEE5arrayE:
+	.quad	4621819117588971520     # double 1.000000e+01
+	.quad	4621256167635550208     # double 9.000000e+00
+	.quad	4620693217682128896     # double 8.000000e+00
+	.quad	4619567317775286272     # double 7.000000e+00
+	.quad	4618441417868443648     # double 6.000000e+00
+	.quad	4617315517961601024     # double 5.000000e+00
+	.quad	4616189618054758400     # double 4.000000e+00
+	.quad	4613937818241073152     # double 3.000000e+00
+	.quad	4611686018427387904     # double 2.000000e+00
+	.quad	4607182418800017408     # double 1.000000e+00
+	.quad	0                       # double 0.000000e+00
+	.size	_ZN3tml4impl10to_runtimeINS_4listIJNS_8floating6numberILNS3_6sign_tE1ELsn28ELj2684354560EEENS4_ILS5_1ELsn28ELj2415919104EEENS4_ILS5_1ELsn28ELj2147483648EEENS4_ILS5_1ELsn29ELj3758096384EEENS4_ILS5_1ELsn29ELj3221225472EEENS4_ILS5_1ELsn29ELj2684354560EEENS4_ILS5_1ELsn29ELj2147483648EEENS4_ILS5_1ELsn30ELj3221225472EEENS4_ILS5_1ELsn30ELj2147483648EEENS4_ILS5_1ELsn31ELj2147483648EEENS4_ILS5_1ELsn31ELj0EEEEEEE5arrayE, 88
+```
+*We all hate C++ mangling, isn't?*
+
+Which is exactly the expected behaviour: Floating-point values injected into the executable, with no runtime overhead.
+
 ## Known issues:
 
 The features explained above have some implementation issues (Working on...):
