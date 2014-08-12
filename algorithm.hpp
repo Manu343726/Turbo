@@ -47,6 +47,71 @@ using tml::placeholders::_2;
 
 namespace tml
 {
+    namespace impl
+    {
+        /*
+         * Successively applies a function to a value the specified number of times
+         */
+        template<typename F , typename STATE , typename BEGIN , typename END , typename ADVANCE>
+        struct apply_for
+        {
+            using next_state   = tml::eval<F,STATE,BEGIN>;
+            using next_counter = tml::eval<ADVANCE,BEGIN>;
+            
+            using result = typename apply_for<F,next_state,next_counter,END,ADVANCE>::result;
+        };
+        
+        template<typename F , typename STATE , typename END , typename ADVANCE>
+        struct apply_for<F,STATE,END,END,ADVANCE>
+        {
+            using result = STATE;
+        };
+
+        
+        
+        /*
+         * Successively applies a function to a value while the value meets a condition
+         */
+        template<typename F , typename STATE , typename WHILE , bool FINISHED = false>
+        struct apply_while_impl
+        {
+            using next_state = tml::eval<F,STATE>;
+            using finished = tml::eval<WHILE,next_state,STATE>;
+            
+            using result = typename apply_while_impl<F,next_state,WHILE,finished::value>::result;
+        };
+
+        template<typename F , typename STATE , typename WHILE>
+        struct apply_while_impl<F,STATE,WHILE,true>
+        {
+            using result = STATE;
+        };
+        
+        /*
+         * Successively applies a function to a value while the value meets a condition
+         */
+        template<typename F , typename STATE , typename WHILE>
+        struct apply_while
+        {
+            using result = typename apply_while_impl<F,STATE,WHILE,false>::result;
+        };
+        
+        /*
+         * Successively applies a function to a value while the value meets a condition
+         */
+        template<typename F , typename STATE , typename UNTIL>
+        struct apply_until
+        {
+            using result = typename apply_while<F,STATE,
+                                                tml::lambda<tml::placeholders::_1 , tml::placeholders::_2 , tml::logical_not<tml::deval<UNTIL,tml::placeholders::_1,tml::placeholders::_2>>>
+                                               >::result;
+        };
+    }
+    
+    
+    
+    
+    
     /*
      * Returns true if any element of a sequence has some property represented by a 
      * boolean predicate P
@@ -109,23 +174,41 @@ namespace tml
     
     
     /*
-     * Gievn a range and an unary predicate, returns two lists, one with the values evaluated to true 
-     * and other with the elements evaluated to false.
+     * Successively applies a function to a value the specified number of times.
      * 
-     * The argumments of the function could be:
-     * 
-     * List-based sequence:
-     * ====================
-     *  - P: The boolean predicate. It should be a unary boolean function enity.
-     *  - SEQ: The sequence, represented as a tml::list.
-     * 
-     * Iterators-based sequence:
-     * =========================
-     *  - P: The boolean predicate. It should be a unary boolean function enity.
-     *  - BEGIN: An iterator pointing to the beginning of the input sequence.
-     *  - END: An iterator pointing to the end of the input sequence. Note sequences represented
-     *    as pairs of iterators are sequences of the interval [BEGIN,END).
+     * Function argumments:
+     *  - F: Binary function. Takes the current value and returns the next. The first parameter is the current value, and the second is the current
+     *       value of the counter.
+     *  - STATE: Initial value.
+     *  - BEGIN , END: The number of times the transformation is applied to the value is represented as a range [BEGIN,END), where BEGIN and END are values.
+     *  - ADVANCE: Given the current element of the "number-of-times interval" (See above), computes the next element. By default increases the value by 1.
      */
+    template<typename F , typename STATE , typename BEGIN , typename END , typename ADVANCE = tml::lambda<tml::placeholders::_1 , tml::add<tml::one<BEGIN>,tml::placeholders::_1>>>
+    using apply_for = typename tml::impl::apply_for<F,STATE,BEGIN,END,ADVANCE>::result;
+    
+    /*
+     * Successively applies a function to a value while a certain condition is met.
+     * 
+     * Function argumments:
+     *  - F: Unary function. Takes the current value and returns the next.
+     *  - STATE: Initial value.
+     *  - WHILE: Binary boolean function. Represents the condition to be met. The first parameter is the current value, and the second the previous one. This
+     *           allows to easily write convergence conditions. If you only want a property based on the current value, just ignore the second function param.
+     */
+    template<typename F , typename STATE , typename WHILE>
+    using apply_while = typename tml::impl::apply_while<F,STATE,WHILE>::result;
+    
+    /*
+     * Successively applies a function to a value until a certain condition is met.
+     * 
+     * Function argumments:
+     *  - F: Unary function. Takes the current value and returns the next.
+     *  - STATE: Initial value.
+     *  - UNTIL: Binary boolean function. Represents the condition to be met. The first parameter is the current value, and the second the previous one. This
+     *           allows to easily write convergence conditions. If you only want a property based on the current value, just ignore the second function param.
+     */
+    template<typename F , typename STATE , typename UNTIL>
+    using apply_until = typename tml::impl::apply_until<F,STATE,UNTIL>::result;
     
 }
 

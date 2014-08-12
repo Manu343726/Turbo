@@ -72,6 +72,35 @@ namespace tml
                                                   >
                                 >;
     };
+    
+    /*
+     * Computes the square root of a given number N
+     */
+    template<typename N>
+    struct sqrt
+    {
+        /*
+         * Square Root via Newton Raphson aproximation:
+         * 
+         * sqrt(a) = root(f(x)) where:
+         * 
+         * f(x) = X^2 - a
+         * f'(x) = 2X
+         * 
+         *                f(Xn)             Xn * Xn - a 
+         * Xn+1 = Xn - ___________ = Xn - _______________
+         *                f'(Xn)                2Xn 
+         */
+        
+        template<typename Xn , typename UNUSED>
+        struct iteration
+        {
+            using result = tml::eval<tml::sub<Xn,tml::div<tml::sub<tml::mul<Xn,Xn>,N>,tml::add<Xn,Xn>>>>;
+        };
+
+        
+        using result = tml::apply_for<tml::lazy<iteration> , N , tml::size_t<0> , tml::size_t<5>>;
+    };
 }
 
 #endif	/* MATH_HPP */

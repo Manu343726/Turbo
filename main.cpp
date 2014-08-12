@@ -60,10 +60,13 @@ using namespace tml::runtime::placeholders;
 using a = tml::floating::integer<0>;
 using b = tml::floating::decimal<0,5>; 
 
+using sqrt_ = tml::eval<tml::sqrt<tml::floating::integer<2>>>;
+using number = tml::eval<tml::mul<sqrt_,sqrt_>>;
+
 int main()
 {
-    std::cout << tml::to_string<a>() << std::endl;
-    std::cout << tml::to_runtime<a>() << std::endl;
-    std::cout << tml::to_string<b>() << std::endl;
-    std::cout << tml::to_runtime<b>() << std::endl;
+    std::cout << tml::to_string<sqrt_>() << std::endl;
+    std::cout << tml::to_runtime<sqrt_>() << std::endl;
+    std::cout << tml::to_string<number>() << std::endl;
+    std::cout << tml::to_runtime<number>() << std::endl;
 }

@@ -29,6 +29,7 @@
 #include "function_alias_decl.hpp"
 #include "placeholders.hpp"
 #include "iterator.hpp"
+#include "fixed_point.hpp"
 
 using namespace tml::placeholders;
 

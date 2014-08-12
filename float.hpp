@@ -147,7 +147,7 @@ namespace tml
                 static constexpr const int         shift    = BIT_INDEX::value - hsb;
                 
                 static_assert( hsb   <= tml::floating::mantissa_msb::value , "HSB Overflow" );
-                static_assert( shift <  (int)tml::floating::mantissa_msb::value , "Overflow" );
+                static_assert( shift <= (int)tml::floating::mantissa_msb::value , "Overflow" );
                 
                 using result = typename tml::floating::impl::shift<F,tml::Int<shift>>::result;
             };
