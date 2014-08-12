@@ -71,6 +71,8 @@ namespace tml
                                                    tml::lazy<negative_pow,BASE,integral_exp>
                                                   >
                                 >;
+        
+        TURBO_ENSURE_ALGEBRAIC_EVAL(result);
     };
     
     /*
@@ -92,7 +94,7 @@ namespace tml
          *                f'(Xn)                2Xn 
          */
         
-        template<typename Xn , typename UNUSED>
+        template<typename Xn , typename COUNTER /* unused */>
         struct iteration
         {
             using result = tml::eval<tml::sub<Xn,tml::div<tml::sub<tml::mul<Xn,Xn>,N>,tml::add<Xn,Xn>>>>;
@@ -100,6 +102,8 @@ namespace tml
 
         
         using result = tml::apply_for<tml::lazy<iteration> , N , tml::size_t<0> , tml::size_t<5>>;
+        
+        TURBO_ENSURE_ALGEBRAIC_EVAL(result);
     };
 }
 

@@ -24,6 +24,7 @@
 #include "high_order_functions.hpp"
 #include "list_algorithms.hpp"
 #include "integral_lists.hpp"
+#include "algebra.hpp"
 
 /*
  * This header declares a set of functional-style algorithms built upon the
@@ -59,12 +60,16 @@ namespace tml
             using next_counter = tml::eval<ADVANCE,BEGIN>;
             
             using result = typename apply_for<F,next_state,next_counter,END,ADVANCE>::result;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
         
         template<typename F , typename STATE , typename END , typename ADVANCE>
         struct apply_for<F,STATE,END,END,ADVANCE>
         {
             using result = STATE;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
 
         
@@ -72,19 +77,26 @@ namespace tml
         /*
          * Successively applies a function to a value while the value meets a condition
          */
-        template<typename F , typename STATE , typename WHILE , bool FINISHED = false>
-        struct apply_while_impl
+        template<typename F , typename STATE , typename WHILE , typename CONTINUE>
+        struct apply_while_impl;
+        
+        template<typename F , typename STATE , typename WHILE>
+        struct apply_while_impl<F,STATE,WHILE,tml::true_type>
         {
             using next_state = tml::eval<F,STATE>;
-            using finished = tml::eval<WHILE,next_state,STATE>;
+            using continue_running = tml::eval<WHILE,next_state,STATE>;
             
-            using result = typename apply_while_impl<F,next_state,WHILE,finished::value>::result;
+            using result = typename apply_while_impl<F,next_state,WHILE,continue_running>::result;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
 
         template<typename F , typename STATE , typename WHILE>
-        struct apply_while_impl<F,STATE,WHILE,true>
+        struct apply_while_impl<F,STATE,WHILE,tml::false_type>
         {
             using result = STATE;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
         
         /*
@@ -93,7 +105,9 @@ namespace tml
         template<typename F , typename STATE , typename WHILE>
         struct apply_while
         {
-            using result = typename apply_while_impl<F,STATE,WHILE,false>::result;
+            using result = typename apply_while_impl<F,STATE,WHILE,tml::true_type>::result;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
         
         /*
@@ -105,6 +119,8 @@ namespace tml
             using result = typename apply_while<F,STATE,
                                                 tml::lambda<tml::placeholders::_1 , tml::placeholders::_2 , tml::logical_not<tml::deval<UNTIL,tml::placeholders::_1,tml::placeholders::_2>>>
                                                >::result;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
     }
     
@@ -192,8 +208,9 @@ namespace tml
      * Function argumments:
      *  - F: Unary function. Takes the current value and returns the next.
      *  - STATE: Initial value.
-     *  - WHILE: Binary boolean function. Represents the condition to be met. The first parameter is the current value, and the second the previous one. This
-     *           allows to easily write convergence conditions. If you only want a property based on the current value, just ignore the second function param.
+     *  - WHILE: Binary boolean function. Represents the condition to be met. The first parameter is the current value (Value after current function application), and the second the previous one (Value just after 
+     *           current function application).
+     *           This allows to easily write convergence conditions. If you only want a property based on the current value, just ignore the second function param.
      */
     template<typename F , typename STATE , typename WHILE>
     using apply_while = typename tml::impl::apply_while<F,STATE,WHILE>::result;
@@ -204,8 +221,9 @@ namespace tml
      * Function argumments:
      *  - F: Unary function. Takes the current value and returns the next.
      *  - STATE: Initial value.
-     *  - UNTIL: Binary boolean function. Represents the condition to be met. The first parameter is the current value, and the second the previous one. This
-     *           allows to easily write convergence conditions. If you only want a property based on the current value, just ignore the second function param.
+     *  - UNTIL: Binary boolean function. Represents the condition to be met. The first parameter is the current value (Value after current function application), and the second the previous one (Value just after 
+     *           current function application).
+     *           This allows to easily write convergence conditions. If you only want a property based on the current value, just ignore the second function param.
      */
     template<typename F , typename STATE , typename UNTIL>
     using apply_until = typename tml::impl::apply_until<F,STATE,UNTIL>::result;

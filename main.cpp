@@ -63,10 +63,16 @@ using b = tml::floating::decimal<0,5>;
 using sqrt_ = tml::eval<tml::sqrt<tml::floating::integer<2>>>;
 using number = tml::eval<tml::mul<sqrt_,sqrt_>>;
 
+
+
+using loop_result = tml::apply_while<tml::lambda<_1 , tml::div<_1,tml::floating::decimal<1,1>>> , tml::floating::integer<1000000> , tml::lambda<_3,_4 , tml::bigger_than<_3 , tml::floating::integer<2>>>>;
+
 int main()
 {
     std::cout << tml::to_string<sqrt_>() << std::endl;
     std::cout << tml::to_runtime<sqrt_>() << std::endl;
     std::cout << tml::to_string<number>() << std::endl;
     std::cout << tml::to_runtime<number>() << std::endl;
+    std::cout << tml::to_string<loop_result>() << std::endl;
+    std::cout << tml::to_runtime<loop_result>() << std::endl;
 }

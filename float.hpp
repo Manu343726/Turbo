@@ -216,6 +216,28 @@ namespace tml
     }
     
     /*
+     * Comparison functions
+     */
+    
+    template<tml::floating::sign_t S_LHS , tml::floating::exponent_t E_LHS , tml::floating::mantissa_t M_LHS ,
+             tml::floating::sign_t S_RHS , tml::floating::exponent_t E_RHS , tml::floating::mantissa_t M_RHS>
+    struct equal<tml::floating::number<S_LHS,E_LHS,M_LHS>,tml::floating::number<S_RHS,E_RHS,M_RHS>>
+    {
+        using result = tml::boolean<S_LHS == S_RHS && E_LHS == E_RHS && M_LHS == M_RHS>;
+    };
+    
+    template<tml::floating::sign_t S_LHS , tml::floating::exponent_t E_LHS , tml::floating::mantissa_t M_LHS ,
+             tml::floating::sign_t S_RHS , tml::floating::exponent_t E_RHS , tml::floating::mantissa_t M_RHS>
+    struct less_than<tml::floating::number<S_LHS,E_LHS,M_LHS>,tml::floating::number<S_RHS,E_RHS,M_RHS>>
+    {
+        static constexpr const bool unsigned_result = E_LHS < E_RHS || ( E_LHS == E_RHS && M_LHS < M_RHS );
+        
+        using result = tml::Bool<(S_LHS == S_RHS)              ? unsigned_result :
+                                 ((bool)S_LHS && !(bool)S_RHS) ? false : true>;
+    };
+    
+    
+    /*
      * Algebraic functions
      */
     
@@ -343,7 +365,7 @@ namespace tml
     {
         using N   = tml::floating::number<S,E,M>;
         using one = tml::one<tml::floating::number<__,__,__>>; //Please Clang, be a good friend and memoize this. Thanks
-        using two = tml::floating::number<tml::floating::sign_t::positive,-30,0x80000000>; //And this
+        using two = tml::floating::number<tml::floating::sign_t::positive,-30,0x80000000>; //This too
         
         /*
          * First compute a 1/X guess, say mantissa integer division between 1 and X:

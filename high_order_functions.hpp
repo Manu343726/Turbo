@@ -29,9 +29,7 @@
 #include "function_alias_decl.hpp"
 #include "placeholders.hpp"
 #include "iterator.hpp"
-#include "fixed_point.hpp"
-
-using namespace tml::placeholders;
+#include "algebra.hpp"
 
 
 /*
@@ -71,8 +69,12 @@ namespace tml
          * O(1) complexity
          */
         template<typename T , typename... SEQUENCE>
-        struct map<T,tml::list<SEQUENCE...>,tml::empty_list> : public tml::function<tml::list<tml::eval<T,SEQUENCE>...>>
-        {};
+        struct map<T,tml::list<SEQUENCE...>,tml::empty_list>
+        {
+            using result = tml::list<tml::eval<T,SEQUENCE>...>;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
+        };
                
         /*
          * Iterators-based sequece map function
@@ -89,12 +91,16 @@ namespace tml
                                           END,
                                           tml::list<PROCESSED...,tml::eval<T,tml::iterator::deref<BEGIN>>>
                                        >::result;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
         
         template<typename T , typename... PROCESSED , typename END>
         struct map<T,END,END,tml::list<PROCESSED...>>
         {
             using result = tml::list<PROCESSED...>;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
         
         /*
@@ -125,6 +131,8 @@ namespace tml
                                            >;
             
             using result = typename filter_impl<F,tml::list<TAIL...>,passed>::result;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
         
         /*
@@ -138,6 +146,8 @@ namespace tml
         struct filter_impl<F,tml::empty_list,tml::list<PASSED...>>
         {
             using result = tml::list<PASSED...>;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
         
         /*
@@ -155,6 +165,8 @@ namespace tml
                                            >;
             
             using result = typename filter_impl<F,tml::iterator::next<BEGIN>,END,passed>::result;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
         
         /*
@@ -168,6 +180,8 @@ namespace tml
         struct filter_impl<F,END,END,tml::list<PASSED...>>
         {
             using result = tml::list<PASSED...>;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
         
         
@@ -191,12 +205,16 @@ namespace tml
         struct foldr<F,STATE,tml::list<HEAD,TAIL...>>
         {
             using result = tml::eval<F,HEAD,typename foldr<F,STATE,tml::list<TAIL...>>::result>;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
         
         template<typename F , typename STATE>
         struct foldr<F,STATE,tml::empty_list>
         {
             using result = STATE;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
         
         
@@ -209,12 +227,16 @@ namespace tml
         struct foldl<F,STATE,tml::list<HEAD,TAIL...>>
         {
             using result = typename foldl<F,tml::eval<F,STATE,HEAD>,tml::list<TAIL...>>::result;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
         
         template<typename F , typename STATE>
         struct foldl<F,STATE,tml::empty_list>
         {
             using result = STATE;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
         
         /*
@@ -228,12 +250,16 @@ namespace tml
             using result = tml::eval<F,tml::iterator::deref<BEGIN>,
                                        typename foldr<F,STATE,tml::iterator::next<BEGIN>,END>::result
                                     >;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
         
         template<typename F , typename STATE , typename END>
         struct foldr<F,STATE,END,END>
         {
             using result = STATE;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
         
         /*
@@ -248,12 +274,16 @@ namespace tml
                                           tml::iterator::next<BEGIN>,
                                           END
                                          >::result;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
         
         template<typename F , typename STATE , typename END>
         struct foldl<F,STATE,END,END>
         {
             using result = STATE;
+            
+            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
         };
     }
     

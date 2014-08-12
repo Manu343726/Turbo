@@ -246,5 +246,7 @@ namespace tml
     {};
 }
 
+#define TURBO_ENSURE_ALGEBRAIC_EVAL(...) static_assert( !std::is_same<tml::not_evaluated_function_chameleon::result,__VA_ARGS__>::value && !std::is_base_of<tml::not_evaluated_function_chameleon::result,__VA_ARGS__>::value , "ERROR: Arithmetic expression incorrectly evaluated." );
+
 #endif	/* ALGREGRA_HPP */
 
