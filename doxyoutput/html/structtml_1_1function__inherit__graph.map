@@ -1,0 +1,5 @@
+<map id="tml::function&lt; RESULT &gt;" name="tml::function&lt; RESULT &gt;">
+<area shape="rect" id="node2" href="$structtml_1_1impl_1_1to__integral_3_01_t_00_01tml_1_1fixed__point_3_01_i_n_t_e_g_e_r___t_00_01_v_01_4_01_4.html" title="tml::impl::to_integral\l\&lt; T, tml::fixed_point\l\&lt; INTEGER_T, V \&gt; \&gt;" alt="" coords="250,12,401,68"/>
+<area shape="rect" id="node4" href="$structtml_1_1mul_3_01tml_1_1fixed__point_3_01_i_n_t_e_g_e_r___t_00_01_l_h_s_01_4_00_01tml_1_1fixa8b1a149c88004c1514736c09159ec97.html" title="tml::mul\&lt; tml::fixed\l_point\&lt; INTEGER_T, LHS\l \&gt;, tml::fixed_point\&lt; INTEGER\l_T, RHS \&gt; \&gt;" alt="" coords="224,93,427,163"/>
+<area shape="rect" id="node3" href="$structtml_1_1impl_1_1to__integral_3_01tml_1_1integral__constant_3_01_t_00_01_w_01_4_00_01tml_1_1910925ffdd16f63859ad36c42576b8b2.html" title="tml::impl::to_integral\l\&lt; tml::integral_constant\l\&lt; T, W \&gt;, tml::fixed_point\l\&lt; INTEGER_T, V \&gt; \&gt;" alt="" coords="475,5,647,75"/>
+</map>

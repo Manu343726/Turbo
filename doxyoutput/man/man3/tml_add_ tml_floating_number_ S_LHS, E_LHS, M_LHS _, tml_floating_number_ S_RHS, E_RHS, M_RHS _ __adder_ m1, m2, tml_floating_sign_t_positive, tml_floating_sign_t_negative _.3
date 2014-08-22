@@ -1,0 +1,38 @@
+.TH "tml::add< tml::floating::number< S_LHS, E_LHS, M_LHS >, tml::floating::number< S_RHS, E_RHS, M_RHS > >::adder< m1, m2, tml::floating::sign_t::positive, tml::floating::sign_t::negative >" 3 "Fri Aug 22 2014" "Turbo" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tml::add< tml::floating::number< S_LHS, E_LHS, M_LHS >, tml::floating::number< S_RHS, E_RHS, M_RHS > >::adder< m1, m2, tml::floating::sign_t::positive, tml::floating::sign_t::negative > \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "using \fBresult\fP = \fBtml::floating::number\fP< sign, result_exponent, mantissa >"
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static constexpr const 
+.br
+tml::floating::mantissa_t \fBmantissa\fP = (m1 >= m2) ? (m1 - m2) : (m2 - m1)"
+.br
+.ti -1c
+.RI "static constexpr const auto \fBsign\fP = (tml::floating::sign_t)(m1 >= m2)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<tml::floating::sign_t S_LHS, tml::floating::exponent_t E_LHS, tml::floating::mantissa_t M_LHS, tml::floating::sign_t S_RHS, tml::floating::exponent_t E_RHS, tml::floating::mantissa_t M_RHS>template<tml::floating::mantissa_t m1, tml::floating::mantissa_t m2>struct tml::add< tml::floating::number< S_LHS, E_LHS, M_LHS >, tml::floating::number< S_RHS, E_RHS, M_RHS > >::adder< m1, m2, tml::floating::sign_t::positive, tml::floating::sign_t::negative >"
+
+.PP
+Definition at line 305 of file float\&.hpp\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Turbo from the source code\&.

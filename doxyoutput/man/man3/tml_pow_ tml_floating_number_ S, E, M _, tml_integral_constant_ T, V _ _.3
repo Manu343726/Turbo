@@ -1,0 +1,48 @@
+.TH "tml::pow< tml::floating::number< S, E, M >, tml::integral_constant< T, V > >" 3 "Fri Aug 22 2014" "Turbo" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tml::pow< tml::floating::number< S, E, M >, tml::integral_constant< T, V > > \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBpow_impl\fP"
+.br
+.ti -1c
+.RI "struct \fBpow_impl< positive, tml::integral_constant< T, 0 > >\fP"
+.br
+.ti -1c
+.RI "struct \fBpow_impl< tml::false_type, EXP >\fP"
+.br
+.in -1c
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "using \fBbase\fP = \fBtml::floating::number\fP< S, E, M >"
+.br
+.ti -1c
+.RI "using \fBexponent\fP = tml::integral_constant< T, V >"
+.br
+.ti -1c
+.RI "using \fBone\fP = tml::one< \fBbase\fP >"
+.br
+.ti -1c
+.RI "using \fBresult\fP = typename pow_impl< tml::sign< exponent >>::result"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<tml::floating::sign_t S, tml::floating::exponent_t E, tml::floating::mantissa_t M, typename T, T V>struct tml::pow< tml::floating::number< S, E, M >, tml::integral_constant< T, V > >"
+
+.PP
+Definition at line 503 of file float\&.hpp\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Turbo from the source code\&.

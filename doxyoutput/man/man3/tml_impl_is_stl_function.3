@@ -1,0 +1,36 @@
+.TH "tml::impl::is_stl_function< T >" 3 "Fri Aug 22 2014" "Turbo" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tml::impl::is_stl_function< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename U > static std::true_type \fBtest\fP (typename U::type *)"
+.br
+.ti -1c
+.RI "template<typename U > static std::false_type \fBtest\fP (\&.\&.\&.)"
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static constexpr bool \fBresult\fP = decltype( test<T>( nullptr ) )::value"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>struct tml::impl::is_stl_function< T >"
+
+.PP
+Definition at line 56 of file function\&.hpp\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Turbo from the source code\&.

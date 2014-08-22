@@ -1,0 +1,44 @@
+.TH "tml::floating::impl::decimal< NUMBER, DECIMALS >" 3 "Fri Aug 22 2014" "Turbo" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tml::floating::impl::decimal< NUMBER, DECIMALS > \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "using \fBnumber\fP = typename \fBinteger\fP< NUMBER >::result"
+.br
+.ti -1c
+.RI "using \fBdecimals_i\fP = tml::integral_constant< std::uint64_t, DECIMALS >"
+.br
+.ti -1c
+.RI "using \fBdecimals_f\fP = typename \fBinteger\fP< DECIMALS >::result"
+.br
+.ti -1c
+.RI "using \fBdigits\fP = tml::eval< \fBtml::add\fP< \fBtml::log10\fP< decimals_i >, tml::one< decimals_i >>>"
+.br
+.ti -1c
+.RI "using \fBdivisor\fP = tml::eval< \fBtml::pow\fP< typename \fBinteger\fP< 10 >::result, digits >>"
+.br
+.ti -1c
+.RI "using \fBdecimals_value\fP = tml::eval< \fBtml::div\fP< decimals_f, divisor >>"
+.br
+.ti -1c
+.RI "using \fBresult\fP = tml::eval< \fBtml::add\fP< number, decimals_value >>"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<std::int64_t NUMBER, std::uint64_t DECIMALS>struct tml::floating::impl::decimal< NUMBER, DECIMALS >"
+
+.PP
+Definition at line 566 of file float\&.hpp\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Turbo from the source code\&.

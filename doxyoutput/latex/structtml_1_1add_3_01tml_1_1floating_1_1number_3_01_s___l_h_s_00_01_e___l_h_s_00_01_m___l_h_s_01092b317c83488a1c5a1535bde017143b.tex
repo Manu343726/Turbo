@@ -1,0 +1,33 @@
+\hypertarget{structtml_1_1add_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01092b317c83488a1c5a1535bde017143b}{\section{tml\+:\+:add$<$ tml\+:\+:floating\+:\+:number$<$ S\+\_\+\+L\+H\+S, E\+\_\+\+L\+H\+S, M\+\_\+\+L\+H\+S $>$, tml\+:\+:floating\+:\+:number$<$ S\+\_\+\+R\+H\+S, E\+\_\+\+R\+H\+S, M\+\_\+\+R\+H\+S $>$ $>$\+:\+:adder$<$ m1, m2, tml\+:\+:floating\+:\+:sign\+\_\+t\+:\+:negative, tml\+:\+:floating\+:\+:sign\+\_\+t\+:\+:positive $>$ Struct Template Reference}
+\label{structtml_1_1add_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01092b317c83488a1c5a1535bde017143b}\index{tml\+::add$<$ tml\+::floating\+::number$<$ S\+\_\+\+L\+H\+S, E\+\_\+\+L\+H\+S, M\+\_\+\+L\+H\+S $>$, tml\+::floating\+::number$<$ S\+\_\+\+R\+H\+S, E\+\_\+\+R\+H\+S, M\+\_\+\+R\+H\+S $>$ $>$\+::adder$<$ m1, m2, tml\+::floating\+::sign\+\_\+t\+::negative, tml\+::floating\+::sign\+\_\+t\+::positive $>$@{tml\+::add$<$ tml\+::floating\+::number$<$ S\+\_\+\+L\+H\+S, E\+\_\+\+L\+H\+S, M\+\_\+\+L\+H\+S $>$, tml\+::floating\+::number$<$ S\+\_\+\+R\+H\+S, E\+\_\+\+R\+H\+S, M\+\_\+\+R\+H\+S $>$ $>$\+::adder$<$ m1, m2, tml\+::floating\+::sign\+\_\+t\+::negative, tml\+::floating\+::sign\+\_\+t\+::positive $>$}}
+}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structtml_1_1add_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01092b317c83488a1c5a1535bde017143b_a28553c41d3cdc437bf4ff98dc7257956}{using {\bfseries result} = \hyperlink{structtml_1_1floating_1_1number}{tml\+::floating\+::number}$<$ sign, result\+\_\+exponent, mantissa $>$}\label{structtml_1_1add_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01092b317c83488a1c5a1535bde017143b_a28553c41d3cdc437bf4ff98dc7257956}
+
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structtml_1_1add_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01092b317c83488a1c5a1535bde017143b_a371b229704f0ef79c32b50eaa7b82319}{static constexpr const \\*
+tml\+::floating\+::mantissa\+\_\+t {\bfseries mantissa} = (m1 $>$= m2) ? (m2 -\/ m1) \+: (m1 -\/ m2)}\label{structtml_1_1add_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01092b317c83488a1c5a1535bde017143b_a371b229704f0ef79c32b50eaa7b82319}
+
+\item 
+\hypertarget{structtml_1_1add_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01092b317c83488a1c5a1535bde017143b_aea3cb465245357a22c9c8ac7afc2f6a3}{static constexpr const auto {\bfseries sign} = (tml\+::floating\+::sign\+\_\+t)(m1 $<$ m2)}\label{structtml_1_1add_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01092b317c83488a1c5a1535bde017143b_aea3cb465245357a22c9c8ac7afc2f6a3}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$tml\+::floating\+::sign\+\_\+t S\+\_\+\+L\+H\+S, tml\+::floating\+::exponent\+\_\+t E\+\_\+\+L\+H\+S, tml\+::floating\+::mantissa\+\_\+t M\+\_\+\+L\+H\+S, tml\+::floating\+::sign\+\_\+t S\+\_\+\+R\+H\+S, tml\+::floating\+::exponent\+\_\+t E\+\_\+\+R\+H\+S, tml\+::floating\+::mantissa\+\_\+t M\+\_\+\+R\+H\+S$>$template$<$tml\+::floating\+::mantissa\+\_\+t m1, tml\+::floating\+::mantissa\+\_\+t m2$>$struct tml\+::add$<$ tml\+::floating\+::number$<$ S\+\_\+\+L\+H\+S, E\+\_\+\+L\+H\+S, M\+\_\+\+L\+H\+S $>$, tml\+::floating\+::number$<$ S\+\_\+\+R\+H\+S, E\+\_\+\+R\+H\+S, M\+\_\+\+R\+H\+S $>$ $>$\+::adder$<$ m1, m2, tml\+::floating\+::sign\+\_\+t\+::negative, tml\+::floating\+::sign\+\_\+t\+::positive $>$}
+
+
+
+Definition at line 321 of file float.\+hpp.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+blocks/manu343726/turbo\+\_\+computing/float.\+hpp\end{DoxyCompactItemize}

@@ -1,0 +1,26 @@
+.TH "tml::pow< tml::floating::number< S, E, M >, tml::integral_constant< T, V > >::pow_impl< positive, EXP >" 3 "Fri Aug 22 2014" "Turbo" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tml::pow< tml::floating::number< S, E, M >, tml::integral_constant< T, V > >::pow_impl< positive, EXP > \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "using \fBresult\fP = tml::eval< \fBtml::mul\fP< \fBbase\fP, typename pow_impl< tml::true_type, tml::integral_constant< T, EXP::value-1 >>::result >>"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<tml::floating::sign_t S, tml::floating::exponent_t E, tml::floating::mantissa_t M, typename T, T V>template<typename positive, typename EXP = exponent>struct tml::pow< tml::floating::number< S, E, M >, tml::integral_constant< T, V > >::pow_impl< positive, EXP >"
+
+.PP
+Definition at line 510 of file float\&.hpp\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Turbo from the source code\&.

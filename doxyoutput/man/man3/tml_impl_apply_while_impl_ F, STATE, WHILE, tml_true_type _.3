@@ -1,0 +1,39 @@
+.TH "tml::impl::apply_while_impl< F, STATE, WHILE, tml::true_type >" 3 "Fri Aug 22 2014" "Turbo" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tml::impl::apply_while_impl< F, STATE, WHILE, tml::true_type > \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "using \fBnext_state\fP = tml::eval< F, STATE >"
+.br
+.ti -1c
+.RI "using \fBcontinue_running\fP = tml::eval< WHILE, next_state, STATE >"
+.br
+.ti -1c
+.RI "using \fBresult\fP = typename \fBapply_while_impl\fP< F, next_state, WHILE, continue_running >::result"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTURBO_ENSURE_ALGEBRAIC_EVAL\fP (result)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename F, typename STATE, typename WHILE>struct tml::impl::apply_while_impl< F, STATE, WHILE, tml::true_type >"
+
+.PP
+Definition at line 84 of file algorithm\&.hpp\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Turbo from the source code\&.

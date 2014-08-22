@@ -7,21 +7,41 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/float.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/chameleon.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/main.cpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/control_structures.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/to_runtime.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/warning.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/integral.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/impl/CPP_META_MACROS.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/algorithm.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/algebra.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/eval.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/enable_if.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/function.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/utility.hpp</file>
-            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/math.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_utils/illformed_call.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/let_expressions.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/control_structures.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/function_alias_decl.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_computing/fixed_point.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/integral.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/placeholders.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/list.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/type_traits.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/to_string.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/chameleon.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/function.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/placeholder_lists.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/runtime_chameleon.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/bind.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/iterator.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/eval.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/integral_iterators.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/algorithm.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/curry.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_utils/assert.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/runtime_placeholders.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/enable_if.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/high_order_functions.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/lambda.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/lazy.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/math.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/algebra.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/list_algorithms.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_main/main.cpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/integral_lists.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/turbo_core.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_utils/utility.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_core/to_runtime.hpp</file>
+            <file>file:/home/manu343726/Dropbox/PROYECTOS/C_C++/Turbo/blocks/manu343726/turbo_computing/float.hpp</file>
         </group>
     </open-files>
 </project-private>

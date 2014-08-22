@@ -1,0 +1,41 @@
+\hypertarget{structtml_1_1floating_1_1impl_1_1parse__float}{\section{tml\+:\+:floating\+:\+:impl\+:\+:parse\+\_\+float$<$ C\+H\+A\+R\+S $>$ Struct Template Reference}
+\label{structtml_1_1floating_1_1impl_1_1parse__float}\index{tml\+::floating\+::impl\+::parse\+\_\+float$<$ C\+H\+A\+R\+S $>$@{tml\+::floating\+::impl\+::parse\+\_\+float$<$ C\+H\+A\+R\+S $>$}}
+}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structtml_1_1floating_1_1impl_1_1parse__float_ac60b586687c0965aea6044931ca6dc2d}{using {\bfseries input} = \hyperlink{structtml_1_1list}{tml\+::character\+\_\+list}$<$ C\+H\+A\+R\+S...$>$}\label{structtml_1_1floating_1_1impl_1_1parse__float_ac60b586687c0965aea6044931ca6dc2d}
+
+\item 
+\hypertarget{structtml_1_1floating_1_1impl_1_1parse__float_af68640bf1a7f113b00414293c2190cc2}{using {\bfseries initial\+\_\+parsing\+\_\+state} = \hyperlink{structtml_1_1floating_1_1impl_1_1parsing__data}{parsing\+\_\+data}$<$ float\+\_\+parsing\+\_\+state\+::reading\+\_\+sign, 0, 0, 0, 0 $>$}\label{structtml_1_1floating_1_1impl_1_1parse__float_af68640bf1a7f113b00414293c2190cc2}
+
+\item 
+\hypertarget{structtml_1_1floating_1_1impl_1_1parse__float_a0fa29ecf6fc0d676e2f7578febde9751}{using {\bfseries parse\+\_\+result} = tml\+::foldl$<$ \hyperlink{structtml_1_1lazy}{tml\+::lazy}$<$ \hyperlink{structtml_1_1floating_1_1impl_1_1parse}{parse} $>$, \hyperlink{structtml_1_1floating_1_1impl_1_1parsing__data}{initial\+\_\+parsing\+\_\+state}, \hyperlink{structtml_1_1list}{input} $>$}\label{structtml_1_1floating_1_1impl_1_1parse__float_a0fa29ecf6fc0d676e2f7578febde9751}
+
+\item 
+\hypertarget{structtml_1_1floating_1_1impl_1_1parse__float_a5977c59dfaccf62e439cec1e2f4f66b9}{{\footnotesize template$<$std\+::int64\+\_\+t i$>$ }\\using {\bfseries integer} = typename \hyperlink{structtml_1_1floating_1_1impl_1_1integer}{tml\+::floating\+::impl\+::integer}$<$ i $>$\+::result}\label{structtml_1_1floating_1_1impl_1_1parse__float_a5977c59dfaccf62e439cec1e2f4f66b9}
+
+\item 
+\hypertarget{structtml_1_1floating_1_1impl_1_1parse__float_a62fa2ec7fbce4f8f974b5731b6fb55eb}{using {\bfseries integer\+\_\+part} = integer$<$ parse\+\_\+result\+::integer\+\_\+part $>$}\label{structtml_1_1floating_1_1impl_1_1parse__float_a62fa2ec7fbce4f8f974b5731b6fb55eb}
+
+\item 
+\hypertarget{structtml_1_1floating_1_1impl_1_1parse__float_acb8bb1c74d235b503fb10638a9a8f825}{using {\bfseries decimals} = integer$<$ parse\+\_\+result\+::decimals $>$}\label{structtml_1_1floating_1_1impl_1_1parse__float_acb8bb1c74d235b503fb10638a9a8f825}
+
+\item 
+\hypertarget{structtml_1_1floating_1_1impl_1_1parse__float_abebfb81054e378d1baa7e47f9c98984d}{using {\bfseries bias} = tml\+::integral\+\_\+constant$<$ std\+::int64\+\_\+t,(std\+::int64\+\_\+t)(parse\+\_\+result\+::heading\+\_\+zeros+parse\+\_\+result\+::decimals\+\_\+count)$>$}\label{structtml_1_1floating_1_1impl_1_1parse__float_abebfb81054e378d1baa7e47f9c98984d}
+
+\item 
+\hypertarget{structtml_1_1floating_1_1impl_1_1parse__float_a47b3aca0afa00a61a15eccc18bb4227f}{using {\bfseries heading\+\_\+zero\+\_\+bias} = tml\+::eval$<$ \hyperlink{structtml_1_1pow}{tml\+::pow}$<$ integer$<$ 10 $>$, bias $>$$>$}\label{structtml_1_1floating_1_1impl_1_1parse__float_a47b3aca0afa00a61a15eccc18bb4227f}
+
+\item 
+\hypertarget{structtml_1_1floating_1_1impl_1_1parse__float_a7a8c1c3093ef6f7f108ee001da8a305c}{using {\bfseries decimals\+\_\+value} = tml\+::eval$<$ \hyperlink{structtml_1_1div}{tml\+::div}$<$ decimals, heading\+\_\+zero\+\_\+bias $>$$>$}\label{structtml_1_1floating_1_1impl_1_1parse__float_a7a8c1c3093ef6f7f108ee001da8a305c}
+
+\item 
+\hypertarget{structtml_1_1floating_1_1impl_1_1parse__float_aee2735aec0ab24e0d972fc71da948adf}{using {\bfseries result} = tml\+::eval$<$ \hyperlink{structtml_1_1add}{tml\+::add}$<$ integer\+\_\+part, decimals\+\_\+value $>$$>$}\label{structtml_1_1floating_1_1impl_1_1parse__float_aee2735aec0ab24e0d972fc71da948adf}
+
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+float.\+hpp\end{DoxyCompactItemize}

@@ -1,0 +1,32 @@
+.TH "tml::floating::impl::decimal_sci< MANTISSA, EXPONENT >" 3 "Fri Aug 22 2014" "Turbo" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tml::floating::impl::decimal_sci< MANTISSA, EXPONENT > \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "using \fBmantissa_value\fP = typename \fBinteger\fP< MANTISSA >::result"
+.br
+.ti -1c
+.RI "using \fBexponent_value\fP = tml::eval< \fBtml::pow\fP< typename \fBinteger\fP< 10 >::result, tml::integral_constant< std::int64_t, EXPONENT >>>"
+.br
+.ti -1c
+.RI "using \fBresult\fP = tml::eval< \fBtml::mul\fP< mantissa_value, exponent_value >>"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<std::int64_t MANTISSA, std::int64_t EXPONENT>struct tml::floating::impl::decimal_sci< MANTISSA, EXPONENT >"
+
+.PP
+Definition at line 599 of file float\&.hpp\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Turbo from the source code\&.

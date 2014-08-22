@@ -1,0 +1,33 @@
+.TH "tml::less_than< tml::floating::number< S_LHS, E_LHS, M_LHS >, tml::floating::number< S_RHS, E_RHS, M_RHS > >" 3 "Fri Aug 22 2014" "Turbo" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tml::less_than< tml::floating::number< S_LHS, E_LHS, M_LHS >, tml::floating::number< S_RHS, E_RHS, M_RHS > > \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "using \fBresult\fP = tml::Bool<(S_LHS==S_RHS)?unsigned_result:((bool) S_LHS &&!(bool) S_RHS)?false:true >"
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static constexpr const bool \fBunsigned_result\fP = E_LHS < E_RHS || ( E_LHS == E_RHS && M_LHS < M_RHS )"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<tml::floating::sign_t S_LHS, tml::floating::exponent_t E_LHS, tml::floating::mantissa_t M_LHS, tml::floating::sign_t S_RHS, tml::floating::exponent_t E_RHS, tml::floating::mantissa_t M_RHS>struct tml::less_than< tml::floating::number< S_LHS, E_LHS, M_LHS >, tml::floating::number< S_RHS, E_RHS, M_RHS > >"
+
+.PP
+Definition at line 231 of file float\&.hpp\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for Turbo from the source code\&.

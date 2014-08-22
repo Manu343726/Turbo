@@ -1,0 +1,38 @@
+\hypertarget{structtml_1_1reciprocal_3_01tml_1_1floating_1_1number_3_01_s_00_01_e_00_01_m_01_4_01_4}{\section{tml\+:\+:reciprocal$<$ tml\+:\+:floating\+:\+:number$<$ S, E, M $>$ $>$ Struct Template Reference}
+\label{structtml_1_1reciprocal_3_01tml_1_1floating_1_1number_3_01_s_00_01_e_00_01_m_01_4_01_4}\index{tml\+::reciprocal$<$ tml\+::floating\+::number$<$ S, E, M $>$ $>$@{tml\+::reciprocal$<$ tml\+::floating\+::number$<$ S, E, M $>$ $>$}}
+}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structtml_1_1reciprocal_3_01tml_1_1floating_1_1number_3_01_s_00_01_e_00_01_m_01_4_01_4_ad36a3d65efbcc494e1e47971265a870c}{using {\bfseries N} = \hyperlink{structtml_1_1floating_1_1number}{tml\+::floating\+::number}$<$ S, E, M $>$}\label{structtml_1_1reciprocal_3_01tml_1_1floating_1_1number_3_01_s_00_01_e_00_01_m_01_4_01_4_ad36a3d65efbcc494e1e47971265a870c}
+
+\item 
+\hypertarget{structtml_1_1reciprocal_3_01tml_1_1floating_1_1number_3_01_s_00_01_e_00_01_m_01_4_01_4_a4c4b6d15a07322bd2aff7c539e42bcee}{using {\bfseries one} = tml\+::one$<$ \hyperlink{structtml_1_1floating_1_1number}{tml\+::floating\+::number}$<$ \+\_\+\+\_\+, \+\_\+\+\_\+, \+\_\+\+\_\+ $>$$>$}\label{structtml_1_1reciprocal_3_01tml_1_1floating_1_1number_3_01_s_00_01_e_00_01_m_01_4_01_4_a4c4b6d15a07322bd2aff7c539e42bcee}
+
+\item 
+\hypertarget{structtml_1_1reciprocal_3_01tml_1_1floating_1_1number_3_01_s_00_01_e_00_01_m_01_4_01_4_a3b51f18ae825c70babf4e9fb6cf0e75f}{using {\bfseries two} = \hyperlink{structtml_1_1floating_1_1number}{tml\+::floating\+::number}$<$ tml\+::floating\+::sign\+\_\+t\+::positive,-\/30, 0x80000000 $>$}\label{structtml_1_1reciprocal_3_01tml_1_1floating_1_1number_3_01_s_00_01_e_00_01_m_01_4_01_4_a3b51f18ae825c70babf4e9fb6cf0e75f}
+
+\item 
+\hypertarget{structtml_1_1reciprocal_3_01tml_1_1floating_1_1number_3_01_s_00_01_e_00_01_m_01_4_01_4_a58b15d0438fef83616e4f9f16f88b87b}{using {\bfseries guess\+\_\+divisor} = tml\+::floating\+::normalize$<$ \hyperlink{structtml_1_1floating_1_1number}{N}, tml\+::size\+\_\+t$<$ 15 $>$$>$}\label{structtml_1_1reciprocal_3_01tml_1_1floating_1_1number_3_01_s_00_01_e_00_01_m_01_4_01_4_a58b15d0438fef83616e4f9f16f88b87b}
+
+\item 
+\hypertarget{structtml_1_1reciprocal_3_01tml_1_1floating_1_1number_3_01_s_00_01_e_00_01_m_01_4_01_4_ac4e2b0db8bee612a06334934693b072c}{using {\bfseries guess} = \hyperlink{structtml_1_1floating_1_1number}{tml\+::floating\+::number}$<$ S,-\/guess\+\_\+divisor\+::exponent-\/31, M/guess\+\_\+divisor\+::mantissa $>$}\label{structtml_1_1reciprocal_3_01tml_1_1floating_1_1number_3_01_s_00_01_e_00_01_m_01_4_01_4_ac4e2b0db8bee612a06334934693b072c}
+
+\item 
+\hypertarget{structtml_1_1reciprocal_3_01tml_1_1floating_1_1number_3_01_s_00_01_e_00_01_m_01_4_01_4_a84713b83f70c7ec03def141c3f482aaf}{using {\bfseries result} = tml\+::apply\+\_\+for$<$ tml\+::lambda$<$ \hyperlink{structtml_1_1placeholder}{\+\_\+1}, \hyperlink{structtml_1_1placeholder}{\+\_\+2}, \hyperlink{structtml_1_1mul}{tml\+::mul}$<$ \hyperlink{structtml_1_1placeholder}{\+\_\+1}, \hyperlink{structtml_1_1sub}{tml\+::sub}$<$ \hyperlink{structtml_1_1floating_1_1number}{two}, \hyperlink{structtml_1_1mul}{tml\+::mul}$<$ \hyperlink{structtml_1_1floating_1_1number}{N}, \hyperlink{structtml_1_1placeholder}{\+\_\+1} $>$$>$$>$ $>$, \hyperlink{structtml_1_1floating_1_1number}{guess}, tml\+::size\+\_\+t$<$ 0 $>$, tml\+::size\+\_\+t$<$ tml\+::util\+::sizeof\+\_\+bits$<$ tml\+::floating\+::mantissa\+\_\+t $>$\+::value/4 $>$$>$}\label{structtml_1_1reciprocal_3_01tml_1_1floating_1_1number_3_01_s_00_01_e_00_01_m_01_4_01_4_a84713b83f70c7ec03def141c3f482aaf}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$tml\+::floating\+::sign\+\_\+t S, tml\+::floating\+::exponent\+\_\+t E, tml\+::floating\+::mantissa\+\_\+t M$>$struct tml\+::reciprocal$<$ tml\+::floating\+::number$<$ S, E, M $>$ $>$}
+
+
+
+Definition at line 364 of file float.\+hpp.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+blocks/manu343726/turbo\+\_\+computing/float.\+hpp\end{DoxyCompactItemize}

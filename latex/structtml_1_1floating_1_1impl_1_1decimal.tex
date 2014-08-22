@@ -1,0 +1,32 @@
+\hypertarget{structtml_1_1floating_1_1impl_1_1decimal}{\section{tml\+:\+:floating\+:\+:impl\+:\+:decimal$<$ N\+U\+M\+B\+E\+R, D\+E\+C\+I\+M\+A\+L\+S $>$ Struct Template Reference}
+\label{structtml_1_1floating_1_1impl_1_1decimal}\index{tml\+::floating\+::impl\+::decimal$<$ N\+U\+M\+B\+E\+R, D\+E\+C\+I\+M\+A\+L\+S $>$@{tml\+::floating\+::impl\+::decimal$<$ N\+U\+M\+B\+E\+R, D\+E\+C\+I\+M\+A\+L\+S $>$}}
+}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structtml_1_1floating_1_1impl_1_1decimal_a68be11021de2f5a8b2070b7ab4fe61ca}{using {\bfseries number} = typename \hyperlink{structtml_1_1floating_1_1impl_1_1integer}{integer}$<$ N\+U\+M\+B\+E\+R $>$\+::result}\label{structtml_1_1floating_1_1impl_1_1decimal_a68be11021de2f5a8b2070b7ab4fe61ca}
+
+\item 
+\hypertarget{structtml_1_1floating_1_1impl_1_1decimal_a23741aa6ab63f0d2710e198869d94334}{using {\bfseries decimals\+\_\+i} = tml\+::integral\+\_\+constant$<$ std\+::uint64\+\_\+t, D\+E\+C\+I\+M\+A\+L\+S $>$}\label{structtml_1_1floating_1_1impl_1_1decimal_a23741aa6ab63f0d2710e198869d94334}
+
+\item 
+\hypertarget{structtml_1_1floating_1_1impl_1_1decimal_a0fc68c7b5d1565e405376a4ed8b42f29}{using {\bfseries decimals\+\_\+f} = typename \hyperlink{structtml_1_1floating_1_1impl_1_1integer}{integer}$<$ D\+E\+C\+I\+M\+A\+L\+S $>$\+::result}\label{structtml_1_1floating_1_1impl_1_1decimal_a0fc68c7b5d1565e405376a4ed8b42f29}
+
+\item 
+\hypertarget{structtml_1_1floating_1_1impl_1_1decimal_ade56bd1a7d1c9795fcea70d28284fe92}{using {\bfseries digits} = tml\+::eval$<$ \hyperlink{structtml_1_1add}{tml\+::add}$<$ \hyperlink{structtml_1_1log10}{tml\+::log10}$<$ decimals\+\_\+i $>$, tml\+::one$<$ decimals\+\_\+i $>$$>$$>$}\label{structtml_1_1floating_1_1impl_1_1decimal_ade56bd1a7d1c9795fcea70d28284fe92}
+
+\item 
+\hypertarget{structtml_1_1floating_1_1impl_1_1decimal_ac7654d902d2e81d17d8c84494decf34e}{using {\bfseries divisor} = tml\+::eval$<$ \hyperlink{structtml_1_1pow}{tml\+::pow}$<$ typename \hyperlink{structtml_1_1floating_1_1impl_1_1integer}{integer}$<$ 10 $>$\+::result, digits $>$$>$}\label{structtml_1_1floating_1_1impl_1_1decimal_ac7654d902d2e81d17d8c84494decf34e}
+
+\item 
+\hypertarget{structtml_1_1floating_1_1impl_1_1decimal_ab870e1dbdd306bdb31365395ff435c97}{using {\bfseries decimals\+\_\+value} = tml\+::eval$<$ \hyperlink{structtml_1_1div}{tml\+::div}$<$ decimals\+\_\+f, divisor $>$$>$}\label{structtml_1_1floating_1_1impl_1_1decimal_ab870e1dbdd306bdb31365395ff435c97}
+
+\item 
+\hypertarget{structtml_1_1floating_1_1impl_1_1decimal_a19fcb26551cba54b91351e003259e19f}{using {\bfseries result} = tml\+::eval$<$ \hyperlink{structtml_1_1add}{tml\+::add}$<$ number, decimals\+\_\+value $>$$>$}\label{structtml_1_1floating_1_1impl_1_1decimal_a19fcb26551cba54b91351e003259e19f}
+
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+float.\+hpp\end{DoxyCompactItemize}

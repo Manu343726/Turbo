@@ -1,0 +1,1066 @@
+.TH "md__r_e_a_d_m_e" 3 "Fri Aug 22 2014" "Turbo" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+md__r_e_a_d_m_e \- Turbo [![Build Status](https://travis-ci.org/Manu343726/Turbo.svg?branch=reboot)](https://travis-ci.org/Manu343726/Turbo) 
+\fIC++11 metaprogramming library\fP
+.PP
+.SS "What is Turbo?"
+.PP
+Turbo is a library dessigned to provide compile-time utilities through \fCtemplate metaprogramming\fP\&.
+.PP
+One of the key points of C++, and where its expresiveness power comes from, is its ability to define new language constructs and/or customize existing constructs, all leading in a simple and clear syntax (See for example DSELs)\&.
+.PP
+But when dealing with the creation and/or manipulation of such constructs, nothing is simple nor clear\&. Template-meta-programming is powerfull, but suffers from a horrible syntax and the lack of high-level (meta)programming features\&. Some people claim that tmp seems like a compile-time pure functional language built inside C++ itself\&. But instead metaprogramming in C++ is more like a functional language with the worst syntax ever made (Despite LISP?)\&.
+.PP
+This library aims to provide high-level constructs to aid with the \fBmanipulation of the C++ type system\fP, and the creation and execution of \fBcomplex computations at compile-time\fP; all with a clear and uniform syntax\&. Also the library takes advantage of such features and provides some usefull C++ (runtime) utilities, which are easy to implement thanks to Turbo\&.
+.PP
+.SS "What about Boost\&.MPL?"
+.PP
+\fCBoost\&.MPL\fP is the de facto metaprogramming library for C++\&. But it suffers from two main problems which, in my oppinion, makes difficult to work with it:
+.PP
+.IP "\(bu" 2
+\fBIs Boost\fP: The Boost libraries are one of the best C++ libraries in the world, but they base the implementation of their features on many many tricks they implemented (See Boost\&.Preprocessor, for example)\&. The problem with Boost is that making a project depend on the Boost libraries could be a problem, its a huge library\&. My intention was to rely on standard features only, that is, something which works perfectly providing a C++11 compliant compiler only\&.
+.IP "\(bu" 2
+\fBBoost\&.MPL was designed on the C++98 era\fP: C++11 is like a reboot of the language, and like in other parts of the language, metaprogramming in C++11 is far easier than in C++98/03\&. The problem is that MPL was written for/using C++98/03 and its design is based in some cumbersome constructs which have been cleared and/or simplified a lot in C++11\&. Specifically, template aliases are a huge advantage when doing template-meta-programming, and the Turbo library relies on that in all of its features\&.
+.PP
+.PP
+.SS "Features"
+.PP
+At this time (April 2014) the library is being completely rewritten from scratch\&. The initial implementation suffers from some scalability issues due to problems (Bad design decissions?) on the base design and modules of the library\&.
+.PP
+To solve that problems, the library was completly redesigned, focusing the implementation on high-order metaprogramming facilities to make developing new features easy, and reduce (Avoid, if possible=) coupling on different features of the library\&.
+.PP
+The reimplementation of the library is being developed at the \fC`reboot` branch\fP\&. Its (currently) focused in a simple set of high-order features:
+.PP
+.SS "Uniform expression evaluation facilities"
+.PP
+The goal is to create a way to evaluate any kind of expression the library could work with\&. By convention, this library works with types only\&. There are no templates with value parameters, basic values are provided through boxing using wrappers like \fCstd::integral_constant\fP\&. \fINote that this is not required inside the implementation itself\fP\&. So an expression could be:
+.IP "1." 4
+A simple value (Like \fCint\fP)\&.
+.IP "2." 4
+A \fIparametrized-expression\fP: A parametrized expression is just an expression composed from a set of components\&. Because this is a template metaprogramming library, the way to build expressions is through templates\&. So a parametrized expressions refers to any kind of template\&.
+.IP "3." 4
+A \fIfunctional expression\fP: This is a type of parametrized expression dessigned to return a value from a set of parameters\&. That is, a function\&. This library assumes that any expression with a \fCresult\fP type member is a function\&.
+.PP
+.PP
+``` cpp //A simple expression using e1 = int; //e1 is a simple expression
+.PP
+//A functional expression using e2 = tml::function<int>; //e2 is a functional expression
+.PP
+//A more complex expression (A functional expression) using e3 = tml::transform<tml::list<int,float,double>,tml::size_of<_1>>; ```
+.PP
+To evaluate an expression, one should evaluate the entire set of parameters of a parametrized expression, and return the result if the expression is a functional expression\&. Thats what \fCtml::eval\fP is dessigned for:
+.PP
+``` cpp //Just a simple identity metafunction: template<typename T> struct identity { using result = T; };
+.PP
+using expression = identity<int>; using result = tml::eval<expression>; //Compute the result of evaluating the expression\&. using result = tml::eval<identity<identity<int>>>; //result is int ```
+.PP
+Also, \fCtml::eval\fP could be used to take an expression and evaluate it with a new set of argumments\&. Following with the example above: 
+.PP
+.nf
+using binded = tml::eval<identity<int>,float>; //We evaluate identity<> with float instead of int as parameter
+
+.fi
+.PP
+.PP
+Or one could fill the expression with placeholders and evaluate the expression later when the argumments are aviable (Lazy evaluation): 
+.PP
+.nf
+using expression = f<_1,_2,_3>; //_1,_2, and _3 are placeholders
+...
+using result = tml::eval<expression,float,int,double>;
+
+.fi
+.PP
+.PP
+Because the library wrks with types only, lazy evaluation of metafunctions should be done filling the metafunction with placeholders to properly instantiate it (See the example above)\&. Turbo provides the \fC\fBtml::lazy\fP\fP template, dessigned to take a template parameter storing it, making possible to instantiate the template later: 
+.PP
+.nf
+using t = tml::lazy<tml::function>; //t stores a tml::function metafunction
+using instance = tml::lazy_instance<t,int>; //instance is tml::function<int>
+
+.fi
+.PP
+.PP
+Also \fC\fBtml::lazy\fP\fP could be used to do lazy evaluation of metafunctions\&. For example: 
+.PP
+.nf
+using t = tml::lazy<tml::function>;
+using result = tml::eval<t,int>; //Result is int (The result of evaluating tml::function<int>)
+
+.fi
+.PP
+.PP
+Finally \fCtml::eval\fP abuses of function types and specializes itself to handle function types like \fCF(ARGS\&.\&.\&.)\fP as a metafunction call, where \fCF\fP is a functional expression: 
+.PP
+.nf
+using F = tml::lambda<_1 , tml::add<_1,_1>>;
+using i = tml::Int<1>;
+
+using r = tml::eval<F(i)>;
+
+.fi
+.PP
+.PP
+For more information see the documentation inside \fC\fBeval\&.hpp\fP\fP\&.
+.PP
+.SS "Haskell-like let expressions"
+.PP
+\fCtml::eval\fP allows you to evaluate an exsisting expression with other argumments, but it hasn't enought power to be usable in all situations\&. For example, \fCtml::eval\fP only binds parameters of the main scope, so an expression with nested parametrized expressions can only be reevaluated specifying the most enclosing parameter (See the tml::eval binding examples above)\&.
+.PP
+Turbo probides \fCtml::let\fP, a high-order metafunction similar to haskell's \fClet\fP Its purpose is to subsitute a value on an expression, given an specifiec variable to bind the value with: 
+.PP
+.nf
+struct X{}; //A "variable"
+
+using expression = tml::let<X,int,tml::function<X>>; // expression is "tml::function<int>"
+
+.fi
+.PP
+.PP
+The power of let comes from its ability to parse the entire expression recursively, subsituting all ocurrences of the variable with the specified value: 
+.PP
+.nf
+using expression = tml::let<X,float,f<X,int,tml::function<g<X,X>>>>; //Expression is f<float,int,tml::function<g<float,float>>>
+
+.fi
+.PP
+.PP
+Finally, Turbo extends that concept providing the \fCtml::multi_let\fP template, a template dessigned as a let of multiple variables: 
+.PP
+.nf
+using expression = tml::multi_let<X,Y,Z, //variables
+                                  int,char,double, //values
+                                  f<X,g<Y,Z>> //expression
+                                 >;
+
+.fi
+.PP
+.PP
+\fCtml::multi_let\fP works currifying the multiple variable let into a chain of nested \fCtml::let\fP expressions\&.
+.PP
+.SS "Lambda expressions:"
+.PP
+The ability of substituting a value in an expression provided by \fCtml::let\fP makes possible to create lambda expressions without any special effort\&. Turbo provides the \fCtml::lambda\fP template: 
+.PP
+.nf
+//Gets a list with the sizes of the specified types
+using result = tml::transform<tml::lambda<_1,tml::size_of<_1>>,tml::list<float,int,double>>;
+
+.fi
+.PP
+.PP
+Multiple-variable lambda expressions are provided too: 
+.PP
+.nf
+//Returns true if at least one element of the SEQUENCE evaluates the predicate P to true
+template<typename P , typename SEQUENCE>
+using any_of = tml::foldl<tml::multi_lambda<_1,_2 , tml::logical_or<_1,tml::eval<P,_2>>>,SEQUENCE>;
+
+.fi
+.PP
+.PP
+.SS "High-order algorithms\&. Lists and iterators:"
+.PP
+Turbo implements a set of high-order metafunctions as algorithms provided by the \fC\fBalgorithm\&.hpp\fP\fP header\&. Those algorithms mimic the most common functional high-order functions to provide building blocks for the rest of the library: 
+.PP
+.nf
+//Compute the adition of a set of numbers at compile-time
+template<typename... Ns>
+using sum = tml::foldl<tml::lambda<_1,_2 , tml::add<_1,_2>>,tml::zero,tml::list<Ns...>>;
+
+.fi
+.PP
+.PP
+Turbo is a C++ library, but since template-meta-programming seems like a functional language, Turbo takes inspiration from functional languages such as Haskell\&. For algorithms, C++ uses an iterator approach, when Haskell uses lists instead\&. Both approaches has advantages and cons, so what approach we should use?
+.PP
+Turbo doesn't choose between, instead implements both using exactly the same interface! Turbo algorithms are designed to work with sequences, and that sequences could be represented via typelists (\fC\fBtml::list\fP\fP) or iterators: 
+.PP
+.nf
+using numbers = tml::integer_list<1,2,3,4,5>;
+
+using squared = tml::map<tml::lambda<_1 , tml::mul<_1,_1>>,numbers>;
+using squared = tml::map<tml::lambda<_1 , tml::mul<_1,_1>>,tml::begin<numbers>,tml::end<numbers>>;
+
+.fi
+.PP
+.PP
+The library provides the header \fC\fBiterator\&.hpp\fP\fP, which implements metafunctions for iterators manipulation, such as \fCtml::begin\fP, \fCtml::end\fP , \fCtml::rbegin\fP, \fCtml::next\fP , \fCtml::deref\fP , etc\&. The header provides the declaration of the metafunctions, aliases, and the implementation metafunctions, all ready to be highly customizable by the user\&. This allows to write iterator-ready custom types specializing a small set of metafunctions only\&. When its done, everything automagically works!
+.PP
+By default Turbo provides an iterator implementation for typelists (See the example above) and integral values (See the \fCnumeric_iterators\&.hpp\fP header): 
+.PP
+.nf
+//Returns a list filled with the numbers on the interval [begin,end)
+template<int begin , int end>
+using integer_range = tml::map<tml::function<_>,
+                               tml::forward_iterators::make_int<begin>,
+                               tml::forward_iterators::make_int<end>
+                              >;
+
+.fi
+.PP
+.PP
+.SS "TMP-aware static asserting:"
+.PP
+The standard \fCstatic_assert()\fP expects a boolean value as asserting condition\&. In mostly situations (Even using the Standard Library metaprogramming facilities only) that condition comes in the form of a boolean type (Like \fCstd::integral_constant<bool,true>\fP)\&. Turbo implements the macro \fCTURBO_ASSERT()\fP which is dessigned to work with such types without needing to extract the value via the \fC::value\fP member: 
+.PP
+.nf
+TURBO_ASSERT( (std::is_integral<int>) , "What happened????" );
+
+.fi
+.PP
+.PP
+.SS "Compilation-time static warning:"
+.PP
+The only standard way to throw warnings during compilation is the \fC#warning\fP macro\&. But this warnings are checked during preprocessing time, and what a C++ (meta)programmer needs is a way to generate warnings depending on compile-time values and/or templates\&.
+.PP
+Turbo implements a \fCSTATIC_WARNING()\fP macro, which generates a warning at template instantation phase\&. This feature is based in a \fCdeprecated\fP attribute trick, which will be standard in C++14\&. At this time, Turbo uses compiler-specific attributes\&.
+.PP
+.SS "Uniform multiple-SFINAE facilities:"
+.PP
+The Standard template to do SFINAE, \fCstd::enable_if\fP, disables the instantation of a template if a certain boolean condition is not guaranteed\&. As in the \fCstatic_assert()\fP case explained above, \fCstd::enable_if\fP expects a boolean value as condition\&. Also, the member type \fC::type\fP of \fCstd::enable_if\fP should be explicitly referenced via the common and cumbersome \fCtypename ::type\fP construction\&.
+.PP
+Turbo provides the macros \fCTURBO_ENABLE_IF()\fP and \fCTURBO_DISABLE_IF()\fP, which makes SFINAE clean and easy\&. For example: 
+.PP
+.nf
+template<typename T , typename SFINAE_FLAG = tml::sfinae_result>
+struct f;
+
+template<typename T>
+struct f<T , TURBO_ENABLE_IF( std::is_floating_point<T> )>
+{};
+
+.fi
+.PP
+.PP
+There are cases where a template should be enabled/disabled depending in many conditions\&. This could be achieved passing a complex boolean expression to \fCstd::enable_if\fP (Or \fCTURBO_ENABLE/DISABLE_IF()\fP)\&. Instead Turbo implements a so-called \fIsfinae container\fP, that is, a template dessigned to store multiple SFINAE entities like \fCstd::enable_if\fP and behave itself as a big \fCenable_if\fP\&. That template is enabled (ie declares a \fC::type\fP member) if and only if all the SFINAE entities passed are enabled\&.
+.PP
+Also Turbo provies some macros, \fCTURBO_SFINAE_ALL()\fP , \fCTURBO_SFINAE_ANY()\fP, \fCENABLE_IF()\fP, and \fCDISABLE_IF()\fP to build such sfinae containers easily\&. The combination of these features makes possible to write multiple-condition SFINAE expressions in a clear and concise syntax: 
+.PP
+.nf
+//Following with the f example above, now we define another f specialization:
+
+template<typename T>
+struct f<T , TURBO_SFINAE_ALL( DISABLE_IF( std::is_floating_point<T> ),
+                               ENABLE_IF( std::is_default_constructible<T>)
+                             )>
+{
+
+};
+
+.fi
+.PP
+.PP
+.SS "Runtime access to compile-time computations via the \fCtml::to_runtime<T>()\fP function:"
+.PP
+The function \fCtml::to_runtime<T>()\fP returns a runtime constant equivalent to the spefied compile-time value \fCT\fP\&. Its dessigned to provide a clear interface between the compile-time and runtime sides of a program\&. For example: 
+.PP
+.nf
+//Compute the range of ints [10,20) at compile-time
+using numbers = tml::integer_range<10,20>;
+
+//Print that numbers at runtime:
+for( int i : tml::to_runtime<numbers>() )
+    std::cout << i << " ";
+
+.fi
+.PP
+.PP
+.RS 4
+10 11 12 13 14 15 16 17 18 19 
+.RE
+.PP
+.PP
+.SS "Compile-time floating-point arithmetic:"
+.PP
+Turbo implements its own floating-point type to perform compile-time computations\&. The implementation doesn't follow any specific standard (i\&.e\&. IEEE 754), its only a working (on\&.\&.\&.) implementation with the following characteristics:
+.PP
+.IP "\(bu" 2
+32 bit mantissa with no implicit extra 1 (The mantissa is 32 bits wide, and the precission of the resulting number is 32 bits too\&. Thats done to simplify debugging)\&.
+.IP "\(bu" 2
+16 bit exponent\&.
+.PP
+.PP
+``` cpp using one = \fBtml::floating::number\fP<tml::floating::sign_t::positive , -31 , 0x80000000>; using two = tml::eval<tml::add<one,one>>; //two is [+|-30|0x80000000] using three = tml::eval<tml::add<one,two>>; //three is [+|-30|0xC0000000] ```
+.PP
+Several metafunction are provided for easy initialization of floating-point values:
+.PP
+```cpp using two = tml::floating::integer<2>; using sqrt_two = tml::eval<tml::sqrt<two>>; using pi = tml::floating::decimal<3,141592654>;
+.PP
+int main() { std::cout << tml::to_string<two>() << std::endl << tml::to_runtime<two>() << std::endl;
+.PP
+std::cout << tml::to_string<sqrt_two>() << std::endl << tml::to_runtime<sqrt_two>() << std::endl;
+.PP
+std::cout << tml::to_string<pi>() << std::endl << tml::to_runtime<pi>() << std::endl; } ```
+.PP
+.RS 4
+[+|-30|10000000000000000000000000000000] 2 [+|-31|10110101000001001111001100110110] 1\&.41421 [+|-30|11001001000011111101101010100010] 3\&.14159 
+.RE
+.PP
+.PP
+The library is designed to do all the required computations at compile-time with zero runtime overhead when using the resutls\&. That means the floating-point values (Actually stored as \fCdouble\fPs on the runtime side) should be completely aviable and known at compile-time\&.
+.PP
+Given this code, which computes N (10 in the example) consecutive floating-point numbers at compile-time:
+.PP
+```cpp template<std::size_t N> using generate_numbers = tml::foldl<tml::lambda<_1,_2 , tml::lists::func::push_front<_1,\fBtml::add\fP<tml::lists::func::head<_1>,tml::floating::integer<1>>>> , \fBtml::list\fP<tml::floating::integer<0>> , tml::integral_forward_iterators::make_size_t<0> , tml::integral_forward_iterators::make_size_t<N>>;
+.PP
+int main() { using numbers = generate_numbers<10>;
+.PP
+for( double n : tml::to_runtime<numbers>() ) std::cout << n << std::endl;
+.PP
+} ``\fC Yields to the following code for the\fPtml::to_runtime()` instance:
+.PP
+```asm _ZN3tml4impl10to_runtimeINS_4listIJNS_8floating6numberILNS3_6sign_tE1ELsn28ELj2684354560EEENS4_ILS5_1ELsn28ELj2415919104EEENS4_ILS5_1ELsn28ELj2147483648EEENS4_ILS5_1ELsn29ELj3758096384EEENS4_ILS5_1ELsn29ELj3221225472EEENS4_ILS5_1ELsn29ELj2684354560EEENS4_ILS5_1ELsn29ELj2147483648EEENS4_ILS5_1ELsn30ELj3221225472EEENS4_ILS5_1ELsn30ELj2147483648EEENS4_ILS5_1ELsn31ELj2147483648EEENS4_ILS5_1ELsn31ELj0EEEEEEE5arrayE: \&.quad 4621819117588971520 # double 1\&.000000e+01 \&.quad 4621256167635550208 # double 9\&.000000e+00 \&.quad 4620693217682128896 # double 8\&.000000e+00 \&.quad 4619567317775286272 # double 7\&.000000e+00 \&.quad 4618441417868443648 # double 6\&.000000e+00 \&.quad 4617315517961601024 # double 5\&.000000e+00 \&.quad 4616189618054758400 # double 4\&.000000e+00 \&.quad 4613937818241073152 # double 3\&.000000e+00 \&.quad 4611686018427387904 # double 2\&.000000e+00 \&.quad 4607182418800017408 # double 1\&.000000e+00 \&.quad 0 # double 0\&.000000e+00 \&.size _ZN3tml4impl10to_runtimeINS_4listIJNS_8floating6numberILNS3_6sign_tE1ELsn28ELj2684354560EEENS4_ILS5_1ELsn28ELj2415919104EEENS4_ILS5_1ELsn28ELj2147483648EEENS4_ILS5_1ELsn29ELj3758096384EEENS4_ILS5_1ELsn29ELj3221225472EEENS4_ILS5_1ELsn29ELj2684354560EEENS4_ILS5_1ELsn29ELj2147483648EEENS4_ILS5_1ELsn30ELj3221225472EEENS4_ILS5_1ELsn30ELj2147483648EEENS4_ILS5_1ELsn31ELj2147483648EEENS4_ILS5_1ELsn31ELj0EEEEEEE5arrayE, 88 ``` \fIWe all hate C++ mangling, isn't?\fP
+.PP
+Which is exactly the expected behaviour: Floating-point values injected into the executable, with no runtime overhead\&.
+.PP
+.SS "Known issues:"
+.PP
+The features explained above have some implementation issues (Working on\&.\&.\&.):
+.PP
+.IP "\(bu" 2
+\fBTemplate specialization priority issues\&. A ISO C++ Standard bug?\fP: The initial implementation of \fCtml::eval\fP consisted on three different cases (Partial specializations), one for each kind of expression the library is cappable of evaluate:
+.IP "  1." 6
+\fBSimple values\fP: The result of evaluating a value is the value itself 
+.PP
+.nf
+ using result = tml::eval<tml::Int<0>>; //result is Int<0>
+ using result = tml::eval<int>; //result is int
+
+.fi
+.PP
+
+.IP "  2." 6
+\fBParametrized expressions\fP: Parametrized expressions are not functions, but their parameters could be anything, so they must be evaluated 
+.PP
+.nf
+ using vector = tml::eval<std::vector<tml::function<int>>>; // vector is std::vector<int>
+
+.fi
+.PP
+
+.IP "  3." 6
+\fBFunctional expressions\fP: Same as parametrized expressions, but they have a result which should be computed (Extracted) 
+.PP
+.nf
+ using myint = tml::eval<tml::function<int>>; //myint is int
+
+.fi
+.PP
+
+.IP "  4." 6
+\fBFunctional expressions with binded argumments\fP: \fCtml::eval\fP could be used to reevaluate an existing (Instanced) functional expression with a new set of parameters 
+.PP
+.nf
+ using result = tml::eval<tml::function<int>,double>; //result is double
+
+.fi
+.PP
+
+.PP
+.PP
+In addition to this generic cases, the user could explicitly specialize the implementation of \fCtml::eval\fP (The internal template \fC\fBtml::impl::eval\fP\fP) to make \fCtml::eval\fP work in a custom and specific way\&. For example: 
+.PP
+.nf
+ struct foo {};
+
+ //We customize tml::eval saying the result of evaluating 'foo' is 'int'
+ template<>
+ struct eval<foo> : public tml::function<int>
+ {};
+
+.fi
+.PP
+.PP
+When the specialized expression is complex (Like a template \fCtemplate<typename T> struct bar{};\fP) that specialization has conflicts with the default generic specializations\&. The \fIcommon sense\fP says that our custom specialization should be instanced, because \fCbar<T>\fP is more specialized than \fCF<T>\fP (The generic functional case)\&. Instead, the generic specialization is instanced or the compilation fails due to ambiguous template specializations (Depending on the compiler)\&.
+.PP
+This situation \fCwas discussed\fP for two weeks, and after some effort we conclused this is an issue on the wording of the ISO Standard, specifically:
+.PP
+.PP
+.RS 4
+If for each type being considered a given template is at least as specialized for all types, and more specialized for some set of types and the other template is not more specialized for any types, or {the other template} is not at least as specialized for any types, then the given template is more specialized than the other template\&. 
+.RE
+.PP
+.PP
+An ambiguity problem very similar to \fCan official ISO C++ issue\fP which has no official resolution (At June 2014)\&.
+.PP
+\fIThe situation was solved using SFINAE and a custom registry metafunction which specifies if a certain kind of expression overrides the default behaviour of \fCtml::eval\fP\&. Note that its only a workaround, the bug on the template specialization rules is still there\&.\fP
+.PP
+.IP "\(bu" 2
+**\fC\fBtml::impl::multi_lambda\fP\fP evaluation doesn't work on GCC**: The multiple-variable lambda template is defined as follows: 
+.PP
+.nf
+  template<typename... VARIABLES , typename BODY>
+  struct multi_lambda
+  {
+      template<typename... ARGS>
+      using result = tml::eval<tml::multi_let<VARIABLES...,
+                                              ARGS...,
+                                              BODY
+                                             >
+                              >;
+  };
+
+.fi
+.PP
+.PP
+Later \fC\fBtml::impl::multi_lambda\fP\fP overrides \fCtml::eval\fP to call the \fC::result\fP template alias properly: 
+.PP
+.nf
+  template<typename... VARIABLES , typename BODY>
+  struct overrides_eval<tml::impl::multi_lambda<VARIABLES...,BODY>> : public tml::true_type
+  {};
+
+  template<typename... VARIABLES , typename BODY , typename... ARGS>
+  struct eval<tml::impl::multi_lambda<VARIABLES...,BODY>,tml::list<ARGS...>> :
+     public tml::function<typename tml::impl::multi_lambda<VARIABLES...,BODY>::template result<ARGS...>>
+  {};
+
+.fi
+.PP
+.PP
+\fIThe evaluation of that lambda does not work on GCC\&. After some discussions and tests I'm sure this code is valid, seems like a GCC bug\&. This project was reconfigured to use the LLVM/CLang toolchain, where this code works perfectly\&.\fP
+.IP "\(bu" 2
+\fBThe \fCTURBO_ASSERT()\fP macro overloading doesn't work on LLVM/CLang\fP: \fCTURBO_ASSERT()\fP is a macro 'overloaded', making possible to pass one or two parameters depending on the use case\&. The macro overloading is an old trick to define macros with different number of parameters, but with the same name\&. \fCTURBO_ASSERT()\fP was implemented and tested using GCC 4\&.8\&.2, but the overloading doesn't work properly on LLVM/CLang toolchain for some reason\&.
+.PP
+\fICurrently fixed, was a bug on the \fCSELECT_ARG_3(\&.\&.\&.)\fP macro\&.\fP
+.IP "\(bu" 2
+\fBLambda body and placeholders evaluation\fP: As explained above in the \fCFeatures\fP entry, Turbo implements lambda expressions as Haskell-like let expressions where the lambda variables are substituted with the value of the parameters at the point of lambda evaluation: 
+.PP
+.nf
+ using l = tml::lambda<_1 , tml::function<_1>>;
+ using result = tml::eval<l,int>; //result is int
+
+.fi
+.PP
+.PP
+Even if \fCtml::eval\fP is specialized to take care of placeholders, there are cases when expressions depending on \fCtml::eval\fP evaluation are not correctly evaluated because they have placeholders\&. Consider this example: 
+.PP
+.nf
+ template<typename F , typename SEQ>
+ using any_of = tml::foldl<tml::lambda<_1,_2 , logical_or<_1,tml::eval<F,_2>>>,tml::false_type,SEQ>;
+
+.fi
+.PP
+.PP
+This sentence defines a metafunction \fCany_of\fP, which returns true if almost one element of a sequence evaluates to true certain predicate\&. Its implemented using a metafunction provided by the Turbo 'algorithm\&.hpp' header, a Haskell-like \fCfoldl\fP metafunction (Similar to \fCstd::accumulate()\fP)\&. The combination metafunction passed to \fCtml::foldl\fP is written in the form of a binary lambda expression, which computes the logical or between the current state of the computation and the current element of the sequence\&. 'Readable' functional programming at compile-time in C++\&. Cool, isn't?
+.PP
+But that doesn't work\&. Note that the \fCtml::eval\fP written inside the lambda body is instanced (Executed) before the substitution of the lambda variables (The placeholders)\&. To deal with that situations, a template \fC\fBtml::delayed_eval\fP\fP (\fCtml::deval\fP) was designed to hold a \fCtml::eval\fP-like expression inside let expressions\&. During the let execution, \fC\fBtml::delayed_eval\fP\fP is substituted by \fCtml::eval\fP \fBafter variable substitution\fP\&. The correct \fCtml::any\fP implementation should be: 
+.PP
+.nf
+  template<typename P , typename SEQUENCE>
+  using any = tml::foldl<P,tml::lambda<_1,_2 , tml::logical_or<_1,tml::deval<P,_2>>>>,tml::false_type,SEQUENCE>;
+
+.fi
+.PP
+.PP
+This solution successfully solved the problem on unary lambdas, but it doesn't work on multiple-variable lambda expressions, probably because of the curryfication process\&.
+.PP
+\fIFixed, it was a bug on the currifier\fP
+.PP
+.PP
+.SS "README content of the original library implementation:"
+.PP
+Turbo provides a set of features to simplify type manipulation and compile-time computations:
+.PP
+.SS "Portable \fCto_string()\fP function to print type names at runtime:"
+.PP
+Turbo implements demangling for the most common compilers\*{1\*}  to provide a function which returns the \fCstd::string\fP representation of a type\&. For example: 
+.PP
+.nf
+#include "to_string.hpp" 
+#include <iostream>
+#include <vector>
+
+int main()
+{
+    std::cout << mpl::to_string<std::vector<int>>() << std::endl;
+}
+
+.fi
+.PP
+.PP
+Output: 
+.PP
+.RS 4
+\fCvector<int>\fP 
+.RE
+.PP
+.PP
+*[1] GCC and MSVC only demangling implementation yet\&.*
+.PP
+.SS "Compile-time basic types wrappers: Compile-time arithmetic"
+.PP
+Turbo provides a set of predefined templates which are equivalent to the most common C++ basic types, such as \fCbool\fP, \fCchar\fP, \fCinteger\fP, etc: \fCmpl::boolean\fP, \fCmpl::character\fP, \fCmpl::integer\fP\&.
+.PP
+The function \fCmpl::to_string()\fP is specialized to provide a natural and readable string value of the wrappers\&. For example: 
+.PP
+.nf
+#include "basic_types.hpp"
+#include "to_string.hpp"
+
+#include <iostream>
+
+int main()
+{
+  using bool_value = mpl::boolean<true>;
+  using char_value = mpl::character<'a'>;
+  using integer_value = mpl::integer<10>;
+
+  std::cout << mpl::to_string<bool_value>() << " ";
+  std::cout << mpl::to_string<char_value>() << " ";
+  std::cout << mpl::to_string<integer_value>();
+}
+
+.fi
+.PP
+.PP
+Output: 
+.PP
+.RS 4
+true a 10 
+.RE
+.PP
+.PP
+.SS "Compile-time arithmetic:"
+.PP
+The library provides a set of default metafunctions to perform \fBarithmetic, bitshift, logical, and comparison operations with the basic type wrappers\fP\&. Type casting is correctly performed in that computations to avoid signed-unsigned overflows and other related problems: 
+.PP
+.nf
+#include "operators.hpp"
+#include "basic_types.hpp"
+
+int main()
+{
+  using a = mpl::uinteger<1>;
+  using b = mpl::integer<2>;
+
+  using c = mpl::add<a,b>; //c is mpl::integer<3>
+}
+
+.fi
+.PP
+.PP
+.SS "Expression templates: Operators overloading for a simple and more readable expression syntax"
+.PP
+Turbo overloads the most common operators to implement expression templates and provide, within type inspection through the \fC`decltype` specifier\fP, the functions described above in a more confortable syntax\&. This is specially usefull when the expressions are complex\&. For example: 
+.PP
+.nf
+#include "operators.hpp"
+#include "basic_types.hpp"
+#include "expressions.hpp"
+
+int main()
+{
+  using x = mpl::integer<1>;
+  using y = mpl::integer<2>;
+  using z = mpl::integer<3>;
+
+  //The following expression is equivalent to
+  //mpl::add<mpl::add<mpl::mul<x,x>,mpl::mul<y,y>>,mpl::mul<z,z>>;:
+
+  using square_length = decltype( x()*x() + y()*y() + z()*z() );
+}
+
+.fi
+.PP
+.PP
+\fINOTE: This is an example of the computation of the length of a 3d vector at compile-time\&. The example computes the square-length of the vector, because the \fCsquare_root\fP function still is not implemented\&.\fP
+.PP
+.SS "Typelists"
+.PP
+Turbo implements variadic-template based typelists through the \fCmpl::list\fP class: 
+.PP
+.nf
+#include "list.hpp"
+#include "to_string.hpp"
+
+using list = mpl::list<bool,char,int,float,double>;
+
+int main()
+{
+  std::cout << mpl::to_string<list>() << std::endl;
+}
+
+.fi
+.PP
+ 
+.PP
+.RS 4
+[bool,char,int,float,double] 
+.RE
+.PP
+.PP
+.SS "List operations:"
+.PP
+The library provides a set of list operations aviable for typelists: Splitting, concating, inserting, erasing, etc: 
+.PP
+.nf
+#include "list.hpp"
+#include "to_string.hpp"
+
+using list = mpl::list<bool,char,int,float,double>;
+
+using index = mpl::index_of<list,float>; //index is mpl::size_t<3>
+using a = typename mpl::split<list,mpl::size_t<2>>::left;
+using b = typename mpl::split<list,mpl::size_t<2>>::right;
+using c = mpl::concat<b,a>;
+
+
+
+int main()
+{
+  std::cout << mpl::to_string<list>() << std::endl;
+  std::cout << mpl::to_string<a>() << std::endl;
+  std::cout << mpl::to_string<b>() << std::endl;
+  std::cout << mpl::to_string<c>() << std::endl;
+
+}
+
+.fi
+.PP
+ 
+.PP
+.RS 4
+[bool,char,int,float,double] [bool,char,int] [float,double] [float,double,bool,char,int] 
+.RE
+.PP
+.PP
+.SS "Compile-time list sorting"
+.PP
+Using the list operations showed above \fBTurbo implements a sorting metafunction\*{1\*}  which can be used to sort types with the specified criteria\fP\&. For example: 
+.PP
+.nf
+#include "list.hpp"
+#include "sort.hpp"
+
+using list = mpl::list<double,char,float,int,
+
+template<typename T , typename U>
+using comparer = mpl::boolean<(sizeof(T) >= sizeof<(U))>;
+
+using sorted_list = mpl::sort<list,comparer>;
+
+int main()
+{
+  std::cout << mpl::to_string<sorted_list>() << std::endl;
+}
+
+.fi
+.PP
+ 
+.PP
+.RS 4
+[double,int,float,char] 
+.RE
+.PP
+.PP
+*[1] \fCmpl::sort\fP uses the quickosrt sorting algorithm by default, but this metafunction is parametrized to allow specifying other algorithms\&. The metafunction is defined as:* 
+.PP
+.nf
+template<
+         typename LIST , 
+         template<typename,typename> class COMPARER = mpl::greather_than , 
+         template<typename,template<typename,typename>class> class ALGORITHM = mpl::qsort
+        >
+using mpl::sort = /* ... */
+
+.fi
+.PP
+ \fIso you can implement your own sorting algorithm and pass it to the metafunction\&. For example:\fP 
+.PP
+.nf
+ template<typename LIST , template<typename,typename> class COMPARER>
+ struct my_stupid_sorting_algorithm
+ {
+        using result = LIST;
+ };
+
+ using list = mpl::list<int,char,bool>;
+ using sorted_list = mpl::sort<list,mpl::less_than,my_stupid_sorting_algorithm>;
+
+.fi
+.PP
+.PP
+.SS "Iterators and loops"
+.PP
+Turbo implements the iterator dessign pattern to provide an easy way to trasverse ranges or intervals, such as numeric intervals or a part of a typelist\&. The library defines three types of iterators:
+.IP "\(bu" 2
+\fBForward iterators\fP: Are iterators dessigned to trasverse a range forwards (From begin to end)\&.
+.IP "\(bu" 2
+\fBForward iterators\fP: This type of iterators are dessigned to trasverse a range form its end to its begin (In the backwards direction)\&.
+.IP "\(bu" 2
+\fBBidirectional iterators [DEPRECATED]\fP: Are iterators which can advance in any direction\&.
+.PP
+.PP
+The library provides a set of metafunctions to work with iterators:
+.IP "\(bu" 2
+\fBFunctions to get iterators\fP: Are functions to create iterators from things to trasverse it: \fCmpl::begin\fP , \fCmpl::end\fP , \fCmpl::rbegin\fP , \fCmpl::rend\fP\&.
+.IP "\(bu" 2
+\fBFunctions to manipulate iterators\fP: \fCmpl::next\fP , \fCmpl::previous\fP[DEPRECATED]\&. All of the metafunctions above can be specialized to implement user-defined iterators\&. In fact the library provides specializations to work with typelists and integral numbers\&. For example: 
+.PP
+.nf
+  #include "iterators.hpp"
+  #include "numeric_iterators.hpp"
+  #include "list.hpp"
+  #include "basic_types.hpp"
+
+  using list  = mpl::list<bool,char,int,float>;
+  using begin = mpl::begin<list>;
+  using end   = mpl::end<list>;
+
+  /* A metafunction to print values of a typelist: */
+
+  teplate<typename BEGIN , typename END>
+  struct print_list
+  {
+    static void execute()
+    {
+        std::cout << mpl::to_string<typename BEGIN::value>() << std::endl;
+
+        print_list<mpl::next<BEGIN>,END>::execute();
+    }
+  };
+
+  template<typename END>
+  struct print_list<END,END>
+  {
+    static void execute() {}
+  };
+
+  /* Possible usage: */
+
+  using printer = print_list<mpl::begin<list> , mpl::end<list>>;
+  using partial_printer = print_list<decltype( mpl::begin<list>() + mpl::size_t<2>() )  , mpl::end<list>>;
+
+
+  int main()
+  {
+    printer::execute();
+    std::cout << std::endl;
+    partial_printer::execute();
+  }
+
+.fi
+.PP
+ 
+.PP
+.RS 4
+bool char int float
+.PP
+int float 
+.RE
+.PP
+
+.PP
+.PP
+For integral types the library provides a set of utility functions to make iterators from integral values\&. The example above could be rewritten to work with unsigned ints: 
+.PP
+.nf
+using printer = print_list<mpl::make_uinteger_backward_iterator<10> , mpl::make_uinteger_backward_iterator<0>>;
+
+.fi
+.PP
+ 
+.PP
+.RS 4
+10 
+.RE
+.PP
+9 8 7 6 5 4 3 2 1
+.PP
+.SS "Loops: for and for each"
+.PP
+A common problem with template-meta-programming and variadic templates is to execute an operation over a set of values (types)\&. That leads to witing recursive metafunctions everytime we need to do that kind of operations\&.
+.PP
+\fBTurbo provides the metaloops \fCmpl::for_loop\fP and \fCmpl::for_each\fP to simplify the implementation of that kind of things\fP\&. That loops works through iterators: What the loops do is to execute the specified \fIkernel\fP (The operation to be performed) through the range represented by the iterators\&. Finally, the loop returns the result\&.
+.PP
+.SS "\fCmpl::for_each\fP"
+.PP
+This loop is dessigned to apply the specified kernel to every type from a set of types, and return a typelist filled with the set of applications\&. Its equivalent 'runtime' code is:
+.PP
+template<typename iterator_type , typename result_type> std::vector<result_type> for_each(iterator_type begin , iterator_type end , result_type(*)(typename iterator_type::value_type) kernel) { std::vector<result_type> output;
+.PP
+for( auto& it = begin ; it != end ; ++it) output\&.push_back( kernel(*it) );
+.PP
+return output; }
+.PP
+A kernel is a metafunction of the form: 
+.PP
+.nf
+ template<typename CURRENT>
+ struct kernel
+ {
+  using result = /* Operation involving CURRENT */
+ };
+
+.fi
+.PP
+ In other words, a one parameter function\&.
+.PP
+What \fCmpl::for_each\fP returns is the list of applications, that is, the set of \fCkernel::result\fP from each type\&. For example: 
+.PP
+.nf
+using list = mpl::list<bool,char,float,int,double>;
+using begin = mpl::begin<list>;
+using end = mpl::end<list>;
+
+//A kernel: It returns the size of the type specified
+template<typename T>
+struct compute_sizeof
+{
+  using result = mpl::size_t<sizeof(T)>;
+};
+
+using result = mpl::for_each<begin,end,compute_sizeof>;
+
+int main()
+{
+  std::cout << mpl::to_string<result>() << std::endl;
+}
+
+.fi
+.PP
+ Output: 
+.PP
+.RS 4
+[1,1,4,4,8] 
+.RE
+.PP
+.PP
+Note that a kernel is a metafunction of one parameter which returns via a \fCresult\fP alias\&. Thats exatly the signature of \fCmpl::function\fP, so you could use \fCmpl::function\fP to simplify the implementation of a kernel\&. The example above could be rewriten as: 
+.PP
+.nf
+template<typename T>
+using compute_sizeof = mpl::function<mpl::size_t<sizeof(T)>>;
+
+.fi
+.PP
+.PP
+In addition, you could specify a filter (A boolean predicate) to discard elements of the input which does not fullfill a requeriment\&. Following with the example above: 
+.PP
+.nf
+...
+
+template<typename T>
+using filter = mpl::boolean<sizeof(T) % 2 == 0>;
+
+using result = mpl::for_each<begin,end,compute_sizeof,filter>;
+
+...
+
+.fi
+.PP
+ Now the output is: 
+.PP
+.RS 4
+[4,4,8] 
+.RE
+.PP
+.PP
+.SS "\fCmpl::for_loop\fP"
+.PP
+\fCmpl::for_loop\fP is dessigned to \fBexecute iterative computations\fP, in other words, does a loop over a range, and the kernel does computations over that range, storing the result and using the previous value of the result\&. This could be viewed as a for loop with an aux varialbe which stores the result of the computation, and the body of that loop (The kernel acts as the body of the loop)\&. For example:
+.PP
+int result;
+.PP
+for(auto& it = begin ; it != end ; ++it) { result = *it * result; }
+.PP
+So the kernel has two parameters: \fBThe current value of the iterator and the previous value of the result\fP:
+.PP
+template<typename CURRENT , typename PREVIOUS_RESULT> struct kernel { using result = /* \&.\&.\&. */ }; The loop passes the \fCresult\fP of the current kernel application to the next iteration\&. So \fBthe loop needs the initial value of the 'aux variable'\fP\&. \fCmpl::for_loop\fP is defined as follows:
+.PP
+template<typename BEGIN , typename END , typename INITIAL_VALUE , template<typename,typename> class KERNEL> using for_loop = /*\&.\&.\&.*/
+.PP
+In addition, a kernel of a for loop must define a public boolean constant that specifies if the loop should be aborted\&. In other words, \fBthe user could specify a break condition for the loop through the kernel\fP:
+.PP
+template<typename CURRENT , typename PREVIOUS_RESULT> struct kernel { using result = /* \&.\&.\&. */ static const bool abort = /* \&.\&.\&. */ };
+.PP
+An example of the use of \fCmpl::for_loop\fP could be the computation of the summation of a range of numbers:
+.PP
+using begin = mpl::make_uinteger_forward_iterator<0>; using end = mpl::make_uinteger_forward_iterator<10>;
+.PP
+template<typename CURRENT_VALUE , typename PREVIOUS_RESULT> struct kernel : public mpl::no_abort_kernel //This defines the abort flag as false { using result = mpl::add<PREVIOUS_RESULT,CURRENT_VALUE>; };
+.PP
+using result = mpl::for_loop<begin,end,mpl::uinteger<0>,kernel>;
+.PP
+int main() { std::cout << mpl::to_string<result>() << std::cout; } Output: 
+.PP
+.RS 4
+45 
+.RE
+.PP
+.PP
+.SS "Compile-time fixed-point arithmetic"
+.PP
+Turbo implements decimal fixed-point arithmetic through the \fCmpl::fixed_point\fP type\&. This type provides compile-time fixed-point arithmetic through specializations of the arithmetic metafunctions described above\&.
+.PP
+\fCmpl::fixed_point\fP implements decimal fixed-point numbers with the specified precision (The number of digits which represent the fractional part of the number): 
+.PP
+.nf
+template<mpl::fixed_point_bits BITS , mpl::fixed_point_precission PRECISION>
+struct fixed_point {};
+
+.fi
+.PP
+.PP
+By default \fCmpl::fixed_point_bits\fP is a \fClong long int\fP, that is, is 64 bits length\&. So \fCmpl::fixed_point\fP \fBcould represent decimal numbers up to 19 digits\fP\&. Of course that 19 digits include the fractional digits\&. By default Turbo sets the precision of \fCmpl::fixed_point\fP at 8 digits\&.
+.PP
+The way to instantiate fixed point numbers is tu cumbersome, because you have to take into account the precision of the number and provide the full integer number\&. For example:
+.PP
+using pi = mpl::fixed_point<314150000,8>; //3,1415 with 8 digits precision
+.PP
+To deal with that problem, the library provides the alias \fCmpl::decimal\fP, which implements \fBdecimal scientific notation\fP: 
+.PP
+.nf
+using pi = mpl::decimal<31415,-4>; //31415 x 10^-4 (3,1415)
+
+.fi
+.PP
+.PP
+Of course \fCmpl::fixed_point\fP specializes \fCmpl::to_string\fP : 
+.PP
+.nf
+#include "fixed_point.hpp"
+#include "expressions.hpp"
+#include "to_string.hpp"
+
+using pi      = mpl::decimal<314159265,-8>; //3,14159265
+using radious = mpl::decimal<10>; //10
+using circle_length = decltype( mpl::decimal<2>() * pi() * radious() );
+
+int main()
+{
+ std::cout << "Radious: " << mpl::to_string<radious>() << std::endl;
+ std::cout << "Circle length: " << mpl::to_string<circle_length>() << std::endl;
+}
+
+.fi
+.PP
+ 
+.PP
+.RS 4
+Radious: 10 
+.RE
+.PP
+Circle length: 62,831853
+.PP
+.SS "Trigonometric functions"
+.PP
+In addition to the arithmetic operations shared with the integral values, Turbo \fCimplements compile-time trigonometric functions such as sine and cosine through Taylor-McLaurin series\fP: 
+.PP
+.nf
+#include "trigonometry.hpp"
+#include "fixed_point.hpp"
+#include "to_string.hpp"
+
+using deg_0 = mpl::decimal<0>;
+using deg_45 = decltype( math::pi() / mpl::decimal<4>() );
+using deg_90 = decltype( math::pi() / mpl::decimal<2>() );
+
+int main()
+{
+  std::cout << "sin(0º) = "  << mpl::to_string<math::sin<deg_0>>() << std::endl;
+  std::cout << "sin(45º) = " << mpl::to_string<math::sin<deg_45>>() << std::endl;
+  std::cout << "sin(90º) = " << mpl::to_string<math::sin<deg_90>>() << std::endl;
+
+  std::cout << "cos(0º) = "  << mpl::to_string<math::cos<deg_0>>() << std::endl;
+  std::cout << "cos(45º) = " << mpl::to_string<math::cos<deg_45>>() << std::endl;
+  std::cout << "cos(90º) = " << mpl::to_string<math::cos<deg_90>>() << std::endl;
+}
+
+.fi
+.PP
+ 
+.PP
+.RS 4
+sin(0º) = 0 
+.RE
+.PP
+sin(45º) = 0,707107 sin(90º) = 1 cos(0º) = 1 cos(45º) = 0,07107 cos(90º) = 1e-08
+.PP
+As the example shows, the implementation has little precision errors (\fCcos(90º)\fP should be zero)\&. Turbo uses a MacLaurin series aproximation of 10 terms by default, but the arithmetric functions are parametrized to allow specifying the number of terms used in the aproximations: 
+.PP
+.nf
+using cos_deg_90 = math::cos<deg_90,mpl::uinteger<200>>; //cos(90º) computed using 200 terms. 
+
+.fi
+.PP
+.PP
+.SS "Square-root"
+.PP
+The library \fCimplements a square root function\fP, \fCmath::sqrt\fP, computing the value through the Newton's method to aproximate function roots:
+.PP
+using two = mpl::decimal<2>; using result = math::sqrt<two>;
+.PP
+int main() { std::cout << mpl::to_string<result>() << std::endl; } Output: 
+.PP
+.RS 4
+1,4142 
+.RE
+.PP
+.PP
+.SS "Compile-time matrix algebra"
+.PP
+Turbo implements 3x3 and 4x4 matrices to provide \fBcompile-time matrix algebra\fP\&. It supports matrix addition, substraction, and multiplication\&. For example:
+.PP
+#include 'matrix3x3\&.hpp'
+.PP
+using unity = math::unity3x3<mpl::decimal> using a = decltype( (unity() * unity()) * mpl::decimal<4>() ); using b = decltype( a() + a() );
+.PP
+int main() { std::cout << mpl::to_string<b>() << std::endl; } 
+.PP
+.RS 4
+| 8 0 0 | 
+.RE
+.PP
+| 0 8 0 | | 0 0 8 |
+.PP
+.SS "Compile-time 2d/3d transformations"
+.PP
+In adition to matrices, Turbo implements 2d/3d/4d vectors and provides \fBtransformation matrices\fP such as rotations, scales, translations, etc\&. For example:
+.PP
+#include 'matrix4x4\&.hpp' #include 'vector\&.hpp'
+.PP
+using v1 = math::vec3<mpl::decimal<1> , mpl::decimal<1> , mpl::decimal<1>>; using translation = mpl::vector<mpl::decimal<1> , mpl::decimal<0> , mpl::decimal<0>>; using angle = decltype(math::pi() / mpl::decimal<2>()); using transformation = decltype( math::translate<translation>() * mpl::rotate<angle,math::x_axis>() ); using v2 = decltype( transformation() * v1() );
+.PP
+int main() { std::cout << mpl::to_string<v1>() << std::endl; std::cout << mpl::to_string<v2>() << std::endl; } 
+.PP
+.RS 4
+(1,1,1) 
+.RE
+.PP
+(2,1,-1)
+.PP
+.SS "Compile-time string manipulation"
+.PP
+Turbo explodes C++11 generalized constant expressions to manipulate raw strings and create types (metavariables) which the library can work with using template metaprogramming\&. For example: 
+.PP
+.nf
+#include "string.hpp"
+#include "to_string.hpp"
+
+//TURBO_STRING_VARIABLE() macro defines a new string metavariable which holds the specified string:
+
+TURBO_STRING_VARIABLE( hello , "hello " );
+TURBO_STRING_VARIABLE( world , "world!" );
+
+using hello_world = tml::concat<hello,world>;
+
+int main()
+{
+    std::cout << tml::to_string<hello_world>() << std::endl;
+}
+
+.fi
+.PP
+.PP
+.RS 4
+hello world! 
+.RE
+.PP
+.PP
+.SS "Future features:"
+.PP
+I'm currently working in a compile-time time manipulation library (\fCtml::chrono\fP namespace), based on the Standard \fCstd::chrono\fP library\&. Also I'm working on compile-time random number generation facilities, using the features of \fCtml::chrono\fP as seed\&. 

@@ -1,0 +1,40 @@
+\hypertarget{structtml_1_1mul_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01ac138e7545479133819191251e8549d2}{\section{tml\+:\+:mul$<$ tml\+:\+:floating\+:\+:number$<$ S\+\_\+\+L\+H\+S, E\+\_\+\+L\+H\+S, M\+\_\+\+L\+H\+S $>$, tml\+:\+:floating\+:\+:number$<$ S\+\_\+\+R\+H\+S, E\+\_\+\+R\+H\+S, M\+\_\+\+R\+H\+S $>$ $>$ Struct Template Reference}
+\label{structtml_1_1mul_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01ac138e7545479133819191251e8549d2}\index{tml\+::mul$<$ tml\+::floating\+::number$<$ S\+\_\+\+L\+H\+S, E\+\_\+\+L\+H\+S, M\+\_\+\+L\+H\+S $>$, tml\+::floating\+::number$<$ S\+\_\+\+R\+H\+S, E\+\_\+\+R\+H\+S, M\+\_\+\+R\+H\+S $>$ $>$@{tml\+::mul$<$ tml\+::floating\+::number$<$ S\+\_\+\+L\+H\+S, E\+\_\+\+L\+H\+S, M\+\_\+\+L\+H\+S $>$, tml\+::floating\+::number$<$ S\+\_\+\+R\+H\+S, E\+\_\+\+R\+H\+S, M\+\_\+\+R\+H\+S $>$ $>$}}
+}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structtml_1_1mul_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01ac138e7545479133819191251e8549d2_a24df8453bb21fb39690af6e7aefa05c8}{using {\bfseries result} = tml\+::floating\+::normalize$<$ \hyperlink{structtml_1_1floating_1_1number}{tml\+::floating\+::number}$<$ sign, exponent, mantissa $>$$>$}\label{structtml_1_1mul_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01ac138e7545479133819191251e8549d2_a24df8453bb21fb39690af6e7aefa05c8}
+
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{structtml_1_1mul_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01ac138e7545479133819191251e8549d2_a1bc81a9d2c3654ee6aea043aa54cfee1}{static constexpr const \\*
+std\+::uint64\+\_\+t {\bfseries mantissa\+\_\+full} = (std\+::uint64\+\_\+t)M\+\_\+\+L\+H\+S $\ast$ (std\+::uint64\+\_\+t)M\+\_\+\+R\+H\+S}\label{structtml_1_1mul_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01ac138e7545479133819191251e8549d2_a1bc81a9d2c3654ee6aea043aa54cfee1}
+
+\item 
+\hypertarget{structtml_1_1mul_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01ac138e7545479133819191251e8549d2_a0741aba21a96d0fe85de62247af94f7a}{static constexpr const \\*
+std\+::uint32\+\_\+t {\bfseries mantissa} = mantissa\+\_\+full $>$$>$ 32}\label{structtml_1_1mul_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01ac138e7545479133819191251e8549d2_a0741aba21a96d0fe85de62247af94f7a}
+
+\item 
+\hypertarget{structtml_1_1mul_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01ac138e7545479133819191251e8549d2_a7dec9adba1eaf3f9d6a5a819b855bac3}{static constexpr const auto {\bfseries exponent} = E\+\_\+\+L\+H\+S+E\+\_\+\+R\+H\+S + 32}\label{structtml_1_1mul_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01ac138e7545479133819191251e8549d2_a7dec9adba1eaf3f9d6a5a819b855bac3}
+
+\item 
+\hypertarget{structtml_1_1mul_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01ac138e7545479133819191251e8549d2_af4ad1eee5825988ec83550957eaf5c8a}{static constexpr const auto {\bfseries sign} = (tml\+::floating\+::sign\+\_\+t)(!((bool)S\+\_\+\+L\+H\+S $^\wedge$ (bool)S\+\_\+\+R\+H\+S))}\label{structtml_1_1mul_3_01tml_1_1floating_1_1number_3_01_s___l_h_s_00_01_e___l_h_s_00_01_m___l_h_s_01ac138e7545479133819191251e8549d2_af4ad1eee5825988ec83550957eaf5c8a}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$tml\+::floating\+::sign\+\_\+t S\+\_\+\+L\+H\+S, tml\+::floating\+::exponent\+\_\+t E\+\_\+\+L\+H\+S, tml\+::floating\+::mantissa\+\_\+t M\+\_\+\+L\+H\+S, tml\+::floating\+::sign\+\_\+t S\+\_\+\+R\+H\+S, tml\+::floating\+::exponent\+\_\+t E\+\_\+\+R\+H\+S, tml\+::floating\+::mantissa\+\_\+t M\+\_\+\+R\+H\+S$>$struct tml\+::mul$<$ tml\+::floating\+::number$<$ S\+\_\+\+L\+H\+S, E\+\_\+\+L\+H\+S, M\+\_\+\+L\+H\+S $>$, tml\+::floating\+::number$<$ S\+\_\+\+R\+H\+S, E\+\_\+\+R\+H\+S, M\+\_\+\+R\+H\+S $>$ $>$}
+
+
+
+Definition at line 348 of file float.\+hpp.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+blocks/manu343726/turbo\+\_\+computing/float.\+hpp\end{DoxyCompactItemize}
