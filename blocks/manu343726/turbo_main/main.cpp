@@ -18,27 +18,14 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
-#include "manu343726/turbo_core/turbo_core.hpp"
-#include "manu343726/turbo_computing/float.hpp"
+//#include "manu343726/turbo_core/turbo_core.hpp"
+//#include "manu343726/turbo_computing/float.hpp"
 
 #include <type_traits>
 #include <iostream>
 #include <iomanip>
 
-using namespace tml::placeholders;
-using namespace tml::runtime::placeholders;
-
-
-using a = FLOAT(0.5);
-
-using l = tml::lambda<_1 , tml::add<_1,_1> >;
-using b = tml::bind<tml::function,int>;
-using r = tml::eval<l(tml::Int<1>)>;
-
 int main()
 {
-    std::cout << std::setprecision(10) 
-              << tml::to_string<r>()  << std::endl
-              << tml::to_runtime<a>() << std::endl;
-            
+    std::cout << "hello" << std::endl;
 }
