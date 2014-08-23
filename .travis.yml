@@ -21,8 +21,7 @@ install:
   # install biicode:
   
   - wget https://s3.amazonaws.com/biibinaries/release/1.3.3/bii-ubuntu32_1_3_3.deb 
-  - sudo dpkg -i bii-ubuntu32_1_3_3.deb
-  - sudo apt-get -f install
+  - sudo dpkg -i bii-ubuntu32_1_3_3.deb && sudo apt-get -f install
 
   # install clang-3.4
   - if [ "$CXX" == "clang++" ]; then sudo apt-get install --allow-unauthenticated -qq clang-3.4; fi
