@@ -18,9 +18,10 @@ before_install:
 
 # Install dependencies
 install:
-    # install biicode:
-
+  # install biicode:
+  
   # 1. Add this line to your /etc/apt/sources.list file
+  - sudo apt-get install deb
   - deb http://apt.biicode.com/debian/ stable non-free
 
   # 2. Add our public key executing:
