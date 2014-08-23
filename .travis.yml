@@ -42,5 +42,5 @@ install:
 script: 
   - bii find
   - bii work
-  - bii cpp::build
+  - bii cpp:build
   - ./bin/manu343726_turbo_main_main 
