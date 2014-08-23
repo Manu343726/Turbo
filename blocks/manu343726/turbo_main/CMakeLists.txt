@@ -13,7 +13,7 @@ INIT_BIICODE_BLOCK()
 ADD_BIICODE_TARGETS()
 
 #LLVM/Clang flags: C++11 and LLVM Standard Library
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11  -stdlib=libc++ -lc++abi")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 #Use LLVM/Clang instead of GCC
 set(CMAKE_C_COMPILER "clang")

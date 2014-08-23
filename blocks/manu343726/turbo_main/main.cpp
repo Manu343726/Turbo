@@ -37,7 +37,7 @@ using r = tml::eval<l(tml::Int<1>)>;
 
 int main()
 {
-    std::cout << std::setprecision(10) << std::defaultfloat
+    std::cout << std::setprecision(10) 
               << tml::to_string<r>()  << std::endl
               << tml::to_runtime<a>() << std::endl;
             
