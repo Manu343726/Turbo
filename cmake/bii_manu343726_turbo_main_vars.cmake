@@ -9,7 +9,7 @@ SET(BII_manu343726_turbo_main_EXES main)
 SET(BII_manu343726_turbo_main_main_SRC main.cpp)
 SET(BII_manu343726_turbo_main_main_DATA_FILES  )
 SET(BII_manu343726_turbo_main_main_RESOURCES )
-SET(BII_manu343726_turbo_main_main_BLOCK_DEPS manu343726_turbo_computing
+SET(BII_manu343726_turbo_main_main_BLOCK_DEPS manu343726_turbo_utils
 manu343726_turbo_core)
 SET(BII_manu343726_turbo_main_main_SYSTEM_DEPS )
 SET(BII_manu343726_turbo_main_main_INTERFACE_LIB False)

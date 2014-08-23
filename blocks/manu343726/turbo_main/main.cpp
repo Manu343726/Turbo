@@ -20,10 +20,14 @@
 
 #include "manu343726/turbo_core/turbo_core.hpp"
 //#include "manu343726/turbo_computing/float.hpp"
+#include "manu343726/turbo_utils/assert.hpp"
+
 
 #include <type_traits>
 #include <iostream>
 #include <iomanip>
+
+TURBO_ASSERT(( std::is_same<int,int> ));
 
 int main()
 {

@@ -9,10 +9,8 @@ INCLUDE(biicode.cmake)
 BII_PREBUILD_STEP(blocks/manu343726/turbo_core)
 BII_PREBUILD_STEP(blocks/manu343726/turbo_utils)
 BII_PREBUILD_STEP(blocks/manu343726/turbo_main)
-BII_PREBUILD_STEP(blocks/manu343726/turbo_computing)
 
 # Inclusion of the blocks affected by the build
 BII_INCLUDE_BLOCK(blocks/manu343726/turbo_core)
 BII_INCLUDE_BLOCK(blocks/manu343726/turbo_utils)
 BII_INCLUDE_BLOCK(blocks/manu343726/turbo_main)
-BII_INCLUDE_BLOCK(blocks/manu343726/turbo_computing)

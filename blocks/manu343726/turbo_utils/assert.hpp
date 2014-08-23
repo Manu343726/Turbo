@@ -21,7 +21,7 @@
 #ifndef ASSERT_HPP
 #define	ASSERT_HPP
 
-#include "manu343726/turbo_core/impl/cpp_meta_macros.hpp"
+#include "manu343726/turbo_core/cpp_meta_macros.hpp"
 
 /*
  * Evaluates a template boolean expression and aborts compilation if the 

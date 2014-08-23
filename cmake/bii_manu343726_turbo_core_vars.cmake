@@ -23,6 +23,7 @@ list.hpp
 bind.hpp
 control_structures.hpp
 algorithm.hpp
+cpp_meta_macros.hpp
 placeholders.hpp
 demangle.hpp
 turbo_core.hpp
