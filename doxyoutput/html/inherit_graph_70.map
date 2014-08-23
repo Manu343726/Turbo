@@ -1,7 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structtml_1_1function.html" title="tml::function\&lt; tml\l::false_type \&gt;" alt="" coords="6,103,130,145"/>
-<area shape="rect" id="node2" href="$structtml_1_1impl_1_1is__fixed__point.html" title="tml::impl::is_fixed\l_point\&lt; T \&gt;" alt="" coords="203,5,328,46"/>
-<area shape="rect" id="node3" href="$structtml_1_1impl_1_1is__integral__constant.html" title="tml::impl::is_integral\l_constant\&lt; T \&gt;" alt="" coords="196,70,335,111"/>
-<area shape="rect" id="node4" href="$structtml_1_1impl_1_1is__parametrized__expression.html" title="tml::impl::is_parametrized\l_expression\&lt; T \&gt;" alt="" coords="179,135,351,177"/>
-<area shape="rect" id="node5" href="$structtml_1_1is__placeholder.html" title="tml::is_placeholder\&lt; T \&gt;" alt="" coords="184,201,347,228"/>
-</map>
