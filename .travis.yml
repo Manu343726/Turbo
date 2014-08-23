@@ -40,9 +40,6 @@ install:
 
   - if [ "$CXX" == "clang++" ]; then CXX=clang++-3.4; fi
 
-before_script:
-  - export CXX=clang++
-
 # command to run tests
 script: 
   - bii find
