@@ -13,17 +13,19 @@ compiler:
 
 # Setup repos etc before installation
 before_install:
+  - if [ "$CXX" == "clang++" -a "$CPP14" == "1" ]; then sudo add-apt-repository -y ppa:h-rayflood/llvm; fi
   - sudo apt-get update -qq
 
 # Install dependencies
 install:
   # Install biicode:
   - wget https://s3.amazonaws.com/biibinaries/release/1.3.3/bii-ubuntu64_1_3_3.deb 
-  - (! sudo dpkg -i bii-ubuntu32_1_3_3.deb ) && sudo apt-get -f install  
+  - (! sudo dpkg -i bii-ubuntu32_1_3_3.deb ) && sudo apt-get -f install
+  - sudo apt-get update  
+
 
 # command to run tests
 script: 
-  - ls -al
   - bii find
   - bii cpp:build
   - ./bin/manu343726_turbo_main_main 
