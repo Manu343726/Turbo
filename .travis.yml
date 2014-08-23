@@ -18,9 +18,15 @@ before_install:
 
 # Install dependencies
 install:
-  # Install biicode:
-  - wget https://s3.amazonaws.com/biibinaries/release/1.3.3/bii-ubuntu64_1_3_3.deb 
+  # install biicode:
+  
+  - wget https://s3.amazonaws.com/biibinaries/release/1.3.3/bii-ubuntu32_1_3_3.deb 
   - (! sudo dpkg -i bii-ubuntu32_1_3_3.deb ) && sudo apt-get -f install
+
+  # install clang-3.4
+  - if [ "$CXX" == "clang++" ]; then sudo apt-get install --allow-unauthenticated -qq clang-3.4; fi
+
+  - if [ "$CXX" == "clang++" ]; then cwd=$(pwd); fi
 
   # Install libc++ if tests are run with clang++
   - if [ "$CXX" == "clang++" -a "$CPP14" == "0" ]; then svn co --quiet http://llvm.org/svn/llvm-project/libcxx/trunk@181765 libcxx; fi
@@ -32,9 +38,14 @@ install:
   - if [ "$CXX" == "clang++" ]; then cd /usr/lib && sudo ln -sf libc++.so.1.0 libc++.so; fi
   - if [ "$CXX" == "clang++" ]; then sudo ln -sf libc++.so.1.0 libc++.so.1 && cd $cwd; fi
 
+  - if [ "$CXX" == "clang++" ]; then CXX=clang++-3.4; fi
+
+before_script:
+  - export CXX=clang++
 
 # command to run tests
 script: 
   - bii find
+  - bii work
   - bii cpp:build
   - ./bin/manu343726_turbo_main_main 
