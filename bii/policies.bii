@@ -24,7 +24,7 @@
 default:
 # First rule is accept with priority 1 all your published blocks (master branches)
 # for all tags.
-- block: block.user == "YOUR_USER_NAME" and branch == "YOUR_USER_NAME/master"
+- block: block.user == "manu343726" and branch == "manu343726/master"
   version: tag>=DEV
   priority: 1
 # Then, accept with priority 1 all 'master' branches of the original
