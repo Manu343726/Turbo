@@ -19,7 +19,7 @@ before_install:
 # Install dependencies
 install:
   # install biicode
-    - wget http://apt.biicode.com/install.sh && chmod +x install.sh && ./install.sh
+  - wget http://apt.biicode.com/install.sh && chmod +x install.sh && ./install.sh
 
   # install clang-3.4
   - if [ "$CXX" == "clang++" ]; then sudo apt-get install --allow-unauthenticated -qq clang-3.4; fi
