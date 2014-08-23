@@ -18,7 +18,7 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
-//#include "manu343726/turbo_core/turbo_core.hpp"
+#include "manu343726/turbo_core/turbo_core.hpp"
 //#include "manu343726/turbo_computing/float.hpp"
 
 #include <type_traits>
@@ -27,5 +27,5 @@
 
 int main()
 {
-    std::cout << "hello" << std::endl;
+    std::cout << tml::to_string<decltype("hello")>() << std::endl;
 }
