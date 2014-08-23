@@ -18,16 +18,14 @@
 * along with The Turbo Library. If not, see <http://www.gnu.org/licenses/>.   *
 ******************************************************************************/
 
-//#include "manu343726/turbo_core/turbo_core.hpp"
-#include "manu343726/turbo_computing/float.hpp"
+#include "manu343726/turbo_core/turbo_core.hpp"
+//#include "manu343726/turbo_computing/float.hpp"
 
 #include <type_traits>
 #include <iostream>
 #include <iomanip>
 
-using a = FLOAT(2.54);
-
 int main()
 {
-    //std::cout << tml::to_string<decltype("hello")>() << std::endl;
+    std::cout << tml::to_string<decltype("hello")>() << std::endl;
 }
