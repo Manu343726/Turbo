@@ -20,18 +20,8 @@ before_install:
 install:
   # install biicode:
   
-  # 1. Add this line to your /etc/apt/sources.list file
-  - sudo apt-get install deb
-  - deb http://apt.biicode.com/debian/ stable non-free
-
-  # 2. Add our public key executing:
-  - wget -qO- http://apt.biicode.com/packages.biicode.key | sudo apt-key add -
-
-  # 3. Execute apt-get update:
-  - sudo apt-get update
-  
-  # 4. Execute apt-get install:
-  - sudo apt-get install biicode
+  - wget https://s3.amazonaws.com/biibinaries/release/1.3.3/bii-ubuntu32_1_3_3.deb ./biicode.deb
+  - sudo dpkg -i biicode.deb
 
   # install clang-3.4
   - if [ "$CXX" == "clang++" ]; then sudo apt-get install --allow-unauthenticated -qq clang-3.4; fi
