@@ -18,7 +18,6 @@ dist/
 build/
 
 # Biicode metadata and cmake output
-bii/
 cmake/
 bin/
 
