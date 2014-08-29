@@ -6,6 +6,7 @@
 ## or even broken). Since this is a C++ metaprogramming library, successfull compilation is interpreted as the tests successfully
 ## passed (If not, the static asserts fail and the compilation fails). 
 
+language: cpp
 compiler:
   - clang
 
