@@ -21,6 +21,9 @@ install:
 
 # command to run tests
 script: 
+  # Show me what compiler are you using:
+  - echo $CXX 
+  
   - bii find
   - bii work
   - bii cpp:build
