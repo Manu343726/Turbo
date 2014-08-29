@@ -22,8 +22,7 @@ install:
 # command to run tests
 script: 
   # Show me what compiler are you using:
-  - echo $CXX 
-  - $CXX --version
+  - echo $CC $CXX
   
   - bii find
   - bii work
