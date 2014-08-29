@@ -56,7 +56,7 @@ script:
   - bii find
   - bii work
   
-  -cmake --version
+  - cmake --version
   
   - if [ "$CXX" == "clang++" ]; then export CXX="clang++" && bii cpp:build; fi
   - if [ "$CXX" == "g++" ];     then export CXX="g++"     && bii cpp:build; fi
