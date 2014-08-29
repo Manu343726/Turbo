@@ -39,6 +39,14 @@ install:
   # install biicode:
   - wget https://s3.amazonaws.com/biibinaries/release/1.3.3/bii-ubuntu32_1_3_3.deb 
   - (! sudo dpkg -i bii-ubuntu32_1_3_3.deb ) && sudo apt-get -f install
+  - rm bii-ubuntu32_1_3_3.deb
+  
+  # Update cmake: 
+  - wget http://www.cmake.org/files/v3.0/cmake-3.0.1-Linux-i386.tar.gz
+  - tar -xzf cmake-3.0.1-Linux-i386.tar.gz
+  - sudo cp -fR cmake-3.0.1-Linux-i386/* /usr
+  - rm -rf cmake-3.0.1-Linux-i386
+  - rm cmake-3.0.1-Linux-i386.tar.gz
 
 script: 
   # Show me what compiler are you using:
@@ -47,6 +55,8 @@ script:
   
   - bii find
   - bii work
+  
+  -cmake --version
   
   - if [ "$CXX" == "clang++" ]; then export CXX="clang++" && bii cpp:build; fi
   - if [ "$CXX" == "g++" ];     then export CXX="g++"     && bii cpp:build; fi
