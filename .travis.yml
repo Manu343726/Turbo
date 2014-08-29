@@ -23,6 +23,7 @@ install:
 script: 
   # Show me what compiler are you using:
   - echo $CXX 
+  - $CXX --version
   
   - bii find
   - bii work
