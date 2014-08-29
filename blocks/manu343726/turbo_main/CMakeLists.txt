@@ -27,6 +27,9 @@ IF($TRAVIS_CXX="")
 
 ELSE($TRAVIS_CXX="")
 	# Under TravisCI environment.
+	
+	set(CMAKE_C_COMPILER "clang")
+	set(CMAKE_CXX_COMPILER "clang++")
 
 	IF($TRAVIS_CXX="clang++")
 	    # Force Clang usage
