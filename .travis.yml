@@ -7,7 +7,7 @@
 ## passed (If not, the static asserts fail and the compilation fails). 
 
 compiler:
-  - gcc
+  - clang
 
 # Setup repos etc before installation
 before_install:
