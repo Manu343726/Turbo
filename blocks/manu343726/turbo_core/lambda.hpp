@@ -104,14 +104,7 @@ namespace tml
          */
         template<typename BODY , typename... VARIABLES>
         struct multi_lambda
-        {
-            template<typename... ARGS>
-            using result = tml::eval<tml::multi_let<VARIABLES...,
-                                                    ARGS...,
-                                                    BODY
-                                                   >
-                                    >;
-        };
+        {};
         
    
         
@@ -173,11 +166,11 @@ namespace tml
          * so tml::eval acts as a calling high-level metafunction (See the tml::eval documentation) always when a 
          * lambda is passed.
          */
-        template<typename... VARIABLES , typename BODY , typename... ARGS>
-        struct eval<multi_lambda<BODY,VARIABLES...>,tml::list<ARGS...>> : 
-            public tml::function<typename multi_lambda<BODY,VARIABLES...>::template result<tml::eval<ARGS>...>>
+        template<typename... VARIABLES , typename BODY , typename ARG , typename... ARGS>
+        struct eval<multi_lambda<BODY,VARIABLES...>,tml::list<ARG,ARGS...>>
         {
-            //static_assert( sizeof(BODY) != sizeof(BODY) , "Instanced" );
+            using let_args = tml::list<VARIABLES...,ARG,ARGS...,BODY>;
+            using result = tml::eval<typename tml::impl::multi_let_currifier<let_args>::result>;
         };
     }
     

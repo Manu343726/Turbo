@@ -179,6 +179,47 @@ namespace tml
     
     namespace impl
     {            
+        template<typename ARGS>
+        struct multi_let_data_parser;
+
+        template<typename... ARGS>
+        struct multi_let_data_parser<tml::list<ARGS...>>
+        {
+            enum state { reading_vars , reading_args };
+
+
+            template<typename VARIABLES , typename ARGS_ , typename LIST , std::size_t i , bool args_parsed>
+            struct parse;
+
+            template<typename... VARIABLES , typename ARGS_ , typename HEAD , typename... TAIL , std::size_t i>
+            struct parse<tml::list<VARIABLES...>,ARGS_,tml::list<HEAD,TAIL...>,i,false>
+            {
+                using variables = typename parse<tml::list<VARIABLES...,HEAD>,ARGS_,tml::list<TAIL...>, i-1, (i-1) == 0>::variables;
+                using args      = typename parse<tml::list<VARIABLES...,HEAD>,ARGS_,tml::list<TAIL...>, i-1, (i-1) == 0>::args;
+                using body      = typename parse<tml::list<VARIABLES...,HEAD>,ARGS_,tml::list<TAIL...>, i-1, (i-1) == 0>::body;
+            };
+
+            template<typename VARIABLES , typename... ARGS_ , typename HEAD , typename T , typename... TAIL>
+            struct parse<VARIABLES,tml::list<ARGS_...>,tml::list<HEAD,T,TAIL...>,0,true>
+            {
+                using variables = VARIABLES;
+                using args      = typename parse<VARIABLES,tml::list<ARGS_...,HEAD>,tml::list<T,TAIL...>, 0,true>::args;
+                using body      = typename parse<VARIABLES,tml::list<ARGS_...,HEAD>,tml::list<T,TAIL...>, 0,true>::body;
+            };
+
+            template<typename VARIABLES , typename ARGS_ , typename HEAD>
+            struct parse<VARIABLES,ARGS_,tml::list<HEAD>,0,true>
+            {
+                using variables = VARIABLES;
+                using args      = ARGS_;
+                using body      = HEAD;
+            };
+
+            using variables = typename parse<tml::empty_list,tml::empty_list,tml::list<ARGS...>,sizeof...(ARGS)/2,false>::variables;
+            using args      = typename parse<tml::empty_list,tml::empty_list,tml::list<ARGS...>,sizeof...(ARGS)/2,false>::args;
+            using body      = typename parse<tml::empty_list,tml::empty_list,tml::list<ARGS...>,sizeof...(ARGS)/2,false>::body;
+        };
+
         /*
          * Evaluate a multiple-variable let expression and returns the currified unary let equivalent expression.
          * 
@@ -212,7 +253,7 @@ namespace tml
         struct multi_let_currifier
         {
             static_assert( ( ARGS::length - 1 ) > 0 , "A let expression should have at least one variable-value pair to bind." );
-            static_assert( ( ARGS::length - 1 ) % 2 == 0 , "The set of variables and values should be odd (One value per variable)" );
+            //static_assert( ( ARGS::length - 1 ) % 2 == 0 , "The set of variables and values should be odd (One value per variable)" );
             
             using target = tml::lists::back<ARGS>; //Target expression (See parsing description above)
             
@@ -220,43 +261,10 @@ namespace tml
             struct nil {};
            
             
-            /* 
-             * Metafunction two retrieve the two sets of argumments (Variables and values)
-             * from the original even set of argumments.
-             */
-            template<typename PROCESSED_PARAMS , typename NON_PROCESSED_PARAMS , bool middle>
-            struct split_in_middle;
+            using variables = typename multi_let_data_parser<ARGS>::variables;
+            using args      = typename multi_let_data_parser<ARGS>::args;
+            using body      = typename multi_let_data_parser<ARGS>::body;
             
-            /*
-             * Recursive case: Just iterate to the next element of the argumment list,
-             * 
-             * NOTE: The value of middle flag is ( sizeof...(LEFT_LIST) + 1 ) == sizeof...(TAIL)
-             * Which means the processed params list and the non_processed params list has the same length 
-             * in the next call.
-             */
-            template<typename... LEFT_LIST , typename HEAD , typename... TAIL>
-            struct split_in_middle<tml::list<LEFT_LIST...> , tml::list<HEAD,TAIL...> , false>
-            {
-                using next_call = split_in_middle<tml::list<LEFT_LIST...,HEAD>,tml::list<TAIL...>,( sizeof...(LEFT_LIST) + 1 ) == sizeof...(TAIL)>;
-                
-                using variables = typename next_call::variables;
-                using values = typename next_call::values;
-            };
-            
-            /*
-             * Base case:
-             */
-            template<typename... LEFT_LIST , typename... RIGHT_LIST>
-            struct split_in_middle<tml::list<LEFT_LIST...>,tml::list<RIGHT_LIST...>,true>
-            {
-                using variables = list<LEFT_LIST...>;
-                using values = list<RIGHT_LIST...>;
-            };
-            
-            using args_without_expression = tml::lists::pop_back<ARGS>;
-            
-            using variables = typename split_in_middle<tml::empty_list,args_without_expression,false>::variables;
-            using values    = typename split_in_middle<tml::empty_list,args_without_expression,false>::values;
             
             
             /*
@@ -294,13 +302,13 @@ namespace tml
             template<typename SENTINEL>
             struct currify<list<>,list<>,SENTINEL>
             {
-                using result = target;
+                using result = body;
             };
             
             /*
              * The result of the currification process
              */
-            using result = typename currify<variables,values>::result;
+            using result = typename currify<variables,args,nil>::result;
         };
     }
     
