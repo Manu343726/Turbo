@@ -10,7 +10,7 @@ struct X : public tml::not_evaluated_function_chameleon{}; struct Y : public tml
 
 using l = tml::lambda<X,Y , tml::add<X,Y>>;
 
-using r = tml::eval<l,tml::Int<1>,tml::Int<1>>;
+using r = tml::eval<l,tml::Int<1>,tml::Int<2>>;
 
 int main()
 {

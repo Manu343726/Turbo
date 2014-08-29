@@ -12,14 +12,10 @@ INIT_BIICODE_BLOCK()
 # Actually create targets: EXEcutables, STATIC libraries.
 ADD_BIICODE_TARGETS()
 
-IF(LINUX)
-	# Use LLVM/Clang instead of GCC
-	set(CMAKE_C_COMPILER "clang")
-	set(CMAKE_CXX_COMPILER "clang++")
-
-	# Enable C++11 and libc++
+IF($CXX="clang++")
+    # Enable C++11 and libc++
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++ -lc++abi")
-ELSE(WIN32)
+ELSE($CXX="g++")
 	# Enable C++11
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 ENDIF()
