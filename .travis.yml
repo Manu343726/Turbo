@@ -48,10 +48,13 @@ install:
   - rm -rf cmake-3.0.1-Linux-i386
   - rm cmake-3.0.1-Linux-i386.tar.gz
 
+  #Configure cmake compiler
+  - export TRAVIS_CXX=$CXX
+
 script: 
   # Show me what compiler are you using:
-  - echo $CC $CXX
-  - $CXX --version
+  - echo $TRAVIS_CXX
+  - $TRAVIS_CXX --version
   
   - bii find
   - bii work
