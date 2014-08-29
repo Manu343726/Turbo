@@ -15,6 +15,8 @@ ADD_BIICODE_TARGETS()
 # Enable C++11
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
+set(CMAKE_VERBOSE_MAKEFILE ON) #Please be verbose...
+
 #Under TravisCI the .travis.yml script should define a TRAVIS_CXX variable with the current value of CXX ( export TRAVIS_CXX=$CXX )
 
 IF($TRAVIS_CXX="")
