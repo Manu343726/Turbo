@@ -47,5 +47,8 @@ script:
   
   - bii find
   - bii work
-  - bii cpp:build
+  
+  - if [ "$CXX" == "clang++"] then export CXX="clang++" && bii cpp:build; fi;
+  - if [ "$CXX" == "g++"]     then export CXX="g++"     && bii cpp:build; fi;
+  
   - ./bin/manu343726_turbo_main_main 
