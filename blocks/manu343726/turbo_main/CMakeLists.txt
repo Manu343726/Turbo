@@ -31,6 +31,7 @@ ELSE($TRAVIS_CXX="")
 	IF($TRAVIS_CXX="clang++")
 	    # Force Clang usage
 	    set(CMAKE_C_COMPILER "clang")
+	    	set(CMAKE_C_COMPILER "clang")
 		set(CMAKE_CXX_COMPILER "clang++")
 
 		# Use LLVM libc++
