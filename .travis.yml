@@ -19,10 +19,6 @@ before_install:
   - if [ "$CXX" == "clang++" ]; then sudo add-apt-repository -y ppa:h-rayflood/llvm; fi
 
   - sudo apt-get update -qq
-  
-  
-  #Use recursive cloning, bandit has some submodules (Why this is not the default option Travis???)                                                                                                                                          
-  - git submodule update --init --recursive 
 
 install:
   # g++4.8.1
