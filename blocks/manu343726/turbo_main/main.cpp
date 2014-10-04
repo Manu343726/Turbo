@@ -3,16 +3,17 @@
 
 #include <iostream>
 
-using tml::placeholders::_1;
-using tml::placeholders::_2;
+using m = tml::maps::map<tml::maps::pair<int          , unsigned int>      ,
+                         tml::maps::pair<long int     , unsigned long int> ,
+                         tml::maps::pair<long long int, unsigned long long int>
+                        >;
 
-struct X : public tml::not_evaluated_function_chameleon{}; struct Y : public tml::not_evaluated_function_chameleon{};
 
-using l = tml::lambda<X,Y , tml::add<X,Y>>;
-
-using r = tml::eval<l,tml::Int<1>,tml::Int<2>>;
+template<typename T>
+using unsigned_type = tml::maps::at<m,T>;
 
 int main()
 {
-	std::cout << tml::to_runtime<r>();	
+    std::cout << "Signed to unsigned map: " << tml::to_string<m>() << std::endl;
+	std::cout << tml::to_string<long int>() << " --> " << tml::to_string<unsigned_type<long int>>() << std::endl;	
 }
