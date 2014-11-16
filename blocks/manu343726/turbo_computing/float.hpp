@@ -424,9 +424,9 @@ namespace tml
         {};
 
         /*
-         * Note that the result of tml::to_runtime() should be aviable (computed) at compile-time.
+         * Note that the result of tml::to_runtime() should be available (computed) at compile-time.
          * In this case, this "to double conversion" should be done at compile-time, to be sure the double values
-         * are aviable at compile time and properly placed on the program binary. Hence the constexpr pow2() function.
+         * are available at compile time and properly placed on the program binary. Hence the constexpr pow2() function.
          * 
          * Having a working floating-point library which does all the computations at compile-time, but needs to do
          * std::pow(2.0,e) at runtime only to get those results has no sense at all...
