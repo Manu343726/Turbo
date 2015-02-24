@@ -20,4 +20,6 @@ build/
 # Biicode metadata and cmake output
 cmake/
 bin/
-
+bii/
+deps/
+build/
