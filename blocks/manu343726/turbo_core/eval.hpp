@@ -92,7 +92,8 @@ namespace tml
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<E>),
                                      DISABLE_IF(tml::is_function<E>),
-                                     DISABLE_IF(is_function_ptr_type<E>)
+                                     DISABLE_IF(is_function_ptr_type<E>),
+                                     DISABLE_IF(tml::is_aggregate<E>)
                                     )
                    >
         {
@@ -258,6 +259,18 @@ namespace tml
     template<typename F , typename... ARGS>
     struct delayed_eval : public tml::value_chameleon
     {};
+
+    template<typename F, typename... ARGS>
+    struct overrides_eval<tml::delayed_eval<F,ARGS...>> : public tml::true_type
+    {};
+
+    namespace impl
+    {
+        template<typename F, typename... ARGS>
+        struct eval<tml::delayed_eval<F,ARGS...>, tml::empty_list> : 
+            public tml::function<tml::eval<F,ARGS...>>
+        {};
+    }
     
     /*
      * Simple shorthand alias:

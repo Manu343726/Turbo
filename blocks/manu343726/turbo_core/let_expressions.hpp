@@ -105,8 +105,28 @@ namespace tml
                  typename F , typename... ARGS
                 >
         struct let_impl_low<NAME,VALUE,tml::delayed_eval<F,ARGS...>> 
-            : tml::function<tml::eval<typename let_impl_high<NAME,VALUE,F>::result , typename let_impl_high<NAME,VALUE,ARGS>::result...>>
+            : tml::function<tml::delayed_eval<typename let_impl_high<NAME,VALUE,F>::result , typename let_impl_high<NAME,VALUE,ARGS>::result...>>
         {
+            //static_assert(sizeof(NAME) != sizeof(NAME) , "???");
+        };
+
+        /*
+         * Special case for lambda bodies expressions.
+         * 
+         * Lambda bodies with evaluating expressions such as 'tml::eval<F,_1>' doesn't work because the placeholder is substituted after the 
+         * expression evaluation.
+         * 
+         * The library provides the template tml::delayed_eval<F,ARGS...> for that purpose: It holds a functional expression reevaluation
+         * with parameters that may be placeholders. When doing let on such template, tml::let substitutes the letted placeholders with its
+         * values, and the tml::delayed_eval template with tml::eval.
+         * 
+         * For that purpose, the low_level phase of tml::let is overrided.
+         */
+        template<typename NAME , typename VALUE , template<typename...> class EXPRESSION , typename... PARAMETERS>
+        struct let_impl_low<NAME,VALUE,tml::lazy<EXPRESSION,PARAMETERS...>> :
+        public tml::function<tml::lazy<EXPRESSION,typename let_impl_high<NAME,VALUE,PARAMETERS>::result...>> 
+        {
+            //static_assert( sizeof(NAME) != sizeof(NAME) , "Instanced" );
         };
         
         /*
@@ -173,143 +193,67 @@ namespace tml
      */
     template<typename NAME , typename VALUE , typename EXPRESSION>
     using let = typename impl::let_impl_high<NAME,VALUE,EXPRESSION>::result;
-    
+    //PREFER N-ARY LET BELLOW
     
     
     
     namespace impl
     {            
-        template<typename ARGS>
-        struct multi_let_data_parser;
+
+        template<typename Pairs, typename Body>
+        struct multi_let_currifier_process;
+
+        template<template<typename, typename> class pair, typename Var, typename Val, typename... Tail, typename Body>
+        struct multi_let_currifier_process<tml::list<pair<Var,Val>, Tail...>, Body>
+        {
+            using body = typename impl::let_impl_high<Var,Val,Body>::result;
+
+            using result = typename multi_let_currifier_process<tml::list<Tail...>, body>::result;
+        };
+        
+        template<typename Body>
+        struct multi_let_currifier_process<tml::empty_list, Body>
+        {
+            using result = Body;
+        };
 
         template<typename... ARGS>
-        struct multi_let_data_parser<tml::list<ARGS...>>
-        {
-            enum state { reading_vars , reading_args };
-
-
-            template<typename VARIABLES , typename ARGS_ , typename LIST , std::size_t i , bool args_parsed>
-            struct parse;
-
-            template<typename... VARIABLES , typename ARGS_ , typename HEAD , typename... TAIL , std::size_t i>
-            struct parse<tml::list<VARIABLES...>,ARGS_,tml::list<HEAD,TAIL...>,i,false>
-            {
-                using variables = typename parse<tml::list<VARIABLES...,HEAD>,ARGS_,tml::list<TAIL...>, i-1, (i-1) == 0>::variables;
-                using args      = typename parse<tml::list<VARIABLES...,HEAD>,ARGS_,tml::list<TAIL...>, i-1, (i-1) == 0>::args;
-                using body      = typename parse<tml::list<VARIABLES...,HEAD>,ARGS_,tml::list<TAIL...>, i-1, (i-1) == 0>::body;
-            };
-
-            template<typename VARIABLES , typename... ARGS_ , typename HEAD , typename T , typename... TAIL>
-            struct parse<VARIABLES,tml::list<ARGS_...>,tml::list<HEAD,T,TAIL...>,0,true>
-            {
-                using variables = VARIABLES;
-                using args      = typename parse<VARIABLES,tml::list<ARGS_...,HEAD>,tml::list<T,TAIL...>, 0,true>::args;
-                using body      = typename parse<VARIABLES,tml::list<ARGS_...,HEAD>,tml::list<T,TAIL...>, 0,true>::body;
-            };
-
-            template<typename VARIABLES , typename ARGS_ , typename HEAD>
-            struct parse<VARIABLES,ARGS_,tml::list<HEAD>,0,true>
-            {
-                using variables = VARIABLES;
-                using args      = ARGS_;
-                using body      = HEAD;
-            };
-
-            using variables = typename parse<tml::empty_list,tml::empty_list,tml::list<ARGS...>,sizeof...(ARGS)/2,false>::variables;
-            using args      = typename parse<tml::empty_list,tml::empty_list,tml::list<ARGS...>,sizeof...(ARGS)/2,false>::args;
-            using body      = typename parse<tml::empty_list,tml::empty_list,tml::list<ARGS...>,sizeof...(ARGS)/2,false>::body;
-        };
-
-        /*
-         * Evaluate a multiple-variable let expression and returns the currified unary let equivalent expression.
-         * 
-         * A multiple-variable let expression is of the form:
-         * 
-         *     multi_let<vars...,values...,expression>
-         * 
-         * where vars is a set of expression variables, values a set of values to bind, and expression the expression where
-         * to bind the values. 
-         * Each variable of the set of variables passed has to have a corresponding one-by-one value in the values set specified,
-         * in other words, the number of values passed should be the same as the number of variables passed.
-         * The binding correspondence is done in order. For example:
-         * 
-         *     multi_let<x,y,z,a,b,c,function<x,y,z>>
-         * 
-         * Binds the value a to the variable x on expression, the value b to the variable y, and the value c to the variable z. 
-         * So the result of that multi-variable let expression is:
-         * 
-         *     function<a,b,c>
-         * 
-         * The currifier parses the argumment pack in the way explained above, so the currifier expects an odd number of let parameters
-         * (The last for the expression and one odd set of argumments with the (variable,value) correspondences).
-         * 
-         * The parsing is executed as follows:
-         *  - The currifier extracts the last argumment as the target expression.
-         *  - The rest odd set of argumments is paritiones in two sets, the first corresponding to the set of variables,
-         *    and the later corresponding to the set of values.
-         *  - Then the currifier generates the expected currified let expression recursively. 
-         */
-        template<typename ARGS>
         struct multi_let_currifier
         {
-            static_assert( ( ARGS::length - 1 ) > 0 , "A let expression should have at least one variable-value pair to bind." );
-            //static_assert( ( ARGS::length - 1 ) % 2 == 0 , "The set of variables and values should be odd (One value per variable)" );
-            
-            using target = tml::lists::back<ARGS>; //Target expression (See parsing description above)
-            
-            /* Just a type with no meaning used as sentinel in some contexts */
-            struct nil {};
-           
-            
-            using variables = typename multi_let_data_parser<ARGS>::variables;
-            using args      = typename multi_let_data_parser<ARGS>::args;
-            using body      = typename multi_let_data_parser<ARGS>::body;
-            
-            
-            
-            /*
-             * This metafunction gets the set of variables and values and generates a
-             * currified version of the left expression.
-             * 
-             * The last optional parameter is only to lead with the explicit two-empty-lists specialization
-             * on the base case (See the comments on the base case).
-             */
-            template<typename VARIABLES , typename VALUES , typename = nil>
-            struct currify;
-            
-            /*
-             * Recursive case: There are more variables to process, generate an enclosing unary let expression
-             * to bind the current variable-value correspondence.
-             */
-            template<typename CURRENT_VAR , typename... VARS_TAIL , typename CURRENT_VAL , typename... VALS_TAIL>
-            struct currify<list<CURRENT_VAR,VARS_TAIL...>,list<CURRENT_VAL,VALS_TAIL...>,nil>
+            template<typename Var, typename Val>
+            struct pair {};
+
+            template<typename _ARGS, typename PAIRS>
+            struct parse_args;
+
+            template<typename Var, typename Val, typename... TAIL,
+                     typename... Pairs>
+            struct parse_args<tml::list<Var, Val, TAIL...>, tml::list<Pairs...>>
             {
-                using next_call = currify<list<VARS_TAIL...>,list<VALS_TAIL...>>;
-                using result = tml::let<CURRENT_VAR,CURRENT_VAL,typename next_call::result>;
+                using _pairs = tml::list<Pairs...,pair<Var,Val>>;
+                
+                using pairs = typename parse_args<tml::list<TAIL...>, _pairs>::pairs; 
+                using body = typename parse_args<tml::list<TAIL...>, _pairs>::body;
             };
-            
-            /*
-             * Base case: There are no more variables, just return the original expression to apply
-             * let of the last variable on it.
-             * 
-             * NOTE: The template-partial-specialization parameter is not neccesary. An explicit
-             * specialization for two empty lists should do the work, but explicit template specializations
-             * are not valid on non-global contexts.
-             * 
-             * To ride over that the metafunction has an optional unsused parameter which is specified 
-             * as a partial-specialization parameter here to solve the problem.
-             */
-            template<typename SENTINEL>
-            struct currify<list<>,list<>,SENTINEL>
+
+            template<typename Pairs, typename Body>
+            struct parse_args<tml::list<Body>, Pairs>
             {
-                using result = body;
+                using pairs = Pairs;
+                using body = Body;
             };
-            
-            /*
-             * The result of the currification process
-             */
-            using result = typename currify<variables,args,nil>::result;
+
+            using parser = parse_args<tml::list<ARGS...>,tml::empty_list>;
+
+            using result = typename multi_let_currifier_process<typename parser::pairs, typename parser::body>::result;
         };
+
+        template<template<typename,typename>class... Pairs, typename... Vars, typename... Vals, typename Body>
+        struct multi_let_currifier<tml::list<Pairs<Vars,Vals>...>, Body>
+        {
+            using result = typename multi_let_currifier_process<tml::list<Pairs<Vars,Vals>...>, Body>::result;
+        };
+
     }
     
     /*

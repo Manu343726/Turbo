@@ -72,6 +72,12 @@ namespace tml
     namespace impl
     {
         template<typename... Ts>
+        struct is_function<tml::list<Ts...>>
+        {
+            using result = tml::false_type;
+        };
+        
+        template<typename... Ts>
         struct to_string<tml::list<Ts...>>
         {
             template<typename... Us>
@@ -179,6 +185,34 @@ namespace tml
             {};
         }
     }
+    
+    /**
+     * is_aggregate type trait: Checks if the type is an aggreate type (A template 
+     * instance with parameters) but not a function.
+     */
+    namespace impl
+    {
+        template<typename T, typename is_function = tml::impl::is_function<T>>
+        struct is_aggregate
+        {
+            using result = tml::false_type;
+        };
+        
+        template<template<typename...> class T, typename... ARGS>
+        struct is_aggregate<T<ARGS...>, tml::false_type>
+        {
+            using result = tml::true_type;
+        };
+    }
+    
+    namespace func
+    {
+        template<typename T>
+        using is_aggregate = impl::is_aggregate<T>;
+    }
+    
+    template<typename T>
+    using is_aggregate = typename func::is_aggregate<T>::result;
 }
 
 #endif	/* LIST_HPP */
