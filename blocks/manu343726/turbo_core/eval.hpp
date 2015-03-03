@@ -93,7 +93,8 @@ namespace tml
                                      DISABLE_IF(tml::overrides_eval<E>),
                                      DISABLE_IF(tml::is_function<E>),
                                      DISABLE_IF(is_function_ptr_type<E>),
-                                     DISABLE_IF(tml::is_aggregate<E>)
+                                     DISABLE_IF(tml::is_aggregate<E>),
+                                     DISABLE_IF(tml::is_metafunction_class<E>)
                                     )
                    >
         {
@@ -115,6 +116,7 @@ namespace tml
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<F<ARGS...>>),
                                      ENABLE_IF(tml::is_turbo_function<F<ARGS...>>)
+                                     DISABLE_IF(tml::is_metafunction_class<F<ARGS...>>)
                                     )
                    > 
         {
@@ -135,7 +137,8 @@ namespace tml
         struct eval<F<ARGS...>,tml::empty_list,
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<F<ARGS...>>),
-                                     ENABLE_IF(tml::is_stl_function<F<ARGS...>>)
+                                     ENABLE_IF(tml::is_stl_function<F<ARGS...>>).
+                                     DISABLE_IF(tml::is_metafunction_class<F<ARGS...>>)
                                     )
                    > : 
                    public tml::function<typename F<typename eval<ARGS,tml::empty_list>::result...>::type> 
@@ -152,7 +155,8 @@ namespace tml
         struct eval<E<ARGS...>,tml::empty_list,
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<E<ARGS...>>),
-                                     DISABLE_IF(tml::is_function<E<ARGS...>>)
+                                     DISABLE_IF(tml::is_function<E<ARGS...>>),
+                                     DISABLE_IF(tml::is_metafunction_class<E<ARGS...>,ARGS...>)
                                     )
                    > : 
                    public tml::function<E<typename eval<ARGS,tml::empty_list>::result...>> 
@@ -170,7 +174,8 @@ namespace tml
         struct eval<F<PLACEHOLDERS...> , tml::list<ARG,ARGS...>,
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<F<PLACEHOLDERS...>>),
-                                     ENABLE_IF(tml::is_function<F<PLACEHOLDERS...>>)
+                                     ENABLE_IF(tml::is_function<F<PLACEHOLDERS...>>),
+                                     DISABLE_IF(tml::is_metafunction_class<F<PLACEHOLDERS...>,ARG,ARGS...>)
                                     )
                    > : 
                    public F<typename eval<ARG,tml::empty_list>::result,
@@ -190,7 +195,8 @@ namespace tml
         struct eval<E<PLACEHOLDERS...> , tml::list<ARG,ARGS...>,
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<E<PLACEHOLDERS...>>),
-                                     DISABLE_IF(tml::is_function<E<PLACEHOLDERS...>>)
+                                     DISABLE_IF(tml::is_function<E<PLACEHOLDERS...>>),
+                                     DISABLE_IF(tml::is_metafunction_class<E<PLACEHOLDERS...>,ARG,ARGS...>)
                                     )
                    > : 
                    public tml::function<E<typename eval<ARG,tml::empty_list>::result,

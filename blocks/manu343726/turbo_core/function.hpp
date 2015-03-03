@@ -84,6 +84,15 @@ namespace tml
         {
             static constexpr bool result = false;
         };
+
+        template<typename T, typename... Args>
+        struct is_metafunction_class
+        {
+            template<typename U> static std::true_type test(U::template apply<Args...>*);
+            template<typename U> static std::false_type test(...);
+
+            static constexpr bool result = decltype( test<T>(nullptr) )::value;
+        };
     }
     
     /* User-side tml::is_function type-trait 
@@ -109,6 +118,12 @@ namespace tml
      */
     template<typename E>
     using is_stl_function = std::integral_constant<bool,tml::impl::is_stl_function<E>::result>;
+
+    /*
+     * Checks if the type T is a metafunction class, that is, has an internal apply metafunction accepting Args... as parameters.
+     */
+    template<typename T, typename... Args>
+    using is_metafunction_class = std::integral_constant<bool, tml::impl::is_metafunction_class<T, Args...>::result>;
     
     /*
      * This is a helper metafunction to represent a metafunction in the way the library

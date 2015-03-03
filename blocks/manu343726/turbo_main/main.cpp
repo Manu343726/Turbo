@@ -8,7 +8,11 @@ using namespace tml::placeholders;
 template<typename A, typename B, typename C, typename...>
 struct third
 {
-	using result = C;
+	template<typename _1, typename _2, typename _3, typename...>
+	struct apply
+	{
+		using type = _3;
+	};
 };
 
 int main()
