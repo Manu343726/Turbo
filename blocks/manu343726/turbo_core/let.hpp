@@ -42,7 +42,11 @@ namespace tml
 			using body = typename impl::let_impl_high<Var,Val,Body>::result;
 			using result = typename process<tml::list<Tail...>, body>::result;
 		};
-	}
+
+		using parser = parse_args<tml::list<ARGS...>,tml::empty_list>;
+
+		using result = typename process<typename parser::pairs, typename parser::result>::result;
+	};
 }
 
 #endif
