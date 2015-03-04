@@ -50,6 +50,10 @@ namespace tml
          * That serves to evaluate functions and other functional expressions.
          */   
 
+         template<typename... Args>
+         struct args_list {};
+
+         using no_args = args_list<>;
 
         /*
          * The implementation has three parameters:
@@ -68,7 +72,10 @@ namespace tml
          *  Of course this metafunction is a function too, so it stores the result of the evaluation in a 'result' member type.
          */
         template<typename E , typename ARGS , typename SFINAE_FLAGS = tml::sfinae_return>
-        struct eval;
+        struct eval
+        {
+            using result = E;
+        };
         
         /*
          * Non-decayed function pointer types (i.e. R(ARGS...) ) are used as a shorthand for a metafunction call F(ARGS...).
@@ -87,7 +94,7 @@ namespace tml
          * The result of evaluating such expression is the expression itself.
          */
         template<typename E>
-        struct eval<E,tml::empty_list,
+        struct eval<E,no_args,
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<E>),
                                      DISABLE_IF(tml::is_function<E>),
@@ -111,15 +118,15 @@ namespace tml
          * expression recursively.
          */
         template<template<typename...> class F , typename... ARGS>
-        struct eval<F<ARGS...>,tml::empty_list,
+        struct eval<F<ARGS...>,no_args,
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<F<ARGS...>>),
                                      ENABLE_IF(tml::is_turbo_function<F<ARGS...>>),
-                                     DISABLE_IF(tml::is_metafunction_class<F<ARGS...>,typename eval<ARGS,tml::empty_list>::result...>)
+                                     DISABLE_IF(tml::is_metafunction_class<F<ARGS...>,typename eval<ARGS,no_args>::result...>)
                                     )
                    > 
         {
-            using result = typename  F<typename eval<ARGS,tml::empty_list>::result...>::result;
+            using result = typename  F<typename eval<ARGS,no_args>::result...>::result;
         };
         
         /*
@@ -133,15 +140,15 @@ namespace tml
          * expression recursively.
          */
         template<template<typename...> class F , typename... ARGS>
-        struct eval<F<ARGS...>,tml::empty_list,
+        struct eval<F<ARGS...>,no_args,
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<F<ARGS...>>),
                                      ENABLE_IF(tml::is_stl_function<F<ARGS...>>),
-                                     DISABLE_IF(tml::is_metafunction_class<F<ARGS...>,typename eval<ARGS,tml::empty_list>::result...>)
+                                     DISABLE_IF(tml::is_metafunction_class<F<ARGS...>,typename eval<ARGS,no_args>::result...>)
                                     )
                    >
         {
-            using result = typename F<typename eval<ARGS,tml::empty_list>::result...>::type;
+            using result = typename F<typename eval<ARGS,no_args>::result...>::type;
         };
         
         /*
@@ -152,14 +159,14 @@ namespace tml
          * expression recursively.
          */
         template<template<typename...> class E , typename... ARGS>
-        struct eval<E<ARGS...>,tml::empty_list,
+        struct eval<E<ARGS...>,no_args,
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<E<ARGS...>>),
                                      DISABLE_IF(tml::is_function<E<ARGS...>>),
-                                     DISABLE_IF(tml::is_metafunction_class<E<ARGS...>,typename eval<ARGS,tml::empty_list>::result...>)
+                                     DISABLE_IF(tml::is_metafunction_class<E<ARGS...>,typename eval<ARGS,no_args>::result...>)
                                     )
                    > : 
-                   public tml::function<E<typename eval<ARGS,tml::empty_list>::result...>> 
+                   public tml::function<E<typename eval<ARGS,no_args>::result...>> 
         {};
 
         /*
@@ -171,19 +178,19 @@ namespace tml
          * The result is the result of evaluating the function with that parameters.
          */
         template<template<typename...> class F , typename... PLACEHOLDERS , typename ARG , typename... ARGS>
-        struct eval<F<PLACEHOLDERS...> , tml::list<ARG,ARGS...>,
+        struct eval<F<PLACEHOLDERS...> , args_list<ARG,ARGS...>,
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<F<PLACEHOLDERS...>>),
                                      ENABLE_IF(tml::is_function<F<PLACEHOLDERS...>>),
                                      DISABLE_IF(tml::is_metafunction_class<F<PLACEHOLDERS...>,
-                                                                           typename eval<ARG,tml::empty_list>::result,
-                                                                           typename eval<ARGS,tml::empty_list>::result...
+                                                                           typename eval<ARG,no_args>::result,
+                                                                           typename eval<ARGS,no_args>::result...
                                                                           >
                                                )
                                     )
                    > : 
-                   public F<typename eval<ARG,tml::empty_list>::result,
-                            typename eval<ARGS,tml::empty_list>::result...
+                   public F<typename eval<ARG,no_args>::result,
+                            typename eval<ARGS,no_args>::result...
                            >
         {
             
@@ -196,19 +203,19 @@ namespace tml
          * Note that the parameters of the function call are evaluated too.
          */
         template<template<typename...> class E , typename... PLACEHOLDERS , typename ARG , typename... ARGS>
-        struct eval<E<PLACEHOLDERS...> , tml::list<ARG,ARGS...>,
+        struct eval<E<PLACEHOLDERS...> , args_list<ARG,ARGS...>,
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<E<PLACEHOLDERS...>>),
                                      DISABLE_IF(tml::is_function<E<PLACEHOLDERS...>>),
                                      DISABLE_IF(tml::is_metafunction_class<E<PLACEHOLDERS...>,
-                                                                           typename eval<ARG,tml::empty_list>::result,
-                                                                           typename eval<ARGS,tml::empty_list>::result...
+                                                                           typename eval<ARG,no_args>::result,
+                                                                           typename eval<ARGS,no_args>::result...
                                                                           >
                                                )
                                     )
                    > : 
-                   public tml::function<E<typename eval<ARG,tml::empty_list>::result,
-                                          typename eval<ARGS,tml::empty_list>::result...
+                   public tml::function<E<typename eval<ARG,no_args>::result,
+                                          typename eval<ARGS,no_args>::result...
                                          >
                                        >
         {
@@ -216,10 +223,10 @@ namespace tml
         };
 
         template<typename F , typename ARG , typename... ARGS>
-        struct eval<F, tml::list<ARG,ARGS...>,
+        struct eval<F, args_list<ARG,ARGS...>,
                     TURBO_SFINAE_ALL(ENABLE_IF(tml::is_metafunction_class<F,
-                                                                          typename eval<ARG,tml::empty_list>::result,
-                                                                          typename eval<ARGS,tml::empty_list>::result...
+                                                                          ARG,
+                                                                          ARGS...
                                                                          >
                                               ) 
                                     )
@@ -227,7 +234,7 @@ namespace tml
         {
             //static_assert(sizeof(F) != sizeof(F), "compiler bug!");
 
-            using apply = tml::impl::get_apply<F,typename eval<ARG,tml::empty_list>::result,typename eval<ARGS,tml::empty_list>::result...>;
+            using apply = tml::impl::get_apply<F,typename eval<ARG,no_args>::result,typename eval<ARGS,no_args>::result...>;
 
             template<typename T, bool is_stl_function = tml::is_stl_function<T>::value>
             struct call
@@ -248,18 +255,18 @@ namespace tml
          * Alternative call-like syntax
          */
         template<typename F , typename... ARGS>
-        struct eval<F(ARGS...),tml::empty_list,
+        struct eval<F(ARGS...),no_args,
                     TURBO_SFINAE_ALL(
                                      ENABLE_IF( tml::true_type )
                                     )
                    >:
-                   public tml::impl::eval<F,tml::list<ARGS...>>
+                   public tml::impl::eval<F,args_list<ARGS...>>
         {};
 
         template<typename F, typename G, typename... Args>
-        struct eval<F(*)(G), tml::list<Args...>>
+        struct eval<F(*)(G), args_list<Args...>>
         {
-            using result = typename eval<F,tml::list<typename eval<G,tml::list<Args...>>::result>>::result;
+            using result = typename eval<F,args_list<typename eval<G,args_list<Args...>>::result>>::result;
         };
     }
     
@@ -288,7 +295,7 @@ namespace tml
      *             functional/parametrized expressions).
      */
     template<typename EXPRESSION , typename... ARGS>
-    using eval = typename impl::eval<EXPRESSION , tml::list<ARGS...>>::result;
+    using eval = typename impl::eval<EXPRESSION , impl::args_list<ARGS...>>::result;
     
     
     
@@ -324,7 +331,7 @@ namespace tml
     namespace impl
     {
         template<typename F, typename... ARGS>
-        struct eval<tml::delayed_eval<F,ARGS...>, tml::empty_list> : 
+        struct eval<tml::delayed_eval<F,ARGS...>, no_args> : 
             public tml::function<tml::eval<F,ARGS...>>
         {};
     }

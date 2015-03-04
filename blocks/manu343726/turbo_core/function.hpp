@@ -91,7 +91,6 @@ namespace tml
         template<typename T, typename... Args>
         struct is_metafunction_class
         {
-
             template<typename U> static std::true_type test(get_apply<U,Args...>*);
             template<typename U> static std::false_type test(...);
 
@@ -109,7 +108,7 @@ namespace tml
                 static constexpr bool result = false;
             };
 
-            static constexpr bool result = compute_result<T,has_apply>::result;
+            static constexpr bool result = has_apply;
         };
     }
     

@@ -70,10 +70,31 @@ namespace tml
     template<template<typename...> class F , typename... ARGS>
     struct lazy
     {
+        template<typename... Ts>
+        struct args {};
+
+        struct nil {};
+
+
+        template<typename Args>
+        struct do_apply;
+
         template<typename Head, typename... Tail>
+        struct do_apply<args<nil,Head,Tail...>>
+        {
+            using result = tml::eval<F<ARGS...,Head,Tail...>>;
+        };
+
+        template<typename Nil>
+        struct do_apply<args<Nil>>
+        {
+            using result = lazy<F,ARGS...>;
+        };
+
+        template<typename... Args>
         struct apply
         {
-            using result = tml::eval<F<ARGS...,Head, Tail...>>;
+            using result = typename do_apply<args<nil,Args...>>::result;
         };
     }; 
     
