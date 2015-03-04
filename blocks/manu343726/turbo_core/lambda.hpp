@@ -29,24 +29,6 @@ namespace tml
 { 
     namespace impl
     {
-        /*
-         * Represents a multiple-variable lambda expression.
-         * 
-         * A lambda expression is just a template that holds a set of variables and a functional
-         * expression (The lambda body) where the variable is used. 
-         * The lambda expression is designed to act as a functional expression to be evaluated lazily,
-         * when the values of the parameters are specified. Thats why the 'result'  member of function entities
-         * is parametrized.
-         * 
-         * Because the 'result' member doesn't work like in other function entities (In other function entities returns
-         * the result, in a lambda computes the result), a lambda cannot be considered a classic function entity.
-         * The implementation trait 'tml::impl::is_function' and the 'tml::eval' implementation are overrided to
-         * cover this special behaviour of lambda expressions. 
-         */
-        template<typename BODY , typename... VARIABLES>
-        struct lambda
-        {};
-
         namespace 
         {
             template<typename T, typename U>
@@ -76,37 +58,35 @@ namespace tml
             using pairs = Pairs;
             using body = Body;
         };
-
-        
-        /*
-         * tml::let is overrided to compute the result of the lambda when the lambda itselft is evaluated.
-         * Of course a lambda have to be evaluated with its calling parameters, like:
-         * 
-         *     using result = tml::eval<lambda,params...>;
-         * 
-         * so tml::eval acts as a calling high-level metafunction (See the tml::eval documentation) always when a 
-         * lambda is passed.
-         */
-        template<typename... LambdaArgs , typename... CallArgs>
-        struct eval<impl::lambda<LambdaArgs...>,tml::list<CallArgs...>>
+    }
+    
+    /*
+     * Represents a multiple-variable lambda expression.
+     * 
+     * A lambda expression is just a template that holds a set of variables and a functional
+     * expression (The lambda body) where the variable is used. 
+     * The lambda expression is designed to act as a functional expression to be evaluated lazily,
+     * when the values of the parameters are specified. Thats why the 'result'  member of function entities
+     * is parametrized.
+     * 
+     * Because the 'result' member doesn't work like in other function entities (In other function entities returns
+     * the result, in a lambda computes the result), a lambda cannot be considered a classic function entity.
+     * The implementation trait 'tml::impl::is_function' and the 'tml::eval' implementation are overrided to
+     * cover this special behaviour of lambda expressions. 
+     */
+    template<typename... LambdaArgs>
+    struct lambda
+    {
+        template<typename... CallArgs>
+        struct apply
         {
-            using parser = parse_lambda<tml::list<LambdaArgs...>, tml::list<CallArgs...>, tml::empty_list>;
+            using parser = tml::impl::parse_lambda<tml::list<LambdaArgs...>, tml::list<CallArgs...>, tml::empty_list>;
             using pairs = typename parser::pairs;
             using body = typename parser::body;
 
             using result = tml::eval<typename tml::impl::multi_let_currifier<pairs, body>::result>;
         };
-    }
-    
-    /*
-     * A multiple-variable lambda overrides tml::eval:
-     */
-    template<typename... LambdaArgs>
-    struct overrides_eval<tml::impl::lambda<LambdaArgs...>> : public tml::true_type
-    {};
-    
-    template<typename... ARGS>
-    using lambda = impl::lambda<ARGS...>;
+    };
 }
 
 #endif	/* LAMBDA_HPP */

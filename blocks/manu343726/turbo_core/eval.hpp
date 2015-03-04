@@ -68,8 +68,7 @@ namespace tml
          *  Of course this metafunction is a function too, so it stores the result of the evaluation in a 'result' member type.
          */
         template<typename E , typename ARGS , typename SFINAE_FLAGS = tml::sfinae_return>
-        struct eval : public tml::function<E> //Default case (Just the identity function) for non evaluable expressions
-        {};
+        struct eval;
         
         /*
          * Non-decayed function pointer types (i.e. R(ARGS...) ) are used as a shorthand for a metafunction call F(ARGS...).
@@ -115,8 +114,8 @@ namespace tml
         struct eval<F<ARGS...>,tml::empty_list,
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<F<ARGS...>>),
-                                     ENABLE_IF(tml::is_turbo_function<F<ARGS...>>)
-                                     DISABLE_IF(tml::is_metafunction_class<F<ARGS...>>)
+                                     ENABLE_IF(tml::is_turbo_function<F<ARGS...>>),
+                                     DISABLE_IF(tml::is_metafunction_class<F<ARGS...>,typename eval<ARGS,tml::empty_list>::result...>)
                                     )
                    > 
         {
@@ -137,12 +136,13 @@ namespace tml
         struct eval<F<ARGS...>,tml::empty_list,
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<F<ARGS...>>),
-                                     ENABLE_IF(tml::is_stl_function<F<ARGS...>>).
-                                     DISABLE_IF(tml::is_metafunction_class<F<ARGS...>>)
+                                     ENABLE_IF(tml::is_stl_function<F<ARGS...>>),
+                                     DISABLE_IF(tml::is_metafunction_class<F<ARGS...>,typename eval<ARGS,tml::empty_list>::result...>)
                                     )
-                   > : 
-                   public tml::function<typename F<typename eval<ARGS,tml::empty_list>::result...>::type> 
-        {};
+                   >
+        {
+            using result = typename F<typename eval<ARGS,tml::empty_list>::result...>::type;
+        };
         
         /*
          * This specialization matches the case when the expression passed is a parametrized
@@ -156,7 +156,7 @@ namespace tml
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<E<ARGS...>>),
                                      DISABLE_IF(tml::is_function<E<ARGS...>>),
-                                     DISABLE_IF(tml::is_metafunction_class<E<ARGS...>,ARGS...>)
+                                     DISABLE_IF(tml::is_metafunction_class<E<ARGS...>,typename eval<ARGS,tml::empty_list>::result...>)
                                     )
                    > : 
                    public tml::function<E<typename eval<ARGS,tml::empty_list>::result...>> 
@@ -175,14 +175,18 @@ namespace tml
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<F<PLACEHOLDERS...>>),
                                      ENABLE_IF(tml::is_function<F<PLACEHOLDERS...>>),
-                                     DISABLE_IF(tml::is_metafunction_class<F<PLACEHOLDERS...>,ARG,ARGS...>)
+                                     DISABLE_IF(tml::is_metafunction_class<F<PLACEHOLDERS...>,
+                                                                           typename eval<ARG,tml::empty_list>::result,
+                                                                           typename eval<ARGS,tml::empty_list>::result...
+                                                                          >
+                                               )
                                     )
                    > : 
                    public F<typename eval<ARG,tml::empty_list>::result,
                             typename eval<ARGS,tml::empty_list>::result...
                            >
         {
-            //static_assert( sizeof...(PLACEHOLDERS) == (1 + sizeof...(ARGS)) , "Wrong number of function call parameters." );  
+            
         };
         
         /*
@@ -196,7 +200,11 @@ namespace tml
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<E<PLACEHOLDERS...>>),
                                      DISABLE_IF(tml::is_function<E<PLACEHOLDERS...>>),
-                                     DISABLE_IF(tml::is_metafunction_class<E<PLACEHOLDERS...>,ARG,ARGS...>)
+                                     DISABLE_IF(tml::is_metafunction_class<E<PLACEHOLDERS...>,
+                                                                           typename eval<ARG,tml::empty_list>::result,
+                                                                           typename eval<ARGS,tml::empty_list>::result...
+                                                                          >
+                                               )
                                     )
                    > : 
                    public tml::function<E<typename eval<ARG,tml::empty_list>::result,
@@ -205,6 +213,35 @@ namespace tml
                                        >
         {
             //static_assert( sizeof...(PLACEHOLDERS) == (1 + sizeof...(ARGS)) , "Wrong number of function call parameters." );  
+        };
+
+        template<typename F , typename ARG , typename... ARGS>
+        struct eval<F, tml::list<ARG,ARGS...>,
+                    TURBO_SFINAE_ALL(ENABLE_IF(tml::is_metafunction_class<F,
+                                                                          typename eval<ARG,tml::empty_list>::result,
+                                                                          typename eval<ARGS,tml::empty_list>::result...
+                                                                         >
+                                              ) 
+                                    )
+                   >
+        {
+            //static_assert(sizeof(F) != sizeof(F), "compiler bug!");
+
+            using apply = tml::impl::get_apply<F,typename eval<ARG,tml::empty_list>::result,typename eval<ARGS,tml::empty_list>::result...>;
+
+            template<typename T, bool is_stl_function = tml::is_stl_function<T>::value>
+            struct call
+            {
+                using result = typename T::type;
+            };
+
+            template<typename T>
+            struct call<T, false>
+            {
+                using result = typename T::result;
+            };
+
+            using result = typename call<apply>::result;
         };
         
         /*
@@ -218,6 +255,12 @@ namespace tml
                    >:
                    public tml::impl::eval<F,tml::list<ARGS...>>
         {};
+
+        template<typename F, typename G, typename... Args>
+        struct eval<F(*)(G), tml::list<Args...>>
+        {
+            using result = typename eval<F,tml::list<typename eval<G,tml::list<Args...>>::result>>::result;
+        };
     }
     
     /*
@@ -264,7 +307,15 @@ namespace tml
      */
     template<typename F , typename... ARGS>
     struct delayed_eval : public tml::value_chameleon
-    {};
+    {
+        template<typename...>
+        struct apply
+        {
+            using result = tml::eval<F,ARGS...>;
+        };
+
+        static_assert(tml::is_metafunction_class<delayed_eval>::value, "Why's not a metafunction class?");
+    };
 
     template<typename F, typename... ARGS>
     struct overrides_eval<tml::delayed_eval<F,ARGS...>> : public tml::true_type

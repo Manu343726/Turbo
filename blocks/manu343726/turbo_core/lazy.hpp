@@ -69,7 +69,13 @@ namespace tml
      */
     template<template<typename...> class F , typename... ARGS>
     struct lazy
-    {}; 
+    {
+        template<typename Head, typename... Tail>
+        struct apply
+        {
+            using result = tml::eval<F<ARGS...,Head, Tail...>>;
+        };
+    }; 
     
 /*
  * Shorthand
@@ -129,25 +135,6 @@ namespace tml
      */
     template<typename L , typename... ARGS>
     using lazy_instance = typename tml::impl::lazy_instance<L,ARGS...>::result;
-    
-    
-    
-    /*
-     * tml::eval is overrided to take care of wrapped templates. A wrapped template should be evaluated with a set of parameters.
-     * That parameters are used to instantiate the template and evaluate the resulting instance later.
-     */
-    
-    template<template<typename...> class F , typename... ARGS>
-    struct overrides_eval<tml::lazy<F,ARGS...>> : public tml::true_type
-    {};
-    
-    namespace impl
-    {
-        template<template<typename...> class F , typename... B_ARGS , typename... ARGS>
-        struct eval<tml::lazy<F,B_ARGS...>,tml::list<ARGS...>> : 
-            public tml::function<tml::eval<tml::lazy_instance<tml::lazy<F,B_ARGS...>,ARGS...>>>
-        {};
-    }
 }
 
 #endif	/* LAZY_HPP */

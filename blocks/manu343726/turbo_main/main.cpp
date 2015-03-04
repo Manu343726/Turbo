@@ -5,21 +5,30 @@
 
 using namespace tml::placeholders;
 
-template<typename A, typename B, typename C, typename...>
-struct third
+template<typename... Args>
+struct List
 {
-	template<typename _1, typename _2, typename _3, typename...>
+	template<typename... Fs>
 	struct apply
 	{
-		using type = _3;
+		using result = List<tml::eval<Fs(Args)>...>;
+	};
+
+	template<typename F>
+	struct apply<F>
+	{
+		using result = tml::eval<F(Args...)>;
 	};
 };
 
+
 int main()
 {
-	using l = tml::lambda<_1, _2, _3, _4, tml::deval<_1, _2, _3, _4>>;
 
-	using result = tml::eval<l, tml::lazy<third>, tml::integer<1>, tml::integer<2>, tml::integer<3>>;
+	using f = tml::lazy<std::add_pointer>;
+	using g = tml::lazy<std::remove_pointer>;
+
+	using result = tml::eval<f(int)>;
 
 	std::cout << tml::to_string<result>() << std::endl;
 }

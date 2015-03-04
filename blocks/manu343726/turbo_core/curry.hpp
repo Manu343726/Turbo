@@ -33,7 +33,13 @@ namespace tml
      */
     template<template<typename> class F>
     struct curry
-    {};
+    {
+        template<typename... Args>
+        struct apply
+        {
+            using result = tml::eval<F<tml::list<Args...>>>;
+        };
+    };
 
     /*
      * Given a function F with n argumments (A variadic-pack ARGS...),
@@ -42,26 +48,16 @@ namespace tml
      */
     template<template<typename...> class F>
     struct uncurry
-    {};
-
-    template<template<typename> class F>
-    struct overrides_eval<tml::curry<F>> : public tml::true_type
-    {};
-    template<template<typename...> class F>
-    struct overrides_eval<tml::uncurry<F>> : public tml::true_type
-    {};
-    
-    namespace impl
     {
-        template<template<typename> class F , typename... CARGS>
-        struct eval<tml::curry<F> , tml::list<CARGS...>> : 
-            public tml::function<tml::eval<F<tml::list<CARGS...>>>>
-        {};
-        template<template<typename...> class F , typename... CARGS>
-        struct eval<tml::uncurry<F> , tml::list<tml::list<CARGS...>>> : 
-            public tml::function<tml::eval<F<CARGS...>>>
-        {};
-    }
+        template<typename Args>
+        struct apply;
+
+        template<typename... Args>
+        struct apply<tml::list<Args...>>
+        {
+            using result = tml::eval<F<Args...>>;
+        };
+    };
     
     
     /*
