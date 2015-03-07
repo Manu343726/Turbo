@@ -88,26 +88,12 @@ namespace tml
         {
             //static_assert( sizeof(NAME) != sizeof(NAME) , "Instanced" );
         };
-        
-        /*
-         * Special case for lambda bodies expressions.
-         * 
-         * Lambda bodies with evaluating expressions such as 'tml::eval<F,_1>' doesn't work because the placeholder is substituted after the 
-         * expression evaluation.
-         * 
-         * The library provides the template tml::delayed_eval<F,ARGS...> for that purpose: It holds a functional expression reevaluation
-         * with parameters that may be placeholders. When doing let on such template, tml::let substitutes the letted placeholders with its
-         * values, and the tml::delayed_eval template with tml::eval.
-         * 
-         * For that purpose, the low_level phase of tml::let is overrided.
-         */
-        template<typename NAME , typename VALUE , 
-                 typename F , typename... ARGS
-                >
-        struct let_impl_low<NAME,VALUE,tml::delayed_eval<F,ARGS...>> 
-            : tml::function<tml::delayed_eval<typename let_impl_high<NAME,VALUE,F>::result , typename let_impl_high<NAME,VALUE,ARGS>::result...>>
+
+        template<typename NAME , typename VALUE , typename E , typename... PARAMETERS>
+        struct let_impl_low<NAME,VALUE,E(PARAMETERS...)> :
+        public tml::function<tml::delayed_eval<typename let_impl_high<NAME,VALUE,E>::result,typename let_impl_high<NAME,VALUE,PARAMETERS>::result...>> 
         {
-            //static_assert(sizeof(NAME) != sizeof(NAME) , "???");
+            //static_assert( sizeof(NAME) != sizeof(NAME) , "Instanced" );
         };
 
         /*

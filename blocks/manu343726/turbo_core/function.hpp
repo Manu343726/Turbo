@@ -86,12 +86,24 @@ namespace tml
         };
 
         template<typename T, typename... Args>
-        using get_apply = typename T::template apply<Args...>;
+        struct get_apply_impl
+        {
+            using result = typename T::template apply<Args...>;
+        };
+
+        template<typename T>
+        struct get_apply_impl<T>
+        {
+            using result = typename T::apply;
+        };
+
+        template<typename T, typename... Args>
+        using get_apply = typename get_apply_impl<T,Args...>::result;
 
         template<typename T, typename... Args>
         struct is_metafunction_class
         {
-            template<typename U> static std::true_type test(get_apply<U,Args...>*);
+            template<typename U> static std::true_type test(typename U::template apply<Args...>*);
             template<typename U> static std::false_type test(...);
 
             static constexpr bool has_apply = decltype( test<T>(nullptr) )::value;
@@ -100,6 +112,29 @@ namespace tml
             struct compute_result 
             {
                 static constexpr bool result = is_function<get_apply<U,Args...>>::result;
+            };
+
+            template<typename U>
+            struct compute_result<U, false>
+            {
+                static constexpr bool result = false;
+            };
+
+            static constexpr bool result = has_apply;
+        };
+
+        template<typename T>
+        struct is_metafunction_class<T>
+        {
+            template<typename U> static std::true_type test(typename U::apply*);
+            template<typename U> static std::false_type test(...);
+
+            static constexpr bool has_apply = decltype( test<T>(nullptr) )::value;
+
+            template<typename U, bool has_apply>
+            struct compute_result 
+            {
+                static constexpr bool result = is_function<get_apply<U>>::result;
             };
 
             template<typename U>

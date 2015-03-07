@@ -224,9 +224,7 @@ namespace tml
 
         template<typename F , typename ARG , typename... ARGS>
         struct eval<F, args_list<ARG,ARGS...>,
-                    TURBO_SFINAE_ALL(ENABLE_IF(tml::is_metafunction_class<F,
-                                                                          ARG,
-                                                                          ARGS...
+                    TURBO_SFINAE_ALL(ENABLE_IF(tml::is_metafunction_class<F,typename eval<ARG,no_args>::result,typename eval<ARGS,no_args>::result...
                                                                          >
                                               ) 
                                     )
@@ -312,27 +310,20 @@ namespace tml
      * 
      * NOTE: See the documentation of the specialization of tml::let in "let_expressions.hpp" for more info.
      */
-    template<typename F , typename... ARGS>
+    template<typename... ARGS>
     struct delayed_eval : public tml::value_chameleon
     {
-        template<typename...>
-        struct apply
-        {
-            using result = tml::eval<F,ARGS...>;
-        };
-
-        static_assert(tml::is_metafunction_class<delayed_eval>::value, "Why's not a metafunction class?");
     };
 
-    template<typename F, typename... ARGS>
-    struct overrides_eval<tml::delayed_eval<F,ARGS...>> : public tml::true_type
+    template<typename... ARGS>
+    struct overrides_eval<tml::delayed_eval<ARGS...>> : public tml::true_type
     {};
 
     namespace impl
     {
-        template<typename F, typename... ARGS>
-        struct eval<tml::delayed_eval<F,ARGS...>, no_args> : 
-            public tml::function<tml::eval<F,ARGS...>>
+        template<typename E, typename... ARGS>
+        struct eval<tml::delayed_eval<E,ARGS...>, no_args> : 
+            public tml::function<tml::eval<E,ARGS...>>
         {};
     }
     
