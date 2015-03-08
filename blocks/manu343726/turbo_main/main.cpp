@@ -135,6 +135,61 @@ struct Continuation
 	};
 };
 
+namespace detail
+{
+	template<typename Name, typename Value>
+	using variable = tml::maps::pair<Name, Value>;
+
+	template<typename... Vars>
+	struct variables
+	{
+		using map = tml::maps::map<Vars...>;
+
+		template<typename... Args>
+		struct apply;
+
+		template<typename Name>
+		struct apply
+		{
+			using result = tml::maps::at<map, Name>;
+		};
+
+		template<typename Name, typename Value>
+		struct apply
+		{
+			using exists = tml::maps::contains<map, Name>;
+
+			template<typename Var>
+			struct replacer
+			{
+				using result = Var
+			};
+
+			template<typename V>
+			struct replacer<variable<Name, V>>
+			{
+				using result = variable<Name, Value>;
+			};
+
+			using mapper = tml::eval<ftor(map, mappable_list<_>)>;
+			using replaced = tml::eval<ftor(mapper(tml::lazy<replacer>), tml::maps::map<_>)>;
+
+			using result_map = tml::conditional<tml::maps::contains<replaced, Name>,
+			                                    replaced,
+			                                    tml:::maps::map<Vars...,variable<Name,Value>>
+			                                   >;
+
+			using result = tml::eval<ftor(result_map, variables<_>)>;
+		};
+	};
+
+	template<typename... Fs>
+	struct Do
+	{
+
+	};
+}
+
 template<typename Start, typename... Fs>
 using Do = tml::eval<Continuation<Fs...>(Start)>;
 
@@ -183,10 +238,10 @@ struct Return
 
 int main()
 {
-	using numbers = tml::integer_range<2,10>;
+	using numbers = tml::integer_range<1,10>;
 
-	using numbers2 = Do<push_front<tml::Int<1>, numbers>,
-						tml::lambda<_1, ftor(_1, mappable_list<_>)>,
+	using numbers2 = Do<numbers,
+	                    tml::lambda<_1, ftor(_1, mappable_list<_>)>,
 						tml::lambda<_1, _1(mul_2)>,
 						tml::lambda<_1, _1(Return<ftor(_1,tml::list<_>)>)>,
 						tml::lambda<_1, ftor(_1,tml::list<_>)>
