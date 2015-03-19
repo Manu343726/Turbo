@@ -5,31 +5,31 @@ Turbo [![Build Status](https://travis-ci.org/Manu343726/Turbo.svg?branch=master)
 
 ## What is Turbo?
 
-Turbo is a library dessigned to provide compile-time utilities through [template metaprogramming](http://en.wikipedia.org/wiki/Template_metaprogramming).
+Turbo is a library designed to provide compile-time utilities through [template meta-programming](http://en.wikipedia.org/wiki/Template_metaprogramming).
 
-One of the key points of C++, and where its expresiveness power comes from, is its ability to define new language constructs and/or customize existing constructs, all leading in a simple and clear syntax (See for example DSELs).
+One of the key points of C++, and where its expressiveness power comes from, is its ability to define new language constructs and/or customize existing constructs, all leading in a simple and clear syntax (See for example DSELs).
 
-But when dealing with the creation and/or manipulation of such constructs, nothing is simple nor clear. Template-meta-programming is powerfull, but suffers from a horrible syntax and the lack of high-level (meta)programming features.  
-Some people claim that tmp seems like a compile-time pure functional language built inside C++ itself. But instead metaprogramming in C++ is more like a functional language with the worst syntax ever made (Despite LISP?).
+But when dealing with the creation and/or manipulation of such constructs, nothing is simple nor clear. Template-meta-programming is powerful, but suffers from a horrible syntax and the lack of high-level (meta)programming features.  
+Some people claim that tmp seems like a compile-time pure functional language built inside C++ itself. But instead meta-programming in C++ is more like a functional language with the worst syntax ever made (Despite LISP?).
 
 This library aims to provide high-level constructs to aid with the **manipulation of the C++ type system**, and the creation and execution of **complex computations at compile-time**; all with a clear and uniform syntax.
-Also the library takes advantage of such features and provides some usefull C++ 
+Also the library takes advantage of such features and provides some useful C++ 
 (runtime) utilities, which are easy to implement thanks to Turbo. 
 
 ## What about Boost.MPL?
 
-[Boost.MPL](http://www.boost.org/doc/libs/1_55_0/libs/mpl/doc/index.html) is the de facto metaprogramming library for C++. But it suffers from two main problems which, in my oppinion, makes difficult to work with it:
+[Boost.MPL](http://www.boost.org/doc/libs/1_55_0/libs/mpl/doc/index.html) is the de facto meta programming library for C++. But it suffers from two main problems which, in my oppinion, makes difficult to work with it:
 
  - **Is Boost**: The Boost libraries are one of the best C++ libraries in the world, but they base the implementation of their features on many many tricks they implemented (See Boost.Preprocessor, for example). The problem with Boost is that making a project depend on the Boost libraries could be a problem, its a huge library. My intention was to rely on standard features only, that is, something which works perfectly providing a C++11 compliant compiler only.
 
- - **Boost.MPL was designed on the C++98 era**: C++11 is like a reboot of the language, and like in other parts of the language, metaprogramming in C++11 is far easier than in C++98/03. The problem is that MPL was written for/using C++98/03 and its design is based in some cumbersome constructs which have been cleared and/or simplified a lot in C++11. Specifically, template aliases are a huge advantage when doing template-meta-programming, and the Turbo library relies on that in all of its features.
+ - **Boost.MPL was designed on the C++98 era**: C++11 is like a reboot of the language, and like in other parts of the language, meta-programming in C++11 is far easier than in C++98/03. The problem is that MPL was written for/using C++98/03 and its design is based in some cumbersome constructs which have been cleared and/or simplified a lot in C++11. Specifically, template aliases are a huge advantage when doing template-meta-programming, and the Turbo library relies on that in all of its features.
 
 ## Features
 
 At this time (April 2014) the library is being completely rewritten from scratch.  
-The initial implementation suffers from some scalability issues due to problems (Bad design decissions?) on the base design and modules of the library.
+The initial implementation suffers from some scalability issues due to problems (Bad design decisions?) on the base design and modules of the library.
 
-To solve that problems, the library was completly redesigned, focusing the implementation on high-order metaprogramming facilities to make developing new features easy, and reduce (Avoid, if possible=) coupling on different features of the library.
+To solve that problems, the library was completely redesigned, focusing the implementation on high-order meta-programming facilities to make developing new features easy, and reduce (Avoid, if possible=) coupling on different features of the library.
 
 The reimplementation of the library is being developed at the [`reboot` branch](https://github.com/Manu343726/Turbo/tree/reboot). Its (currently) focused in a simple set of high-order features:
 
@@ -38,8 +38,8 @@ The goal is to create a way to evaluate any kind of expression the library could
 By convention, this library works with types only. There are no templates with value parameters, basic values are provided through boxing using wrappers like `std::integral_constant`. *Note that this is not required inside the implementation itself*.  
 So an expression could be:
   1. A simple value (Like `int`).
-  2. A *parametrized-expression*: A parametrized expression is just an expression composed from a set of components. Because this is a template metaprogramming library, the way to build expressions is through templates. So a parametrized expressions refers to any kind of template.
-  3. A *functional expression*: This is a type of parametrized expression dessigned to return a value from a set of parameters. That is, a function. This library assumes that any expression with a `result` type member is a function. 
+  2. A *parametrized-expression*: A parametrized expression is just an expression composed from a set of components. Because this is a template meta-programming library, the way to build expressions is through templates. So a parametrized expressions refers to any kind of template.
+  3. A *functional expression*: This is a type of parametrized expression designed to return a value from a set of parameters. That is, a function. This library assumes that any expression with a `result` type member is a function. 
 
 
 ``` cpp
@@ -53,7 +53,7 @@ using e2 = tml::function<int>; //e2 is a functional expression
 using e3 = tml::transform<tml::list<int,float,double>,tml::size_of<_1>>;
 ```
 
-To evaluate an expression, one should evaluate the entire set of parameters of a parametrized expression, and return the result if the expression is a functional expression. Thats what `tml::eval` is dessigned for:
+To evaluate an expression, one should evaluate the entire set of parameters of a parametrized expression, and return the result if the expression is a functional expression. Thats what `tml::eval` is designed for:
 
 ``` cpp
 //Just a simple identity metafunction:
@@ -68,11 +68,11 @@ using result = tml::eval<expression>; //Compute the result of evaluating the exp
 using result = tml::eval<identity<identity<int>>>; //result is int
 ```
 
-Also, `tml::eval` could be used to take an expression and evaluate it with a new set of argumments. Following with the example above:
+Also, `tml::eval` could be used to take an expression and evaluate it with a new set of arguments. Following with the example above:
 
     using binded = tml::eval<identity<int>,float>; //We evaluate identity<> with float instead of int as parameter
 
-Or one could fill the expression with placeholders and evaluate the expression later when the argumments are aviable (Lazy evaluation):
+Or one could fill the expression with placeholders and evaluate the expression later when the arguments are available (Lazy evaluation):
 
     using expression = f<_1,_2,_3>; //_1,_2, and _3 are placeholders
     ...
@@ -80,7 +80,7 @@ Or one could fill the expression with placeholders and evaluate the expression l
 
 Because the library wrks with types only, lazy evaluation of metafunctions should be done filling the metafunction with 
 placeholders to properly instantiate it (See the example above).  
-Turbo provides the `tml::lazy` template, dessigned to take a template parameter storing it, making possible to instantiate the
+Turbo provides the `tml::lazy` template, designed to take a template parameter storing it, making possible to instantiate the
 template later:
 
     using t = tml::lazy<tml::function>; //t stores a tml::function metafunction
@@ -103,22 +103,22 @@ For more information see the documentation inside `eval.hpp`.
 
 ### Haskell-like let expressions
 
-`tml::eval` allows you to evaluate an exsisting expression with other argumments, but it hasn't enought power to be usable in all situations.
+`tml::eval` allows you to evaluate an existing expression with other arguments, but it hasn't enough power to be usable in all situations.
 For example, `tml::eval` only binds parameters of the main scope, so an expression with nested parametrized expressions can only be reevaluated specifying the most enclosing parameter (See the tml::eval binding examples above).
 
 Turbo probides `tml::let`, a high-order metafunction similar to haskell's `let`
-Its purpose is to subsitute a value on an expression, given an specifiec variable to bind the value with:
+Its purpose is to substitute a value on an expression, given an specific variable to bind the value with:
 
     struct X{}; //A "variable"
     
     using expression = tml::let<X,int,tml::function<X>>; // expression is "tml::function<int>"
 
-The power of let comes from its ability to parse the entire expression recursively, subsituting all ocurrences of the variable with the specified value:
+The power of let comes from its ability to parse the entire expression recursively, substituting all occurrences of the variable with the specified value:
 
     using expression = tml::let<X,float,f<X,int,tml::function<g<X,X>>>>; //Expression is f<float,int,tml::function<g<float,float>>>
 
 Finally, Turbo extends that concept providing the `tml::multi_let` template,
-a template dessigned as a let of multiple variables:
+a template designed as a let of multiple variables:
 
     using expression = tml::multi_let<X,Y,Z, //variables
                                       int,char,double, //values
@@ -177,8 +177,8 @@ By default Turbo provides an iterator implementation for typelists (See the exam
 
 ### TMP-aware static asserting:
 
-The standard `static_assert()` expects a boolean value as asserting condition. In mostly situations (Even using the Standard Library metaprogramming facilities only) that condition comes in the form of a boolean type (Like `std::integral_constant<bool,true>`).   
-Turbo implements the macro `TURBO_ASSERT()` which is dessigned to work with such types without needing to extract the value via the `::value` member:
+The standard `static_assert()` expects a boolean value as asserting condition. In mostly situations (Even using the Standard Library meta-programming facilities only) that condition comes in the form of a boolean type (Like `std::integral_constant<bool,true>`).   
+Turbo implements the macro `TURBO_ASSERT()` which is designed to work with such types without needing to extract the value via the `::value` member:
 
     TURBO_ASSERT( (std::is_integral<int>) , "What happened????" );
 
@@ -187,12 +187,12 @@ Turbo implements the macro `TURBO_ASSERT()` which is dessigned to work with such
 The only standard way to throw warnings during compilation is the `#warning` macro. But this warnings are checked during preprocessing time, and what a C++ (meta)programmer needs is a way to generate warnings depending on compile-time values
 and/or templates.
 
-Turbo implements a `STATIC_WARNING()` macro, which generates a warning at template instantation phase. This feature is based 
+Turbo implements a `STATIC_WARNING()` macro, which generates a warning at template instantiation phase. This feature is based 
 in a `deprecated` attribute trick, which will be standard in C++14. At this time, Turbo uses compiler-specific attributes.
 
 ### Uniform multiple-SFINAE facilities:
 
-The Standard template to do SFINAE, `std::enable_if`, disables the instantation of a template if a certain boolean condition is
+The Standard template to do SFINAE, `std::enable_if`, disables the instantiation of a template if a certain boolean condition is
 not guaranteed. As in the `static_assert()` case explained above, `std::enable_if` expects a boolean value as condition. Also,
 the member type `::type` of `std::enable_if` should be explicitly referenced via the common and cumbersome `typename ::type` construction.
 
@@ -207,10 +207,10 @@ Turbo provides the macros `TURBO_ENABLE_IF()` and `TURBO_DISABLE_IF()`, which ma
 
 There are cases where a template should be enabled/disabled depending in many conditions. This could be achieved passing 
 a complex boolean expression to `std::enable_if` (Or `TURBO_ENABLE/DISABLE_IF()`).   
-Instead Turbo implements a so-called *sfinae container*, that is, a template dessigned to store multiple SFINAE entities like `std::enable_if` and behave itself as a big `enable_if`. That template is enabled (ie declares a `::type` member) if and only
+Instead Turbo implements a so-called *sfinae container*, that is, a template designed to store multiple SFINAE entities like `std::enable_if` and behave itself as a big `enable_if`. That template is enabled (ie declares a `::type` member) if and only
 if all the SFINAE entities passed are enabled.  
 
-Also Turbo provies some macros, `TURBO_SFINAE_ALL()` , `TURBO_SFINAE_ANY()`, `ENABLE_IF()`, and `DISABLE_IF()` to build such sfinae containers easily. The combination of these features makes possible to write multiple-condition SFINAE expressions in a clear and concise syntax:
+Also Turbo provides some macros, `TURBO_SFINAE_ALL()` , `TURBO_SFINAE_ANY()`, `ENABLE_IF()`, and `DISABLE_IF()` to build such sfinae containers easily. The combination of these features makes possible to write multiple-condition SFINAE expressions in a clear and concise syntax:
 
     //Following with the f example above, now we define another f specialization:
 
@@ -225,7 +225,7 @@ Also Turbo provies some macros, `TURBO_SFINAE_ALL()` , `TURBO_SFINAE_ANY()`, `EN
 
 ### Runtime access to compile-time computations via the `tml::to_runtime<T>()` function:
 
-The function `tml::to_runtime<T>()` returns a runtime constant equivalent to the spefied compile-time value `T`. Its dessigned to provide a clear interface between the compile-time and runtime sides of a program. For example:
+The function `tml::to_runtime<T>()` returns a runtime constant equivalent to the spefied compile-time value `T`. Its designed to provide a clear interface between the compile-time and runtime sides of a program. For example:
 
     //Compute the range of ints [10,20) at compile-time
     using numbers = tml::integer_range<10,20>;
@@ -241,7 +241,7 @@ The function `tml::to_runtime<T>()` returns a runtime constant equivalent to the
 Turbo implements its own floating-point type to perform compile-time computations. The implementation doesn't follow any specific standard (i.e. IEEE 754), its only a working (on...)
 implementation with the following characteristics:
 
- - 32 bit mantissa with no implicit extra 1 (The mantissa is 32 bits wide, and the precission of the resulting number is 32 bits too. Thats done to simplify debugging).
+ - 32 bit mantissa with no implicit extra 1 (The mantissa is 32 bits wide, and the precision of the resulting number is 32 bits too. Thats done to simplify debugging).
  - 16 bit exponent.
 
 ``` cpp
@@ -278,7 +278,7 @@ int main()
 > 3.14159  
 
 
-The library is designed to do all the required computations at compile-time with zero runtime overhead when using the resutls. That means the floating-point values (Actually stored as `double`s on the runtime side) should be completely aviable and known at compile-time.
+The library is designed to do all the required computations at compile-time with zero runtime overhead when using the results. That means the floating-point values (Actually stored as `double`s on the runtime side) should be completely available and known at compile-time.
 
 Given this code, which computes N (10 in the example) consecutive floating-point numbers at compile-time:
 
@@ -315,14 +315,14 @@ _ZN3tml4impl10to_runtimeINS_4listIJNS_8floating6numberILNS3_6sign_tE1ELsn28ELj26
 ```
 *We all hate C++ mangling, isn't?*
 
-Which is exactly the expected behaviour: Floating-point values injected into the executable, with no runtime overhead.
+Which is exactly the expected behavior: Floating-point values injected into the executable, with no runtime overhead.
 
 ## Known issues:
 
 The features explained above have some implementation issues (Working on...):
 
  - **Template specialization  priority issues. A ISO C++ Standard bug?**: The initial implementation of `tml::eval` consisted on three different
-   cases (Partial specializations), one for each kind of expression the library is cappable of evaluate:
+   cases (Partial specializations), one for each kind of expression the library is capable of evaluate:
 
     1. **Simple values**: The result of evaluating a value is the value itself
         
@@ -337,7 +337,7 @@ The features explained above have some implementation issues (Working on...):
 
             using myint = tml::eval<tml::function<int>>; //myint is int
 
-    4. **Functional expressions with binded argumments**: `tml::eval` could be used to reevaluate an existing (Instanced) functional expression
+    4. **Functional expressions with binded arguments**: `tml::eval` could be used to reevaluate an existing (Instanced) functional expression
        with a new set of parameters
 
             using result = tml::eval<tml::function<int>,double>; //result is double
@@ -357,7 +357,7 @@ The features explained above have some implementation issues (Working on...):
    The *common sense* says that our custom specialization should be instanced, because `bar<T>` is more specialized than `F<T>` (The generic functional case).  
    Instead, the generic specialization is instanced or the compilation fails due to ambiguous template specializations (Depending on the compiler).
 
-   This situation [was discussed](http://stackoverflow.com/questions/23393962/partial-template-template-based-specialization-vs-explicit-partial-template-spec) for two weeks, and after some effort we conclused this is an issue on the wording of the ISO Standard, specifically:
+   This situation [was discussed](http://stackoverflow.com/questions/23393962/partial-template-template-based-specialization-vs-explicit-partial-template-spec) for two weeks, and after some effort we concluded this is an issue on the wording of the ISO Standard, specifically:
 
    > If for each type being considered a given template is at least as specialized for all types, and  
    > more specialized for some set of types and the other template is not more specialized for any types, or  
@@ -366,7 +366,7 @@ The features explained above have some implementation issues (Working on...):
 
    An ambiguity problem  very similar to [an official ISO C++ issue](http://www.open-std.org/jtc1/sc22/wg21/docs/cwg_active.html#1705) which has no official resolution (At June 2014).
 
-   *The situation was solved using SFINAE and a custom registry metafunction which specifies if a certain kind of expression overrides the default behaviour of `tml::eval`. Note that its only a workaround, the bug on the template specialization rules is still there.*
+   *The situation was solved using SFINAE and a custom registry metafunction which specifies if a certain kind of expression overrides the default behavior of `tml::eval`. Note that its only a workaround, the bug on the template specialization rules is still there.*
 
 
  - **`tml::impl::multi_lambda` evaluation doesn't work on GCC**: The multiple-variable lambda template is defined as follows:
@@ -499,7 +499,7 @@ The library provides a set of default metafunctions to perform **arithmetic, bit
 
 #### Expression templates: Operators overloading for a simple and more readable expression syntax
 
-Turbo overloads the most common operators to implement expression templates and provide, within type inspection through the [`decltype` specifier](http://en.cppreference.com/w/cpp/language/decltype), the functions described above in a more confortable syntax. This is specially usefull when the expressions are complex. For example:
+Turbo overloads the most common operators to implement expression templates and provide, within type inspection through the [`decltype` specifier](http://en.cppreference.com/w/cpp/language/decltype), the functions described above in a more comfortable syntax. This is specially useful when the expressions are complex. For example:
 
     #include "operators.hpp"
     #include "basic_types.hpp"
@@ -536,7 +536,7 @@ Turbo implements variadic-template based typelists through the `mpl::list` class
 > [bool,char,int,float,double]
 
 #### List operations:
-The library provides a set of list operations aviable for typelists: Splitting, concating, inserting, erasing, etc:
+The library provides a set of list operations available for typelists: Splitting, concating, inserting, erasing, etc:
 
     #include "list.hpp"
     #include "to_string.hpp"
@@ -605,8 +605,8 @@ Using the list operations showed above **Turbo implements a sorting metafunction
 ### Iterators and loops
 
 Turbo implements the iterator dessign pattern to provide an easy way to trasverse ranges or intervals, such as numeric intervals or a part of a typelist. The library defines three types of iterators: 
- - **Forward iterators**: Are iterators dessigned to trasverse a range forwards (From begin to end). 
- - **Forward iterators**:  This type of iterators are dessigned to trasverse a range form its end to its begin (In the backwards direction).
+ - **Forward iterators**: Are iterators designed to trasverse a range forwards (From begin to end). 
+ - **Forward iterators**:  This type of iterators are designed to trasverse a range form its end to its begin (In the backwards direction).
  - **Bidirectional iterators [DEPRECATED]**: Are iterators which can advance in any direction.
 
 The library provides a set of metafunctions to work with iterators: 
@@ -684,7 +684,7 @@ A common problem with template-meta-programming and variadic templates is to exe
 That loops works through iterators: What the loops do is to execute the specified *kernel* (The operation to be performed) through the range represented by the iterators. Finally, the loop returns the result.  
 
 #### `mpl::for_each`
-This loop is dessigned to apply the specified kernel to every type from a set of types, and return a typelist filled with the set of applications.  Its equivalent "runtime" code is: 
+This loop is designed to apply the specified kernel to every type from a set of types, and return a typelist filled with the set of applications.  Its equivalent "runtime" code is: 
  
   template<typename iterator_type , typename result_type>
   std::vector<result_type> for_each(iterator_type begin , iterator_type end , result_type(*)(typename iterator_type::value_type) kernel)
@@ -749,7 +749,7 @@ Now the output is:
 
 #### `mpl::for_loop`
 
-`mpl::for_loop` is dessigned to **execute iterative computations**, in other words, does a loop over a range, and the kernel does computations over that range, storing the result and using the previous value of the result. This could be viewed as a for loop with an aux varialbe which stores the result of the computation, and the body of that loop (The kernel acts as the body of the loop). For example:
+`mpl::for_loop` is designed to **execute iterative computations**, in other words, does a loop over a range, and the kernel does computations over that range, storing the result and using the previous value of the result. This could be viewed as a for loop with an aux varialbe which stores the result of the computation, and the body of that loop (The kernel acts as the body of the loop). For example:
 
   int result;
   
