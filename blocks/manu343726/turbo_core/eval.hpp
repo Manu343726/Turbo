@@ -163,6 +163,7 @@ namespace tml
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<E<ARGS...>>),
                                      DISABLE_IF(tml::is_function<E<ARGS...>>),
+                                     ENABLE_IF(tml::is_aggregate<E<ARGS...>>),
                                      DISABLE_IF(tml::is_metafunction_class<E<ARGS...>,typename eval<ARGS,no_args>::result...>)
                                     )
                    > : 
