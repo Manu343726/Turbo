@@ -1,4 +1,4 @@
-Turbo [![Build Status](https://travis-ci.org/Manu343726/Turbo.svg?branch=master)](https://travis-ci.org/Manu343726/Turbo)
+Turbo  [![Build Status](https://travis-ci.org/Manu343726/Turbo.svg?branch=master)](https://travis-ci.org/Manu343726/Turbo)
 =====
 
 *C++11 metaprogramming library*
