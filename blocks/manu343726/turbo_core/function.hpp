@@ -22,6 +22,7 @@
 #define	FUNCTION_HPP
 
 #include <type_traits>
+#include <tick/traits.h>
 
 namespace tml
 {
@@ -100,50 +101,31 @@ namespace tml
         template<typename T, typename... Args>
         using get_apply = typename get_apply_impl<T,Args...>::result;
 
-        template<typename T, typename... Args>
-        struct is_metafunction_class
+
+
+        TICK_TRAIT(has_apply_template)
         {
-            template<typename U> static std::true_type test(typename U::template apply<Args...>*);
-            template<typename U> static std::false_type test(...);
-
-            static constexpr bool has_apply = decltype( test<T>(nullptr) )::value;
-
-            template<typename U, bool has_apply>
-            struct compute_result 
-            {
-                static constexpr bool result = is_function<get_apply<U,Args...>>::result;
-            };
-
-            template<typename U>
-            struct compute_result<U, false>
-            {
-                static constexpr bool result = false;
-            };
-
-            static constexpr bool result = has_apply;
+            template<class T>
+            auto require(const T& x) -> valid<
+                has_template<T::template apply>
+                >;
         };
 
-        template<typename T>
-        struct is_metafunction_class<T>
+        TICK_TRAIT(has_apply_type)
         {
-            template<typename U> static std::true_type test(typename U::apply*);
-            template<typename U> static std::false_type test(...);
+            template<class T>
+            auto require(const T& x) -> valid<
+                    typename T::apply
+            >;
+        };
 
-            static constexpr bool has_apply = decltype( test<T>(nullptr) )::value;
 
-            template<typename U, bool has_apply>
-            struct compute_result 
-            {
-                static constexpr bool result = is_function<get_apply<U>>::result;
-            };
-
-            template<typename U>
-            struct compute_result<U, false>
-            {
-                static constexpr bool result = false;
-            };
-
-            static constexpr bool result = has_apply;
+        TICK_TRAIT(is_metafunction_class)
+        {
+            template<typename T>
+            auto require(const T& x) -> valid<
+                is_true<std::integral_constant<bool,has_apply_type<T>::value || has_apply_template<T>::value>>
+            >;
         };
     }
     
@@ -174,8 +156,8 @@ namespace tml
     /*
      * Checks if the type T is a metafunction class, that is, has an internal apply metafunction accepting Args... as parameters.
      */
-    template<typename T, typename... Args>
-    using is_metafunction_class = std::integral_constant<bool, tml::impl::is_metafunction_class<T, Args...>::result>;
+    template<typename T>
+    using is_metafunction_class = std::integral_constant<bool, tml::impl::is_metafunction_class<T>::value>;
     
     /*
      * This is a helper metafunction to represent a metafunction in the way the library

@@ -19,6 +19,10 @@ set(CMAKE_VERBOSE_MAKEFILE ON) #Please be verbose...
 
 #Under TravisCI the .travis.yml script should define a TRAVIS_CXX variable with the current value of CXX ( export TRAVIS_CXX=$CXX )
 
+include(biicode/boost/setup)
+
+bii_find_boost()
+
 IF($TRAVIS_CXX="")
 	# No under TravisCI environment.
 

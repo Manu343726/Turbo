@@ -28,6 +28,20 @@
 #include "manu343726/turbo_core/function.hpp"
 #include "manu343726/turbo_core/chameleon.hpp"
 
+#include <boost/preprocessor.hpp>
+
+#define TURBO_EVAL_ARGS_APPLY_NO_ARGS(...) >
+#define TURBO_EVAL_ARGS_APPLY_ARGS(...) ,__VA_ARGS__>
+
+#define TURBO_EVAL_ARGS_APPLY(...) BOOST_PP_IIF( \
+    BOOST_PP_GREATER(BOOST_PP_VARIADIC_SIZE(__VA_ARGS__), 1), \
+        TURBO_EVAL_ARGS_APPLY_ARGS, TURBO_EVAL_ARGS_APPLY_NO_ARGS)
+
+#define TURBO_EVAL_ARGS_APPLY_CALLER(...) TURBO_EVAL_ARGS_APPLY(__,__VA_ARGS__)(__VA_ARGS__)
+
+
+#define $(...) tml::eval<__VA_ARGS__>
+
 namespace tml
 {
     
@@ -106,6 +120,32 @@ namespace tml
         {
             using result = E;
         };
+
+        template<typename E>
+        struct eval<E,no_args,
+                TURBO_SFINAE_ALL(
+                        DISABLE_IF(tml::overrides_eval<E>),
+                        ENABLE_IF(tml::is_function<E>),
+                        DISABLE_IF(is_function_ptr_type<E>),
+                        DISABLE_IF(tml::is_aggregate<E>),
+                        DISABLE_IF(tml::is_metafunction_class<E>)
+                )
+        >
+        {
+            template<typename T, bool is_stl_function = tml::is_stl_function<T>::value>
+            struct call
+            {
+                using result = typename T::type;
+            };
+
+            template<typename T>
+            struct call<T, false>
+            {
+                using result = typename T::result;
+            };
+
+            using result = typename call<E>::result;
+        };
         
         /*
          * This specialization matches the case when the expression passed is a function (In the STL sense, with a 'result' member).
@@ -120,9 +160,10 @@ namespace tml
         template<template<typename...> class F , typename... ARGS>
         struct eval<F<ARGS...>,no_args,
                     TURBO_SFINAE_ALL(
+                                     ENABLE_IF(tml::is_aggregate<F<ARGS...>>),
                                      DISABLE_IF(tml::overrides_eval<F<ARGS...>>),
                                      ENABLE_IF(tml::is_turbo_function<F<ARGS...>>),
-                                     DISABLE_IF(tml::is_metafunction_class<F<ARGS...>,typename eval<ARGS,no_args>::result...>)
+                                     DISABLE_IF(tml::is_metafunction_class<F<ARGS...>>)
                                     )
                    > 
         {
@@ -144,7 +185,7 @@ namespace tml
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<F<ARGS...>>),
                                      ENABLE_IF(tml::is_stl_function<F<ARGS...>>),
-                                     DISABLE_IF(tml::is_metafunction_class<F<ARGS...>,typename eval<ARGS,no_args>::result...>)
+                                     DISABLE_IF(tml::is_metafunction_class<F<ARGS...>>)
                                     )
                    >
         {
@@ -164,7 +205,7 @@ namespace tml
                                      DISABLE_IF(tml::overrides_eval<E<ARGS...>>),
                                      DISABLE_IF(tml::is_function<E<ARGS...>>),
                                      ENABLE_IF(tml::is_aggregate<E<ARGS...>>),
-                                     DISABLE_IF(tml::is_metafunction_class<E<ARGS...>,typename eval<ARGS,no_args>::result...>)
+                                     DISABLE_IF(tml::is_metafunction_class<E<ARGS...>>)
                                     )
                    > : 
                    public tml::function<E<typename eval<ARGS,no_args>::result...>> 
@@ -183,11 +224,7 @@ namespace tml
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<F<PLACEHOLDERS...>>),
                                      ENABLE_IF(tml::is_function<F<PLACEHOLDERS...>>),
-                                     DISABLE_IF(tml::is_metafunction_class<F<PLACEHOLDERS...>,
-                                                                           typename eval<ARG,no_args>::result,
-                                                                           typename eval<ARGS,no_args>::result...
-                                                                          >
-                                               )
+                                     DISABLE_IF(tml::is_metafunction_class<F<PLACEHOLDERS...>>)
                                     )
                    > : 
                    public F<typename eval<ARG,no_args>::result,
@@ -208,11 +245,7 @@ namespace tml
                     TURBO_SFINAE_ALL(
                                      DISABLE_IF(tml::overrides_eval<E<PLACEHOLDERS...>>),
                                      DISABLE_IF(tml::is_function<E<PLACEHOLDERS...>>),
-                                     DISABLE_IF(tml::is_metafunction_class<E<PLACEHOLDERS...>,
-                                                                           typename eval<ARG,no_args>::result,
-                                                                           typename eval<ARGS,no_args>::result...
-                                                                          >
-                                               )
+                                     DISABLE_IF(tml::is_metafunction_class<E<PLACEHOLDERS...>>)
                                     )
                    > : 
                    public tml::function<E<typename eval<ARG,no_args>::result,
@@ -223,17 +256,14 @@ namespace tml
             //static_assert( sizeof...(PLACEHOLDERS) == (1 + sizeof...(ARGS)) , "Wrong number of function call parameters." );  
         };
 
-        template<typename F , typename ARG , typename... ARGS>
-        struct eval<F, args_list<ARG,ARGS...>,
-                    TURBO_SFINAE_ALL(ENABLE_IF(tml::is_metafunction_class<F,typename eval<ARG,no_args>::result,typename eval<ARGS,no_args>::result...
-                                                                         >
-                                              ) 
-                                    )
+        template<typename F, typename... ARGS>
+        struct eval<F, args_list<ARGS...>,
+                    TURBO_SFINAE_ALL(ENABLE_IF(tml::is_metafunction_class<F>))
                    >
         {
             //static_assert(sizeof(F) != sizeof(F), "compiler bug!");
 
-            using apply = tml::impl::get_apply<F,typename eval<ARG,no_args>::result,typename eval<ARGS,no_args>::result...>;
+            using apply = tml::impl::get_apply<F, typename eval<ARGS,no_args>::result...>;
 
             template<typename T, bool is_stl_function = tml::is_stl_function<T>::value>
             struct call
