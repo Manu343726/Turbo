@@ -69,8 +69,34 @@ struct is_nothing
 
 using maybe_int = $(Maybe::Just, int);
 
+struct f
+{
+	template<typename... Head>
+	struct apply
+	{
+		struct type
+		{
+			template<typename... Tail>
+			using apply = f::apply<Head...,Tail...>;
+		};
+	};
+
+	template<typename A, typename B, typename C>
+	struct apply<A, B, C>
+	{
+		using type = C;
+	};
+};
+
+using a = $(f, int);
+using b = $(a, char);
+using c = $(b, bool);
+
 int main()
 {
-	std::cout << tml::to_string<maybe_int>() << std::endl;
-	std::cout << tml::to_string<$(is_nothing, maybe_int)>() << std::endl;
+	std::cout << tml::to_string<a>() << std::endl;
+	std::cout << tml::to_string<b>() << std::endl;
+	std::cout << tml::to_string<c>() << std::endl;
 }
+
+
