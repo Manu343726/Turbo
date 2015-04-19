@@ -21,15 +21,8 @@
 #ifndef FLOAT_HPP
 #define	FLOAT_HPP
 
-#include "manu343726/turbo_core/algebra.hpp"
-#include "manu343726/turbo_core/math.hpp"
-#include "manu343726/turbo_core/integral.hpp"
+#include "manu343726/turbo_core/turbo_core.hpp"
 #include "manu343726/turbo_utils/utility.hpp"
-#include "manu343726/turbo_core/integral_lists.hpp"
-#include "manu343726/turbo_core/control_structures.hpp"
-#include "manu343726/turbo_core/to_runtime.hpp"
-#include "manu343726/turbo_core/to_string.hpp"
-#include "manu343726/turbo_core/runtime_placeholders.hpp"
 
 #include <cmath>
 #include <bitset>
@@ -365,9 +358,9 @@ namespace tml
     struct reciprocal<tml::floating::number<S,E,M>>
     {
         using N   = tml::floating::number<S,E,M>;
-        using one = tml::one<tml::floating::number<tml::runtime::placeholders::__,
-                                                   tml::runtime::placeholders::__,
-                                                   tml::runtime::placeholders::__>>; //Please Clang, be a good friend and memoize this. Thanks
+        using one = tml::one<tml::floating::number<tml::floating::sign_t::positive,
+                                                   0,
+                                                   0>>; //Please Clang, be a good friend and memoize this. Thanks
         using two = tml::floating::number<tml::floating::sign_t::positive,-30,0x80000000>; //This too
         
         /*
@@ -518,7 +511,7 @@ namespace tml
         template<typename positive>
         struct pow_impl<positive,tml::integral_constant<T,0>>
         {
-            using result = tml::one<tml::floating::number<tml::runtime::placeholders::__,tml::runtime::placeholders::__,tml::runtime::placeholders::__>>;
+            using result = tml::one<tml::floating::number<tml::floating::sign_t::positive, 0, 0>>;
         };
         
         template<typename EXP>
@@ -834,7 +827,10 @@ namespace tml
  * User defined literal for getting compile-time floating-point values from floating-point literals (Note the macro FLOAT() bellow)
  */
 template<char... CHARS>
-typename tml::floating::impl::parse_float<CHARS...>::result operator"" _TURBO_FLOAT_LITERAL();
+typename tml::floating::impl::parse_float<CHARS...>::result operator "" _TURBO_FLOAT_LITERAL()
+{
+    return typename tml::floating::impl::parse_float<CHARS...>::result{};
+}
             
 #define FLOAT(x) decltype(x##_TURBO_FLOAT_LITERAL)
 

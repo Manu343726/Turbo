@@ -127,6 +127,14 @@ namespace tml
                 is_true<std::integral_constant<bool,has_apply_type<T>::value || has_apply_template<T>::value>>
             >;
         };
+
+        TICK_TRAIT(not_expandible)
+        {
+            template<class T>
+            auto require(const T& x) -> valid<
+                    typename T::noexpand
+            >;
+        };
     }
     
     /* User-side tml::is_function type-trait 
@@ -158,6 +166,12 @@ namespace tml
      */
     template<typename T>
     using is_metafunction_class = std::integral_constant<bool, tml::impl::is_metafunction_class<T>::value>;
+
+    /*
+     * Checks if the type T can (should) be evaluated during parameter expansion on expression evaluation
+     */
+    template<typename T>
+    using is_expandible = std::integral_constant<bool, !tml::impl::not_expandible<T>::value>;
     
     /*
      * This is a helper metafunction to represent a metafunction in the way the library

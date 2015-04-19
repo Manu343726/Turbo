@@ -121,6 +121,18 @@ namespace tml
             using result = E;
         };
 
+        template<typename E, typename Args, typename = void>
+        struct expand
+        {
+            using result = E;
+        };
+
+        template<typename E, typename Args>
+        struct expand<E,Args,TURBO_ENABLE_IF(tml::is_expandible<E>)>
+        {
+            using result = typename eval<E,Args>::result;
+        };
+
         template<typename E>
         struct eval<E,no_args,
                 TURBO_SFINAE_ALL(
@@ -147,49 +159,31 @@ namespace tml
             using result = typename call<E>::result;
         };
         
-        /*
-         * This specialization matches the case when the expression passed is a function (In the STL sense, with a 'result' member).
-         * The result of the evalutation is just forwarded to the implementation, to reduce
-         * template instantation depth.
-         * 
-         * So the implementation just inherit the function to get its result.
-         * 
-         * The parameters are evaluated too (Could be functional/parametrized expressions) to evaluate the entire
-         * expression recursively.
-         */
+
         template<template<typename...> class F , typename... ARGS>
         struct eval<F<ARGS...>,no_args,
-                    TURBO_SFINAE_ALL(
+                    TURBO_SFINAE_ALL(DISABLE_IF(tml::overrides_eval<F<ARGS...>>),
                                      ENABLE_IF(tml::is_aggregate<F<ARGS...>>),
-                                     DISABLE_IF(tml::overrides_eval<F<ARGS...>>),
                                      ENABLE_IF(tml::is_turbo_function<F<ARGS...>>),
                                      DISABLE_IF(tml::is_metafunction_class<F<ARGS...>>)
                                     )
                    > 
         {
-            using result = typename  F<typename eval<ARGS,no_args>::result...>::result;
-        };
-        
-        /*
-         * This specialization matches the case when the expression passed is a function (In the STL sense, with a 'type' member).
-         * The result of the evalutation is just forwarded to the implementation, to reduce
-         * template instantation depth.
-         * 
-         * So the implementation just inherit the function to get its result.
-         * 
-         * The parameters are evaluated too (Could be functional/parametrized expressions) to evaluate the entire
-         * expression recursively.
-         */
-        template<template<typename...> class F , typename... ARGS>
-        struct eval<F<ARGS...>,no_args,
-                    TURBO_SFINAE_ALL(
-                                     DISABLE_IF(tml::overrides_eval<F<ARGS...>>),
-                                     ENABLE_IF(tml::is_stl_function<F<ARGS...>>),
-                                     DISABLE_IF(tml::is_metafunction_class<F<ARGS...>>)
-                                    )
-                   >
-        {
-            using result = typename F<typename eval<ARGS,no_args>::result...>::type;
+            using f = F<typename expand<ARGS,no_args>::result...>;
+
+            template<typename T, bool is_stl_function = tml::is_stl_function<f>::value>
+            struct call
+            {
+                using result = typename T::type;
+            };
+
+            template<typename T>
+            struct call<T, false>
+            {
+                using result = typename T::result;
+            };
+
+            using result = typename call<f>::result;
         };
         
         /*
@@ -208,7 +202,7 @@ namespace tml
                                      DISABLE_IF(tml::is_metafunction_class<E<ARGS...>>)
                                     )
                    > : 
-                   public tml::function<E<typename eval<ARGS,no_args>::result...>> 
+                   public tml::function<E<typename expand<ARGS,no_args>::result...>>
         {};
 
         /*
@@ -227,8 +221,8 @@ namespace tml
                                      DISABLE_IF(tml::is_metafunction_class<F<PLACEHOLDERS...>>)
                                     )
                    > : 
-                   public F<typename eval<ARG,no_args>::result,
-                            typename eval<ARGS,no_args>::result...
+                   public F<typename expand<ARG,no_args>::result,
+                            typename expand<ARGS,no_args>::result...
                            >
         {
             
@@ -248,8 +242,8 @@ namespace tml
                                      DISABLE_IF(tml::is_metafunction_class<E<PLACEHOLDERS...>>)
                                     )
                    > : 
-                   public tml::function<E<typename eval<ARG,no_args>::result,
-                                          typename eval<ARGS,no_args>::result...
+                   public tml::function<E<typename expand<ARG,no_args>::result,
+                                          typename expand<ARGS,no_args>::result...
                                          >
                                        >
         {
@@ -263,7 +257,7 @@ namespace tml
         {
             //static_assert(sizeof(F) != sizeof(F), "compiler bug!");
 
-            using apply = tml::impl::get_apply<F, typename eval<ARGS,no_args>::result...>;
+            using apply = tml::impl::get_apply<F, typename expand<ARGS,no_args>::result...>;
 
             template<typename T, bool is_stl_function = tml::is_stl_function<T>::value>
             struct call
