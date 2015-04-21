@@ -1,6 +1,8 @@
 Turbo  [![Build Status](https://travis-ci.org/Manu343726/Turbo.svg?branch=master)](https://travis-ci.org/Manu343726/Turbo)
 =====
 
+[![Join the chat at https://gitter.im/Manu343726/Turbo](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Manu343726/Turbo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 *C++11 metaprogramming library*
 
 ## What is Turbo?
