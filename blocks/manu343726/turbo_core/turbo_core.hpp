@@ -22,7 +22,7 @@
 #define	TURBO_CORE_HPP
 
 /*
- * Just an umbrella header for the library core
+ * Just an umbrella header for the library lang
  */
 
 #include "manu343726/turbo_core/algebra.hpp"

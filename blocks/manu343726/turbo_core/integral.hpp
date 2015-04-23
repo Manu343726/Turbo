@@ -376,5 +376,7 @@ namespace tml
     {};
 }
 
+#define $i(x) std::integral_constant<decltype(x), x>
+
 #endif	/* BASIC_TYPES_HPP */
 

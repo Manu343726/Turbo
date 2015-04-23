@@ -85,6 +85,12 @@ namespace tml
             : public conditional_type<(sizeof...(EXTRACTED_IFS) > 0)>
         {};
     }
+
+    /*
+     * void_t type for SFINAE expressions
+     */
+    template<typename...>
+    using void_t = void;
 }
 
 /*
