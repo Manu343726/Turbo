@@ -17,9 +17,16 @@ debug/
 dist/
 build/
 
-# Biicode metadata and cmake output
+# biicode metadata and cmake output
 cmake/
 bin/
 bii/
 deps/
 build/
+
+# biicode clion layout
+.idea/
+CMakeLists.txt
+bii_*.cmake
+biicode.cmake
+
