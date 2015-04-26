@@ -26,7 +26,6 @@ build/
 
 # biicode clion layout
 .idea/
-CMakeLists.txt
 bii_*.cmake
 biicode.cmake
 
