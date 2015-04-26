@@ -23,10 +23,10 @@
 
 #include <type_traits>
 
-#include "manu343726/turbo_core/list.hpp"
-#include "manu343726/turbo_core/enable_if.hpp"
-#include "manu343726/turbo_core/function.hpp"
-#include "manu343726/turbo_core/chameleon.hpp"
+#include "list.hpp"
+#include "enable_if.hpp"
+#include "function.hpp"
+#include "chameleon.hpp"
 
 #include <boost/preprocessor.hpp>
 

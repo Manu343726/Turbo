@@ -1,6 +1,6 @@
 
-#include "manu343726/turbo_core/turbo_core.hpp"
-#include "manu343726/turbo_core/haskell/data/list.hpp"
+#include "core.hpp"
+#include "haskell/data/list.hpp"
 
 #include <iostream>
 

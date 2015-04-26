@@ -21,10 +21,10 @@
 #ifndef LIST_HPP
 #define	LIST_HPP
 
-#include "manu343726/turbo_core/integral.hpp"
-#include "manu343726/turbo_core/function.hpp"
-#include "manu343726/turbo_core/to_string.hpp"
-#include "manu343726/turbo_core/iterator.hpp"
+#include "integral.hpp"
+#include "function.hpp"
+#include "to_string.hpp"
+#include "iterator.hpp"
 
 #include <cstddef>
 #include <string>

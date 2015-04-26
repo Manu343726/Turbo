@@ -21,7 +21,7 @@
 #ifndef LAZY_HPP
 #define	LAZY_HPP
 
-#include "manu343726/turbo_core/eval.hpp"
+#include "eval.hpp"
 
 namespace tml
 {

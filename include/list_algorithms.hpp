@@ -21,8 +21,8 @@
 #ifndef LIST_ALGORITHMS_HPP
 #define	LIST_ALGORITHMS_HPP
 
-#include "manu343726/turbo_core/list.hpp"
-#include "manu343726/turbo_core/function.hpp"
+#include "list.hpp"
+#include "function.hpp"
 
 
 /*

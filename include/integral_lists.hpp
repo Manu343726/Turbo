@@ -21,12 +21,12 @@
 #ifndef BASIC_LISTS_HPP
 #define	BASIC_LISTS_HPP
 
-#include "manu343726/turbo_core/list.hpp"
-#include "manu343726/turbo_core/integral.hpp"
-#include "manu343726/turbo_core/integral_iterators.hpp"
-#include "manu343726/turbo_core/high_order_functions.hpp"
-#include "manu343726/turbo_core/lazy.hpp"
-#include "manu343726/turbo_core/to_runtime.hpp"
+#include "list.hpp"
+#include "integral.hpp"
+#include "integral_iterators.hpp"
+#include "high_order_functions.hpp"
+#include "lazy.hpp"
+#include "to_runtime.hpp"
 
 #include <array>
 

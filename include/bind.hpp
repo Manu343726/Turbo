@@ -21,10 +21,10 @@
 #ifndef BIND_HPP
 #define	BIND_HPP
 
-#include "manu343726/turbo_core/algorithm.hpp"
-#include "manu343726/turbo_core/placeholders.hpp"
-#include "manu343726/turbo_core/curry.hpp"
-#include "manu343726/turbo_core/placeholder_lists.hpp"
+#include "algorithm.hpp"
+#include "placeholders.hpp"
+#include "curry.hpp"
+#include "placeholder_lists.hpp"
 
 using namespace tml::placeholders;
 

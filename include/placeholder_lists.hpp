@@ -21,11 +21,11 @@
 #ifndef PLACEHOLDER_LISTS_HPP
 #define	PLACEHOLDER_LISTS_HPP
 
-#include "manu343726/turbo_core/list.hpp"
-#include "manu343726/turbo_core/placeholders.hpp"
-#include "manu343726/turbo_core/high_order_functions.hpp"
-#include "manu343726/turbo_core/lazy.hpp"
-#include "manu343726/turbo_core/integral_iterators.hpp"
+#include "list.hpp"
+#include "placeholders.hpp"
+#include "high_order_functions.hpp"
+#include "lazy.hpp"
+#include "integral_iterators.hpp"
 
 
 /*

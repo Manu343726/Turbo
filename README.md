@@ -1,7 +1,12 @@
-Turbo  [![Build Status](https://travis-ci.org/Manu343726/Turbo.svg?branch=master)](https://travis-ci.org/Manu343726/Turbo)
+Turbo 
+[![Join the chat at https://gitter.im/Manu343726/Turbo](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Manu343726/Turbo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/Manu343726/Turbo.svg?branch=master)](https://travis-ci.org/Manu343726/Turbo)
+[![GitHub stars](https://img.shields.io/github/stars/Manu343726/Turbo.svg?)](https://github.com/Manu343726/Turbo/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/Manu343726/Turbo.svg)](https://github.com/Manu343726/Turbo/network)
+[![GitHub issues](https://img.shields.io/github/issues/Manu343726/Turbo.svg)](https://github.com/Manu343726/Turbo/issues)
 =====
 
-[![Join the chat at https://gitter.im/Manu343726/Turbo](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Manu343726/Turbo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 
 *C++11 metaprogramming library*
 

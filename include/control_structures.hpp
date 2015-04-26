@@ -23,8 +23,8 @@
 
 #include <type_traits>
 
-#include "manu343726/turbo_core/eval.hpp"
-#include "manu343726/turbo_core/lazy.hpp"
+#include "eval.hpp"
+#include "lazy.hpp"
 
 /*
  * This header declares simple imperative-programming control structures, like ifs, switches, etc

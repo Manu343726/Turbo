@@ -21,9 +21,9 @@
 #ifndef LET_HPP
 #define LET_HPP
 
-#include "manu343726/turbo_core/eval.hpp"
-#include "manu343726/turbo_core/list.hpp"
-#include "manu343726/turbo_core/list_algorithms.hpp"
+#include "eval.hpp"
+#include "list.hpp"
+#include "list_algorithms.hpp"
 
 
 /*

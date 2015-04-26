@@ -21,7 +21,7 @@
 #ifndef RUNTIME_PLACEHOLDERS_HPP
 #define	RUNTIME_PLACEHOLDERS_HPP
 
-#include "manu343726/turbo_core/runtime_chameleon.hpp"
+#include "runtime_chameleon.hpp"
 
 /*
  * These placeholders are placeholders designed to represent compile-time values 

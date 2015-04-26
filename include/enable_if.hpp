@@ -21,8 +21,8 @@
 #ifndef ENABLE_IF_HPP
 #define	ENABLE_IF_HPP
 
-#include "manu343726/turbo_core/integral.hpp"
-#include "manu343726/turbo_core/list.hpp"
+#include "integral.hpp"
+#include "list.hpp"
 
 #include <type_traits>
 

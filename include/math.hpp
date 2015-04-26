@@ -21,13 +21,13 @@
 #ifndef MATH_HPP
 #define	MATH_HPP
 
-#include "manu343726/turbo_core/algorithm.hpp"
-#include "manu343726/turbo_core/algebra.hpp"
-#include "manu343726/turbo_core/integral.hpp"
-#include "manu343726/turbo_core/lazy.hpp"
-#include "manu343726/turbo_core/type_traits.hpp"
-#include "manu343726/turbo_core/control_structures.hpp"
-#include "manu343726/turbo_core/eval.hpp"
+#include "algorithm.hpp"
+#include "algebra.hpp"
+#include "integral.hpp"
+#include "lazy.hpp"
+#include "type_traits.hpp"
+#include "control_structures.hpp"
+#include "eval.hpp"
 
 /*
  * This header defined some matematical metafunctions

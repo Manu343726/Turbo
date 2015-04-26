@@ -21,15 +21,15 @@
 #ifndef HIGH_ORDER_FUNCTIONS_HPP
 #define	HIGH_ORDER_FUNCTIONS_HPP
 
-#include "manu343726/turbo_core/list.hpp"
-#include "manu343726/turbo_core/function.hpp"
-#include "manu343726/turbo_core/eval.hpp"
-#include "manu343726/turbo_core/control_structures.hpp"
-#include "manu343726/turbo_core/lambda.hpp"
-#include "manu343726/turbo_core/function_alias_decl.hpp"
-#include "manu343726/turbo_core/placeholders.hpp"
-#include "manu343726/turbo_core/iterator.hpp"
-#include "manu343726/turbo_core/algebra.hpp"
+#include "list.hpp"
+#include "function.hpp"
+#include "eval.hpp"
+#include "control_structures.hpp"
+#include "lambda.hpp"
+#include "function_alias_decl.hpp"
+#include "placeholders.hpp"
+#include "iterator.hpp"
+#include "algebra.hpp"
 
 
 /*

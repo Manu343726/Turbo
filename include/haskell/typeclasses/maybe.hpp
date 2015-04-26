@@ -5,8 +5,8 @@
 #ifndef _TURBO_MAYBE_HPP_
 #define _TURBO_MAYBE_HPP_
 
-#include <manu343726/turbo_core/eval.hpp>
-#include <manu343726/turbo_core/haskell/typeclasses/monad.hpp>
+#include <eval.hpp>
+#include <haskell/typeclasses/monad.hpp>
 
 namespace tml
 {

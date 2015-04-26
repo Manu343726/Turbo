@@ -5,7 +5,7 @@
 #ifndef TURBO_BOOL_HPP
 #define TURBO_BOOL_HPP
 
-#include "manu343726/turbo_core/haskell/lang/boxed_type.hpp"
+#include "haskell/lang/boxed_type.hpp"
 
 namespace tml
 {

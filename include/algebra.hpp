@@ -21,9 +21,9 @@
 #ifndef ALGREGRA_HPP
 #define	ALGREGRA_HPP
 
-#include "manu343726/turbo_core/function_alias_decl.hpp"
-#include "manu343726/turbo_core/chameleon.hpp"
-#include "manu343726/turbo_core/function.hpp"
+#include "function_alias_decl.hpp"
+#include "chameleon.hpp"
+#include "function.hpp"
 
 
 /*

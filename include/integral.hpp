@@ -25,10 +25,10 @@
 #include <string>
 #include <sstream>
 
-#include "manu343726/turbo_core/algebra.hpp"
-#include "manu343726/turbo_core/function.hpp"
-#include "manu343726/turbo_core/to_string.hpp"
-#include "manu343726/turbo_core/to_runtime.hpp"
+#include "algebra.hpp"
+#include "function.hpp"
+#include "to_string.hpp"
+#include "to_runtime.hpp"
 
 /*
  * This header defines the basic integral types of the library.

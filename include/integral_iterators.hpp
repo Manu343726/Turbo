@@ -21,8 +21,8 @@
 #ifndef NUMERIC_ITERATORS_HPP
 #define	NUMERIC_ITERATORS_HPP
 
-#include "manu343726/turbo_core/integral.hpp"
-#include "manu343726/turbo_core/iterator.hpp"
+#include "integral.hpp"
+#include "iterator.hpp"
 
 
 namespace tml

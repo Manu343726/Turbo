@@ -21,11 +21,11 @@
 #ifndef PLACEHOLDERS_HPP
 #define	PLACEHOLDERS_HPP
 
-#include "manu343726/turbo_core/integral.hpp"
-#include "manu343726/turbo_core/eval.hpp"
-#include "manu343726/turbo_core/function.hpp"
-#include "manu343726/turbo_core/to_string.hpp"
-#include "manu343726/turbo_core/chameleon.hpp"
+#include "integral.hpp"
+#include "eval.hpp"
+#include "function.hpp"
+#include "to_string.hpp"
+#include "chameleon.hpp"
 
 #include <string>
 

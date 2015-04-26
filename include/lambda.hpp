@@ -21,9 +21,9 @@
 #ifndef LAMBDA_HPP
 #define	LAMBDA_HPP
 
-#include "manu343726/turbo_core/eval.hpp"
-#include "manu343726/turbo_core/let_expressions.hpp"
-#include "manu343726/turbo_core/list_algorithms.hpp"
+#include "eval.hpp"
+#include "let_expressions.hpp"
+#include "list_algorithms.hpp"
 
 namespace tml
 { 

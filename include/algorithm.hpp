@@ -21,10 +21,10 @@
 #ifndef ALGORITHM_HPP
 #define	ALGORITHM_HPP
 
-#include "manu343726/turbo_core/high_order_functions.hpp"
-#include "manu343726/turbo_core/list_algorithms.hpp"
-#include "manu343726/turbo_core/integral_lists.hpp"
-#include "manu343726/turbo_core/algebra.hpp"
+#include "high_order_functions.hpp"
+#include "list_algorithms.hpp"
+#include "integral_lists.hpp"
+#include "algebra.hpp"
 
 /*
  * This header declares a set of functional-style algorithms built upon the

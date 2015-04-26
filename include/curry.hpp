@@ -21,8 +21,8 @@
 #ifndef CURRY_HPP
 #define	CURRY_HPP
 
-#include "manu343726/turbo_core/function.hpp"
-#include "manu343726/turbo_core/list.hpp"
+#include "function.hpp"
+#include "list.hpp"
 
 namespace tml
 {

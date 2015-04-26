@@ -21,9 +21,9 @@
 #ifndef TYPE_TRAITS_HPP
 #define	TYPE_TRAITS_HPP
 
-#include "manu343726/turbo_core/function.hpp"
-#include "manu343726/turbo_core/integral.hpp"
-#include "manu343726/turbo_core/lazy.hpp"
+#include "function.hpp"
+#include "integral.hpp"
+#include "lazy.hpp"
 
 #include <type_traits>
 #include <utility>
