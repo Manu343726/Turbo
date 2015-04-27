@@ -6,6 +6,7 @@ Turbo
 [![GitHub forks](https://img.shields.io/github/forks/Manu343726/Turbo.svg)](https://github.com/Manu343726/Turbo/network)
 [![GitHub issues](https://img.shields.io/github/issues/Manu343726/Turbo.svg)](https://github.com/Manu343726/Turbo/issues)
 [![biicode block](https://webapi.biicode.com/v1/badges/manu343726/manu343726/turbo/master)](https://www.biicode.com/manu343726/turbo) 
+[![Dependency Status](https://www.versioneye.com/user/projects/553e7dcd6f8344ac93000006/badge.svg?style=flat)](https://www.versioneye.com/user/projects/553e7dcd6f8344ac93000006)
 
 *C++11 metaprogramming library*
 
