@@ -16,12 +16,7 @@ namespace tml
             struct Cat
             {
                 template<typename Head, typename Tail, typename=void>
-                struct apply;
-
-                template<typename Head, typename Tail>
-                struct apply<Head, Tail,
-                        TURBO_IS_A(List,Tail)
-                >
+                struct apply
                 {
                     using type = boxed_type<List, List::Cat, std::pair<Head,$(Tail)>>;
                 };

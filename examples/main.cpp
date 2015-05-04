@@ -6,11 +6,23 @@
 
 using namespace tml::haskell;
 
-using list = $(List::Variadic, $i(1), $i(2), $i(3), $i(4));
+template<typename Value, typename Type>
+constexpr bool Matches()
+{
+    return is_a<Type, Value>::value;
+}
+
+template<Matches<tml::haskell::List> list>
+struct get_list
+{
+    using type = $(list);
+};
+
+using l = typename get_list<$(List::Variadic, $i(1))>::type;
 
 int main()
 {
-	std::cout << tml::to_string<list>() << std::endl;
+    std::cout << tml::to_string<l>() << std::endl;
 }
 
 
