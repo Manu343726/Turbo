@@ -183,10 +183,10 @@ namespace tml
      * of the library. Inheriting from this helper is a simple whay to ensure any metafunction
      * has the correct interface.
      */
-    template<typename type>
+    template<typename Type>
     struct function
     {
-        using type = type;
+        using type = Type;
     };
 }
 

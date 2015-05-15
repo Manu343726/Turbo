@@ -143,19 +143,7 @@ namespace tml
                 )
         >
         {
-            template<typename T, bool is_stl_function = tml::is_stl_function<T>::value>
-            struct call
-            {
-                using type = typename T::type;
-            };
-
-            template<typename T>
-            struct call<T, false>
-            {
-                using type = typename T::type;
-            };
-
-            using type = typename call<E>::type;
+            using type = typename E::type;
         };
         
 
@@ -170,19 +158,7 @@ namespace tml
         {
             using f = F<typename expand<ARGS,no_args>::type...>;
 
-            template<typename T, bool is_stl_function = tml::is_stl_function<f>::value>
-            struct call
-            {
-                using type = typename T::type;
-            };
-
-            template<typename T>
-            struct call<T, false>
-            {
-                using type = typename T::type;
-            };
-
-            using type = typename call<f>::type;
+            using type = typename f::type;
         };
         
         /*
