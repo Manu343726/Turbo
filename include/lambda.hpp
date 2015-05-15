@@ -84,7 +84,7 @@ namespace tml
             using pairs = typename parser::pairs;
             using body = typename parser::body;
 
-            using result = tml::eval<typename tml::impl::multi_let_currifier<pairs, body>::result>;
+            using type = tml::eval<typename tml::impl::multi_let_currifier<pairs, body>::type>;
         };
     };
 }

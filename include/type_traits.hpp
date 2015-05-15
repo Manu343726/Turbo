@@ -56,7 +56,7 @@ namespace tml
             template<typename U> static tml::true_type  f( decltype(&U::operator())* );
             template<typename U> static tml::false_type f( ... );
             
-            using result = decltype( f<T>( nullptr ) );
+            using type = decltype( f<T>( nullptr ) );
         };
         
         
@@ -132,7 +132,7 @@ namespace tml
             template<typename FF, typename... AA>
             static tml::false_type f(...);
         public:
-            using result = decltype( f<F,ARGS...>(0) );
+            using type = decltype( f<F,ARGS...>(0) );
         };
     }
     

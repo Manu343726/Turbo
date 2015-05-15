@@ -53,7 +53,7 @@ namespace tml
      */
     struct function_chameleon
     {
-        struct result : public tml::value_chameleon {};
+        struct type : public tml::value_chameleon {};
     };
     
     /*

@@ -83,20 +83,20 @@ namespace tml
      * Returns the zero value of a given numeric type
      */
     template<typename T>
-    using zero = typename tml::func::zero<T>::result;
+    using zero = typename tml::func::zero<T>::type;
     
     /*
      * Returns the one value of a given numeric type
      */
     template<typename T>
-    using one = typename tml::func::one<T>::result;
+    using one = typename tml::func::one<T>::type;
     
     /*
      * Returns the sign of a given numeric value.
      * Returns tml::true_type if the value is positive, tml::false_type if its negative.
      */
     template<typename T>
-    using sign = typename tml::func::sign<T>::result;
+    using sign = typename tml::func::sign<T>::type;
 
     
     /*
@@ -201,7 +201,7 @@ namespace tml
      * Returns tml::true_type if the values are not equal, returns tml::false_type otherwise.
      */
     template<typename LHS , typename RHS>
-    struct not_equal : public tml::logical_not<typename tml::equal<LHS,RHS>::result>
+    struct not_equal : public tml::logical_not<typename tml::equal<LHS,RHS>::type>
     {};
     
     /*
@@ -221,8 +221,8 @@ namespace tml
      * returns tml::false_type otherwise.
      */
     template<typename LHS , typename RHS>
-    struct less_or_equal : public tml::logical_or<typename tml::less_than<LHS,RHS>::result,
-                                                  typename tml::equal<LHS,RHS>::result>
+    struct less_or_equal : public tml::logical_or<typename tml::less_than<LHS,RHS>::type,
+                                                  typename tml::equal<LHS,RHS>::type>
     {};
     
     /*
@@ -246,7 +246,7 @@ namespace tml
     {};
 }
 
-#define TURBO_ENSURE_ALGEBRAIC_EVAL(...) static_assert( !std::is_same<tml::not_evaluated_function_chameleon::result,__VA_ARGS__>::value && !std::is_base_of<tml::not_evaluated_function_chameleon::result,__VA_ARGS__>::value , "ERROR: Arithmetic expression incorrectly evaluated." );
+#define TURBO_ENSURE_ALGEBRAIC_EVAL(...) static_assert( !std::is_same<tml::not_evaluated_function_chameleon::type,__VA_ARGS__>::value && !std::is_base_of<tml::not_evaluated_function_chameleon::type,__VA_ARGS__>::value , "ERROR: Arithmetic expression incorrectly evaluated." );
 
 #endif	/* ALGREGRA_HPP */
 

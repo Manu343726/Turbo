@@ -69,13 +69,13 @@ namespace tml
         template<typename Xn , typename COUNTER /* unused */>
         struct iteration
         {
-            using result = tml::eval<tml::sub<Xn,tml::div<tml::sub<tml::mul<Xn,Xn>,N>,tml::add<Xn,Xn>>>>;
+            using type = tml::eval<tml::sub<Xn,tml::div<tml::sub<tml::mul<Xn,Xn>,N>,tml::add<Xn,Xn>>>>;
         };
 
         
-        using result = tml::apply_for<tml::lazy<iteration> , N , tml::size_t<0> , tml::size_t<5>>;
+        using type = tml::apply_for<tml::lazy<iteration> , N , tml::size_t<0> , tml::size_t<5>>;
         
-        TURBO_ENSURE_ALGEBRAIC_EVAL(result);
+        TURBO_ENSURE_ALGEBRAIC_EVAL(type);
     };
 }
 

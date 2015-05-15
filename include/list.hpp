@@ -74,7 +74,7 @@ namespace tml
         template<typename... Ts>
         struct is_function<tml::list<Ts...>>
         {
-            using result = tml::false_type;
+            using type = tml::false_type;
         };
         
         template<typename... Ts>
@@ -101,15 +101,15 @@ namespace tml
             
             operator std::string() const
             {
-                std::stringstream result;
+                std::stringstream type;
                 
-                result << "[";
+                type << "[";
                 
-                result << foo<Ts...>{};
+                type << foo<Ts...>{};
                 
-                result << "]";
+                type << "]";
                 
-                return result.str();
+                return type.str();
             }  
         };
         
@@ -195,13 +195,13 @@ namespace tml
         template<typename T, typename is_function = tml::impl::is_function<T>>
         struct is_aggregate
         {
-            using result = tml::false_type;
+            using type = tml::false_type;
         };
         
         template<template<typename...> class T, typename... ARGS>
         struct is_aggregate<T<ARGS...>, tml::false_type>
         {
-            using result = tml::true_type;
+            using type = tml::true_type;
         };
     }
     
@@ -212,7 +212,7 @@ namespace tml
     }
     
     template<typename T>
-    using is_aggregate = typename func::is_aggregate<T>::result;
+    using is_aggregate = typename func::is_aggregate<T>::type;
 }
 
 #endif	/* LIST_HPP */

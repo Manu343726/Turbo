@@ -82,19 +82,19 @@ namespace tml
         template<typename Head, typename... Tail>
         struct do_apply<args<nil,Head,Tail...>>
         {
-            using result = tml::eval<F<ARGS...,Head,Tail...>>;
+            using type = tml::eval<F<ARGS...,Head,Tail...>>;
         };
 
         template<typename Nil>
         struct do_apply<args<Nil>>
         {
-            using result = lazy<F,ARGS...>;
+            using type = lazy<F,ARGS...>;
         };
 
         template<typename... Args>
         struct apply
         {
-            using result = typename do_apply<args<nil,Args...>>::result;
+            using type = typename do_apply<args<nil,Args...>>::type;
         };
     }; 
     
@@ -155,7 +155,7 @@ namespace tml
      * Instantiates a template wrapped by L using the specified template argumments.
      */
     template<typename L , typename... ARGS>
-    using lazy_instance = typename tml::impl::lazy_instance<L,ARGS...>::result;
+    using lazy_instance = typename tml::impl::lazy_instance<L,ARGS...>::type;
 }
 
 #endif	/* LAZY_HPP */

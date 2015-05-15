@@ -23,7 +23,6 @@
 
 #include <type_traits>
 #include <tick/traits.h>
-#include "integral.hpp"
 
 namespace tml
 {
@@ -41,7 +40,7 @@ namespace tml
         {
             template<class T>
             auto require(const T& x) -> valid<
-                typename T::result
+                typename T::type
             >;
         };
         
@@ -90,17 +89,17 @@ namespace tml
         template<typename T, typename... Args>
         struct get_apply_impl
         {
-            using result = typename T::template apply<Args...>;
+            using type = typename T::template apply<Args...>;
         };
 
         template<typename T>
         struct get_apply_impl<T>
         {
-            using result = typename T::apply;
+            using type = typename T::apply;
         };
 
         template<typename T, typename... Args>
-        using get_apply = typename get_apply_impl<T,Args...>::result;
+        using get_apply = typename get_apply_impl<T,Args...>::type;
 
 
 
@@ -144,7 +143,7 @@ namespace tml
      * (Has a 'result'/'type' member type)
      */
     template<typename E>
-    using is_function = std::integral_constant<bool,tml::impl::is_function<E>::result>;
+    using is_function = std::integral_constant<bool,tml::impl::is_function<E>::type>;
     
     /* User-side tml::is_turbo_function type-trait 
      * 
@@ -152,7 +151,7 @@ namespace tml
      * (Has a 'result' member type)
      */
     template<typename E>
-    using is_turbo_function = std::integral_constant<bool,tml::impl::is_turbo_function<E>::result>;
+    using is_turbo_function = std::integral_constant<bool,tml::impl::is_turbo_function<E>::type>;
     
     /* User-side tml::is_turbo_function type-trait 
      * 
@@ -160,7 +159,7 @@ namespace tml
      * (Has a 'type' member type)
      */
     template<typename E>
-    using is_stl_function = std::integral_constant<bool,tml::impl::is_stl_function<E>::result>;
+    using is_stl_function = std::integral_constant<bool,tml::impl::is_stl_function<E>::type>;
 
     /*
      * Checks if the type T is a metafunction class, that is, has an internal apply metafunction accepting Args... as parameters.
@@ -184,10 +183,10 @@ namespace tml
      * of the library. Inheriting from this helper is a simple whay to ensure any metafunction
      * has the correct interface.
      */
-    template<typename RESULT>
+    template<typename type>
     struct function
     {
-        using result = RESULT;
+        using type = type;
     };
 }
 

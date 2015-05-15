@@ -82,7 +82,7 @@ namespace tml
             /*
              * The result is the result of the call
              */
-            using result = tml::eval<tml::uncurry<apply>,call_args>;
+            using type = tml::eval<tml::uncurry<apply>,call_args>;
         };
     }
     
@@ -113,7 +113,7 @@ namespace tml
         template<template<typename...> class F , typename... F_ARGS , typename... ARGS>
         struct partial_eval<F<F_ARGS...>,ARGS...>
         {
-            using result = tml::bind<F,ARGS...,tml::placeholders_range<sizeof...(ARGS),sizeof...(F_ARGS)>>;
+            using type = tml::bind<F,ARGS...,tml::placeholders_range<sizeof...(ARGS),sizeof...(F_ARGS)>>;
         };
     }
     
@@ -122,7 +122,7 @@ namespace tml
      * returning a parametrized expression of m-n argumments. 
      */
     template<typename F , typename... ARGS>
-    using peval = typename tml::impl::partial_eval<F,ARGS...>::result;
+    using peval = typename tml::impl::partial_eval<F,ARGS...>::type;
 }
 
 #endif	/* BIND_HPP */

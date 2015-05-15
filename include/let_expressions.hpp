@@ -84,14 +84,14 @@ namespace tml
          */
         template<typename NAME , typename VALUE , template<typename...> class EXPRESSION , typename... PARAMETERS>
         struct let_impl_low<NAME,VALUE,EXPRESSION<PARAMETERS...>> :
-        public tml::function<EXPRESSION<typename let_impl_high<NAME,VALUE,PARAMETERS>::result...>> 
+        public tml::function<EXPRESSION<typename let_impl_high<NAME,VALUE,PARAMETERS>::type...>>
         {
             //static_assert( sizeof(NAME) != sizeof(NAME) , "Instanced" );
         };
 
         template<typename NAME , typename VALUE , typename E , typename... PARAMETERS>
         struct let_impl_low<NAME,VALUE,E(PARAMETERS...)> :
-        public tml::function<tml::delayed_eval<typename let_impl_high<NAME,VALUE,E>::result,typename let_impl_high<NAME,VALUE,PARAMETERS>::result...>> 
+        public tml::function<tml::delayed_eval<typename let_impl_high<NAME,VALUE,E>::type,typename let_impl_high<NAME,VALUE,PARAMETERS>::type...>>
         {
             //static_assert( sizeof(NAME) != sizeof(NAME) , "Instanced" );
         };
@@ -110,7 +110,7 @@ namespace tml
          */
         template<typename NAME , typename VALUE , template<typename...> class EXPRESSION , typename... PARAMETERS>
         struct let_impl_low<NAME,VALUE,tml::lazy<EXPRESSION,PARAMETERS...>> :
-        public tml::function<tml::lazy<EXPRESSION,typename let_impl_high<NAME,VALUE,PARAMETERS>::result...>> 
+        public tml::function<tml::lazy<EXPRESSION,typename let_impl_high<NAME,VALUE,PARAMETERS>::type...>>
         {
             //static_assert( sizeof(NAME) != sizeof(NAME) , "Instanced" );
         };
@@ -178,7 +178,7 @@ namespace tml
      *       placeholders and variables is common.
      */
     template<typename NAME , typename VALUE , typename EXPRESSION>
-    using let = typename impl::let_impl_high<NAME,VALUE,EXPRESSION>::result;
+    using let = typename impl::let_impl_high<NAME,VALUE,EXPRESSION>::type;
     //PREFER N-ARY LET BELLOW
     
     
@@ -192,15 +192,15 @@ namespace tml
         template<template<typename, typename> class pair, typename Var, typename Val, typename... Tail, typename Body>
         struct multi_let_currifier_process<tml::list<pair<Var,Val>, Tail...>, Body>
         {
-            using body = typename impl::let_impl_high<Var,Val,Body>::result;
+            using body = typename impl::let_impl_high<Var,Val,Body>::type;
 
-            using result = typename multi_let_currifier_process<tml::list<Tail...>, body>::result;
+            using type = typename multi_let_currifier_process<tml::list<Tail...>, body>::type;
         };
         
         template<typename Body>
         struct multi_let_currifier_process<tml::empty_list, Body>
         {
-            using result = Body;
+            using type = Body;
         };
 
         template<typename... ARGS>
@@ -231,13 +231,13 @@ namespace tml
 
             using parser = parse_args<tml::list<ARGS...>,tml::empty_list>;
 
-            using result = typename multi_let_currifier_process<typename parser::pairs, typename parser::body>::result;
+            using type = typename multi_let_currifier_process<typename parser::pairs, typename parser::body>::type;
         };
 
         template<template<typename,typename>class... Pairs, typename... Vars, typename... Vals, typename Body>
         struct multi_let_currifier<tml::list<Pairs<Vars,Vals>...>, Body>
         {
-            using result = typename multi_let_currifier_process<tml::list<Pairs<Vars,Vals>...>, Body>::result;
+            using type = typename multi_let_currifier_process<tml::list<Pairs<Vars,Vals>...>, Body>::type;
         };
 
     }
@@ -255,7 +255,7 @@ namespace tml
      * the ocurences of the named variable have been substituted with the value.
      */
     template<typename... ARGS>
-    using multi_let = typename impl::multi_let_currifier<tml::list<ARGS...>>::result;
+    using multi_let = typename impl::multi_let_currifier<tml::list<ARGS...>>::type;
 }
 
 #endif  /* LET_HPP */

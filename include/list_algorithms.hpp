@@ -178,27 +178,27 @@ namespace tml
         }
         
         template<typename L1 , typename L2>
-        using concat = typename tml::lists::impl::concat<L1,L2>::result;
+        using concat = typename tml::lists::impl::concat<L1,L2>::type;
         
         template<typename LIST , typename INDEX>
-        using get = typename tml::lists::impl::get<LIST,INDEX>::result;
+        using get = typename tml::lists::impl::get<LIST,INDEX>::type;
 
         
         template<typename LIST>
-        using back = typename tml::lists::func::back<LIST>::result;
+        using back = typename tml::lists::func::back<LIST>::type;
 
         template<typename LIST>
-        using pop_back = typename tml::lists::impl::pop_back<tml::empty_list,LIST,false>::result;
+        using pop_back = typename tml::lists::impl::pop_back<tml::empty_list,LIST,false>::type;
 
         template<typename LIST , typename T>
-        using push_back = typename tml::lists::func::push_back<LIST,T>::result;
+        using push_back = typename tml::lists::func::push_back<LIST,T>::type;
         
         template<typename LIST , typename T>
-        using push_front = typename tml::lists::func::push_front<LIST,T>::result;
+        using push_front = typename tml::lists::func::push_front<LIST,T>::type;
         
         
         template<typename LIST>
-        using head = typename tml::lists::func::head<LIST>::result;
+        using head = typename tml::lists::func::head<LIST>::type;
         
         template<typename LIST>
         using first = tml::lists::head<LIST>;
@@ -207,10 +207,10 @@ namespace tml
         using second = tml::lists::get<LIST,tml::size_t<1>>;
 
         template<typename LIST>
-        using pop_front = typename tml::lists::impl::pop_front<LIST>::result;
+        using pop_front = typename tml::lists::impl::pop_front<LIST>::type;
 
         template<typename LIST , typename T>
-        using push_front = typename tml::lists::impl::push_front<LIST,T>::result;
+        using push_front = typename tml::lists::impl::push_front<LIST,T>::type;
     }
 }
 

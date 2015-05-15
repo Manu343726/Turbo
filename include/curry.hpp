@@ -37,7 +37,7 @@ namespace tml
         template<typename... Args>
         struct apply
         {
-            using result = tml::eval<F<tml::list<Args...>>>;
+            using type = tml::eval<F<tml::list<Args...>>>;
         };
     };
 
@@ -55,7 +55,7 @@ namespace tml
         template<typename... Args>
         struct apply<tml::list<Args...>>
         {
-            using result = tml::eval<F<Args...>>;
+            using type = tml::eval<F<Args...>>;
         };
     };
     

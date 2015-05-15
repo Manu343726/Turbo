@@ -67,7 +67,7 @@ namespace tml
 
 
 
-            template<typename K> using at = typename decltype(map::test<K>(static_cast<keylist*>(nullptr)))::result; //Searches for matching overload on bases (PAIRS)
+            template<typename K> using at = typename decltype(map::test<K>(static_cast<keylist*>(nullptr)))::type; //Searches for matching overload on bases (PAIRS)
             template<typename K> using contains = tml::boolean<!std::is_same<at<K>,map_base::not_found>::value>;
         };
         

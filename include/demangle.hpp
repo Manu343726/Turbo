@@ -77,12 +77,12 @@
         if( status != 0 )
             throw;
 
-        std::string result{ demangled_name };
+        std::string type{ demangled_name };
 
         std::free( demangled_name ); //IMPORTANT! The result of __cxa_demangle() was malloc()ed, should be released
                                      //using free(). See __cxa_demangle() documentation.
                                 
-        return result;
+        return type;
     }
 #else /* Others (Currently unsupported platforms. The name is returned unchanged) */
     namespace tml{

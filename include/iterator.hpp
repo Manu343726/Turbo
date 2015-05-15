@@ -146,37 +146,37 @@ namespace tml
          * Dereferences the iterator (Obtains the data which the iterator points to)
          */
         template<typename I>
-        using deref = typename tml::iterator::impl::deref<I>::result;
+        using deref = typename tml::iterator::impl::deref<I>::type;
 
         /*
          * Obtains the next iterator of the sequence.
          */
         template<typename I>
-        using next = typename tml::iterator::impl::next<I>::result;
+        using next = typename tml::iterator::impl::next<I>::type;
         
         /*
          * Returns a forward iterator pointing to the first element of a sequence.
          */
         template<typename SEQ>
-        using begin = typename tml::iterator::impl::begin<SEQ>::result;
+        using begin = typename tml::iterator::impl::begin<SEQ>::type;
 
         /*
          * Returns a forward iterator pointing to the end of a sequence.
          */
         template<typename SEQ>
-        using end = typename tml::iterator::impl::end<SEQ>::result;
+        using end = typename tml::iterator::impl::end<SEQ>::type;
 
         /*
          * Returns a backward iterator pointing to the last element of a sequence.
          */
         template<typename SEQ>
-        using rbegin = typename tml::iterator::impl::rbegin<SEQ>::result;
+        using rbegin = typename tml::iterator::impl::rbegin<SEQ>::type;
 
         /*
          * Returns a backward iterator pointing to the past-last element of a sequence.
          */
         template<typename SEQ>
-        using rend = typename tml::iterator::impl::rend<SEQ>::result;
+        using rend = typename tml::iterator::impl::rend<SEQ>::type;
     }
 }
 

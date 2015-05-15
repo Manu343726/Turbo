@@ -45,7 +45,7 @@ By convention, this library works with types only. There are no templates with v
 So an expression could be:
   1. A simple value (Like `int`).
   2. A *parametrized-expression*: A parametrized expression is just an expression composed from a set of components. Because this is a template meta-programming library, the way to build expressions is through templates. So a parametrized expressions refers to any kind of template.
-  3. A *functional expression*: This is a type of parametrized expression designed to return a value from a set of parameters. That is, a function. This library assumes that any expression with a `result` type member is a function. 
+  3. A *functional expression*: This is a type of parametrized expression designed to return a value from a set of parameters. That is, a function. This library assumes that any expression with a `type` type member is a function. 
 
 
 ``` cpp
@@ -59,19 +59,19 @@ using e2 = tml::function<int>; //e2 is a functional expression
 using e3 = tml::transform<tml::list<int,float,double>,tml::size_of<_1>>;
 ```
 
-To evaluate an expression, one should evaluate the entire set of parameters of a parametrized expression, and return the result if the expression is a functional expression. Thats what `tml::eval` is designed for:
+To evaluate an expression, one should evaluate the entire set of parameters of a parametrized expression, and return the type if the expression is a functional expression. Thats what `tml::eval` is designed for:
 
 ``` cpp
 //Just a simple identity metafunction:
 template<typename T>
 struct identity
 {
-    using result = T;
+    using type = T;
 };
     
 using expression = identity<int>;
-using result = tml::eval<expression>; //Compute the result of evaluating the expression.
-using result = tml::eval<identity<identity<int>>>; //result is int
+using type = tml::eval<expression>; //Compute the type of evaluating the expression.
+using type = tml::eval<identity<identity<int>>>; //type is int
 ```
 
 Also, `tml::eval` could be used to take an expression and evaluate it with a new set of arguments. Following with the example above:
@@ -82,7 +82,7 @@ Or one could fill the expression with placeholders and evaluate the expression l
 
     using expression = f<_1,_2,_3>; //_1,_2, and _3 are placeholders
     ...
-    using result = tml::eval<expression,float,int,double>;
+    using type = tml::eval<expression,float,int,double>;
 
 Because the library wrks with types only, lazy evaluation of metafunctions should be done filling the metafunction with 
 placeholders to properly instantiate it (See the example above).  
@@ -95,7 +95,7 @@ template later:
 Also `tml::lazy` could be used to do lazy evaluation of metafunctions. For example:
 
     using t = tml::lazy<tml::function>;
-    using result = tml::eval<t,int>; //Result is int (The result of evaluating tml::function<int>)
+    using type = tml::eval<t,int>; //type is int (The type of evaluating tml::function<int>)
 
 Finally `tml::eval` abuses of function types and specializes itself to handle function types like
 `F(ARGS...)` as a metafunction call, where `F` is a functional expression:
@@ -138,7 +138,7 @@ a template designed as a let of multiple variables:
 The ability of substituting a value in an expression provided by `tml::let` makes possible to create lambda expressions without any special effort. Turbo provides the `tml::lambda` template:
 
     //Gets a list with the sizes of the specified types
-    using result = tml::transform<tml::lambda<_1,tml::size_of<_1>>,tml::list<float,int,double>>;
+    using type = tml::transform<tml::lambda<_1,tml::size_of<_1>>,tml::list<float,int,double>>;
 
 Multiple-variable lambda expressions are provided too:
 
@@ -204,7 +204,7 @@ the member type `::type` of `std::enable_if` should be explicitly referenced via
 
 Turbo provides the macros `TURBO_ENABLE_IF()` and `TURBO_DISABLE_IF()`, which makes SFINAE clean and easy. For example:
 
-    template<typename T , typename SFINAE_FLAG = tml::sfinae_result>
+    template<typename T , typename SFINAE_FLAG = tml::sfinae_type>
     struct f;
 
     template<typename T>
@@ -247,7 +247,7 @@ The function `tml::to_runtime<T>()` returns a runtime constant equivalent to the
 Turbo implements its own floating-point type to perform compile-time computations. The implementation doesn't follow any specific standard (i.e. IEEE 754), its only a working (on...)
 implementation with the following characteristics:
 
- - 32 bit mantissa with no implicit extra 1 (The mantissa is 32 bits wide, and the precision of the resulting number is 32 bits too. Thats done to simplify debugging).
+ - 32 bit mantissa with no implicit extra 1 (The mantissa is 32 bits wide, and the precision of the typeing number is 32 bits too. Thats done to simplify debugging).
  - 16 bit exponent.
 
 ``` cpp
@@ -284,7 +284,7 @@ int main()
 > 3.14159  
 
 
-The library is designed to do all the required computations at compile-time with zero runtime overhead when using the results. That means the floating-point values (Actually stored as `double`s on the runtime side) should be completely available and known at compile-time.
+The library is designed to do all the required computations at compile-time with zero runtime overhead when using the types. That means the floating-point values (Actually stored as `double`s on the runtime side) should be completely available and known at compile-time.
 
 Given this code, which computes N (10 in the example) consecutive floating-point numbers at compile-time:
 
@@ -330,30 +330,30 @@ The features explained above have some implementation issues (Working on...):
  - **Template specialization  priority issues. A ISO C++ Standard bug?**: The initial implementation of `tml::eval` consisted on three different
    cases (Partial specializations), one for each kind of expression the library is capable of evaluate:
 
-    1. **Simple values**: The result of evaluating a value is the value itself
+    1. **Simple values**: The type of evaluating a value is the value itself
         
-            using result = tml::eval<tml::Int<0>>; //result is Int<0>
-            using result = tml::eval<int>; //result is int
+            using type = tml::eval<tml::Int<0>>; //type is Int<0>
+            using type = tml::eval<int>; //type is int
     
     2. **Parametrized expressions**: Parametrized expressions are not functions, but their parameters could be anything, so they must be evaluated
 
             using vector = tml::eval<std::vector<tml::function<int>>>; // vector is std::vector<int>
 
-    3. **Functional expressions**: Same as parametrized expressions, but they have a result which should be computed (Extracted)
+    3. **Functional expressions**: Same as parametrized expressions, but they have a type which should be computed (Extracted)
 
             using myint = tml::eval<tml::function<int>>; //myint is int
 
     4. **Functional expressions with binded arguments**: `tml::eval` could be used to reevaluate an existing (Instanced) functional expression
        with a new set of parameters
 
-            using result = tml::eval<tml::function<int>,double>; //result is double
+            using type = tml::eval<tml::function<int>,double>; //type is double
 
    In addition to this generic cases, the user could explicitly specialize the implementation of `tml::eval` (The internal template `tml::impl::eval`)
    to make `tml::eval` work in a custom and specific way. For example:
 
         struct foo {};
         
-        //We customize tml::eval saying the result of evaluating 'foo' is 'int'
+        //We customize tml::eval saying the type of evaluating 'foo' is 'int'
         template<>
         struct eval<foo> : public tml::function<int>
         {};
@@ -381,14 +381,14 @@ The features explained above have some implementation issues (Working on...):
          struct multi_lambda
          {
              template<typename... ARGS>
-             using result = tml::eval<tml::multi_let<VARIABLES...,
+             using type = tml::eval<tml::multi_let<VARIABLES...,
                                                      ARGS...,
                                                      BODY
                                                     >
                                      >;
          };
 
-   Later `tml::impl::multi_lambda` overrides `tml::eval` to call the `::result` template alias properly:
+   Later `tml::impl::multi_lambda` overrides `tml::eval` to call the `::type` template alias properly:
 
          template<typename... VARIABLES , typename BODY>
          struct overrides_eval<tml::impl::multi_lambda<VARIABLES...,BODY>> : public tml::true_type
@@ -396,7 +396,7 @@ The features explained above have some implementation issues (Working on...):
 
          template<typename... VARIABLES , typename BODY , typename... ARGS>
          struct eval<tml::impl::multi_lambda<VARIABLES...,BODY>,tml::list<ARGS...>> :
-            public tml::function<typename tml::impl::multi_lambda<VARIABLES...,BODY>::template result<ARGS...>>
+            public tml::function<typename tml::impl::multi_lambda<VARIABLES...,BODY>::template type<ARGS...>>
          {};
 
 
@@ -415,7 +415,7 @@ The features explained above have some implementation issues (Working on...):
    variables are substituted with the value of the parameters at the point of lambda evaluation:
 
         using l = tml::lambda<_1 , tml::function<_1>>;
-        using result = tml::eval<l,int>; //result is int
+        using type = tml::eval<l,int>; //type is int
 
    Even if `tml::eval` is specialized to take care of placeholders, there are cases when expressions depending on `tml::eval` evaluation are not correctly evaluated because 
    they have placeholders. Consider this example:
@@ -601,7 +601,7 @@ Using the list operations showed above **Turbo implements a sorting metafunction
      template<typename LIST , template<typename,typename> class COMPARER>
      struct my_stupid_sorting_algorithm
      {
-            using result = LIST;
+            using type = LIST;
      };
     
      using list = mpl::list<int,char,bool>;
@@ -687,15 +687,15 @@ For integral types the library provides a set of utility functions to make itera
 A common problem with template-meta-programming and variadic templates is to execute an operation over a set of values (types). That leads to witing recursive metafunctions everytime we need to do that kind of operations.   
 
 **Turbo provides the metaloops `mpl::for_loop` and `mpl::for_each` to simplify the implementation of that kind of things**. 
-That loops works through iterators: What the loops do is to execute the specified *kernel* (The operation to be performed) through the range represented by the iterators. Finally, the loop returns the result.  
+That loops works through iterators: What the loops do is to execute the specified *kernel* (The operation to be performed) through the range represented by the iterators. Finally, the loop returns the type.  
 
 #### `mpl::for_each`
 This loop is designed to apply the specified kernel to every type from a set of types, and return a typelist filled with the set of applications.  Its equivalent "runtime" code is: 
  
-  template<typename iterator_type , typename result_type>
-  std::vector<result_type> for_each(iterator_type begin , iterator_type end , result_type(*)(typename iterator_type::value_type) kernel)
+  template<typename iterator_type , typename type_type>
+  std::vector<type_type> for_each(iterator_type begin , iterator_type end , type_type(*)(typename iterator_type::value_type) kernel)
   {
-    std::vector<result_type> output;
+    std::vector<type_type> output;
     
     for( auto& it = begin ; it != end ; ++it)
       output.push_back( kernel(*it) );
@@ -708,11 +708,11 @@ A kernel is a metafunction of the form:
      template<typename CURRENT>
      struct kernel
      {
-      using result = /* Operation involving CURRENT */
+      using type = /* Operation involving CURRENT */
      };
 In other words, a one parameter function.
 
-What `mpl::for_each` returns is the list of applications, that is, the set of `kernel::result` from each type. 
+What `mpl::for_each` returns is the list of applications, that is, the set of `kernel::type` from each type. 
 For example:
 
     using list = mpl::list<bool,char,float,int,double>;
@@ -723,19 +723,19 @@ For example:
     template<typename T>
     struct compute_sizeof
     {
-      using result = mpl::size_t<sizeof(T)>;
+      using type = mpl::size_t<sizeof(T)>;
     };
     
-    using result = mpl::for_each<begin,end,compute_sizeof>;
+    using type = mpl::for_each<begin,end,compute_sizeof>;
     
     int main()
     {
-      std::cout << mpl::to_string<result>() << std::endl;
+      std::cout << mpl::to_string<type>() << std::endl;
     }
  Output:
  > [1,1,4,4,8]
  
- Note that a kernel is a metafunction of one parameter which returns via a `result` alias. Thats exatly the signature of `mpl::function`, so you could use `mpl::function` to simplify the implementation of a kernel. The example above could be rewriten as:
+ Note that a kernel is a metafunction of one parameter which returns via a `type` alias. Thats exatly the signature of `mpl::function`, so you could use `mpl::function` to simplify the implementation of a kernel. The example above could be rewriten as:
  
      template<typename T>
      using compute_sizeof = mpl::function<mpl::size_t<sizeof(T)>>;
@@ -747,7 +747,7 @@ For example:
      template<typename T>
      using filter = mpl::boolean<sizeof(T) % 2 == 0>;
      
-     using result = mpl::for_each<begin,end,compute_sizeof,filter>;
+     using type = mpl::for_each<begin,end,compute_sizeof,filter>;
      
      ...
 Now the output is:
@@ -755,33 +755,33 @@ Now the output is:
 
 #### `mpl::for_loop`
 
-`mpl::for_loop` is designed to **execute iterative computations**, in other words, does a loop over a range, and the kernel does computations over that range, storing the result and using the previous value of the result. This could be viewed as a for loop with an aux varialbe which stores the result of the computation, and the body of that loop (The kernel acts as the body of the loop). For example:
+`mpl::for_loop` is designed to **execute iterative computations**, in other words, does a loop over a range, and the kernel does computations over that range, storing the type and using the previous value of the type. This could be viewed as a for loop with an aux varialbe which stores the type of the computation, and the body of that loop (The kernel acts as the body of the loop). For example:
 
-  int result;
+  int type;
   
   for(auto& it = begin ; it != end ; ++it)
   {                  
-    result = *it * result;
+    type = *it * type;
   }                  
 
-So the kernel has two parameters: **The current value of the iterator and the previous value of the result**:
+So the kernel has two parameters: **The current value of the iterator and the previous value of the type**:
 
-  template<typename CURRENT , typename PREVIOUS_RESULT>
+  template<typename CURRENT , typename PREVIOUS_type>
   struct kernel
   {
-    using result = /* ... */
+    using type = /* ... */
   };
-The loop passes the `result` of the current kernel application to the next iteration. So **the loop needs the initial value of the "aux variable"**. `mpl::for_loop` is defined as follows:
+The loop passes the `type` of the current kernel application to the next iteration. So **the loop needs the initial value of the "aux variable"**. `mpl::for_loop` is defined as follows:
 
   template<typename BEGIN , typename END , typename INITIAL_VALUE , template<typename,typename> class KERNEL>
   using for_loop = /*...*/
 
 In addition, a kernel of a for loop must define a public boolean constant that specifies if the loop should be aborted. In other words, **the user could specify a break condition for the loop through the kernel**:
 
-  template<typename CURRENT , typename PREVIOUS_RESULT>
+  template<typename CURRENT , typename PREVIOUS_type>
   struct kernel
   {
-    using result = /* ... */
+    using type = /* ... */
     static const bool abort = /* ... */
   };
 
@@ -790,17 +790,17 @@ An example of the use of `mpl::for_loop` could be the computation of the summati
   using begin = mpl::make_uinteger_forward_iterator<0>;
   using end   = mpl::make_uinteger_forward_iterator<10>;
   
-  template<typename CURRENT_VALUE , typename PREVIOUS_RESULT>
+  template<typename CURRENT_VALUE , typename PREVIOUS_type>
   struct kernel : public mpl::no_abort_kernel //This defines the abort flag as false
   {
-    using result = mpl::add<PREVIOUS_RESULT,CURRENT_VALUE>;
+    using type = mpl::add<PREVIOUS_type,CURRENT_VALUE>;
   };
   
-  using result = mpl::for_loop<begin,end,mpl::uinteger<0>,kernel>;
+  using type = mpl::for_loop<begin,end,mpl::uinteger<0>,kernel>;
   
   int main()
   {
-    std::cout << mpl::to_string<result>() << std::cout;
+    std::cout << mpl::to_string<type>() << std::cout;
   }
 Output:
 > 45
@@ -878,11 +878,11 @@ As the example shows, the implementation has little precision errors (`cos(90º)
 The library [implements a square root function](https://github.com/Manu343726/Turbo/blob/dynamic_fixed_point/sqrt.hpp), `math::sqrt`, computing the value through the Newton's method to aproximate function roots:
 
   using two = mpl::decimal<2>;
-  using result = math::sqrt<two>;
+  using type = math::sqrt<two>;
   
   int main()
   {
-    std::cout << mpl::to_string<result>() << std::endl;
+    std::cout << mpl::to_string<type>() << std::endl;
   }
 Output:
 > 1,4142

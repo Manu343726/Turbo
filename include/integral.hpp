@@ -131,7 +131,7 @@ namespace tml
                                        (0x016345785D8A0000ULL <= value && value < 0x0DE0B6B3A7640000ULL) ? 17 : //Interval [10^17,10^18)
                                                                                                            18;  //Interval [10^18,2^64 - 1)
         
-        using result = tml::integral_constant<T,log>;
+        using type = tml::integral_constant<T,log>;
     };
 
     namespace impl

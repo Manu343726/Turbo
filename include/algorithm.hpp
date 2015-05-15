@@ -59,17 +59,17 @@ namespace tml
             using next_state   = tml::eval<F,STATE,BEGIN>;
             using next_counter = tml::eval<ADVANCE,BEGIN>;
             
-            using result = typename apply_for<F,next_state,next_counter,END,ADVANCE>::result;
+            using type = typename apply_for<F,next_state,next_counter,END,ADVANCE>::type;
             
-            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
+            TURBO_ENSURE_ALGEBRAIC_EVAL(type);
         };
         
         template<typename F , typename STATE , typename END , typename ADVANCE>
         struct apply_for<F,STATE,END,END,ADVANCE>
         {
-            using result = STATE;
+            using type = STATE;
             
-            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
+            TURBO_ENSURE_ALGEBRAIC_EVAL(type);
         };
 
         
@@ -86,17 +86,17 @@ namespace tml
             using next_state = tml::eval<F,STATE>;
             using continue_running = tml::eval<WHILE,next_state,STATE>;
             
-            using result = typename apply_while_impl<F,next_state,WHILE,continue_running>::result;
+            using type = typename apply_while_impl<F,next_state,WHILE,continue_running>::type;
             
-            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
+            TURBO_ENSURE_ALGEBRAIC_EVAL(type);
         };
 
         template<typename F , typename STATE , typename WHILE>
         struct apply_while_impl<F,STATE,WHILE,tml::false_type>
         {
-            using result = STATE;
+            using type = STATE;
             
-            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
+            TURBO_ENSURE_ALGEBRAIC_EVAL(type);
         };
         
         /*
@@ -105,9 +105,9 @@ namespace tml
         template<typename F , typename STATE , typename WHILE>
         struct apply_while
         {
-            using result = typename apply_while_impl<F,STATE,WHILE,tml::true_type>::result;
+            using type = typename apply_while_impl<F,STATE,WHILE,tml::true_type>::type;
             
-            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
+            TURBO_ENSURE_ALGEBRAIC_EVAL(type);
         };
         
         /*
@@ -116,11 +116,11 @@ namespace tml
         template<typename F , typename STATE , typename UNTIL>
         struct apply_until
         {
-            using result = typename apply_while<F,STATE,
+            using type = typename apply_while<F,STATE,
                                                 tml::lambda<tml::placeholders::_1 , tml::placeholders::_2 , tml::logical_not<tml::deval<UNTIL,tml::placeholders::_1,tml::placeholders::_2>>>
-                                               >::result;
+                                               >::type;
             
-            TURBO_ENSURE_ALGEBRAIC_EVAL(result);
+            TURBO_ENSURE_ALGEBRAIC_EVAL(type);
         };
     }
     
@@ -200,7 +200,7 @@ namespace tml
      *  - ADVANCE: Given the current element of the "number-of-times interval" (See above), computes the next element. By default increases the value by 1.
      */
     template<typename F , typename STATE , typename BEGIN , typename END , typename ADVANCE = tml::lambda<tml::placeholders::_1 , tml::add<tml::one<BEGIN>,tml::placeholders::_1>>>
-    using apply_for = typename tml::impl::apply_for<F,STATE,BEGIN,END,ADVANCE>::result;
+    using apply_for = typename tml::impl::apply_for<F,STATE,BEGIN,END,ADVANCE>::type;
     
     /*
      * Successively applies a function to a value while a certain condition is met.
@@ -213,7 +213,7 @@ namespace tml
      *           This allows to easily write convergence conditions. If you only want a property based on the current value, just ignore the second function param.
      */
     template<typename F , typename STATE , typename WHILE>
-    using apply_while = typename tml::impl::apply_while<F,STATE,WHILE>::result;
+    using apply_while = typename tml::impl::apply_while<F,STATE,WHILE>::type;
     
     /*
      * Successively applies a function to a value until a certain condition is met.
@@ -226,7 +226,7 @@ namespace tml
      *           This allows to easily write convergence conditions. If you only want a property based on the current value, just ignore the second function param.
      */
     template<typename F , typename STATE , typename UNTIL>
-    using apply_until = typename tml::impl::apply_until<F,STATE,UNTIL>::result;
+    using apply_until = typename tml::impl::apply_until<F,STATE,UNTIL>::type;
     
 }
 

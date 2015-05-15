@@ -33,7 +33,7 @@
  */
 #define TURBO_DEFINE_FUNCTION_TALIAS( function ) \
         template<typename... ARGS>               \
-        using  function = typename tml::impl::function<ARGS...>::result; 
+        using  function = typename tml::impl::function<ARGS...>::type;
 
 /*
  * This macro defines the user-side template alias for a specified function, but
@@ -49,7 +49,7 @@
  */
 #define TURBO_DEFINE_FUNCTION_TALIAS_CUSTOMNAME( function , name ) \
         template<typename... ARGS>               \
-        using  name = typename tml::impl::function<ARGS...>::result; 
+        using  name = typename tml::impl::function<ARGS...>::type;
 
 #endif	/* FUNCTION_ALIAS_DECL_HPP */
 

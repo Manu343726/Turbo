@@ -39,13 +39,13 @@ namespace tml
 		template<typename Var, typename Val, typename... Tail, typename Body>
 		struct process<tml::list<pair<Var,Val>, Tail...>, Body>
 		{
-			using body = typename impl::let_impl_high<Var,Val,Body>::result;
-			using result = typename process<tml::list<Tail...>, body>::result;
+			using body = typename impl::let_impl_high<Var,Val,Body>::type;
+			using type = typename process<tml::list<Tail...>, body>::type;
 		};
 
 		using parser = parse_args<tml::list<ARGS...>,tml::empty_list>;
 
-		using result = typename process<typename parser::pairs, typename parser::result>::result;
+		using type = typename process<typename parser::pairs, typename parser::type>::type;
 	};
 }
 

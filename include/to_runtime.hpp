@@ -75,7 +75,7 @@ namespace tml
      * The user should override the implementation metafunction tml::impl::runtime_representation
      */
     template<typename T>
-    using runtime_representation = typename tml::impl::runtime_representation<T>::result;
+    using runtime_representation = typename tml::impl::runtime_representation<T>::type;
     
     /*
      * Returns the runtime equivalent of a compile-time value.

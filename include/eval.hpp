@@ -23,7 +23,6 @@
 
 #include <type_traits>
 
-#include "list.hpp"
 #include "enable_if.hpp"
 #include "function.hpp"
 #include "chameleon.hpp"
@@ -88,7 +87,7 @@ namespace tml
         template<typename E , typename ARGS , typename SFINAE_FLAGS = tml::sfinae_return>
         struct eval
         {
-            using result = E;
+            using type = E;
         };
         
         /*
@@ -118,19 +117,19 @@ namespace tml
                                     )
                    >
         {
-            using result = E;
+            using type = E;
         };
 
         template<typename E, typename Args, typename = void>
         struct expand
         {
-            using result = E;
+            using type = E;
         };
 
         template<typename E, typename Args>
         struct expand<E,Args,TURBO_ENABLE_IF(tml::is_expandible<E>)>
         {
-            using result = typename eval<E,Args>::result;
+            using type = typename eval<E,Args>::type;
         };
 
         template<typename E>
@@ -147,16 +146,16 @@ namespace tml
             template<typename T, bool is_stl_function = tml::is_stl_function<T>::value>
             struct call
             {
-                using result = typename T::type;
+                using type = typename T::type;
             };
 
             template<typename T>
             struct call<T, false>
             {
-                using result = typename T::result;
+                using type = typename T::type;
             };
 
-            using result = typename call<E>::result;
+            using type = typename call<E>::type;
         };
         
 
@@ -169,21 +168,21 @@ namespace tml
                                     )
                    > 
         {
-            using f = F<typename expand<ARGS,no_args>::result...>;
+            using f = F<typename expand<ARGS,no_args>::type...>;
 
             template<typename T, bool is_stl_function = tml::is_stl_function<f>::value>
             struct call
             {
-                using result = typename T::type;
+                using type = typename T::type;
             };
 
             template<typename T>
             struct call<T, false>
             {
-                using result = typename T::result;
+                using type = typename T::type;
             };
 
-            using result = typename call<f>::result;
+            using type = typename call<f>::type;
         };
         
         /*
@@ -202,7 +201,7 @@ namespace tml
                                      DISABLE_IF(tml::is_metafunction_class<E<ARGS...>>)
                                     )
                    > : 
-                   public tml::function<E<typename expand<ARGS,no_args>::result...>>
+                   public tml::function<E<typename expand<ARGS,no_args>::type...>>
         {};
 
         /*
@@ -221,8 +220,8 @@ namespace tml
                                      DISABLE_IF(tml::is_metafunction_class<F<PLACEHOLDERS...>>)
                                     )
                    > : 
-                   public F<typename expand<ARG,no_args>::result,
-                            typename expand<ARGS,no_args>::result...
+                   public F<typename expand<ARG,no_args>::type,
+                            typename expand<ARGS,no_args>::type...
                            >
         {
             
@@ -242,8 +241,8 @@ namespace tml
                                      DISABLE_IF(tml::is_metafunction_class<E<PLACEHOLDERS...>>)
                                     )
                    > : 
-                   public tml::function<E<typename expand<ARG,no_args>::result,
-                                          typename expand<ARGS,no_args>::result...
+                   public tml::function<E<typename expand<ARG,no_args>::type,
+                                          typename expand<ARGS,no_args>::type...
                                          >
                                        >
         {
@@ -257,21 +256,9 @@ namespace tml
         {
             //static_assert(sizeof(F) != sizeof(F), "compiler bug!");
 
-            using apply = tml::impl::get_apply<F, typename expand<ARGS,no_args>::result...>;
+            using apply = tml::impl::get_apply<F, typename expand<ARGS,no_args>::type...>;
 
-            template<typename T, bool is_stl_function = tml::is_stl_function<T>::value>
-            struct call
-            {
-                using result = typename T::type;
-            };
-
-            template<typename T>
-            struct call<T, false>
-            {
-                using result = typename T::result;
-            };
-
-            using result = typename call<apply>::result;
+            using type = typename apply::type;
         };
         
         /*
@@ -289,7 +276,7 @@ namespace tml
         template<typename F, typename G, typename... Args>
         struct eval<F(*)(G), args_list<Args...>>
         {
-            using result = typename eval<F,args_list<typename eval<G,args_list<Args...>>::result>>::result;
+            using type = typename eval<F,args_list<typename eval<G,args_list<Args...>>::type>>::type;
         };
     }
     
@@ -318,7 +305,7 @@ namespace tml
      *             functional/parametrized expressions).
      */
     template<typename EXPRESSION , typename... ARGS>
-    using eval = typename impl::eval<EXPRESSION , impl::args_list<ARGS...>>::result;
+    using eval = typename impl::eval<EXPRESSION , impl::args_list<ARGS...>>::type;
     
     
     
