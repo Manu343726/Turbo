@@ -23,6 +23,7 @@
 
 #include <type_traits>
 #include <tick/traits.h>
+#include "integral.hpp"
 
 namespace tml
 {
@@ -36,13 +37,12 @@ namespace tml
          * check the existence of that member type, that is, to check if a type is
          * a function.
          */
-        template<typename T>
-        struct is_turbo_function
+        TICK_TRAIT(is_turbo_function)
         {
-            template<typename U> static std::true_type  test( typename U::result* );
-            template<typename U> static std::false_type test( ... );
-            
-            static constexpr bool result = decltype( test<T>( nullptr ) )::value;
+            template<class T>
+            auto require(const T& x) -> valid<
+                typename T::result
+            >;
         };
         
         /*
@@ -53,13 +53,12 @@ namespace tml
          * check the existence of that member type, that is, to check if a type is
          * a function.
          */
-        template<typename T>
-        struct is_stl_function
+        TICK_TRAIT(is_stl_function)
         {
-            template<typename U> static std::true_type  test( typename U::type* );
-            template<typename U> static std::false_type test( ... );
-            
-            static constexpr bool result = decltype( test<T>( nullptr ) )::value;
+            template<class T>
+            auto require(const T& x) -> valid<
+                typename T::type
+            >;
         };
         
         /*
@@ -70,10 +69,12 @@ namespace tml
          * check the existence of that member type, that is, to check if a type is
          * a function.
          */
-        template<typename T>
-        struct is_function 
+        TICK_TRAIT(is_function)
         {
-            static constexpr const bool result = tml::impl::is_turbo_function<T>::result || tml::impl::is_stl_function<T>::result;
+            template<typename T>
+            auto require(const T& x) -> valid<
+                is_true<std::integral_constant<bool,tml::impl::is_turbo_function<T>::value || tml::impl::is_stl_function<T>::value>>
+            >;
         };
         
         /*
@@ -83,7 +84,7 @@ namespace tml
         template<typename T, T V>
         struct is_function<std::integral_constant<T,V>>
         {
-            static constexpr bool result = false;
+            static constexpr bool value = false;
         };
 
         template<typename T, typename... Args>

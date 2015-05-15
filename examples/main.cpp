@@ -18,7 +18,7 @@ struct get_list
     using type = $(list);
 };
 
-using l = typename get_list<$(List::Variadic, $i(1))>::type;
+using l = typename get_list<$(List::Variadic, $i(1), $i(2))>::type;
 
 int main()
 {
