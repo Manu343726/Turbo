@@ -1,6 +1,7 @@
+#include "core_concepts.hpp"
+#include "new_eval.hpp"
+#include "to_string.hpp"
 
-#include "core.hpp"
-#include "tick/builder.h"
 #include <iostream>
 
 
@@ -46,19 +47,29 @@ struct pack_length
     };
 };
 
-static_assert(concepts::is_metafunction_class<nullary_void>(), "???");
-static_assert(concepts::is_metafunction_class<pack_length>(), "???");
+static_assert(!tml::concepts::value<void>(), "???");
+static_assert(tml::concepts::value<std::true_type>(), "???");
+static_assert(!tml::concepts::metafunction<std::true_type>(), "???");
+static_assert(tml::concepts::metafunction_class<nullary_void>(), "???");
+static_assert(tml::concepts::metafunction_class<pack_length>(), "???");
+static_assert(!tml::concepts::atomic<pack_length>(), "???");
+static_assert(!tml::concepts::atomic<nullary_void>(), "???");
+static_assert(!tml::concepts::atomic<nullary_void::apply>(), "???");
 
-template<concepts::is_metafunction_class F, typename... Args>
-struct call
-{
-    using type = $(F, Args...);
-};
+static_assert(!tml::concepts::value<int>(), "???");
+static_assert(!tml::concepts::aggregate<int>(), "???");
+static_assert(!tml::concepts::metafunction<int>(), "???");
+static_assert(!tml::concepts::metafunction_class<int>(), "???");
+
+static_assert(tml::concepts::atomic<int>(), "???");
+static_assert(!tml::concepts::atomic<std::false_type>(), "???");
+
+
+using i = tml::eval<nullary_void>;
 
 int main()
 {
-    std::cout << tml::to_string<typename call<void>::type>() << std::endl;
-    std::cout << tml::to_string<typename call<pack_length, int, int, int>::type>() << std::endl;
+    std::cout << tml::to_string<i>() << std::endl;
 }
 
 
